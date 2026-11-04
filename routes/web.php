@@ -46,6 +46,10 @@ Route::get('/saved-reports', function () {
     return view('saved-reports');
 })->name('saved.reports');
 
+Route::get('/admin', function () {
+    return view('admin.dashboard');
+})->name('admin.dashboard');
+
 
 
 

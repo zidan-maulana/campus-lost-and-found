@@ -1218,6 +1218,15 @@
                 <i data-lucide="chevron-right" class="item-chevron"></i>
             </div>
 
+            <!-- Akses Dashboard Administrator (Petugas & Pengelola) -->
+            <a href="{{ route('admin.dashboard') }}" class="profile-menu-item" style="background: #f8fafc; border-left: 3px solid #1572b8;">
+                <div class="profile-item-left">
+                    <i data-lucide="shield" class="profile-item-icon" style="color: #1572b8;"></i>
+                    <span class="profile-item-title" style="font-weight: 600; color: #0f172a;">Dashboard Administrator</span>
+                </div>
+                <i data-lucide="chevron-right" class="item-chevron"></i>
+            </a>
+
             <!-- 10. TOMBOL KELUAR (SIGN OUT) -->
             <div class="btn-signout-wrap">
                 <button type="button" class="btn-signout" onclick="handleSignOut()">
@@ -1410,6 +1419,23 @@
                     </div>
                     <div class="desktop-act-right">
                         <span class="desktop-act-pill pill-red" id="badge-desktop-notif">15+ Baru</span>
+                        <i data-lucide="chevron-right" class="desktop-act-chevron"></i>
+                    </div>
+                </a>
+
+                <!-- 5. Dashboard Administrator (Petugas & Pengelola) -->
+                <a href="{{ route('admin.dashboard') }}" class="desktop-activity-row" style="background: #f8fafc; border-left: 3px solid #1572b8;">
+                    <div class="desktop-act-left">
+                        <div class="desktop-act-icon-box" style="background: #e0f2fe; color: #0284c7;">
+                            <i data-lucide="shield"></i>
+                        </div>
+                        <div class="desktop-act-info">
+                            <span class="desktop-act-title">Dashboard Administrator</span>
+                            <span class="desktop-act-desc">Panel moderasi laporan, verifikasi aduan civitas, dan kelola tata kelola akun kampus</span>
+                        </div>
+                    </div>
+                    <div class="desktop-act-right">
+                        <span class="desktop-act-pill" style="background: #e0f2fe; color: #0369a1; font-weight: 600;">Panel Petugas</span>
                         <i data-lucide="chevron-right" class="desktop-act-chevron"></i>
                     </div>
                 </a>

@@ -2164,7 +2164,7 @@
 
                 <div class="sidebar-divider"></div>
 
-                <!-- 4. Navigasi Tambahan (Buku Panduan, Pengaturan, Pusat Bantuan) -->
+                <!-- 4. Navigasi Tambahan (Buku Panduan, Pengaturan, Pusat Bantuan, Panel Admin) -->
                 <div class="sidebar-secondary-group">
                     <button type="button" class="sidebar-nav-item" onclick="openGuideModal()" title="Buku Panduan &amp; Informasi">
                         <div class="sidebar-item-left">
@@ -2190,6 +2190,14 @@
                             <span class="sidebar-item-label">Pusat Bantuan</span>
                         </div>
                     </button>
+                    <a href="{{ route('admin.dashboard') }}" class="sidebar-nav-item {{ request()->is('admin*') ? 'active' : '' }}" title="Dashboard Administrator FindUMB">
+                        <div class="sidebar-item-left">
+                            <div class="sidebar-item-icon">
+                                <i data-lucide="shield-check"></i>
+                            </div>
+                            <span class="sidebar-item-label">Panel Admin</span>
+                        </div>
+                    </a>
                 </div>
             </div>
 

@@ -219,4 +219,29 @@ class ExampleTest extends TestCase
         $response->assertSee('modal-desktop-detail');
         $response->assertSee('saved-reports-list');
     }
+
+    public function test_the_admin_dashboard_returns_a_successful_response(): void
+    {
+        $response = $this->get('/admin');
+
+        $response->assertStatus(200);
+        $response->assertSee('Dashboard Administrator');
+        $response->assertSee('Pusat komando moderasi pelaporan');
+        $response->assertSee('Total Laporan Aktif');
+        $response->assertSee('Barang Selesai Serah Terima');
+        $response->assertSee('Aduan Menunggu Review');
+        $response->assertSee('Akun Ditangguhkan');
+        $response->assertSee('Aduan &amp; Moderasi', false);
+        $response->assertSee('Kelola Laporan Barang');
+        $response->assertSee('Manajemen Pengguna');
+        $response->assertSee('Log Audit Moderasi');
+        $response->assertSee('Kategori Barang');
+        $response->assertSee('Web Civitas');
+        $response->assertSee('Kembali ke Halaman Civitas');
+        $response->assertSee('Mode Admin Aktif');
+        $response->assertSee('modal-moderation-action');
+        $response->assertSee('modal-abuse-detail');
+        $response->assertSee('modal-create-admin');
+        $response->assertSee('modal-admin-settings');
+    }
 }
