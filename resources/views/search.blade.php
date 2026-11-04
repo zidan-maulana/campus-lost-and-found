@@ -12,15 +12,29 @@
         gap: 0.95rem;
     }
 
+    /* Search Top Row (Input + Dropdown) */
+    .search-top-row {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        width: 100%;
+    }
+
+    .category-dropdown-wrapper {
+        display: none;
+    }
+
     /* Main Search Input Bar */
     .search-input-wrapper {
+        flex: 1;
+        min-width: 0;
         display: flex;
         align-items: center;
         gap: 0.75rem;
         background: #ffffff;
         border: 1px solid var(--border-subtle);
         border-radius: var(--radius-md);
-        padding: 0.75rem 1rem;
+        padding: 0.35rem 6px 0.35rem 1rem;
         box-shadow: 0 1px 4px rgba(15, 23, 42, 0.03);
         transition: var(--transition);
         position: relative;
@@ -59,29 +73,7 @@
         font-size: 0.875rem;
     }
 
-    .search-clear-btn {
-        background: transparent;
-        border: none;
-        color: #94a3b8;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 0.2rem;
-        border-radius: 50%;
-        transition: var(--transition);
-    }
 
-    .search-clear-btn:hover {
-        color: #0f172a;
-        background: #f1f5f9;
-    }
-
-    .search-clear-btn svg, .search-clear-btn .lucide {
-        width: 16px;
-        height: 16px;
-        stroke-width: 2.2;
-    }
 
     /* Month Filter Calendar Icon Trigger in Search Bar */
     .month-filter-container {
@@ -249,7 +241,7 @@
         display: flex;
         background: #f1f5f9;
         padding: 4px;
-        border-radius: var(--radius-pill);
+        border-radius: 14px;
         position: relative;
         gap: 4px;
     }
@@ -263,7 +255,7 @@
         font-size: 0.825rem;
         font-weight: 500;
         padding: 0.55rem 0.5rem;
-        border-radius: var(--radius-pill);
+        border-radius: 10px;
         cursor: pointer;
         transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
         text-align: center;
@@ -843,84 +835,756 @@
         visibility: visible;
         transform: translateX(-50%) translateY(0);
     }
+
+    /* Desktop Responsive Adjustments (min-width: 1024px) */
+    @media (min-width: 1024px) {
+        .search-container {
+            max-width: 1380px;
+            margin: 0 auto;
+            padding: 2.25rem clamp(1.75rem, 4vw, 4rem) 4rem clamp(1.75rem, 4vw, 4rem);
+            width: 100%;
+            box-sizing: border-box;
+            gap: 1.35rem;
+        }
+
+        .search-top-row {
+            gap: 0.85rem;
+        }
+
+        .search-input-wrapper {
+            height: 48px;
+            box-sizing: border-box;
+            border-radius: 14px;
+            padding: 0 6px 0 1.15rem;
+            box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .search-main-field {
+            font-size: 0.95rem;
+        }
+
+        /* Desktop Category Dropdown Option Button */
+        .category-dropdown-wrapper {
+            display: inline-block !important;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .category-filter-dropdown-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+            height: 48px;
+            box-sizing: border-box;
+            padding: 0 1.15rem;
+            background: linear-gradient(135deg, #0c559c 0%, #1572b8 52%, #2aa5e0 100%);
+            border: 1.5px solid transparent;
+            border-radius: 14px;
+            font-family: var(--font-main);
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: #ffffff;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            user-select: none;
+            white-space: nowrap;
+            box-shadow: none !important;
+        }
+
+        .category-filter-dropdown-btn:hover {
+            background: linear-gradient(135deg, #0a4d8d 0%, #1369aa 52%, #2499d3 100%);
+            box-shadow: none !important;
+            transform: translateY(-0.5px);
+        }
+
+        .category-filter-dropdown-btn.open {
+            background: linear-gradient(135deg, #0a4d8d 0%, #1369aa 52%, #2499d3 100%);
+            box-shadow: none !important;
+        }
+
+        .category-filter-dropdown-btn .dropdown-btn-content {
+            display: flex;
+            align-items: center;
+            gap: 0.55rem;
+        }
+
+        .category-filter-dropdown-btn .dropdown-filter-text {
+            color: #ffffff;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+        }
+
+        .category-filter-dropdown-btn .dropdown-filter-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 22px;
+            height: 22px;
+            padding: 0 0.4rem;
+            border-radius: 9999px;
+            background-color: #ffffff;
+            color: #0c559c;
+            font-size: 0.75rem;
+            font-weight: 700;
+            line-height: 1;
+            box-shadow: none !important;
+            transition: all 0.18s ease;
+        }
+
+        .category-filter-dropdown-btn .dropdown-chevron-icon {
+            width: 16px;
+            height: 16px;
+            stroke-width: 2.4;
+            color: #ffffff;
+            stroke: #ffffff;
+            transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            opacity: 0.9;
+        }
+
+        .category-filter-dropdown-btn.open .dropdown-chevron-icon {
+            transform: rotate(180deg);
+            opacity: 1;
+        }
+
+        /* Category Filter Menu Popup */
+        .category-filter-menu {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            min-width: 230px;
+            background: #ffffff;
+            border: 1px solid var(--border-subtle);
+            border-radius: 16px;
+            box-shadow: 0 12px 36px rgba(15, 23, 42, 0.12), 0 0 0 1px rgba(15, 23, 42, 0.05);
+            z-index: 100;
+            padding: 0.45rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            animation: categoryDropdownFade 0.16s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes categoryDropdownFade {
+            from {
+                opacity: 0;
+                transform: translateY(-6px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .category-filter-menu-header {
+            font-size: 0.68rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #94a3b8;
+            padding: 0.35rem 0.65rem 0.25rem 0.65rem;
+        }
+
+        .category-filter-option {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            padding: 0.55rem 0.75rem;
+            border-radius: 10px;
+            background: transparent;
+            border: none;
+            font-family: var(--font-main);
+            font-size: 0.825rem;
+            font-weight: 500;
+            color: #334155;
+            cursor: pointer;
+            transition: background-color 0.15s ease, color 0.15s ease;
+            text-align: left;
+        }
+
+        .category-filter-option:hover {
+            background: #f8fafc;
+            color: #0f172a;
+        }
+
+        .category-filter-option.selected {
+            background: #eff6ff;
+            color: #1572b8;
+            font-weight: 600;
+        }
+
+        .category-option-left {
+            display: flex;
+            align-items: center;
+            gap: 0.55rem;
+        }
+
+        .category-option-left svg, .category-option-left .lucide {
+            width: 15px;
+            height: 15px;
+            stroke-width: 2.1;
+            color: #64748b;
+        }
+
+        .category-filter-option.selected .category-option-left svg,
+        .category-filter-option.selected .category-option-left .lucide {
+            color: #1572b8;
+        }
+
+        .category-option-right {
+            display: flex;
+            align-items: center;
+        }
+
+        .category-option-count {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 20px;
+            height: 20px;
+            padding: 0 0.35rem;
+            border-radius: 9999px;
+            background-color: #ef4444; /* Red indicator badge */
+            color: #ffffff;
+            font-size: 0.7rem;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        /* Hide Horizontal Category Chips on Desktop */
+        .categories-scroll-track {
+            display: none !important;
+        }
+
+        .search-reports-list {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 1.25rem;
+        }
+
+        .report-card {
+            padding: 0.85rem 1rem;
+            border-radius: 16px;
+        }
+
+        .report-card:hover {
+            transform: none !important;
+            box-shadow: 0 1px 2px rgba(15, 23, 42, 0.02) !important;
+            border-color: rgba(15, 23, 42, 0.055) !important;
+        }
+
+        /* ----------------------------------------------------
+           Desktop Floating Detail Modal (Jendela Mengambang)
+           ---------------------------------------------------- */
+        .desktop-detail-modal-backdrop {
+            z-index: 150;
+            background: rgba(15, 23, 42, 0.45);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+        }
+
+        .desktop-detail-card {
+            background: #ffffff;
+            border-radius: 24px;
+            width: 100%;
+            max-width: 560px;
+            max-height: 86vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.25), 0 0 0 1px rgba(15, 23, 42, 0.06);
+            transform: scale(0.96);
+            transition: transform 0.24s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.24s ease;
+        }
+
+        .desktop-detail-modal-backdrop.active .desktop-detail-card {
+            transform: scale(1);
+        }
+
+        .desktop-detail-hero-box {
+            position: relative;
+            width: 100%;
+            height: 220px;
+            background: #f1f5f9;
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+
+        .desktop-detail-hero-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .desktop-detail-floating-header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 1rem 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: linear-gradient(180deg, rgba(15, 23, 42, 0.5) 0%, rgba(15, 23, 42, 0) 100%);
+            z-index: 2;
+        }
+
+        .desktop-detail-floating-actions-right {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .desktop-detail-circle-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.92);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            color: #1e293b;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .desktop-detail-circle-btn:hover {
+            background: #ffffff;
+            color: #0f172a;
+            transform: scale(1.06);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.16);
+        }
+
+        .desktop-detail-circle-btn.bookmarked {
+            background: #eff6ff;
+            color: #1572b8;
+            border-color: #bfdbfe;
+        }
+
+        .desktop-detail-circle-btn svg, .desktop-detail-circle-btn .lucide {
+            width: 17px;
+            height: 17px;
+            stroke-width: 2.2;
+        }
+
+        .desktop-detail-content-scroll {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.25rem 1.65rem 1.25rem 1.65rem;
+            scrollbar-width: thin;
+            scrollbar-color: #cbd5e1 transparent;
+        }
+
+        .desktop-detail-content-scroll::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .desktop-detail-content-scroll::-webkit-scrollbar-button {
+            display: none;
+            width: 0;
+            height: 0;
+        }
+
+        .desktop-detail-content-scroll::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .desktop-detail-content-scroll::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 9999px;
+        }
+
+        .desktop-detail-content-scroll::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        .desktop-detail-title {
+            font-family: var(--font-heading);
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin: 0 0 0.5rem 0;
+            line-height: 1.3;
+        }
+
+        .desktop-detail-author-row {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.825rem;
+            color: #64748b;
+            margin-bottom: 1.15rem;
+        }
+
+        .desktop-detail-author-avatar {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: #e0f2fe;
+            color: #0284c7;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .desktop-detail-author-avatar svg, .desktop-detail-author-avatar .lucide {
+            width: 14px;
+            height: 14px;
+        }
+
+        .desktop-detail-author-name {
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .reporter-badge-verified {
+            display: inline-flex;
+            align-items: center;
+            color: #0284c7;
+        }
+
+        .reporter-badge-verified svg, .reporter-badge-verified .lucide {
+            width: 14px;
+            height: 14px;
+        }
+
+        .desktop-detail-meta-dot {
+            color: #cbd5e1;
+        }
+
+        .desktop-detail-props-table {
+            border-top: 1px solid #f1f5f9;
+            margin-bottom: 1.1rem;
+        }
+
+        .desktop-detail-prop-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            font-size: 0.85rem;
+            line-height: 1.45;
+            padding: 0.55rem 0;
+            border-bottom: 1px solid #f8fafc;
+        }
+
+        .desktop-detail-prop-label {
+            display: flex;
+            align-items: center;
+            gap: 0.45rem;
+            width: 140px;
+            flex-shrink: 0;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .desktop-detail-prop-label svg, .desktop-detail-prop-label .lucide {
+            width: 15px;
+            height: 15px;
+            color: #64748b;
+            flex-shrink: 0;
+            stroke-width: 2.2;
+        }
+
+        .desktop-detail-prop-value {
+            flex: 1;
+            min-width: 0;
+            color: #0f172a;
+            font-weight: 600;
+            word-break: break-word;
+        }
+
+        .desktop-detail-desc-section {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 0.85rem 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+            margin-top: 0.25rem;
+        }
+
+        .desktop-detail-desc-heading {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin: 0;
+        }
+
+        .desktop-detail-desc-content {
+            font-size: 0.825rem;
+            line-height: 1.55;
+            color: #475569;
+            margin: 0;
+        }
+
+        .desktop-detail-footer-bar {
+            padding: 0.95rem 1.65rem 1.15rem 1.65rem;
+            background: #ffffff;
+            border-top: 1px solid #f1f5f9;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            flex-shrink: 0;
+        }
+
+        .desktop-detail-btn-primary {
+            flex: 1;
+            background: #0f5791;
+            color: #ffffff;
+            border: none;
+            height: 46px;
+            border-radius: 12px;
+            font-family: var(--font-main);
+            font-size: 0.9rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.2s ease, transform 0.15s ease;
+        }
+
+        .desktop-detail-btn-primary:hover {
+            background: #0b4372;
+        }
+
+        .desktop-detail-btn-primary svg, .desktop-detail-btn-primary .lucide {
+            width: 17px;
+            height: 17px;
+            stroke-width: 2.2;
+        }
+
+        .desktop-detail-btn-bookmark, .desktop-detail-btn-external {
+            width: 46px;
+            height: 46px;
+            border-radius: 12px;
+            background: #ffffff;
+            border: 1px solid var(--border-subtle);
+            color: #64748b;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .desktop-detail-btn-bookmark:hover, .desktop-detail-btn-external:hover {
+            background: #f8fafc;
+            color: #0f172a;
+            border-color: #cbd5e1;
+        }
+
+        .desktop-detail-btn-bookmark.bookmarked {
+            background: #eff6ff;
+            color: #1572b8;
+            border-color: #bfdbfe;
+        }
+
+        .desktop-detail-btn-bookmark svg, .desktop-detail-btn-external svg,
+        .desktop-detail-btn-bookmark .lucide, .desktop-detail-btn-external .lucide {
+            width: 18px;
+            height: 18px;
+            stroke-width: 2.2;
+        }
+    }
+
+    @media (max-width: 1023px) {
+        .desktop-detail-modal-backdrop {
+            display: none !important;
+        }
+    }
 </style>
 @endpush
 
 @section('content')
 <div class="search-container">
-    <!-- Search Bar with Filters Trigger -->
-    <div class="search-input-wrapper">
-        <span class="search-input-icon">
-            <i data-lucide="search"></i>
-        </span>
-        <input type="text" id="live-search-input" class="search-main-field" placeholder="Cari barang hilang atau temuan..." autocomplete="off">
-        <button type="button" class="search-clear-btn" id="btn-clear-search" aria-label="Hapus Pencarian" onclick="clearSearchInput()">
-            <i data-lucide="x"></i>
-        </button>
-        <!-- Month Filter Dropdown Trigger & Floating Menu -->
-        <div class="month-filter-container" id="month-filter-container">
-            <button type="button" class="btn-month-filter" id="btn-month-filter" onclick="toggleMonthDropdown(event)" aria-haspopup="listbox" aria-expanded="false" aria-label="Filter Berdasarkan Bulan" title="Filter Bulan">
-                <i data-lucide="calendar"></i>
-                <span class="month-active-dot" id="month-active-dot"></span>
+    <!-- Search Bar & Category Dropdown Row -->
+    <div class="search-top-row">
+        <div class="search-input-wrapper">
+            <span class="search-input-icon">
+                <i data-lucide="search"></i>
+            </span>
+            <input type="text" id="live-search-input" class="search-main-field" value="{{ request('q', '') }}" placeholder="Cari barang hilang atau temuan..." autocomplete="off">
+            <!-- Month Filter Dropdown Trigger & Floating Menu -->
+            <div class="month-filter-container" id="month-filter-container">
+                <button type="button" class="btn-month-filter" id="btn-month-filter" onclick="toggleMonthDropdown(event)" aria-haspopup="listbox" aria-expanded="false" aria-label="Filter Berdasarkan Bulan" title="Filter Bulan">
+                    <i data-lucide="calendar"></i>
+                    <span class="month-active-dot" id="month-active-dot"></span>
+                </button>
+
+                <!-- Floating Dropdown Option List -->
+                <div class="month-dropdown-menu" id="month-dropdown-menu" role="listbox" style="display: none;">
+                    <div class="month-dropdown-header">Filter Bulan</div>
+                    <div class="month-dropdown-list">
+                        <button type="button" class="month-dropdown-item selected" data-month="all" onclick="selectMonthFilter('all', 'Semua Bulan')">
+                            <span>Semua Bulan</span>
+                            <i data-lucide="check" class="item-check"></i>
+                        </button>
+                        <button type="button" class="month-dropdown-item" data-month="01" onclick="selectMonthFilter('01', 'Januari')">
+                            <span>Januari</span>
+                            <i data-lucide="check" class="item-check"></i>
+                        </button>
+                        <button type="button" class="month-dropdown-item" data-month="02" onclick="selectMonthFilter('02', 'Februari')">
+                            <span>Februari</span>
+                            <i data-lucide="check" class="item-check"></i>
+                        </button>
+                        <button type="button" class="month-dropdown-item" data-month="03" onclick="selectMonthFilter('03', 'Maret')">
+                            <span>Maret</span>
+                            <i data-lucide="check" class="item-check"></i>
+                        </button>
+                        <button type="button" class="month-dropdown-item" data-month="04" onclick="selectMonthFilter('04', 'April')">
+                            <span>April</span>
+                            <i data-lucide="check" class="item-check"></i>
+                        </button>
+                        <button type="button" class="month-dropdown-item" data-month="05" onclick="selectMonthFilter('05', 'Mei')">
+                            <span>Mei</span>
+                            <i data-lucide="check" class="item-check"></i>
+                        </button>
+                        <button type="button" class="month-dropdown-item" data-month="06" onclick="selectMonthFilter('06', 'Juni')">
+                            <span>Juni</span>
+                            <i data-lucide="check" class="item-check"></i>
+                        </button>
+                        <button type="button" class="month-dropdown-item" data-month="07" onclick="selectMonthFilter('07', 'Juli')">
+                            <span>Juli</span>
+                            <i data-lucide="check" class="item-check"></i>
+                        </button>
+                        <button type="button" class="month-dropdown-item" data-month="08" onclick="selectMonthFilter('08', 'Agustus')">
+                            <span>Agustus</span>
+                            <i data-lucide="check" class="item-check"></i>
+                        </button>
+                        <button type="button" class="month-dropdown-item" data-month="09" onclick="selectMonthFilter('09', 'September')">
+                            <span>September</span>
+                            <i data-lucide="check" class="item-check"></i>
+                        </button>
+                        <button type="button" class="month-dropdown-item" data-month="10" onclick="selectMonthFilter('10', 'Oktober')">
+                            <span>Oktober</span>
+                            <i data-lucide="check" class="item-check"></i>
+                        </button>
+                        <button type="button" class="month-dropdown-item" data-month="11" onclick="selectMonthFilter('11', 'November')">
+                            <span>November</span>
+                            <i data-lucide="check" class="item-check"></i>
+                        </button>
+                        <button type="button" class="month-dropdown-item" data-month="12" onclick="selectMonthFilter('12', 'Desember')">
+                            <span>Desember</span>
+                            <i data-lucide="check" class="item-check"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Category Dropdown Option Button (Desktop) -->
+        <div class="category-dropdown-wrapper" id="category-dropdown-wrapper">
+            <button type="button" 
+                    class="category-filter-dropdown-btn" 
+                    id="btn-category-filter-dropdown" 
+                    aria-haspopup="true" 
+                    aria-expanded="false" 
+                    onclick="toggleCategoryFilterDropdown(event)"
+                    title="Filter Kategori">
+                <span class="dropdown-btn-content">
+                    <span class="dropdown-filter-text" id="category-dropdown-label">Semua Kategori</span>
+                    <span class="dropdown-filter-badge" id="category-dropdown-badge">10</span>
+                </span>
+                <i data-lucide="chevron-down" class="dropdown-chevron-icon" id="category-dropdown-chevron"></i>
             </button>
 
-            <!-- Floating Dropdown Option List -->
-            <div class="month-dropdown-menu" id="month-dropdown-menu" role="listbox" style="display: none;">
-                <div class="month-dropdown-header">Filter Bulan</div>
-                <div class="month-dropdown-list">
-                    <button type="button" class="month-dropdown-item selected" data-month="all" onclick="selectMonthFilter('all', 'Semua Bulan')">
-                        <span>Semua Bulan</span>
-                        <i data-lucide="check" class="item-check"></i>
-                    </button>
-                    <button type="button" class="month-dropdown-item" data-month="01" onclick="selectMonthFilter('01', 'Januari')">
-                        <span>Januari</span>
-                        <i data-lucide="check" class="item-check"></i>
-                    </button>
-                    <button type="button" class="month-dropdown-item" data-month="02" onclick="selectMonthFilter('02', 'Februari')">
-                        <span>Februari</span>
-                        <i data-lucide="check" class="item-check"></i>
-                    </button>
-                    <button type="button" class="month-dropdown-item" data-month="03" onclick="selectMonthFilter('03', 'Maret')">
-                        <span>Maret</span>
-                        <i data-lucide="check" class="item-check"></i>
-                    </button>
-                    <button type="button" class="month-dropdown-item" data-month="04" onclick="selectMonthFilter('04', 'April')">
-                        <span>April</span>
-                        <i data-lucide="check" class="item-check"></i>
-                    </button>
-                    <button type="button" class="month-dropdown-item" data-month="05" onclick="selectMonthFilter('05', 'Mei')">
-                        <span>Mei</span>
-                        <i data-lucide="check" class="item-check"></i>
-                    </button>
-                    <button type="button" class="month-dropdown-item" data-month="06" onclick="selectMonthFilter('06', 'Juni')">
-                        <span>Juni</span>
-                        <i data-lucide="check" class="item-check"></i>
-                    </button>
-                    <button type="button" class="month-dropdown-item" data-month="07" onclick="selectMonthFilter('07', 'Juli')">
-                        <span>Juli</span>
-                        <i data-lucide="check" class="item-check"></i>
-                    </button>
-                    <button type="button" class="month-dropdown-item" data-month="08" onclick="selectMonthFilter('08', 'Agustus')">
-                        <span>Agustus</span>
-                        <i data-lucide="check" class="item-check"></i>
-                    </button>
-                    <button type="button" class="month-dropdown-item" data-month="09" onclick="selectMonthFilter('09', 'September')">
-                        <span>September</span>
-                        <i data-lucide="check" class="item-check"></i>
-                    </button>
-                    <button type="button" class="month-dropdown-item" data-month="10" onclick="selectMonthFilter('10', 'Oktober')">
-                        <span>Oktober</span>
-                        <i data-lucide="check" class="item-check"></i>
-                    </button>
-                    <button type="button" class="month-dropdown-item" data-month="11" onclick="selectMonthFilter('11', 'November')">
-                        <span>November</span>
-                        <i data-lucide="check" class="item-check"></i>
-                    </button>
-                    <button type="button" class="month-dropdown-item" data-month="12" onclick="selectMonthFilter('12', 'Desember')">
-                        <span>Desember</span>
-                        <i data-lucide="check" class="item-check"></i>
-                    </button>
-                </div>
+            <div class="category-filter-menu" id="category-filter-menu" role="menu" style="display: none;" onclick="event.stopPropagation()">
+                <div class="category-filter-menu-header">Pilih Kategori</div>
+                
+                <button type="button" class="category-filter-option selected" data-category="all" role="menuitem" onclick="selectCategoryFromDropdown('all')">
+                    <div class="category-option-left">
+                        <i data-lucide="layers"></i>
+                        <span class="category-option-label">Semua Kategori</span>
+                    </div>
+                    <div class="category-option-right">
+                        <span class="category-option-count" id="category-count-all">10</span>
+                    </div>
+                </button>
+
+                <button type="button" class="category-filter-option" data-category="elektronik" role="menuitem" onclick="selectCategoryFromDropdown('elektronik')">
+                    <div class="category-option-left">
+                        <i data-lucide="smartphone"></i>
+                        <span class="category-option-label">Elektronik</span>
+                    </div>
+                    <div class="category-option-right">
+                        <span class="category-option-count" id="category-count-elektronik">3</span>
+                    </div>
+                </button>
+
+                <button type="button" class="category-filter-option" data-category="tas" role="menuitem" onclick="selectCategoryFromDropdown('tas')">
+                    <div class="category-option-left">
+                        <i data-lucide="briefcase"></i>
+                        <span class="category-option-label">Tas &amp; Dompet</span>
+                    </div>
+                    <div class="category-option-right">
+                        <span class="category-option-count" id="category-count-tas">2</span>
+                    </div>
+                </button>
+
+                <button type="button" class="category-filter-option" data-category="dokumen" role="menuitem" onclick="selectCategoryFromDropdown('dokumen')">
+                    <div class="category-option-left">
+                        <i data-lucide="file-text"></i>
+                        <span class="category-option-label">Dokumen &amp; KTM</span>
+                    </div>
+                    <div class="category-option-right">
+                        <span class="category-option-count" id="category-count-dokumen">2</span>
+                    </div>
+                </button>
+
+                <button type="button" class="category-filter-option" data-category="pakaian" role="menuitem" onclick="selectCategoryFromDropdown('pakaian')">
+                    <div class="category-option-left">
+                        <i data-lucide="shirt"></i>
+                        <span class="category-option-label">Pakaian</span>
+                    </div>
+                    <div class="category-option-right">
+                        <span class="category-option-count" id="category-count-pakaian">1</span>
+                    </div>
+                </button>
+
+                <button type="button" class="category-filter-option" data-category="kunci" role="menuitem" onclick="selectCategoryFromDropdown('kunci')">
+                    <div class="category-option-left">
+                        <i data-lucide="key"></i>
+                        <span class="category-option-label">Kunci</span>
+                    </div>
+                    <div class="category-option-right">
+                        <span class="category-option-count" id="category-count-kunci">1</span>
+                    </div>
+                </button>
+
+                <button type="button" class="category-filter-option" data-category="aksesoris" role="menuitem" onclick="selectCategoryFromDropdown('aksesoris')">
+                    <div class="category-option-left">
+                        <i data-lucide="watch"></i>
+                        <span class="category-option-label">Aksesoris</span>
+                    </div>
+                    <div class="category-option-right">
+                        <span class="category-option-count" id="category-count-aksesoris">2</span>
+                    </div>
+                </button>
+
+                <button type="button" class="category-filter-option" data-category="lainnya" role="menuitem" onclick="selectCategoryFromDropdown('lainnya')">
+                    <div class="category-option-left">
+                        <i data-lucide="help-circle"></i>
+                        <span class="category-option-label">Lainnya</span>
+                    </div>
+                    <div class="category-option-right">
+                        <span class="category-option-count" id="category-count-lainnya">0</span>
+                    </div>
+                </button>
             </div>
         </div>
     </div>
@@ -1335,6 +1999,140 @@
     </div>
 </div>
 
+<!-- DESKTOP DETAIL MODAL (Floating Modal / Jendela Mengambang) -->
+<div class="modal-backdrop desktop-detail-modal-backdrop" id="modal-desktop-detail" onclick="closeDesktopDetailModalOnBackdrop(event)" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="desktop-detail-card" onclick="event.stopPropagation()">
+        <!-- Top Image with Floating Action Buttons & Zoom Trigger -->
+        <div class="desktop-detail-hero-box" onclick="openImageLightbox(document.getElementById('modal-detail-hero-img').src, document.getElementById('modal-detail-title').textContent)" title="Klik untuk lihat detail foto">
+            <img src="" alt="Foto Barang" class="desktop-detail-hero-img" id="modal-detail-hero-img">
+            <div class="desktop-detail-zoom-pill">
+                <i data-lucide="zoom-in"></i>
+                <span>Lihat Detail Foto</span>
+            </div>
+            <div class="desktop-detail-floating-header">
+                <button type="button" class="desktop-detail-circle-btn" onclick="event.stopPropagation(); closeDesktopDetailModal()" aria-label="Tutup Detail" title="Tutup">
+                    <i data-lucide="x"></i>
+                </button>
+                <div class="desktop-detail-floating-actions-right">
+                    <button type="button" class="desktop-detail-circle-btn" onclick="event.stopPropagation(); handleDetailModalShare()" aria-label="Bagikan Laporan" title="Bagikan Laporan">
+                        <i data-lucide="share-2"></i>
+                    </button>
+                    <button type="button" class="desktop-detail-circle-btn" id="modal-detail-top-bookmark" onclick="event.stopPropagation(); handleDetailModalBookmark()" aria-label="Simpan Laporan" title="Simpan Laporan">
+                        <i data-lucide="bookmark"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scrollable Modal Content -->
+        <div class="desktop-detail-content-scroll">
+            <!-- Heading Title -->
+            <h2 class="desktop-detail-title" id="modal-detail-title">Nama Barang</h2>
+
+            <!-- Author / Reporter Row -->
+            <div class="desktop-detail-author-row">
+                <div class="desktop-detail-author-avatar">
+                    <i data-lucide="user"></i>
+                </div>
+                <span class="desktop-detail-author-name" id="modal-detail-reporter-name">Civitas UMB</span>
+                <span class="reporter-badge-verified" title="Terverifikasi">
+                    <i data-lucide="check-circle-2"></i>
+                </span>
+                <span class="desktop-detail-meta-dot">•</span>
+                <span class="desktop-detail-post-date" id="modal-detail-post-date">12 Mei 2026</span>
+            </div>
+
+            <!-- Structured Properties List (Persis Image 1) -->
+            <div class="desktop-detail-props-table">
+                <!-- Status Laporan -->
+                <div class="desktop-detail-prop-row">
+                    <div class="desktop-detail-prop-label">
+                        <i data-lucide="tag"></i>
+                        <span>Status:</span>
+                    </div>
+                    <div class="desktop-detail-prop-value">
+                        <span class="badge-status badge-lost" id="modal-detail-status-badge">Hilang</span>
+                    </div>
+                </div>
+
+                <!-- Tanggal -->
+                <div class="desktop-detail-prop-row">
+                    <div class="desktop-detail-prop-label">
+                        <i data-lucide="calendar"></i>
+                        <span id="modal-label-prop-date">Tanggal Hilang:</span>
+                    </div>
+                    <div class="desktop-detail-prop-value" id="modal-detail-date">12 Mei 2026</div>
+                </div>
+
+                <!-- Waktu -->
+                <div class="desktop-detail-prop-row">
+                    <div class="desktop-detail-prop-label">
+                        <i data-lucide="clock"></i>
+                        <span>Waktu:</span>
+                    </div>
+                    <div class="desktop-detail-prop-value" id="modal-detail-time">10.00 - 11.30 WIB</div>
+                </div>
+
+                <!-- Lokasi Kampus -->
+                <div class="desktop-detail-prop-row">
+                    <div class="desktop-detail-prop-label">
+                        <i data-lucide="map-pin"></i>
+                        <span>Lokasi Kampus:</span>
+                    </div>
+                    <div class="desktop-detail-prop-value" id="modal-detail-location">Kampus Meruya — Gedung E R. 204</div>
+                </div>
+
+                <!-- Kategori Barang -->
+                <div class="desktop-detail-prop-row">
+                    <div class="desktop-detail-prop-label">
+                        <i data-lucide="layers"></i>
+                        <span>Kategori:</span>
+                    </div>
+                    <div class="desktop-detail-prop-value" id="modal-detail-category">Buku, Dokumen &amp; ATK</div>
+                </div>
+
+                <!-- Merek / Tipe -->
+                <div class="desktop-detail-prop-row">
+                    <div class="desktop-detail-prop-label">
+                        <i data-lucide="bookmark"></i>
+                        <span>Merek / Tipe:</span>
+                    </div>
+                    <div class="desktop-detail-prop-value" id="modal-detail-brand">Dokumen Resmi Imigrasi</div>
+                </div>
+
+                <!-- Status Simpan / Pengamanan -->
+                <div class="desktop-detail-prop-row" id="modal-row-prop-storage">
+                    <div class="desktop-detail-prop-label">
+                        <i data-lucide="shield-check"></i>
+                        <span>Status Simpan:</span>
+                    </div>
+                    <div class="desktop-detail-prop-value" id="modal-detail-storage">Disimpan Sendiri</div>
+                </div>
+            </div>
+
+            <!-- Deskripsi & Ciri Khusus -->
+            <div class="desktop-detail-desc-section">
+                <h3 class="desktop-detail-desc-heading">Deskripsi &amp; Ciri Khusus</h3>
+                <p class="desktop-detail-desc-content" id="modal-detail-features">Map plastik biru berisi Paspor Republik Indonesia...</p>
+            </div>
+        </div>
+
+        <!-- Bottom Action Bar inside Modal -->
+        <div class="desktop-detail-footer-bar">
+            <a href="{{ route('messages') }}" class="desktop-detail-btn-primary" id="modal-detail-primary-btn">
+                <i data-lucide="hand" id="modal-detail-btn-icon"></i>
+                <span id="modal-detail-btn-label">Saya Menemukan Barang Ini</span>
+            </a>
+            <button type="button" class="desktop-detail-btn-bookmark" id="modal-detail-footer-bookmark" onclick="handleDetailModalBookmark()" aria-label="Simpan Laporan" title="Simpan Laporan">
+                <i data-lucide="bookmark"></i>
+            </button>
+            <a href="#" class="desktop-detail-btn-external" id="modal-detail-open-full" target="_self" title="Buka di Halaman Penuh" aria-label="Buka di Halaman Penuh">
+                <i data-lucide="external-link"></i>
+            </a>
+        </div>
+    </div>
+</div>
+
 <!-- Toast Popup Notification -->
 <div class="toast-popup" id="toast-popup" role="status" aria-live="polite"></div>
 @endsection
@@ -1348,6 +2146,425 @@
     let currentSortOrder = 'newest';
     let currentQuery = '';
 
+    // ----------------------------------------------------
+    // Desktop Floating Detail Modal Catalog & Handlers
+    // ----------------------------------------------------
+    const mockReportsCatalog = {
+        '1': {
+            id: '1',
+            type: 'lost',
+            title: 'Samsung SM-A135F',
+            brand: 'Samsung Galaxy A13',
+            category: 'Elektronik & HP',
+            category_slug: 'elektronik',
+            location_campus: 'Kampus Meruya',
+            location_specific: 'Gedung Tower Lt. 7 R. 702',
+            location_full: 'Kampus Meruya — Gedung Tower Lt. 7 R. 702',
+            date: '2026-06-20',
+            date_display: '20 Jun 2026',
+            time: '14.30 WIB (Siang)',
+            storage: 'Disimpan Sendiri',
+            features: 'Smartphone Samsung warna hitam, terpasang casing transparan dengan stiker logo Informatika di bagian belakang. Layar dalam keadaan terkunci.',
+            image: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=800&auto=format&fit=crop&q=80',
+            reporter_name: 'Mahasiswa Fasilkom',
+            reporter_meta: 'Civitas Terverifikasi • NIM 4152***'
+        },
+        '2': {
+            id: '2',
+            type: 'lost',
+            title: 'Paspor & Berkas Beasiswa',
+            brand: 'Dokumen Resmi Imigrasi',
+            category: 'Buku, Dokumen & ATK',
+            category_slug: 'dokumen',
+            location_campus: 'Kampus Meruya',
+            location_specific: 'Gedung E R. 204',
+            location_full: 'Kampus Meruya — Gedung E R. 204',
+            date: '2026-05-12',
+            date_display: '12 Mei 2026',
+            time: '10.00 - 11.30 WIB',
+            storage: 'Disimpan Sendiri',
+            features: 'Map plastik biru berisi Paspor Republik Indonesia atas nama mahasiswa dan berkas pendaftaran beasiswa luar negeri.',
+            image: 'https://images.unsplash.com/photo-1544717305-2782549b5136?w=800&auto=format&fit=crop&q=80',
+            reporter_name: 'Mahasiswi FEB',
+            reporter_meta: 'Civitas Terverifikasi • NIM 4312***'
+        },
+        '3': {
+            id: '3',
+            type: 'found',
+            title: 'Tasbih & Gelang Manik Merah',
+            brand: 'Aksesoris Ibadah',
+            category: 'Jam & Aksesori',
+            category_slug: 'aksesoris',
+            location_campus: 'Kampus Meruya',
+            location_specific: 'Masjid Manarul \'Amal UMB, Area Saf Laki-laki',
+            location_full: 'Kampus Meruya — Masjid Manarul \'Amal UMB',
+            date: '2026-01-15',
+            date_display: '15 Jan 2026',
+            time: 'Ba\'da Salat Dzuhur',
+            storage: 'Dititipkan di Pengurus DKM Masjid',
+            features: 'Tasbih kayu berbutir merah marun berjumlah 33 butir dan gelang manik elastis. Saat ini diamankan di meja pengurus DKM.',
+            image: 'https://images.unsplash.com/photo-1590402494682-cd3fb53b1f70?w=800&auto=format&fit=crop&q=80',
+            reporter_name: 'Pengurus DKM Manarul \'Amal',
+            reporter_meta: 'Pengurus Masjid Kampus UMB'
+        },
+        '4': {
+            id: '4',
+            type: 'found',
+            title: 'Kunci Motor Honda & Remote',
+            brand: 'Honda Smart Key',
+            category: 'Kunci Kendaraan / Ruangan',
+            category_slug: 'kunci',
+            location_campus: 'Kampus Meruya',
+            location_specific: 'Parkir Barat Kampus Meruya (Dekat Pohon Rindang)',
+            location_full: 'Kampus Meruya — Parkir Barat Kampus Meruya',
+            date: '2026-01-10',
+            date_display: '10 Jan 2026',
+            time: 'Pagi (± 08.15 WIB)',
+            storage: 'Dititipkan di Pos Satpam Parkir',
+            features: 'Kunci motor Honda dengan gantungan tali lanyard hitam bertuliskan One Heart dan remote alarm hitam.',
+            image: 'https://images.unsplash.com/photo-1582139329536-e7284fece509?w=800&auto=format&fit=crop&q=80',
+            reporter_name: 'Petugas Keamanan Parkir',
+            reporter_meta: 'Biro Keamanan & Ketertiban Kampus'
+        },
+        '5': {
+            id: '5',
+            type: 'lost',
+            title: 'Cincin Emas Berlian',
+            brand: 'Perhiasan Emas Kuning',
+            category: 'Jam & Aksesori',
+            category_slug: 'aksesoris',
+            location_campus: 'Kampus Meruya',
+            location_specific: 'Parkir Barat Kampus Meruya',
+            location_full: 'Kampus Meruya — Parkir Barat Kampus Meruya',
+            date: '2026-01-15',
+            date_display: '15 Jan 2026',
+            time: 'Siang saat menuju kendaraan',
+            storage: 'Disimpan Sendiri',
+            features: 'Cincin emas sepasang model pertunangan/pernikahan dengan ukiran inisial halus di lingkar dalam. Terjatuh di sekitar parkiran.',
+            image: 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=800&auto=format&fit=crop&q=80',
+            reporter_name: 'Civitas UMB',
+            reporter_meta: 'Civitas Terverifikasi • UMB Meruya'
+        },
+        '6': {
+            id: '6',
+            type: 'lost',
+            title: 'Tablet Samsung Tab S8',
+            brand: 'Samsung Galaxy Tab S8',
+            category: 'Elektronik & HP',
+            category_slug: 'elektronik',
+            location_campus: 'Kampus Meruya',
+            location_specific: 'Gedung E Lt. 3 Ruang Diskusi',
+            location_full: 'Kampus Meruya — Gedung E Lt. 3 Ruang Diskusi',
+            date: '2026-01-14',
+            date_display: '14 Jan 2026',
+            time: 'Sore (± 16.00 WIB)',
+            storage: 'Disimpan Sendiri',
+            features: 'Tablet warna graphite abu-abu tua dengan book cover magnetic hitam dan S-Pen menempel di punggung tablet.',
+            image: 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=800&auto=format&fit=crop&q=80',
+            reporter_name: 'Mahasiswa Desain (FDSK)',
+            reporter_meta: 'Civitas Terverifikasi • NIM 4232***'
+        },
+        '7': {
+            id: '7',
+            type: 'lost',
+            title: 'Tas Laptop Lenovo ThinkPad',
+            brand: 'ThinkPad Essential Backpack',
+            category: 'Tas & Ransel',
+            category_slug: 'tas',
+            location_campus: 'Kampus Meruya',
+            location_specific: 'Lab Komputer Gedung Tower Lt. 4',
+            location_full: 'Kampus Meruya — Lab Komputer Gedung Tower',
+            date: '2026-01-18',
+            date_display: '18 Jan 2026',
+            time: '13.00 WIB usai praktikum',
+            storage: 'Dititipkan di Lab Komputer Tower',
+            features: 'Ransel laptop hitam bergaris merah khas ThinkPad, di dalamnya ada charger laptop 65W dan buku catatan kuliah.',
+            image: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=800&auto=format&fit=crop&q=80',
+            reporter_name: 'Mahasiswa Teknik Elektro',
+            reporter_meta: 'Civitas Terverifikasi • NIM 4142***'
+        },
+        '8': {
+            id: '8',
+            type: 'lost',
+            title: 'Dompet Kulit & KTM Mahasiswa',
+            brand: 'Dompet Kulit Cokelat',
+            category: 'Dompet & Kartu',
+            category_slug: 'tas',
+            location_campus: 'Kampus Meruya',
+            location_specific: 'Kantin Gedung D Lantai 1',
+            location_full: 'Kampus Meruya — Kantin Gedung D',
+            date: '2026-02-08',
+            date_display: '08 Feb 2026',
+            time: 'Istirahat makan siang',
+            storage: 'Dititipkan di Pengelola Kantin',
+            features: 'Dompet kulit warna cokelat tua berisi KTM UMB, e-KTP, kartu debit bank, dan uang tunai.',
+            image: 'https://images.unsplash.com/photo-1627123424574-724758594e93?w=800&auto=format&fit=crop&q=80',
+            reporter_name: 'Mahasiswa Fikom',
+            reporter_meta: 'Civitas Terverifikasi • NIM 4422***'
+        },
+        '9': {
+            id: '9',
+            type: 'found',
+            title: 'Jaket Almamater UMB',
+            brand: 'Jas Almamater Resmi UMB',
+            category: 'Pakaian & Sepatu',
+            category_slug: 'pakaian',
+            location_campus: 'Kampus Meruya',
+            location_specific: 'Perpustakaan Pusat Lantai 2, Meja Baca Mandiri',
+            location_full: 'Kampus Meruya — Perpustakaan Pusat Lt. 2',
+            date: '2026-01-22',
+            date_display: '22 Jan 2026',
+            time: '17.00 WIB (Sore)',
+            storage: 'Dititipkan di Staf Perpustakaan',
+            features: 'Jaket almamater biru navy ukuran L dengan badge bordir logo Universitas Mercu Buana di dada kiri. Tertinggal di sandaran kursi.',
+            image: 'https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?w=800&auto=format&fit=crop&q=80',
+            reporter_name: 'Staf Perpustakaan UMB',
+            reporter_meta: 'Pengelola Fasilitas Perpustakaan'
+        },
+        '10': {
+            id: '10',
+            type: 'found',
+            title: 'Earphone TWS Anker Soundcore',
+            brand: 'Anker Soundcore R50i',
+            category: 'Elektronik & HP',
+            category_slug: 'elektronik',
+            location_campus: 'Kampus Meruya',
+            location_specific: 'Gazebo Taman Depan Gedung Tower',
+            location_full: 'Kampus Meruya — Gazebo Taman Kampus',
+            date: '2026-02-02',
+            date_display: '02 Feb 2026',
+            time: '15.45 WIB (Sore)',
+            storage: 'Dititipkan di Pos Keamanan Kampus',
+            features: 'Charging case TWS warna hitam matte beserta sepasang earphone di dalamnya. Kondisi baterai masih menyala.',
+            image: 'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=800&auto=format&fit=crop&q=80',
+            reporter_name: 'Civitas UMB',
+            reporter_meta: 'Civitas Terverifikasi • Kampus Meruya'
+        }
+    };
+
+    function getReportDataById(id) {
+        const idStr = String(id);
+        try {
+            const raw = localStorage.getItem('findumb_custom_reports');
+            if (raw) {
+                const list = JSON.parse(raw);
+                if (Array.isArray(list)) {
+                    const found = list.find(r => String(r.id) === idStr);
+                    if (found) {
+                        return {
+                            ...found,
+                            reporter_name: found.reporter_name || (found.is_mine ? 'Ahmad Fauzi (Saya)' : 'Civitas UMB'),
+                            reporter_meta: found.reporter_meta || 'Civitas Terverifikasi • NIM 4152***'
+                        };
+                    }
+                }
+            }
+        } catch(e) {}
+
+        if (mockReportsCatalog[idStr]) {
+            return mockReportsCatalog[idStr];
+        }
+
+        return mockReportsCatalog['1'];
+    }
+
+    function openDesktopDetailModal(id) {
+        const report = getReportDataById(id);
+        if (!report) return;
+
+        const modal = document.getElementById('modal-desktop-detail');
+        if (!modal) return;
+
+        // Title
+        const titleEl = document.getElementById('modal-detail-title');
+        if (titleEl) titleEl.textContent = report.title || 'Detail Laporan';
+
+        // Hero Image
+        const imgEl = document.getElementById('modal-detail-hero-img');
+        if (imgEl) {
+            imgEl.src = report.image || 'https://images.unsplash.com/photo-1584438784894-089d6a62b8fa?w=800&auto=format&fit=crop&q=80';
+            imgEl.alt = report.title || 'Foto Barang';
+        }
+
+        // Status Badge
+        const badgeEl = document.getElementById('modal-detail-status-badge');
+        if (badgeEl) {
+            if (report.status === 'resolved' || report.status === 'completed') {
+                badgeEl.className = 'badge-status badge-resolved';
+                badgeEl.textContent = 'Selesai';
+            } else if (report.type === 'found') {
+                badgeEl.className = 'badge-status badge-found';
+                badgeEl.textContent = 'Temuan';
+            } else {
+                badgeEl.className = 'badge-status badge-lost';
+                badgeEl.textContent = 'Hilang';
+            }
+        }
+
+        // Reporter & Date
+        const repNameEl = document.getElementById('modal-detail-reporter-name');
+        if (repNameEl) repNameEl.textContent = report.reporter_name || 'Civitas UMB';
+
+        const postDateEl = document.getElementById('modal-detail-post-date');
+        if (postDateEl) postDateEl.textContent = report.date_display || report.date || 'Baru Saja';
+
+        // Location
+        const locEl = document.getElementById('modal-detail-location');
+        if (locEl) locEl.textContent = report.location_full || report.location_campus || 'Kampus Meruya';
+
+        // Date Metric
+        const dateEl = document.getElementById('modal-detail-date');
+        const labelDateEl = document.getElementById('modal-label-prop-date');
+        if (dateEl) dateEl.textContent = report.date_display || report.date || 'Hari Ini';
+        if (labelDateEl) {
+            labelDateEl.textContent = report.type === 'found' ? 'Tanggal Temuan:' : 'Tanggal Hilang:';
+        }
+
+        // Time Metric
+        const timeEl = document.getElementById('modal-detail-time');
+        if (timeEl) {
+            if (report.time) {
+                timeEl.textContent = report.time.replace(/^waktu\s*:\s*/i, '').trim();
+            } else {
+                timeEl.textContent = 'Tidak ditentukan';
+            }
+        }
+
+        // Category & Brand
+        const catEl = document.getElementById('modal-detail-category');
+        if (catEl) catEl.textContent = report.category_label || report.category || 'Lainnya';
+
+        const brandEl = document.getElementById('modal-detail-brand');
+        if (brandEl) brandEl.textContent = report.brand || 'Sesuai Ciri Fisik';
+
+        // Storage status
+        const storageEl = document.getElementById('modal-detail-storage');
+        const storageRow = document.getElementById('modal-row-prop-storage');
+        if (storageEl && storageRow) {
+            if (report.storage) {
+                storageEl.textContent = report.storage;
+                storageRow.style.display = 'flex';
+            } else if (report.type === 'found') {
+                storageEl.textContent = 'Disimpan Sendiri';
+                storageRow.style.display = 'flex';
+            } else {
+                storageRow.style.display = 'none';
+            }
+        }
+
+        // Description & features
+        const descEl = document.getElementById('modal-detail-features');
+        if (descEl) {
+            descEl.textContent = report.features || 'Tidak ada catatan tambahan mengenai ciri khusus atau deskripsi fisik barang.';
+        }
+
+        // Primary Action Button
+        const primaryBtn = document.getElementById('modal-detail-primary-btn');
+        const btnLabel = document.getElementById('modal-detail-btn-label');
+        if (primaryBtn && btnLabel) {
+            if (report.status === 'resolved' || report.status === 'completed') {
+                btnLabel.textContent = 'Laporan Selesai';
+                primaryBtn.style.background = '#64748b';
+                primaryBtn.style.pointerEvents = 'none';
+            } else if (report.type === 'found') {
+                btnLabel.textContent = 'Ajukan Klaim Barang Ini';
+                primaryBtn.style.background = '#0f5791';
+                primaryBtn.style.pointerEvents = 'auto';
+            } else {
+                btnLabel.textContent = 'Saya Menemukan Barang Ini';
+                primaryBtn.style.background = '#0f5791';
+                primaryBtn.style.pointerEvents = 'auto';
+            }
+        }
+
+        // External Link to Full Report Page
+        const fullPageBtn = document.getElementById('modal-detail-open-full');
+        if (fullPageBtn) {
+            const fallbackId = String(report.id).replace('featured-', '');
+            fullPageBtn.href = `{{ url('/report') }}/${encodeURIComponent(fallbackId)}`;
+        }
+
+        // Set active id for bookmarks & shares
+        modal.setAttribute('data-active-id', report.id || id);
+        syncDetailModalBookmarkState(report.id || id);
+
+        modal.classList.add('active');
+        modal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
+    }
+
+    function closeDesktopDetailModal() {
+        const modal = document.getElementById('modal-desktop-detail');
+        if (modal) {
+            modal.classList.remove('active');
+            modal.setAttribute('aria-hidden', 'true');
+            document.body.style.overflow = '';
+        }
+    }
+
+    function closeDesktopDetailModalOnBackdrop(e) {
+        if (e.target.id === 'modal-desktop-detail') {
+            closeDesktopDetailModal();
+        }
+    }
+
+    function handleDetailModalBookmark() {
+        const modal = document.getElementById('modal-desktop-detail');
+        if (!modal) return;
+        const id = modal.getAttribute('data-active-id') || '1';
+        toggleBookmark(id);
+    }
+
+    function syncDetailModalBookmarkState(id) {
+        const bookmarks = getStoredBookmarks();
+        const isBookmarked = bookmarks.includes(String(id));
+
+        const topBtn = document.getElementById('modal-detail-top-bookmark');
+        const footerBtn = document.getElementById('modal-detail-footer-bookmark');
+
+        if (topBtn) topBtn.classList.toggle('bookmarked', isBookmarked);
+        if (footerBtn) footerBtn.classList.toggle('bookmarked', isBookmarked);
+    }
+
+    function handleDetailModalShare() {
+        const modal = document.getElementById('modal-desktop-detail');
+        const id = modal ? modal.getAttribute('data-active-id') || '1' : '1';
+        const titleEl = document.getElementById('modal-detail-title');
+        const title = titleEl ? titleEl.textContent : 'Laporan';
+        const fallbackId = String(id).replace('featured-', '');
+        const reportUrl = `${window.location.origin}/report/${encodeURIComponent(fallbackId)}`;
+
+        if (navigator.share) {
+            navigator.share({
+                title: title + ' — Find UMB',
+                text: 'Periksa laporan ' + title + ' di Find UMB (Campus Lost & Found).',
+                url: reportUrl,
+            }).catch(() => {});
+        } else {
+            navigator.clipboard.writeText(reportUrl).then(() => {
+                showToast('Tautan laporan disalin ke clipboard!');
+            }).catch(() => {
+                showToast('Tautan siap dibagikan.');
+            });
+        }
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            const lightbox = document.getElementById('modal-image-lightbox');
+            if (lightbox && lightbox.classList.contains('active')) {
+                return; // Lightbox will be closed by global handler
+            }
+            closeMonthDropdown();
+            closeCategoryFilterDropdown();
+            closeDesktopDetailModal();
+        }
+    });
+
     // Inisialisasi
     document.addEventListener('DOMContentLoaded', () => {
         if (typeof lucide !== 'undefined') {
@@ -1355,15 +2572,22 @@
         }
 
         renderCustomSearchReports();
+        syncCardBookmarks();
+        updateCategoryDropdownUI();
 
         const searchInput = document.getElementById('live-search-input');
+        const urlParams = new URLSearchParams(window.location.search);
+        const queryParam = urlParams.get('q') || (searchInput ? searchInput.value : '');
+        if (queryParam) {
+            currentQuery = queryParam.toLowerCase().trim();
+            if (searchInput) {
+                searchInput.value = queryParam;
+            }
+        }
+
         if (searchInput) {
             searchInput.addEventListener('input', (e) => {
                 currentQuery = e.target.value.toLowerCase().trim();
-                const clearBtn = document.getElementById('btn-clear-search');
-                if (clearBtn) {
-                    clearBtn.style.display = currentQuery.length > 0 ? 'flex' : 'none';
-                }
                 applyFilterAndSearch();
             });
 
@@ -1379,10 +2603,14 @@
             if (dropdownWrapper && !dropdownWrapper.contains(e.target)) {
                 closeMonthDropdown();
             }
+
+            const catDropdownWrapper = document.getElementById('category-dropdown-wrapper');
+            if (catDropdownWrapper && !catDropdownWrapper.contains(e.target)) {
+                closeCategoryFilterDropdown();
+            }
         });
 
         // Open month filter dropdown if requested via URL param (e.g. from home search bar calendar icon)
-        const urlParams = new URLSearchParams(window.location.search);
         if (urlParams.get('open_month') === '1') {
             setTimeout(() => {
                 toggleMonthDropdown();
@@ -1391,12 +2619,17 @@
 
         applyFilterAndSearch();
 
-        // Card Click Navigation to Detail Page
+        // Card Click Navigation to Detail Page / Floating Desktop Modal
         document.addEventListener('click', (e) => {
             const card = e.target.closest('.report-card');
             if (card && !e.target.closest('.card-actions-row') && !e.target.closest('.btn-action-icon') && !e.target.closest('.card-options-menu')) {
                 const id = card.getAttribute('data-id') || '1';
-                window.location.href = `{{ url('/report') }}/${encodeURIComponent(id)}`;
+                if (window.innerWidth >= 1024) {
+                    e.preventDefault();
+                    openDesktopDetailModal(id);
+                } else {
+                    window.location.href = `{{ url('/report') }}/${encodeURIComponent(id)}`;
+                }
             }
         });
     });
@@ -1551,7 +2784,7 @@
 
         const statusVal = document.getElementById('edit-status').value;
 
-        // Validasi in-app modal jika mengubah status menjadi Terselesaikan
+        // Validate completion modal requirements
         if (statusVal === 'resolved' && reports[index].status !== 'resolved') {
             openSearchEditStatusConfirmModal();
             return;
@@ -1619,6 +2852,8 @@
 
         closeSearchEditModal();
         renderCustomSearchReports();
+        syncCardBookmarks();
+        updateCategoryDropdownUI();
         applyFilterAndSearch();
         showToast('✓ Laporan berhasil diperbarui!');
     }
@@ -1808,6 +3043,8 @@
             container.prepend(card);
         });
 
+        syncCardBookmarks();
+
         if (typeof lucide !== 'undefined') {
             lucide.createIcons();
         }
@@ -1827,17 +3064,114 @@
         applyFilterAndSearch();
     }
 
-    // 2. Kategori Filter
+    // 2. Kategori Filter (Dropdown & Chips Synchronized)
+    const CATEGORY_MAP = {
+        'all': { label: 'Semua Kategori', icon: 'layers' },
+        'elektronik': { label: 'Elektronik', icon: 'smartphone' },
+        'tas': { label: 'Tas & Dompet', icon: 'briefcase' },
+        'dokumen': { label: 'Dokumen & KTM', icon: 'file-text' },
+        'pakaian': { label: 'Pakaian', icon: 'shirt' },
+        'kunci': { label: 'Kunci', icon: 'key' },
+        'aksesoris': { label: 'Aksesoris', icon: 'watch' },
+        'lainnya': { label: 'Lainnya', icon: 'help-circle' }
+    };
+
+    function getCategoryCounts() {
+        const cards = Array.from(document.querySelectorAll('#search-reports-container .report-card'));
+        const counts = {
+            all: cards.length,
+            elektronik: 0,
+            tas: 0,
+            dokumen: 0,
+            pakaian: 0,
+            kunci: 0,
+            aksesoris: 0,
+            lainnya: 0
+        };
+        cards.forEach(card => {
+            const cat = card.getAttribute('data-category');
+            if (cat && counts.hasOwnProperty(cat)) {
+                counts[cat]++;
+            } else if (counts.hasOwnProperty('lainnya')) {
+                counts.lainnya++;
+            }
+        });
+        return counts;
+    }
+
+    function updateCategoryDropdownUI() {
+        const counts = getCategoryCounts();
+        
+        // Update individual option count badges in the menu
+        Object.keys(counts).forEach(cat => {
+            const badgeEl = document.getElementById(`category-count-${cat}`);
+            if (badgeEl) {
+                badgeEl.textContent = counts[cat];
+            }
+        });
+
+        // Update main dropdown button label and badge
+        const currentMeta = CATEGORY_MAP[currentCategoryFilter] || CATEGORY_MAP['all'];
+        const labelEl = document.getElementById('category-dropdown-label');
+        const badgeEl = document.getElementById('category-dropdown-badge');
+
+        if (labelEl) labelEl.textContent = currentMeta.label;
+        if (badgeEl) badgeEl.textContent = counts[currentCategoryFilter] !== undefined ? counts[currentCategoryFilter] : counts['all'];
+
+        // Update selected state in dropdown menu items
+        document.querySelectorAll('.category-filter-option').forEach(item => {
+            const itemCat = item.getAttribute('data-category');
+            item.classList.toggle('selected', itemCat === currentCategoryFilter);
+        });
+    }
+
+    function toggleCategoryFilterDropdown(e) {
+        if (e) e.stopPropagation();
+        const menu = document.getElementById('category-filter-menu');
+        const btn = document.getElementById('btn-category-filter-dropdown');
+        if (!menu || !btn) return;
+
+        const isOpen = menu.style.display !== 'none';
+        if (isOpen) {
+            closeCategoryFilterDropdown();
+        } else {
+            closeMonthDropdown();
+            updateCategoryDropdownUI();
+            menu.style.display = 'flex';
+            btn.classList.add('open');
+            btn.setAttribute('aria-expanded', 'true');
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        }
+    }
+
+    function closeCategoryFilterDropdown() {
+        const menu = document.getElementById('category-filter-menu');
+        const btn = document.getElementById('btn-category-filter-dropdown');
+        if (menu) menu.style.display = 'none';
+        if (btn) {
+            btn.classList.remove('open');
+            btn.setAttribute('aria-expanded', 'false');
+        }
+    }
+
+    function selectCategoryFromDropdown(category) {
+        setCategoryFilter(category);
+        const meta = CATEGORY_MAP[category] || CATEGORY_MAP['all'];
+        showToast(`Kategori: ${meta.label}`);
+    }
+
     function setCategoryFilter(category, el) {
         currentCategoryFilter = category;
         document.querySelectorAll('.category-chip').forEach(btn => {
-            btn.classList.remove('active');
+            btn.classList.toggle('active', btn.getAttribute('data-category') === category);
         });
-        if (el) {
-            el.classList.add('active');
-            // Auto scroll chip to view
+        if (el && el.classList && el.classList.contains('category-chip')) {
             el.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
         }
+        updateCategoryDropdownUI();
+        closeCategoryFilterDropdown();
         applyFilterAndSearch();
     }
 
@@ -1848,10 +3182,6 @@
             input.value = '';
             currentQuery = '';
             input.focus();
-        }
-        const clearBtn = document.getElementById('btn-clear-search');
-        if (clearBtn) {
-            clearBtn.style.display = 'none';
         }
         applyFilterAndSearch();
     }
@@ -1995,9 +3325,6 @@
         if (input) input.value = '';
         currentQuery = '';
 
-        const clearBtn = document.getElementById('btn-clear-search');
-        if (clearBtn) clearBtn.style.display = 'none';
-
         setStatusFilter('all', document.querySelector('.status-segment-pill[data-status="all"]'));
         setCategoryFilter('all', document.querySelector('.category-chip[data-category="all"]'));
 
@@ -2027,13 +3354,71 @@
         }
     }
 
-    function toggleBookmark(btn) {
-        btn.classList.toggle('bookmarked');
-        if (btn.classList.contains('bookmarked')) {
+    function getStoredBookmarks() {
+        try {
+            const raw = localStorage.getItem('findumb_bookmarks');
+            if (raw) {
+                const parsed = JSON.parse(raw);
+                if (Array.isArray(parsed)) return parsed.map(String);
+            }
+        } catch(e) {}
+        const defaultBookmarks = ['2', '3', '7'];
+        try {
+            if (!localStorage.getItem('findumb_bookmarks_init')) {
+                localStorage.setItem('findumb_bookmarks', JSON.stringify(defaultBookmarks));
+                localStorage.setItem('findumb_bookmarks_init', 'true');
+            }
+        } catch(e) {}
+        return defaultBookmarks;
+    }
+
+    function setStoredBookmarks(bookmarks) {
+        try {
+            localStorage.setItem('findumb_bookmarks', JSON.stringify(bookmarks));
+            localStorage.setItem('findumb_bookmarks_init', 'true');
+        } catch(e) {}
+    }
+
+    function toggleBookmark(btnOrId) {
+        let id = null;
+        let btn = null;
+
+        if (typeof btnOrId === 'string' || typeof btnOrId === 'number') {
+            id = String(btnOrId);
+        } else if (btnOrId && btnOrId.nodeType) {
+            btn = btnOrId;
+            const card = btn.closest('.report-card');
+            if (card) id = card.getAttribute('data-id');
+        }
+
+        if (!id) return;
+
+        let bookmarks = getStoredBookmarks();
+        const index = bookmarks.indexOf(id);
+        const isAdding = (index === -1);
+
+        if (isAdding) {
+            bookmarks.push(id);
             showToast('Laporan disimpan ke daftar tersimpan.');
         } else {
+            bookmarks.splice(index, 1);
             showToast('Laporan dihapus dari daftar tersimpan.');
         }
+
+        setStoredBookmarks(bookmarks);
+        syncCardBookmarks();
+        syncDetailModalBookmarkState(id);
+    }
+
+    function syncCardBookmarks() {
+        const bookmarks = getStoredBookmarks();
+        document.querySelectorAll('#search-reports-container .report-card').forEach(card => {
+            const id = String(card.getAttribute('data-id') || '');
+            const btn = card.querySelector('.card-actions-row button[aria-label="Simpan"]');
+            if (btn && id) {
+                btn.classList.toggle('bookmarked', bookmarks.includes(id));
+            }
+        });
     }
 
     function handleShare(title) {

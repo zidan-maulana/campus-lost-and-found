@@ -620,20 +620,25 @@
 @section('content')
 <div class="detail-page-container">
 
-    <!-- 1. Hero Image Container with Edge-to-Edge Visual -->
-    <div class="detail-hero-wrapper">
+    <!-- 1. Hero Image Container with Edge-to-Edge Visual & Lightbox Trigger -->
+    <div class="detail-hero-wrapper" onclick="openImageLightbox(document.getElementById('detail-hero-img').src, document.getElementById('detail-title').textContent)" style="cursor: zoom-in;" title="Klik untuk lihat detail foto">
         <img src="https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=800&auto=format&fit=crop&q=80" alt="Foto Barang" class="detail-hero-img" id="detail-hero-img">
         
+        <div class="desktop-detail-zoom-pill">
+            <i data-lucide="zoom-in"></i>
+            <span>Lihat Detail Foto</span>
+        </div>
+
         <!-- Floating Header Buttons -->
         <div class="detail-floating-header">
-            <a href="{{ route('home') }}" class="floating-circle-btn" id="btn-detail-back" onclick="handleDetailBack(event)" aria-label="Kembali">
+            <a href="{{ route('home') }}" class="floating-circle-btn" id="btn-detail-back" onclick="event.stopPropagation(); handleDetailBack(event)" aria-label="Kembali">
                 <i data-lucide="chevron-left"></i>
             </a>
             <div class="floating-actions-right">
-                <button type="button" class="floating-circle-btn" onclick="handleDetailShare()" aria-label="Bagikan Laporan">
+                <button type="button" class="floating-circle-btn" onclick="event.stopPropagation(); handleDetailShare()" aria-label="Bagikan Laporan">
                     <i data-lucide="share-2"></i>
                 </button>
-                <button type="button" class="floating-circle-btn" id="btn-top-bookmark" onclick="toggleDetailBookmark()" aria-label="Simpan Laporan">
+                <button type="button" class="floating-circle-btn" id="btn-top-bookmark" onclick="event.stopPropagation(); toggleDetailBookmark()" aria-label="Simpan Laporan">
                     <i data-lucide="bookmark"></i>
                 </button>
             </div>
@@ -1265,14 +1270,14 @@
         const actionLabel = document.getElementById('btn-action-label');
 
         if (isOwner) {
-            // Sembunyikan tombol simpan atas (tidak ada titik 3 di atas karena sudah terwakili tombol edit dan delete di bawah)
+            // Hide bookmark button for report author
             if (topBookmarkBtn) topBookmarkBtn.style.display = 'none';
 
             // Sembunyikan tombol simpan bawah, tampilkan tombol hapus
             if (bottomBookmarkBtn) bottomBookmarkBtn.style.display = 'none';
             if (bottomDeleteBtn) bottomDeleteBtn.style.display = 'flex';
 
-            // Ganti tombol "Saya menemukan barang ini" menjadi "Edit Laporan"
+            // Switch action button to Edit Report for author
             if (primaryBtn) {
                 primaryBtn.href = "javascript:void(0)";
                 primaryBtn.onclick = function(e) {
@@ -1360,7 +1365,7 @@
 
         const statusVal = document.getElementById('edit-status').value;
 
-        // Validasi in-app modal jika mengubah status menjadi Terselesaikan
+        // Validate completion modal requirements
         if (statusVal === 'resolved' && reports[index].status !== 'resolved') {
             openDetailEditStatusConfirmModal();
             return;
@@ -1525,47 +1530,59 @@
         }
     }
 
+    // Stored Bookmarks Management
+    function getStoredBookmarks() {
+        try {
+            const raw = localStorage.getItem('findumb_bookmarks');
+            if (raw) {
+                const parsed = JSON.parse(raw);
+                if (Array.isArray(parsed)) return parsed.map(String);
+            }
+        } catch(e) {}
+        const defaultBookmarks = ['2', '3', '7'];
+        try {
+            if (!localStorage.getItem('findumb_bookmarks_init')) {
+                localStorage.setItem('findumb_bookmarks', JSON.stringify(defaultBookmarks));
+                localStorage.setItem('findumb_bookmarks_init', 'true');
+            }
+        } catch(e) {}
+        return defaultBookmarks;
+    }
+
+    function setStoredBookmarks(bookmarks) {
+        try {
+            localStorage.setItem('findumb_bookmarks', JSON.stringify(bookmarks));
+            localStorage.setItem('findumb_bookmarks_init', 'true');
+        } catch(e) {}
+    }
+
     // Bookmark Toggle Handler
     function toggleDetailBookmark() {
         const topBtn = document.getElementById('btn-top-bookmark');
         const bottomBtn = document.getElementById('btn-bookmark-action');
 
-        let savedBookmarks = [];
-        try {
-            savedBookmarks = JSON.parse(localStorage.getItem('findumb_bookmarks') || '[]');
-        } catch(e) {
-            savedBookmarks = [];
-        }
-
+        let bookmarks = getStoredBookmarks();
         const reportKey = String(currentReportId);
-        const index = savedBookmarks.indexOf(reportKey);
+        const index = bookmarks.indexOf(reportKey);
 
         if (index > -1) {
-            savedBookmarks.splice(index, 1);
+            bookmarks.splice(index, 1);
             if (topBtn) topBtn.classList.remove('bookmarked');
             if (bottomBtn) bottomBtn.classList.remove('bookmarked');
             showToast('Laporan dihapus dari daftar tersimpan.');
         } else {
-            savedBookmarks.push(reportKey);
+            bookmarks.push(reportKey);
             if (topBtn) topBtn.classList.add('bookmarked');
             if (bottomBtn) bottomBtn.classList.add('bookmarked');
             showToast('Laporan disimpan ke daftar tersimpan.');
         }
 
-        try {
-            localStorage.setItem('findumb_bookmarks', JSON.stringify(savedBookmarks));
-        } catch(e) {}
+        setStoredBookmarks(bookmarks);
     }
 
     function syncBookmarkButtonState() {
-        let savedBookmarks = [];
-        try {
-            savedBookmarks = JSON.parse(localStorage.getItem('findumb_bookmarks') || '[]');
-        } catch(e) {
-            savedBookmarks = [];
-        }
-
-        const isBookmarked = savedBookmarks.includes(String(currentReportId));
+        const bookmarks = getStoredBookmarks();
+        const isBookmarked = bookmarks.includes(String(currentReportId));
         const topBtn = document.getElementById('btn-top-bookmark');
         const bottomBtn = document.getElementById('btn-bookmark-action');
 

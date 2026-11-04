@@ -10,10 +10,10 @@
 
     <title>@yield('title', 'Find UMB — Campus Lost & Found Universitas Mercu Buana')</title>
 
-    <!-- Google Fonts: Inter (Exact match to reference) -->
+    <!-- Google Fonts: Inter, Nunito, Quicksand, & Poppins -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Nunito:wght@700;800;900&family=Quicksand:wght@600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
 
     <style>
         :root {
@@ -677,36 +677,1685 @@
             color: var(--text-main);
             font-weight: 600;
         }
+        /* Mobile defaults (Hidden on mobile) */
+        .desktop-sidebar,
+        .header-desktop-search,
+        .desktop-profile-btn,
+        .sidebar-collapse-btn,
+        .sidebar-rail-sparkle-btn,
+        .sidebar-rail-expand-btn,
+        .messages-filter-dropdown-wrapper {
+            display: none;
+        }
+
+        .app-layout-wrapper {
+            display: contents;
+        }
+
+        /* Responsive Desktop Breakpoints (min-width: 1024px) */
+        @media (min-width: 1024px) {
+            body {
+                display: block;
+                width: 100%;
+                background-color: #ffffff;
+            }
+
+            .app-layout-wrapper {
+                display: flex !important;
+                width: 100%;
+                min-height: 100vh;
+                background-color: #ffffff;
+            }
+
+            /* Desktop Left Sidebar (Reference Pointsale Concept) */
+            .desktop-sidebar {
+                display: flex !important;
+                flex-direction: column;
+                justify-content: space-between;
+                width: 260px;
+                min-width: 260px;
+                max-width: 260px;
+                height: 100vh;
+                position: sticky;
+                top: 0;
+                background: #ffffff;
+                border-right: 1px solid #f1f5f9;
+                padding: 1.25rem 0.95rem;
+                z-index: 60;
+                box-sizing: border-box;
+                transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
+                            min-width 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
+                            max-width 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
+                            padding 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+                overflow-y: auto;
+                overflow-x: hidden;
+                white-space: nowrap;
+                scrollbar-width: none;
+            }
+
+            .desktop-sidebar::-webkit-scrollbar {
+                display: none;
+            }
+
+            .sidebar-top-container {
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+                width: 100%;
+            }
+
+            /* 1. Header Row */
+            .sidebar-header-row {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 0 0.25rem;
+                min-height: 40px;
+            }
+
+            .sidebar-brand-wrap {
+                display: flex;
+                align-items: center;
+                gap: 0.65rem;
+            }
+
+            .sidebar-logo-btn {
+                background: transparent;
+                border: none;
+                padding: 0;
+                margin: 0;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .sidebar-logo-container {
+                width: 36px;
+                height: 36px;
+                position: relative;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-shrink: 0;
+                border-radius: 9px;
+                transition: background-color 0.2s ease;
+            }
+
+            .sidebar-logo-btn:hover .sidebar-logo-container {
+                background-color: #f1f5f9;
+            }
+
+            .sidebar-logo-flipper {
+                width: 32px;
+                height: 32px;
+                position: relative;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .sidebar-logo-face {
+                position: absolute;
+                inset: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            }
+
+            .sidebar-logo-face-logo {
+                opacity: 1;
+                transform: scale(1) rotate(0deg);
+            }
+
+            .sidebar-logo-face-icon {
+                opacity: 0;
+                transform: scale(0.75) rotate(-10deg);
+                color: #1572b8;
+            }
+
+            .sidebar-open-slide-icon {
+                width: 22px;
+                height: 22px;
+                stroke-width: 2.3;
+                color: #1572b8;
+                stroke: #1572b8;
+            }
+
+            /* Keyframes: Transisi logo dengan icon open slide setiap 4 detik */
+            @keyframes logoSlideOut {
+                0%, 65% {
+                    opacity: 1;
+                    transform: scale(1) rotate(0deg);
+                }
+                72%, 92% {
+                    opacity: 0;
+                    transform: scale(0.7) rotate(12deg);
+                }
+                98%, 100% {
+                    opacity: 1;
+                    transform: scale(1) rotate(0deg);
+                }
+            }
+
+            @keyframes iconSlideIn {
+                0%, 65% {
+                    opacity: 0;
+                    transform: scale(0.7) rotate(-12deg);
+                    pointer-events: none;
+                }
+                72%, 92% {
+                    opacity: 1;
+                    transform: scale(1) rotate(0deg);
+                    pointer-events: auto;
+                }
+                98%, 100% {
+                    opacity: 0;
+                    transform: scale(0.7) rotate(-12deg);
+                    pointer-events: none;
+                }
+            }
+
+            .sidebar-brand-title-link {
+                text-decoration: none;
+                color: inherit;
+                display: flex;
+                align-items: center;
+            }
+
+            .sidebar-logo-img {
+                width: 32px;
+                height: 32px;
+                object-fit: contain;
+                flex-shrink: 0;
+            }
+
+            .sidebar-brand-name {
+                font-family: var(--font-heading);
+                font-weight: 800;
+                font-size: 1.25rem;
+                letter-spacing: -0.02em;
+                color: #1572b8;
+            }
+
+            .sidebar-brand-name span {
+                color: #0c487b;
+            }
+
+            .sidebar-collapse-btn {
+                width: 32px;
+                height: 32px;
+                border-radius: 8px;
+                border: 1px solid var(--border-subtle);
+                background: #ffffff;
+                color: #64748b;
+                display: flex !important;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                transition: var(--transition);
+                flex-shrink: 0;
+            }
+
+            .sidebar-collapse-btn:hover {
+                background: #f8fafc;
+                color: var(--primary);
+                border-color: #cbd5e1;
+            }
+
+            .sidebar-collapse-btn svg, .sidebar-collapse-btn .lucide {
+                width: 17px;
+                height: 17px;
+                stroke-width: 2;
+            }
+
+            /* 2. Navigation Groups & Links */
+            .sidebar-links-group,
+            .sidebar-nav-list,
+            .sidebar-secondary-group {
+                display: flex;
+                flex-direction: column;
+                gap: 0.25rem;
+                width: 100%;
+            }
+
+            .sidebar-nav-item {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 0.75rem;
+                padding: 0.6rem 0.75rem;
+                border-radius: 10px;
+                color: #475569;
+                font-family: var(--font-main);
+                font-size: 0.875rem;
+                font-weight: 500;
+                text-decoration: none;
+                border: 1px solid transparent;
+                background: transparent;
+                cursor: pointer;
+                transition: var(--transition);
+                width: 100%;
+                box-sizing: border-box;
+                text-align: left;
+            }
+
+            .sidebar-nav-item:hover {
+                background-color: #f8fafc;
+                color: #0f172a;
+            }
+
+            /* Active Item Styling: Shape biru sesuai warna card besar beranda, tanpa shadow */
+            .sidebar-nav-item.active {
+                background: linear-gradient(135deg, #0c559c 0%, #1572b8 52%, #2aa5e0 100%) !important;
+                border: none !important;
+                box-shadow: none !important; /* Hapus shadow pada button option yang dipilih */
+                color: #ffffff !important;
+                font-weight: 700 !important;
+            }
+
+            .sidebar-nav-item.active .sidebar-item-icon {
+                color: #ffffff !important;
+            }
+
+            .sidebar-nav-item.active .sidebar-item-label {
+                color: #ffffff !important;
+            }
+
+            /* Indikator notif warna putih ketika button dipilih */
+            .sidebar-nav-item.active .sidebar-badge-counter,
+            .sidebar-nav-item.active .sidebar-badge-counter.sidebar-badge-notif {
+                background-color: #ffffff !important;
+                color: #0c559c !important;
+                font-weight: 700 !important;
+            }
+
+            .sidebar-item-left {
+                display: flex;
+                align-items: center;
+                gap: 0.75rem;
+            }
+
+            .sidebar-item-icon {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 20px;
+                height: 20px;
+                flex-shrink: 0;
+                color: inherit;
+            }
+
+            .sidebar-item-icon svg, .sidebar-item-icon .lucide {
+                width: 19px;
+                height: 19px;
+                stroke-width: 2;
+                color: inherit;
+            }
+
+            .sidebar-item-label {
+                font-size: 0.875rem;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .sidebar-badge-counter {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 0.7rem;
+                font-weight: 700;
+                color: #64748b;
+                min-width: 20px;
+                height: 18px;
+                padding: 1.5px 0.42rem 0 0.42rem;
+                border-radius: 9999px;
+                background: #f1f5f9;
+                line-height: 1;
+                box-sizing: border-box;
+                text-align: center;
+            }
+
+            /* Indikator Merah untuk Pesan Masuk & Notifikasi saat tidak dipilih */
+            .sidebar-badge-counter.sidebar-badge-notif {
+                background-color: #ef4444 !important;
+                color: #ffffff !important;
+                font-weight: 700;
+            }
+
+            .sidebar-divider {
+                height: 1px;
+                background-color: #f1f5f9;
+                width: 100%;
+                margin: 0.25rem 0;
+            }
+
+            .sidebar-section-title {
+                font-size: 0.75rem;
+                font-weight: 600;
+                color: #64748b;
+                padding: 0 0.5rem;
+                margin-bottom: 0.4rem;
+                letter-spacing: 0.02em;
+            }
+
+            /* Container bawah sidebar untuk card & account */
+            .sidebar-bottom-container {
+                display: flex;
+                flex-direction: column;
+                gap: 0.5rem;
+                width: 100%;
+                margin-top: auto;
+            }
+
+            /* 3. Card Lapor Barang (Posisi tepat diatas account profile): Shape biru senada */
+            .sidebar-card-widget {
+                width: 100%;
+                margin: 1.15rem 0 0 0; /* Memberi jarak lega dari button Pusat Bantuan */
+            }
+
+            .sidebar-card-expanded {
+                background: linear-gradient(135deg, #0c559c 0%, #1572b8 52%, #2aa5e0 100%) !important;
+                border: none !important;
+                border-radius: 16px;
+                padding: 1rem 0.95rem;
+                display: flex;
+                flex-direction: column;
+                gap: 0.6rem;
+                box-sizing: border-box;
+                color: #ffffff;
+                box-shadow: 0 4px 14px rgba(12, 85, 156, 0.16) !important;
+            }
+
+            .sidebar-card-header {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+            }
+
+            /* Circle Shape Icon + sejajar dan balance dengan title */
+            .sidebar-card-plus-circle {
+                width: 16px;
+                height: 16px;
+                border-radius: 50%;
+                background: #ffffff;
+                color: #0c559c;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-shrink: 0;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+            }
+
+            .sidebar-card-plus-circle svg,
+            .sidebar-card-plus-circle .lucide {
+                width: 9.5px;
+                height: 9.5px;
+                stroke-width: 2.8;
+                color: #0c559c;
+                stroke: #0c559c;
+            }
+
+            .sidebar-card-main-title {
+                font-size: 0.9rem;
+                font-weight: 700;
+                color: #ffffff;
+                line-height: 1.25;
+                margin: 0;
+            }
+
+            /* Deskripsi dibatasi maksimal 2 baris */
+            .sidebar-card-desc {
+                font-size: 0.75rem;
+                color: rgba(255, 255, 255, 0.92);
+                line-height: 1.4;
+                margin: 0;
+                white-space: normal;
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .sidebar-card-action-btn {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 0.45rem;
+                background: #ffffff !important;
+                color: #0c559c !important;
+                border: none !important;
+                border-radius: 10px; /* Dikurangi agar seimbang dengan card utama (16px) */
+                padding: 0.55rem 0.85rem;
+                font-family: var(--font-main);
+                font-size: 0.825rem;
+                font-weight: 700;
+                cursor: pointer;
+                transition: var(--transition);
+                box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+                width: 100%;
+            }
+
+            .sidebar-card-action-btn:hover {
+                background: #f8fafc !important;
+                transform: translateY(-1px);
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.16);
+            }
+
+            .sidebar-card-action-btn svg, .sidebar-card-action-btn .lucide {
+                width: 15px;
+                height: 15px;
+                stroke-width: 2.5;
+                color: #0c559c;
+                stroke: #0c559c;
+            }
+
+            /* Single Sparkle button for collapsed rail */
+            .sidebar-rail-sparkle-btn {
+                display: none;
+                width: 44px;
+                height: 44px;
+                border-radius: 50%;
+                background: linear-gradient(135deg, #0c559c 0%, #1572b8 52%, #2aa5e0 100%) !important;
+                border: none !important;
+                color: #ffffff !important;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                transition: var(--transition);
+                box-shadow: 0 4px 12px rgba(12, 85, 156, 0.28) !important;
+                margin: 0.35rem auto;
+            }
+
+            .sidebar-rail-sparkle-btn:hover {
+                transform: scale(1.06);
+                box-shadow: 0 6px 16px rgba(12, 85, 156, 0.35) !important;
+            }
+
+            .sidebar-rail-sparkle-btn svg, .sidebar-rail-sparkle-btn .lucide {
+                width: 20px;
+                height: 20px;
+                stroke-width: 2.2;
+                color: #ffffff !important;
+                stroke: #ffffff !important;
+            }
+
+            /* 5. Footer User Profile Card */
+            .sidebar-footer {
+                padding-top: 0.75rem;
+                border-top: 1px solid #f1f5f9;
+                margin-top: 0.75rem;
+                width: 100%;
+            }
+
+            .sidebar-user-card {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 0.65rem;
+                padding: 0.55rem 0.65rem;
+                border-radius: 10px;
+                background: transparent;
+                border: 1px solid transparent;
+                text-decoration: none;
+                color: inherit;
+                transition: var(--transition);
+                width: 100%;
+                box-sizing: border-box;
+            }
+
+            .sidebar-user-card:hover {
+                background: #f8fafc;
+                border-color: #e2e8f0;
+            }
+
+            .sidebar-user-left {
+                display: flex;
+                align-items: center;
+                gap: 0.65rem;
+                min-width: 0;
+            }
+
+            .sidebar-user-avatar {
+                width: 34px;
+                height: 34px;
+                border-radius: 50%;
+                background: #e0f2fe;
+                color: var(--primary);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-shrink: 0;
+            }
+
+            .sidebar-user-avatar svg, .sidebar-user-avatar .lucide {
+                width: 17px;
+                height: 17px;
+                stroke-width: 2.2;
+            }
+
+            .sidebar-user-info {
+                display: flex;
+                flex-direction: column;
+                min-width: 0;
+            }
+
+            .sidebar-user-name {
+                font-size: 0.825rem;
+                font-weight: 700;
+                color: #0f172a;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                line-height: 1.25;
+            }
+
+            .sidebar-user-role {
+                font-size: 0.7rem;
+                color: #64748b;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                line-height: 1.2;
+            }
+
+            .sidebar-user-chevrons {
+                width: 16px;
+                height: 16px;
+                color: #94a3b8;
+                flex-shrink: 0;
+                stroke-width: 1.8;
+            }
+
+            /* Main Content Shell Width */
+            .app-shell {
+                flex: 1;
+                min-width: 0;
+                width: calc(100% - 260px);
+                max-width: 100%;
+                background-color: #ffffff;
+                box-shadow: none;
+                padding-bottom: 3.5rem;
+                margin: 0;
+                min-height: 100vh;
+                transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            }
+
+            /* Sembunyikan bottom navigation bar mobile pada desktop */
+            .bottom-nav-wrapper {
+                display: none !important;
+            }
+
+            /* Desktop Top Header Full Width */
+            .app-header {
+                width: 100%;
+                padding: 1rem clamp(1.5rem, 3.5vw, 3.5rem);
+                background: #ffffff;
+                border-bottom: none !important; /* Hapus bottom line persis dibawah search bar */
+                position: sticky;
+                top: 0;
+                z-index: 50;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 1.5rem;
+            }
+
+            /* Hide duplicate brand logo in header on desktop */
+            .app-header .brand-logo-area {
+                display: none !important;
+            }
+
+            /* Hide top header on Desktop Home & Search pages because they have dedicated search bars */
+            body.page-home .app-header,
+            body.page-search .app-header {
+                display: none !important;
+            }
+
+            /* Collapsed State (Mini-rail 64px persis seperti di referensi) */
+            .app-layout-wrapper.sidebar-collapsed .desktop-sidebar,
+            .desktop-sidebar-pre-collapsed .app-layout-wrapper .desktop-sidebar {
+                width: 64px !important;
+                min-width: 64px !important;
+                max-width: 64px !important;
+                padding: 1.15rem 0.4rem !important;
+                align-items: center;
+            }
+
+            .app-layout-wrapper.sidebar-collapsed .sidebar-brand-name,
+            .desktop-sidebar-pre-collapsed .app-layout-wrapper .sidebar-brand-name,
+            .app-layout-wrapper.sidebar-collapsed .sidebar-brand-title-link,
+            .desktop-sidebar-pre-collapsed .app-layout-wrapper .sidebar-brand-title-link,
+            .app-layout-wrapper.sidebar-collapsed .sidebar-collapse-btn,
+            .desktop-sidebar-pre-collapsed .app-layout-wrapper .sidebar-collapse-btn,
+            .app-layout-wrapper.sidebar-collapsed .sidebar-item-label,
+            .desktop-sidebar-pre-collapsed .app-layout-wrapper .sidebar-item-label,
+            .app-layout-wrapper.sidebar-collapsed .sidebar-badge-counter,
+            .desktop-sidebar-pre-collapsed .app-layout-wrapper .sidebar-badge-counter,
+            .app-layout-wrapper.sidebar-collapsed .sidebar-section-title,
+            .desktop-sidebar-pre-collapsed .app-layout-wrapper .sidebar-section-title,
+            .app-layout-wrapper.sidebar-collapsed .sidebar-card-expanded,
+            .desktop-sidebar-pre-collapsed .app-layout-wrapper .sidebar-card-expanded,
+            .app-layout-wrapper.sidebar-collapsed .sidebar-user-info,
+            .desktop-sidebar-pre-collapsed .app-layout-wrapper .sidebar-user-info,
+            .app-layout-wrapper.sidebar-collapsed .sidebar-user-chevrons,
+            .desktop-sidebar-pre-collapsed .app-layout-wrapper .sidebar-user-chevrons {
+                display: none !important;
+            }
+
+            .app-layout-wrapper.sidebar-collapsed .sidebar-header-row,
+            .desktop-sidebar-pre-collapsed .app-layout-wrapper .sidebar-header-row {
+                justify-content: center;
+                padding: 0;
+            }
+
+            /* Transition animation pada logo HANYA berlaku ketika sidebar tertutup (collapsed) */
+            .app-layout-wrapper.sidebar-collapsed .sidebar-logo-face-logo,
+            .desktop-sidebar-pre-collapsed .app-layout-wrapper .sidebar-logo-face-logo {
+                animation: logoSlideOut 4s ease-in-out infinite;
+            }
+
+            .app-layout-wrapper.sidebar-collapsed .sidebar-logo-face-icon,
+            .desktop-sidebar-pre-collapsed .app-layout-wrapper .sidebar-logo-face-icon {
+                animation: iconSlideIn 4s ease-in-out infinite;
+            }
+
+            .app-layout-wrapper.sidebar-collapsed .sidebar-logo-btn:hover .sidebar-logo-face-logo,
+            .desktop-sidebar-pre-collapsed .app-layout-wrapper .sidebar-logo-btn:hover .sidebar-logo-face-logo {
+                animation: none;
+                opacity: 0;
+                transform: scale(0.7);
+            }
+
+            .app-layout-wrapper.sidebar-collapsed .sidebar-logo-btn:hover .sidebar-logo-face-icon,
+            .desktop-sidebar-pre-collapsed .app-layout-wrapper .sidebar-logo-btn:hover .sidebar-logo-face-icon {
+                animation: none;
+                opacity: 1;
+                transform: scale(1.08);
+            }
+
+            .app-layout-wrapper.sidebar-collapsed .sidebar-logo-btn,
+            .desktop-sidebar-pre-collapsed .app-layout-wrapper .sidebar-logo-btn {
+                margin: 0 auto;
+            }
+
+            .app-layout-wrapper.sidebar-collapsed .sidebar-brand,
+            .desktop-sidebar-pre-collapsed .app-layout-wrapper .sidebar-brand {
+                padding: 0;
+                justify-content: center;
+            }
+
+            .app-layout-wrapper.sidebar-collapsed .sidebar-nav-item,
+            .desktop-sidebar-pre-collapsed .app-layout-wrapper .sidebar-nav-item {
+                width: 44px;
+                height: 44px;
+                padding: 0;
+                justify-content: center;
+                margin: 0 auto;
+                border-radius: 12px;
+            }
+
+            .app-layout-wrapper.sidebar-collapsed .sidebar-nav-item.active,
+            .desktop-sidebar-pre-collapsed .app-layout-wrapper .sidebar-nav-item.active {
+                background: linear-gradient(135deg, #0c559c 0%, #1572b8 52%, #2aa5e0 100%) !important;
+                border: none !important;
+                box-shadow: none !important; /* Hapus shadow */
+                color: #ffffff !important;
+            }
+
+            .app-layout-wrapper.sidebar-collapsed .sidebar-nav-item.active .sidebar-item-icon,
+            .desktop-sidebar-pre-collapsed .app-layout-wrapper .sidebar-nav-item.active .sidebar-item-icon {
+                color: #ffffff !important;
+            }
+
+            /* Indikator notifikasi merah pada mini-rail */
+            .sidebar-rail-notif-dot {
+                display: none;
+                position: absolute;
+                top: -2px;
+                right: -2px;
+                width: 7px;
+                height: 7px;
+                background-color: #ef4444;
+                border-radius: 50%;
+                border: 1.5px solid #ffffff;
+            }
+
+            .app-layout-wrapper.sidebar-collapsed .sidebar-rail-notif-dot,
+            .desktop-sidebar-pre-collapsed .app-layout-wrapper .sidebar-rail-notif-dot {
+                display: block;
+            }
+
+            .app-layout-wrapper.sidebar-collapsed .sidebar-rail-sparkle-btn,
+            .desktop-sidebar-pre-collapsed .app-layout-wrapper .sidebar-rail-sparkle-btn {
+                display: flex !important;
+            }
+
+            .app-layout-wrapper.sidebar-collapsed .sidebar-user-card,
+            .desktop-sidebar-pre-collapsed .app-layout-wrapper .sidebar-user-card {
+                width: 44px;
+                height: 44px;
+                padding: 0;
+                justify-content: center;
+                margin: 0 auto;
+                background: transparent;
+                border-color: transparent;
+            }
+
+            .app-layout-wrapper.sidebar-collapsed .app-shell,
+            .desktop-sidebar-pre-collapsed .app-layout-wrapper .app-shell {
+                width: calc(100% - 64px) !important;
+                max-width: calc(100% - 64px) !important;
+            }
+
+            /* Header Desktop Search Bar Full Width */
+            .header-desktop-search {
+                display: flex !important;
+                align-items: center;
+                gap: 0.75rem;
+                flex: 1;
+                width: 100% !important;
+                max-width: 100% !important;
+                height: 48px;
+                background: #f8fafc;
+                border: 1.5px solid #e2e8f0;
+                border-radius: 14px;
+                padding: 0 0.65rem 0 1.15rem;
+                transition: var(--transition);
+                box-sizing: border-box;
+            }
+
+            .header-desktop-search:focus-within {
+                background: #ffffff;
+                border-color: var(--primary);
+                box-shadow: 0 0 0 3px rgba(21, 114, 184, 0.12);
+            }
+
+            .header-search-icon {
+                color: #94a3b8;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-shrink: 0;
+            }
+
+            .header-search-icon svg, .header-search-icon .lucide {
+                width: 20px;
+                height: 20px;
+                stroke-width: 2.2;
+            }
+
+            .header-search-input {
+                flex: 1;
+                border: none;
+                background: transparent;
+                font-family: var(--font-main);
+                font-size: 0.925rem;
+                color: #0f172a;
+                outline: none;
+                height: 100%;
+            }
+
+            .header-search-input::placeholder {
+                color: #94a3b8;
+                font-size: 0.9rem;
+            }
+
+            /* Calendar button inside header search: gunakan biru yang sama seperti button sidebar ketika terpilih */
+            .header-search-calendar-btn {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                width: 36px;
+                height: 36px;
+                background: linear-gradient(135deg, #0c559c 0%, #1572b8 52%, #2aa5e0 100%) !important;
+                border: none !important;
+                border-radius: 10px;
+                color: #ffffff !important;
+                cursor: pointer;
+                transition: var(--transition);
+                padding: 0;
+                flex-shrink: 0;
+                box-shadow: none !important;
+            }
+
+            .header-search-calendar-btn:hover {
+                opacity: 0.92;
+                transform: scale(1.02);
+            }
+
+            .header-search-calendar-btn svg, .header-search-calendar-btn .lucide {
+                width: 17px;
+                height: 17px;
+                stroke-width: 2.2;
+                color: #ffffff !important;
+                stroke: #ffffff !important;
+            }
+
+            /* Kurangi radius dari ketiga icon disebelah search bar agar balance dengan radius search bar (14px) */
+            .app-header .icon-circle-btn {
+                border-radius: 12px !important;
+            }
+
+            .app-header .icon-circle-btn .badge-notification-dot {
+                top: 8px;
+                right: 8px;
+            }
+
+            .desktop-profile-btn {
+                display: flex !important;
+            }
+
+            /* Header Messages Clear Search Button */
+            .header-messages-clear-btn {
+                background: transparent;
+                border: none;
+                color: #94a3b8;
+                cursor: pointer;
+                display: none;
+                align-items: center;
+                justify-content: center;
+                padding: 0.3rem;
+                border-radius: 50%;
+                transition: var(--transition);
+                margin-right: 0.25rem;
+                flex-shrink: 0;
+            }
+
+            .header-messages-clear-btn:hover {
+                color: #0f172a;
+                background: #e2e8f0;
+            }
+
+            .header-messages-clear-btn svg, .header-messages-clear-btn .lucide {
+                width: 17px;
+                height: 17px;
+                stroke-width: 2.2;
+            }
+
+            /* Messages Header Filter Dropdown (Menggantikan Icon Notif & Akun pada Pesan Masuk) */
+            .messages-filter-dropdown-wrapper {
+                position: relative;
+                display: inline-block !important;
+            }
+
+            .messages-filter-dropdown-btn {
+                display: inline-flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 0.75rem;
+                height: 48px;
+                padding: 0 1.15rem;
+                background: linear-gradient(135deg, #0c559c 0%, #1572b8 52%, #2aa5e0 100%);
+                border: 1.5px solid transparent;
+                border-radius: 14px;
+                font-family: var(--font-main);
+                font-size: 0.9rem;
+                font-weight: 600;
+                color: #ffffff;
+                cursor: pointer;
+                transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+                white-space: nowrap;
+                user-select: none;
+                box-shadow: none !important;
+                box-sizing: border-box;
+            }
+
+            .messages-filter-dropdown-btn:hover {
+                background: linear-gradient(135deg, #0a4d8d 0%, #1369aa 52%, #2499d3 100%);
+                box-shadow: none !important;
+                transform: translateY(-0.5px);
+            }
+
+            .messages-filter-dropdown-btn.open {
+                background: linear-gradient(135deg, #0a4d8d 0%, #1369aa 52%, #2499d3 100%);
+                box-shadow: none !important;
+            }
+
+            .dropdown-btn-content {
+                display: flex;
+                align-items: center;
+                gap: 0.55rem;
+            }
+
+            .dropdown-filter-text {
+                font-size: 0.9rem;
+                font-weight: 600;
+                color: #ffffff;
+            }
+
+            .dropdown-filter-badge {
+                font-size: 0.725rem;
+                font-weight: 700;
+                padding: 0.12rem 0.52rem;
+                border-radius: var(--radius-pill);
+                background-color: #ffffff !important;
+                color: #0c559c !important;
+                line-height: 1.2;
+                transition: all 0.2s ease;
+            }
+
+            .messages-filter-dropdown-btn:hover .dropdown-filter-badge,
+            .messages-filter-dropdown-btn.open .dropdown-filter-badge {
+                background-color: #ffffff !important;
+                color: #0c559c !important;
+            }
+
+            .dropdown-chevron-icon {
+                width: 16px;
+                height: 16px;
+                stroke-width: 2.4;
+                color: #ffffff;
+                stroke: #ffffff;
+                opacity: 0.92;
+                transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
+            }
+
+            .messages-filter-dropdown-btn.open .dropdown-chevron-icon {
+                transform: rotate(180deg);
+                opacity: 1;
+            }
+
+            /* Dropdown Menu Popup */
+            .messages-filter-menu {
+                position: absolute;
+                top: calc(100% + 8px);
+                right: 0;
+                min-width: 220px;
+                background: #ffffff;
+                border: 1.5px solid #e2e8f0;
+                border-radius: 16px;
+                padding: 6px;
+                box-shadow: 0 12px 30px -4px rgba(15, 23, 42, 0.14), 0 4px 12px -2px rgba(15, 23, 42, 0.06);
+                display: none;
+                flex-direction: column;
+                gap: 3px;
+                z-index: 120;
+                transform-origin: top right;
+                animation: filterMenuIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            }
+
+            @keyframes filterMenuIn {
+                from {
+                    opacity: 0;
+                    transform: translateY(-8px) scale(0.96);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0) scale(1);
+                }
+            }
+
+            .messages-filter-menu.open {
+                display: flex;
+            }
+
+            .messages-filter-option {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 0.75rem;
+                padding: 0.6rem 0.8rem;
+                border-radius: 10px;
+                border: none;
+                background: transparent;
+                cursor: pointer;
+                font-family: var(--font-main);
+                font-size: 0.825rem;
+                font-weight: 500;
+                color: #334155;
+                transition: all 0.15s ease;
+                width: 100%;
+                text-align: left;
+            }
+
+            .messages-filter-option:hover {
+                background: #f8fafc;
+                color: #0f172a;
+            }
+
+            .messages-filter-option.active {
+                background: #f0f7ff;
+                color: var(--primary-dark);
+                font-weight: 600;
+            }
+
+            .filter-option-left {
+                display: flex;
+                align-items: center;
+                gap: 0.6rem;
+            }
+
+            .option-icon-wrap {
+                width: 28px;
+                height: 28px;
+                border-radius: 8px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-shrink: 0;
+            }
+
+            .option-icon-wrap svg, .option-icon-wrap .lucide {
+                width: 15px;
+                height: 15px;
+                stroke-width: 2.2;
+            }
+
+            .option-icon-wrap.option-all {
+                background: #f1f5f9;
+                color: #475569;
+            }
+
+            .option-icon-wrap.option-active {
+                background: #fef3c7;
+                color: #b45309;
+            }
+
+            .option-icon-wrap.option-completed {
+                background: #dcfce7;
+                color: #15803d;
+            }
+
+            .messages-filter-option.active .option-icon-wrap.option-all {
+                background: var(--primary-light);
+                color: var(--primary);
+            }
+
+            .filter-option-right {
+                display: flex;
+                align-items: center;
+                gap: 0.45rem;
+            }
+
+            .option-count {
+                font-size: 0.7rem;
+                font-weight: 700;
+                padding: 0.12rem 0.5rem;
+                border-radius: var(--radius-pill);
+                background-color: #ef4444 !important;
+                color: #ffffff !important;
+                min-width: 18px;
+                text-align: center;
+                line-height: 1.2;
+            }
+
+            .option-count.count-active,
+            .option-count.count-completed {
+                background-color: #ef4444 !important;
+                color: #ffffff !important;
+            }
+
+            /* Desktop Centered Modals (transform from mobile bottom sheet to sleek center modal) */
+            .modal-overlay {
+                align-items: center;
+                padding: 1.5rem;
+            }
+
+            .modal-sheet {
+                border-radius: 20px;
+                max-width: 520px;
+                transform: scale(0.95);
+                box-shadow: 0 20px 40px rgba(15, 23, 42, 0.15);
+            }
+
+            .modal-overlay.active .modal-sheet {
+                transform: scale(1);
+            }
+
+            .modal-pill-drag {
+                display: none;
+            }
+
+            .guide-modal-sheet {
+                max-width: 620px;
+                border-radius: 20px;
+            }
+        }
+
+        /* ----------------------------------------------------
+           Global Image Detail Lightbox Modal (Lihat Detail Foto)
+           ---------------------------------------------------- */
+        .image-lightbox-backdrop {
+            position: fixed;
+            inset: 0;
+            z-index: 300;
+            background: rgba(10, 15, 29, 0.92);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity 0.24s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.24s;
+            padding: 1.5rem;
+        }
+
+        .image-lightbox-backdrop.active {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+
+        .image-lightbox-wrapper {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            max-width: 1000px;
+            height: 100%;
+            max-height: 92vh;
+            transform: scale(0.96);
+            transition: transform 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .image-lightbox-backdrop.active .image-lightbox-wrapper {
+            transform: scale(1);
+        }
+
+        .image-lightbox-header {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-bottom: 0.85rem;
+            flex-shrink: 0;
+        }
+
+        .image-lightbox-title-wrap {
+            display: flex;
+            align-items: center;
+            gap: 0.55rem;
+            color: #f8fafc;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .image-lightbox-title-wrap svg, .image-lightbox-title-wrap .lucide {
+            width: 18px;
+            height: 18px;
+            color: #38bdf8;
+        }
+
+        .image-lightbox-title {
+            max-width: 520px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .image-lightbox-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+        }
+
+        .image-lightbox-btn {
+            background: rgba(255, 255, 255, 0.14);
+            border: 1px solid rgba(255, 255, 255, 0.24);
+            color: #ffffff;
+            height: 38px;
+            padding: 0 0.95rem;
+            border-radius: 9999px;
+            font-family: var(--font-main);
+            font-size: 0.825rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            backdrop-filter: blur(8px);
+        }
+
+        .image-lightbox-btn:hover {
+            background: rgba(255, 255, 255, 0.26);
+            border-color: rgba(255, 255, 255, 0.45);
+            transform: translateY(-1px);
+        }
+
+        .image-lightbox-btn svg, .image-lightbox-btn .lucide {
+            width: 16px;
+            height: 16px;
+            stroke-width: 2.2;
+        }
+
+        .image-lightbox-btn-close {
+            width: 38px;
+            padding: 0;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .image-lightbox-btn-close:hover {
+            background: #ef4444;
+            border-color: #ef4444;
+        }
+
+        .image-lightbox-stage {
+            flex: 1;
+            width: 100%;
+            min-height: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+            cursor: zoom-in;
+            background: rgba(15, 23, 42, 0.4);
+            border-radius: 18px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .image-lightbox-stage.is-zoomed {
+            cursor: zoom-out;
+            overflow: auto;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+        }
+
+        .image-lightbox-stage::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        .image-lightbox-stage::-webkit-scrollbar-button {
+            display: none;
+            width: 0;
+            height: 0;
+        }
+
+        .image-lightbox-stage::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .image-lightbox-stage::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.25);
+            border-radius: 9999px;
+        }
+
+        .image-lightbox-stage::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.45);
+        }
+
+        .image-lightbox-img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            border-radius: 12px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
+            transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+            user-select: none;
+        }
+
+        .image-lightbox-stage.is-zoomed .image-lightbox-img {
+            transform: scale(2);
+            cursor: zoom-out;
+            max-width: none;
+            max-height: none;
+        }
+
+        .image-lightbox-footer {
+            padding-top: 0.75rem;
+            text-align: center;
+            color: #94a3b8;
+            font-size: 0.775rem;
+            flex-shrink: 0;
+        }
+
+        .image-lightbox-footer kbd {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 4px;
+            padding: 0.1rem 0.4rem;
+            font-family: inherit;
+            font-size: 0.75rem;
+            color: #ffffff;
+        }
+
+        .desktop-detail-zoom-pill {
+            position: absolute;
+            bottom: 12px;
+            right: 14px;
+            z-index: 4;
+            background: rgba(15, 23, 42, 0.72);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            color: #ffffff;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.35rem 0.75rem;
+            border-radius: 9999px;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            transition: all 0.2s ease;
+            pointer-events: none;
+        }
+
+        .desktop-detail-hero-box:hover .desktop-detail-zoom-pill,
+        .detail-hero-wrapper:hover .desktop-detail-zoom-pill {
+            background: rgba(15, 23, 42, 0.9);
+            border-color: rgba(255, 255, 255, 0.45);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.28);
+        }
+
+        .desktop-detail-zoom-pill svg, .desktop-detail-zoom-pill .lucide {
+            width: 13.5px;
+            height: 13.5px;
+            stroke-width: 2.2;
+        }
     </style>
     @stack('styles')
+    <script>
+        (function() {
+            try {
+                const urlParams = new URLSearchParams(window.location.search);
+                const queryExpanded = urlParams.get('sidebar') === 'expanded' || urlParams.get('expanded') === '1';
+                if (window.innerWidth >= 1024 && !queryExpanded && localStorage.getItem('findumb_desktop_sidebar_collapsed') !== '0') {
+                    document.documentElement.classList.add('desktop-sidebar-pre-collapsed');
+                }
+            } catch(e) {}
+        })();
+    </script>
 </head>
-<body>
-    <div class="app-shell @yield('app_shell_class')" id="app">
-        @hasSection('header')
-            @yield('header')
-        @else
-            <!-- Top App Header -->
-            <header class="app-header">
-                <a href="{{ url('/') }}" class="brand-logo-area" id="brand-logo">
-                    <picture>
-                        <source srcset="{{ asset('images/logo.webp') }}" type="image/webp">
-                        <img src="{{ asset('images/logo.png') }}" alt="Logo Find UMB" class="brand-logo-img" width="38" height="38" loading="eager">
-                    </picture>
-                    <div class="brand-name">Find<span>UMB</span></div>
-                </a>
-                <div class="header-actions">
-                    @if(request()->routeIs('home', 'search') || request()->is('/') || request()->is('search*'))
-                    <button type="button" class="icon-circle-btn" id="btn-guide-info" onclick="openGuideModal()" aria-label="Buku Panduan &amp; Informasi" title="Buku Panduan &amp; Informasi">
-                        <i data-lucide="book-open" style="width: 19px; height: 19px;"></i>
+<body class="{{ (request()->routeIs('home') || request()->is('/')) ? 'page-home' : '' }} {{ (request()->routeIs('search') || request()->is('search*')) ? 'page-search' : '' }}">
+    <div class="app-layout-wrapper {{ request()->get('sidebar') === 'expanded' || request()->get('expanded') == '1' ? '' : 'sidebar-collapsed' }}">
+        <!-- Desktop Sidebar (Visible on desktop min-width: 1024px - Pointsale Concept) -->
+        <aside class="desktop-sidebar" id="desktop-sidebar" aria-label="Sidebar Navigasi Desktop">
+            <div class="sidebar-top-container">
+                <!-- 1. Header Row (Logo dengan Animasi Open Slide + Brand Name + Toggle Button) -->
+                <div class="sidebar-header-row">
+                    <div class="sidebar-brand-wrap">
+                        <button type="button" class="sidebar-logo-btn" onclick="toggleDesktopSidebar()" title="Buka / Ciutkan Sidebar" aria-label="Buka / Ciutkan Sidebar">
+                            <div class="sidebar-logo-container">
+                                <div class="sidebar-logo-flipper">
+                                    <div class="sidebar-logo-face sidebar-logo-face-logo">
+                                        <picture>
+                                            <source srcset="{{ asset('images/logo.webp') }}" type="image/webp">
+                                            <img src="{{ asset('images/logo.png') }}" alt="Logo Find UMB" class="sidebar-logo-img" width="32" height="32" loading="eager">
+                                        </picture>
+                                    </div>
+                                    <div class="sidebar-logo-face sidebar-logo-face-icon">
+                                        <i data-lucide="panel-left-open" class="sidebar-open-slide-icon"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </button>
+                        <a href="{{ url('/') }}" class="sidebar-brand-title-link" title="Beranda Find UMB">
+                            <span class="sidebar-brand-name">Find<span>UMB</span></span>
+                        </a>
+                    </div>
+                    <button type="button" class="sidebar-collapse-btn" onclick="toggleDesktopSidebar()" title="Ciutkan Sidebar" aria-label="Ciutkan Sidebar">
+                        <i data-lucide="panel-left"></i>
                     </button>
-                    @endif
-                    <a href="{{ route('notifications') }}" class="icon-circle-btn" id="btn-notification" aria-label="Notifikasi" style="text-decoration: none;">
-                        <i data-lucide="bell" style="width: 19px; height: 19px;"></i>
-                        <span class="badge-notification-dot" id="header-notif-dot"></span>
+                </div>
+
+                <!-- 2. Komunikasi Cepat (Pesan Masuk & Notifikasi dengan Indikator Merah) -->
+                <div class="sidebar-links-group">
+                    <a href="{{ route('messages') }}" class="sidebar-nav-item {{ request()->is('messages*') ? 'active' : '' }}" title="Pesan Masuk Civitas (12 pesan)">
+                        <div class="sidebar-item-left">
+                            <div class="sidebar-item-icon" style="position: relative;">
+                                <i data-lucide="inbox"></i>
+                                <span class="sidebar-rail-notif-dot"></span>
+                            </div>
+                            <span class="sidebar-item-label">Pesan Masuk</span>
+                        </div>
+                        <span class="sidebar-badge-counter sidebar-badge-notif">12</span>
+                    </a>
+                    <a href="{{ route('notifications') }}" class="sidebar-nav-item {{ request()->is('notifications*') ? 'active' : '' }}" title="Notifikasi (15+ pemberitahuan)">
+                        <div class="sidebar-item-left">
+                            <div class="sidebar-item-icon" style="position: relative;">
+                                <i data-lucide="bell"></i>
+                                <span class="sidebar-rail-notif-dot"></span>
+                            </div>
+                            <span class="sidebar-item-label">Notifikasi</span>
+                        </div>
+                        <span class="sidebar-badge-counter sidebar-badge-notif">15+</span>
                     </a>
                 </div>
-            </header>
-        @endif
+
+                <div class="sidebar-divider"></div>
+
+                <!-- 3. Navigasi Menu Utama -->
+                <div class="sidebar-menu-section">
+                    <div class="sidebar-section-title">Menu</div>
+                    <nav class="sidebar-nav-list">
+                        <!-- Beranda -->
+                        <a href="{{ url('/') }}" class="sidebar-nav-item {{ request()->is('/') ? 'active' : '' }}" title="Beranda">
+                            <div class="sidebar-item-left">
+                                <div class="sidebar-item-icon">
+                                    <i data-lucide="layout-grid"></i>
+                                </div>
+                                <span class="sidebar-item-label">Beranda</span>
+                            </div>
+                        </a>
+
+                        <!-- Cari Laporan -->
+                        <a href="{{ route('search') }}" class="sidebar-nav-item {{ request()->is('search*') ? 'active' : '' }}" title="Cari Laporan">
+                            <div class="sidebar-item-left">
+                                <div class="sidebar-item-icon">
+                                    <i data-lucide="compass"></i>
+                                </div>
+                                <span class="sidebar-item-label">Cari Laporan</span>
+                            </div>
+                        </a>
+
+                        <!-- Laporan Saya -->
+                        <a href="{{ route('my.reports') }}" class="sidebar-nav-item {{ request()->is('my-reports*') ? 'active' : '' }}" title="Laporan Saya">
+                            <div class="sidebar-item-left">
+                                <div class="sidebar-item-icon">
+                                    <i data-lucide="file-text"></i>
+                                </div>
+                                <span class="sidebar-item-label">Laporan Saya</span>
+                            </div>
+                        </a>
+                    </nav>
+                </div>
+
+                <div class="sidebar-divider"></div>
+
+                <!-- 4. Navigasi Tambahan (Buku Panduan, Pengaturan, Pusat Bantuan) -->
+                <div class="sidebar-secondary-group">
+                    <button type="button" class="sidebar-nav-item" onclick="openGuideModal()" title="Buku Panduan &amp; Informasi">
+                        <div class="sidebar-item-left">
+                            <div class="sidebar-item-icon">
+                                <i data-lucide="book-open"></i>
+                            </div>
+                            <span class="sidebar-item-label">Buku Panduan</span>
+                        </div>
+                    </button>
+                    <a href="{{ route('settings') }}" class="sidebar-nav-item {{ request()->is('settings*') ? 'active' : '' }}" title="Pengaturan Sistem">
+                        <div class="sidebar-item-left">
+                            <div class="sidebar-item-icon">
+                                <i data-lucide="settings"></i>
+                            </div>
+                            <span class="sidebar-item-label">Pengaturan</span>
+                        </div>
+                    </a>
+                    <button type="button" class="sidebar-nav-item" onclick="openGuideModal()" title="Pusat Bantuan &amp; Kontak Pos Keamanan">
+                        <div class="sidebar-item-left">
+                            <div class="sidebar-item-icon">
+                                <i data-lucide="help-circle"></i>
+                            </div>
+                            <span class="sidebar-item-label">Pusat Bantuan</span>
+                        </div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Bagian Bawah: Card Lapor Barang (Tepat di atas account profile) & Profile Pengguna -->
+            <div class="sidebar-bottom-container">
+                <!-- 5. Card Lapor Barang Widget -->
+                <div class="sidebar-card-widget">
+                    <!-- Expanded Card -->
+                    <div class="sidebar-card-expanded">
+                        <div class="sidebar-card-header">
+                            <div class="sidebar-card-plus-circle" aria-hidden="true">
+                                <i data-lucide="plus"></i>
+                            </div>
+                            <h4 class="sidebar-card-main-title">Laporkan Barang</h4>
+                        </div>
+                        <p class="sidebar-card-desc">Bantu civitas UMB amankan dan temukan barang hilang.</p>
+                        <button type="button" class="sidebar-card-action-btn" onclick="openReportModal(event)">
+                            <span>Buat Laporan</span>
+                        </button>
+                    </div>
+
+                    <!-- Collapsed Single Sparkle Button (Circle) -->
+                    <button type="button" class="sidebar-rail-sparkle-btn" onclick="openReportModal(event)" title="Laporkan Barang">
+                        <i data-lucide="plus"></i>
+                    </button>
+                </div>
+
+                <!-- 6. Footer User Profile Card -->
+                <div class="sidebar-footer">
+                    <a href="{{ route('profile') }}" class="sidebar-user-card" title="Buka Profil Saya">
+                        <div class="sidebar-user-left">
+                            <div class="sidebar-user-avatar">
+                                <i data-lucide="user"></i>
+                            </div>
+                            <div class="sidebar-user-info">
+                                <span class="sidebar-user-name">Zidan Maulana</span>
+                                <span class="sidebar-user-role">Civitas Akademika UMB</span>
+                            </div>
+                        </div>
+                        <i data-lucide="chevrons-up-down" class="sidebar-user-chevrons"></i>
+                    </a>
+                </div>
+            </div>
+        </aside>
+
+        <div class="app-shell @yield('app_shell_class')" id="app">
+            @hasSection('header')
+                @yield('header')
+            @else
+                <!-- Top App Header (Mobile & Desktop) -->
+                <header class="app-header">
+                    <a href="{{ url('/') }}" class="brand-logo-area" id="brand-logo">
+                        <picture>
+                            <source srcset="{{ asset('images/logo.webp') }}" type="image/webp">
+                            <img src="{{ asset('images/logo.png') }}" alt="Logo Find UMB" class="brand-logo-img" width="38" height="38" loading="eager">
+                        </picture>
+                        <div class="brand-name">Find<span>UMB</span></div>
+                    </a>
+
+                    <!-- Desktop Top Search Bar (Menggantikan Navigasi di Header pada Desktop) -->
+                    @if(request()->routeIs('messages') || request()->is('messages*'))
+                        <div class="header-desktop-search header-messages-search" id="header-desktop-search">
+                            <span class="header-search-icon">
+                                <i data-lucide="search"></i>
+                            </span>
+                            <input type="text" id="desktop-messages-search-input" class="header-search-input" placeholder="Cari percakapan, nama, atau barang..." autocomplete="off">
+                            <button type="button" class="header-messages-clear-btn" id="btn-clear-desktop-messages" aria-label="Hapus Pencarian" style="display: none;" onclick="clearDesktopMessagesSearch()">
+                                <i data-lucide="x"></i>
+                            </button>
+                        </div>
+                    @else
+                        <form action="{{ route('search') }}" method="GET" class="header-desktop-search" id="header-desktop-search">
+                            <span class="header-search-icon">
+                                <i data-lucide="search"></i>
+                            </span>
+                            <input type="text" name="q" id="header-search-input" class="header-search-input" placeholder="Cari barang hilang atau temuan di kampus..." autocomplete="off">
+                            <button type="button" class="search-calendar-btn header-search-calendar-btn" aria-label="Filter Bulan" title="Filter Bulan" onclick="window.location.href='{{ url('/search?open_month=1') }}';">
+                                <i data-lucide="calendar"></i>
+                            </button>
+                        </form>
+                    @endif
+
+                    <div class="header-actions">
+                        @if(request()->routeIs('messages') || request()->is('messages*'))
+                            <!-- Dropdown Option Button (Menggantikan Icon Notif & Akun pada Pesan Masuk) -->
+                            <div class="messages-filter-dropdown-wrapper" id="messages-filter-dropdown-wrapper">
+                                <button type="button" 
+                                        class="messages-filter-dropdown-btn" 
+                                        id="btn-messages-filter-dropdown" 
+                                        aria-haspopup="true" 
+                                        aria-expanded="false" 
+                                        onclick="toggleMessagesFilterDropdown(event)">
+                                    <span class="dropdown-btn-content">
+                                        <span class="dropdown-filter-text" id="messages-dropdown-label">Semua</span>
+                                        <span class="dropdown-filter-badge" id="messages-dropdown-badge">5</span>
+                                    </span>
+                                    <i data-lucide="chevron-down" class="dropdown-chevron-icon" id="messages-dropdown-chevron"></i>
+                                </button>
+
+                                <div class="messages-filter-menu" id="messages-filter-menu" role="menu">
+                                    <button type="button" 
+                                            class="messages-filter-option active" 
+                                            data-filter="all" 
+                                            role="menuitem" 
+                                            onclick="selectMessagesFilter('all', 'Semua')">
+                                        <div class="filter-option-left">
+                                            <span class="option-icon-wrap option-all">
+                                                <i data-lucide="layers"></i>
+                                            </span>
+                                            <span class="option-label">Semua</span>
+                                        </div>
+                                        <div class="filter-option-right">
+                                            <span class="option-count" id="dropdown-count-all">5</span>
+                                        </div>
+                                    </button>
+
+                                    <button type="button" 
+                                            class="messages-filter-option" 
+                                            data-filter="active" 
+                                            role="menuitem" 
+                                            onclick="selectMessagesFilter('active', 'Klaim Aktif')">
+                                        <div class="filter-option-left">
+                                            <span class="option-icon-wrap option-active">
+                                                <i data-lucide="handshake"></i>
+                                            </span>
+                                            <span class="option-label">Klaim Aktif</span>
+                                        </div>
+                                        <div class="filter-option-right">
+                                            <span class="option-count count-active" id="dropdown-count-active">3</span>
+                                        </div>
+                                    </button>
+
+                                    <button type="button" 
+                                            class="messages-filter-option" 
+                                            data-filter="completed" 
+                                            role="menuitem" 
+                                            onclick="selectMessagesFilter('completed', 'Selesai')">
+                                        <div class="filter-option-left">
+                                            <span class="option-icon-wrap option-completed">
+                                                <i data-lucide="check-circle-2"></i>
+                                            </span>
+                                            <span class="option-label">Selesai</span>
+                                        </div>
+                                        <div class="filter-option-right">
+                                            <span class="option-count count-completed" id="dropdown-count-completed">2</span>
+                                        </div>
+                                    </button>
+                                </div>
+                            </div>
+                        @else
+                            @if(request()->routeIs('home', 'search') || request()->is('/') || request()->is('search*'))
+                            <button type="button" class="icon-circle-btn" id="btn-guide-info" onclick="openGuideModal()" aria-label="Buku Panduan &amp; Informasi" title="Buku Panduan &amp; Informasi">
+                                <i data-lucide="book-open" style="width: 19px; height: 19px;"></i>
+                            </button>
+                            @endif
+                            <a href="{{ route('notifications') }}" class="icon-circle-btn" id="btn-notification" aria-label="Notifikasi" style="text-decoration: none;" title="Pusat Notifikasi">
+                                <i data-lucide="bell" style="width: 19px; height: 19px;"></i>
+                                <span class="badge-notification-dot" id="header-notif-dot"></span>
+                            </a>
+                            <a href="{{ route('profile') }}" class="icon-circle-btn desktop-profile-btn" id="btn-desktop-profile" aria-label="Profil Pengguna" title="Profil Saya" style="text-decoration: none;">
+                                <i data-lucide="user" style="width: 19px; height: 19px;"></i>
+                            </a>
+                        @endif
+                    </div>
+                </header>
+            @endif
 
         <!-- Main Content Slot -->
         <main id="main-content">
@@ -901,7 +2550,37 @@
                 <button type="button" class="btn-guide-close" onclick="closeGuideModal()">Tutup Panduan</button>
             </div>
         </div>
+
+        <!-- Global Image Detail Lightbox Modal (Lihat Detail Foto Penuh) -->
+        <div class="image-lightbox-backdrop" id="modal-image-lightbox" onclick="closeImageLightboxOnBackdrop(event)" role="dialog" aria-modal="true" aria-hidden="true">
+            <div class="image-lightbox-wrapper" onclick="event.stopPropagation()">
+                <div class="image-lightbox-header">
+                    <div class="image-lightbox-title-wrap">
+                        <i data-lucide="image"></i>
+                        <span class="image-lightbox-title" id="lightbox-image-title">Detail Foto Barang</span>
+                    </div>
+                    <div class="image-lightbox-actions">
+                        <button type="button" class="image-lightbox-btn" id="lightbox-btn-zoom" onclick="toggleLightboxZoom()" title="Perbesar / Perkecil" aria-label="Perbesar / Perkecil">
+                            <i data-lucide="zoom-in" id="lightbox-zoom-icon"></i>
+                            <span id="lightbox-zoom-label">Perbesar</span>
+                        </button>
+                        <button type="button" class="image-lightbox-btn image-lightbox-btn-close" onclick="closeImageLightbox()" title="Tutup (Esc)" aria-label="Tutup Pratinjau Foto">
+                            <i data-lucide="x"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="image-lightbox-stage" id="lightbox-stage" onclick="toggleLightboxZoom()" title="Klik untuk memperbesar / memperkecil">
+                    <img src="" alt="Detail Foto Barang" class="image-lightbox-img" id="lightbox-img">
+                </div>
+
+                <div class="image-lightbox-footer">
+                    <span>Klik foto untuk memperbesar • Tekan <kbd>Esc</kbd> atau klik luar untuk menutup</span>
+                </div>
+            </div>
+        </div>
     </div>
+    </div><!-- end .app-layout-wrapper -->
 
     <!-- Lucide Icons Library (Local with CDN fallback) -->
     <script src="{{ asset('js/lucide.min.js') }}"></script>
@@ -911,6 +2590,79 @@
         }
     </script>
     <script>
+        // Global Image Detail Lightbox Modal Handlers
+        function openImageLightbox(src, title) {
+            if (!src) return;
+            const lightbox = document.getElementById('modal-image-lightbox');
+            const img = document.getElementById('lightbox-img');
+            const titleEl = document.getElementById('lightbox-image-title');
+            const stage = document.getElementById('lightbox-stage');
+
+            if (img) img.src = src;
+            if (titleEl) titleEl.textContent = title ? `Detail Foto: ${title}` : 'Detail Foto Barang';
+
+            if (stage) stage.classList.remove('is-zoomed');
+            const zoomLabel = document.getElementById('lightbox-zoom-label');
+            if (zoomLabel) zoomLabel.textContent = 'Perbesar';
+            const zoomIcon = document.getElementById('lightbox-zoom-icon');
+            if (zoomIcon) zoomIcon.setAttribute('data-lucide', 'zoom-in');
+
+            if (lightbox) {
+                lightbox.classList.add('active');
+                lightbox.setAttribute('aria-hidden', 'false');
+                document.body.style.overflow = 'hidden';
+            }
+
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        }
+
+        function closeImageLightbox() {
+            const lightbox = document.getElementById('modal-image-lightbox');
+            if (lightbox) {
+                lightbox.classList.remove('active');
+                lightbox.setAttribute('aria-hidden', 'true');
+                const stage = document.getElementById('lightbox-stage');
+                if (stage) stage.classList.remove('is-zoomed');
+                const otherModalActive = document.querySelector('.modal-backdrop.active, .modal-overlay.active');
+                if (!otherModalActive) {
+                    document.body.style.overflow = '';
+                }
+            }
+        }
+
+        function closeImageLightboxOnBackdrop(e) {
+            if (e.target.id === 'modal-image-lightbox') {
+                closeImageLightbox();
+            }
+        }
+
+        function toggleLightboxZoom() {
+            const stage = document.getElementById('lightbox-stage');
+            if (!stage) return;
+            const isZoomed = stage.classList.toggle('is-zoomed');
+            const zoomLabel = document.getElementById('lightbox-zoom-label');
+            const zoomIcon = document.getElementById('lightbox-zoom-icon');
+
+            if (zoomLabel) zoomLabel.textContent = isZoomed ? 'Perkecil' : 'Perbesar';
+            if (zoomIcon) zoomIcon.setAttribute('data-lucide', isZoomed ? 'zoom-out' : 'zoom-in');
+
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                const lightbox = document.getElementById('modal-image-lightbox');
+                if (lightbox && lightbox.classList.contains('active')) {
+                    e.stopPropagation();
+                    closeImageLightbox();
+                }
+            }
+        });
+
         // Global Quick Report Modal Handlers
         function openReportModal() {
             const modal = document.getElementById('report-modal');
@@ -955,7 +2707,51 @@
             }
         }
 
+        // Desktop Sidebar Toggle (Open/Close with State Persistence)
+        function toggleDesktopSidebar() {
+            const wrapper = document.querySelector('.app-layout-wrapper');
+            if (!wrapper) return;
+
+            wrapper.classList.toggle('sidebar-collapsed');
+            const isCollapsed = wrapper.classList.contains('sidebar-collapsed');
+
+            const sidebar = document.getElementById('desktop-sidebar');
+            if (sidebar) {
+                sidebar.setAttribute('aria-hidden', isCollapsed ? 'true' : 'false');
+            }
+
+            try {
+                localStorage.setItem('findumb_desktop_sidebar_collapsed', isCollapsed ? '1' : '0');
+            } catch (e) {}
+
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
+            // Restore desktop sidebar collapse preference (defaults to collapsed unless explicitly expanded)
+            try {
+                if (window.innerWidth >= 1024) {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const queryExpanded = urlParams.get('sidebar') === 'expanded' || urlParams.get('expanded') === '1';
+                    const isExpanded = queryExpanded || localStorage.getItem('findumb_desktop_sidebar_collapsed') === '0';
+                    const wrapper = document.querySelector('.app-layout-wrapper');
+                    if (wrapper) {
+                        if (isExpanded) {
+                            wrapper.classList.remove('sidebar-collapsed');
+                        } else {
+                            wrapper.classList.add('sidebar-collapsed');
+                        }
+                        const sidebar = document.getElementById('desktop-sidebar');
+                        if (sidebar) {
+                            sidebar.setAttribute('aria-hidden', wrapper.classList.contains('sidebar-collapsed') ? 'true' : 'false');
+                        }
+                    }
+                }
+                document.documentElement.classList.remove('desktop-sidebar-pre-collapsed');
+            } catch(e) {}
+
             if (typeof lucide !== 'undefined') {
                 lucide.createIcons();
             }

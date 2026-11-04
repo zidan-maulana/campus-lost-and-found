@@ -42,5 +42,10 @@ Route::get('/notifications', function () {
     return view('notifications');
 })->name('notifications');
 
+Route::get('/saved-reports', function () {
+    return view('saved-reports');
+})->name('saved.reports');
+
+
 
 

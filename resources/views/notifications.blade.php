@@ -623,6 +623,374 @@
         stroke-width: 2.2;
         color: #38bdf8;
     }
+
+    /* Status Badges for Desktop Detail Modal */
+    .badge-status {
+        padding: 0.22rem 0.65rem;
+        border-radius: 8px;
+        font-family: var(--font-main);
+        font-size: 0.725rem;
+        font-weight: 500;
+        letter-spacing: 0;
+        line-height: 1.1;
+    }
+
+    .badge-lost {
+        background: #fee2e2;
+        color: #e11d48;
+    }
+
+    .badge-found {
+        background: #dcfce7;
+        color: #16a34a;
+    }
+
+    .badge-resolved {
+        background: #f1f5f9;
+        color: #475569;
+    }
+
+    /* ----------------------------------------------------
+       Desktop Floating Detail Modal (Jendela Mengambang)
+       ---------------------------------------------------- */
+    @media (min-width: 1024px) {
+        .desktop-detail-modal-backdrop {
+            z-index: 150;
+            background: rgba(15, 23, 42, 0.45);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            align-items: center !important;
+            justify-content: center !important;
+            padding: 1.5rem;
+        }
+
+        .desktop-detail-modal-backdrop.active {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+        }
+
+        .desktop-detail-card {
+            background: #ffffff;
+            border-radius: 24px;
+            width: 100%;
+            max-width: 560px;
+            max-height: 86vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.25), 0 0 0 1px rgba(15, 23, 42, 0.06);
+            transform: scale(0.96);
+            transition: transform 0.24s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.24s ease;
+        }
+
+        .desktop-detail-modal-backdrop.active .desktop-detail-card {
+            transform: scale(1);
+        }
+
+        .desktop-detail-hero-box {
+            position: relative;
+            width: 100%;
+            height: 220px;
+            background: #f1f5f9;
+            flex-shrink: 0;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .desktop-detail-hero-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .desktop-detail-floating-header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 1rem 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: linear-gradient(180deg, rgba(15, 23, 42, 0.5) 0%, rgba(15, 23, 42, 0) 100%);
+            z-index: 2;
+        }
+
+        .desktop-detail-floating-actions-right {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .desktop-detail-circle-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.92);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            color: #1e293b;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .desktop-detail-circle-btn:hover {
+            background: #ffffff;
+            color: #0f172a;
+            transform: scale(1.06);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.16);
+        }
+
+        .desktop-detail-circle-btn.bookmarked {
+            background: #eff6ff;
+            color: #1572b8;
+            border-color: #bfdbfe;
+        }
+
+        .desktop-detail-circle-btn svg, .desktop-detail-circle-btn .lucide {
+            width: 17px;
+            height: 17px;
+            stroke-width: 2.2;
+        }
+
+        .desktop-detail-content-scroll {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.25rem 1.65rem 1.25rem 1.65rem;
+            scrollbar-width: thin;
+            scrollbar-color: #cbd5e1 transparent;
+        }
+
+        .desktop-detail-content-scroll::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .desktop-detail-content-scroll::-webkit-scrollbar-button {
+            display: none;
+            width: 0;
+            height: 0;
+        }
+
+        .desktop-detail-content-scroll::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .desktop-detail-content-scroll::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 9999px;
+        }
+
+        .desktop-detail-content-scroll::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        .desktop-detail-title {
+            font-family: var(--font-heading);
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin: 0 0 0.5rem 0;
+            line-height: 1.3;
+        }
+
+        .desktop-detail-author-row {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.825rem;
+            color: #64748b;
+            margin-bottom: 1.15rem;
+        }
+
+        .desktop-detail-author-avatar {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: #e0f2fe;
+            color: #0284c7;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .desktop-detail-author-avatar svg, .desktop-detail-author-avatar .lucide {
+            width: 14px;
+            height: 14px;
+        }
+
+        .desktop-detail-author-name {
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .reporter-badge-verified {
+            display: inline-flex;
+            align-items: center;
+            color: #0284c7;
+        }
+
+        .reporter-badge-verified svg, .reporter-badge-verified .lucide {
+            width: 14px;
+            height: 14px;
+        }
+
+        .desktop-detail-meta-dot {
+            color: #cbd5e1;
+        }
+
+        .desktop-detail-props-table {
+            border-top: 1px solid #f1f5f9;
+            margin-bottom: 1.1rem;
+        }
+
+        .desktop-detail-prop-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            font-size: 0.85rem;
+            line-height: 1.45;
+            padding: 0.55rem 0;
+            border-bottom: 1px solid #f8fafc;
+        }
+
+        .desktop-detail-prop-label {
+            display: flex;
+            align-items: center;
+            gap: 0.45rem;
+            width: 140px;
+            flex-shrink: 0;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .desktop-detail-prop-label svg, .desktop-detail-prop-label .lucide {
+            width: 15px;
+            height: 15px;
+            color: #64748b;
+            flex-shrink: 0;
+            stroke-width: 2.2;
+        }
+
+        .desktop-detail-prop-value {
+            flex: 1;
+            min-width: 0;
+            color: #0f172a;
+            font-weight: 600;
+            word-break: break-word;
+        }
+
+        .desktop-detail-desc-section {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 0.85rem 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+            margin-top: 0.25rem;
+        }
+
+        .desktop-detail-desc-heading {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin: 0;
+        }
+
+        .desktop-detail-desc-content {
+            font-size: 0.825rem;
+            line-height: 1.55;
+            color: #475569;
+            margin: 0;
+        }
+
+        .desktop-detail-footer-bar {
+            padding: 0.95rem 1.65rem 1.15rem 1.65rem;
+            background: #ffffff;
+            border-top: 1px solid #f1f5f9;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            flex-shrink: 0;
+        }
+
+        .desktop-detail-btn-primary {
+            flex: 1;
+            background: #0f5791;
+            color: #ffffff;
+            border: none;
+            height: 46px;
+            border-radius: 12px;
+            font-family: var(--font-main);
+            font-size: 0.9rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.2s ease, transform 0.15s ease;
+        }
+
+        .desktop-detail-btn-primary:hover {
+            background: #0b4372;
+        }
+
+        .desktop-detail-btn-primary svg, .desktop-detail-btn-primary .lucide {
+            width: 17px;
+            height: 17px;
+            stroke-width: 2.2;
+        }
+
+        .desktop-detail-btn-bookmark, .desktop-detail-btn-external {
+            width: 46px;
+            height: 46px;
+            border-radius: 12px;
+            background: #ffffff;
+            border: 1px solid var(--border-subtle);
+            color: #64748b;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .desktop-detail-btn-bookmark:hover, .desktop-detail-btn-external:hover {
+            background: #f8fafc;
+            color: #0f172a;
+            border-color: #cbd5e1;
+        }
+
+        .desktop-detail-btn-bookmark.bookmarked {
+            background: #eff6ff;
+            color: #1572b8;
+            border-color: #bfdbfe;
+        }
+
+        .desktop-detail-btn-bookmark svg, .desktop-detail-btn-external svg,
+        .desktop-detail-btn-bookmark .lucide, .desktop-detail-btn-external .lucide {
+            width: 18px;
+            height: 18px;
+            stroke-width: 2.2;
+        }
+    }
+
+    @media (max-width: 1023px) {
+        .desktop-detail-modal-backdrop {
+            display: none !important;
+        }
+    }
 </style>
 @endpush
 
@@ -666,6 +1034,140 @@
 <div class="toast-popup" id="notif-toast" role="status" aria-live="polite">
     <i data-lucide="check-circle-2"></i>
     <span id="toast-message">Notifikasi diperbarui</span>
+</div>
+
+<!-- DESKTOP DETAIL MODAL (Floating Modal / Jendela Mengambang) -->
+<div class="modal-backdrop desktop-detail-modal-backdrop" id="modal-desktop-detail" onclick="closeDesktopDetailModalOnBackdrop(event)" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="desktop-detail-card" onclick="event.stopPropagation()">
+        <!-- Top Image with Floating Action Buttons & Zoom Trigger -->
+        <div class="desktop-detail-hero-box" onclick="openImageLightbox(document.getElementById('modal-detail-hero-img').src, document.getElementById('modal-detail-title').textContent)" title="Klik untuk lihat detail foto">
+            <img src="" alt="Foto Barang" class="desktop-detail-hero-img" id="modal-detail-hero-img">
+            <div class="desktop-detail-zoom-pill">
+                <i data-lucide="zoom-in"></i>
+                <span>Lihat Detail Foto</span>
+            </div>
+            <div class="desktop-detail-floating-header">
+                <button type="button" class="desktop-detail-circle-btn" onclick="event.stopPropagation(); closeDesktopDetailModal()" aria-label="Tutup Detail" title="Tutup">
+                    <i data-lucide="x"></i>
+                </button>
+                <div class="desktop-detail-floating-actions-right">
+                    <button type="button" class="desktop-detail-circle-btn" onclick="event.stopPropagation(); handleDetailModalShare()" aria-label="Bagikan Laporan" title="Bagikan Laporan">
+                        <i data-lucide="share-2"></i>
+                    </button>
+                    <button type="button" class="desktop-detail-circle-btn" id="modal-detail-top-bookmark" onclick="event.stopPropagation(); handleDetailModalBookmark()" aria-label="Simpan Laporan" title="Simpan Laporan">
+                        <i data-lucide="bookmark"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scrollable Modal Content -->
+        <div class="desktop-detail-content-scroll">
+            <!-- Heading Title -->
+            <h2 class="desktop-detail-title" id="modal-detail-title">Nama Barang</h2>
+
+            <!-- Author / Reporter Row -->
+            <div class="desktop-detail-author-row">
+                <div class="desktop-detail-author-avatar">
+                    <i data-lucide="user"></i>
+                </div>
+                <span class="desktop-detail-author-name" id="modal-detail-reporter-name">Civitas UMB</span>
+                <span class="reporter-badge-verified" title="Terverifikasi">
+                    <i data-lucide="check-circle-2"></i>
+                </span>
+                <span class="desktop-detail-meta-dot">•</span>
+                <span class="desktop-detail-post-date" id="modal-detail-post-date">12 Mei 2026</span>
+            </div>
+
+            <!-- Structured Properties List -->
+            <div class="desktop-detail-props-table">
+                <!-- Status Laporan -->
+                <div class="desktop-detail-prop-row">
+                    <div class="desktop-detail-prop-label">
+                        <i data-lucide="tag"></i>
+                        <span>Status:</span>
+                    </div>
+                    <div class="desktop-detail-prop-value">
+                        <span class="badge-status badge-lost" id="modal-detail-status-badge">Hilang</span>
+                    </div>
+                </div>
+
+                <!-- Tanggal -->
+                <div class="desktop-detail-prop-row">
+                    <div class="desktop-detail-prop-label">
+                        <i data-lucide="calendar"></i>
+                        <span id="modal-label-prop-date">Tanggal Hilang:</span>
+                    </div>
+                    <div class="desktop-detail-prop-value" id="modal-detail-date">12 Mei 2026</div>
+                </div>
+
+                <!-- Waktu -->
+                <div class="desktop-detail-prop-row">
+                    <div class="desktop-detail-prop-label">
+                        <i data-lucide="clock"></i>
+                        <span>Waktu:</span>
+                    </div>
+                    <div class="desktop-detail-prop-value" id="modal-detail-time">10.00 - 11.30 WIB</div>
+                </div>
+
+                <!-- Lokasi Kampus -->
+                <div class="desktop-detail-prop-row">
+                    <div class="desktop-detail-prop-label">
+                        <i data-lucide="map-pin"></i>
+                        <span>Lokasi Kampus:</span>
+                    </div>
+                    <div class="desktop-detail-prop-value" id="modal-detail-location">Kampus Meruya — Gedung E R. 204</div>
+                </div>
+
+                <!-- Kategori Barang -->
+                <div class="desktop-detail-prop-row">
+                    <div class="desktop-detail-prop-label">
+                        <i data-lucide="layers"></i>
+                        <span>Kategori:</span>
+                    </div>
+                    <div class="desktop-detail-prop-value" id="modal-detail-category">Buku, Dokumen &amp; ATK</div>
+                </div>
+
+                <!-- Merek / Tipe -->
+                <div class="desktop-detail-prop-row">
+                    <div class="desktop-detail-prop-label">
+                        <i data-lucide="bookmark"></i>
+                        <span>Merek / Tipe:</span>
+                    </div>
+                    <div class="desktop-detail-prop-value" id="modal-detail-brand">Dokumen Resmi Imigrasi</div>
+                </div>
+
+                <!-- Status Simpan / Pengamanan -->
+                <div class="desktop-detail-prop-row" id="modal-row-prop-storage">
+                    <div class="desktop-detail-prop-label">
+                        <i data-lucide="shield-check"></i>
+                        <span>Status Simpan:</span>
+                    </div>
+                    <div class="desktop-detail-prop-value" id="modal-detail-storage">Disimpan Sendiri</div>
+                </div>
+            </div>
+
+            <!-- Deskripsi & Ciri Khusus -->
+            <div class="desktop-detail-desc-section">
+                <h3 class="desktop-detail-desc-heading">Deskripsi &amp; Ciri Khusus</h3>
+                <p class="desktop-detail-desc-content" id="modal-detail-features">Map plastik biru berisi Paspor Republik Indonesia...</p>
+            </div>
+        </div>
+
+        <!-- Bottom Action Bar inside Modal -->
+        <div class="desktop-detail-footer-bar">
+            <a href="{{ route('messages') }}" class="desktop-detail-btn-primary" id="modal-detail-primary-btn">
+                <i data-lucide="hand" id="modal-detail-btn-icon"></i>
+                <span id="modal-detail-btn-label">Saya Menemukan Barang Ini</span>
+            </a>
+            <button type="button" class="desktop-detail-btn-bookmark" id="modal-detail-footer-bookmark" onclick="handleDetailModalBookmark()" aria-label="Simpan Laporan" title="Simpan Laporan">
+                <i data-lucide="bookmark"></i>
+            </button>
+            <a href="#" class="desktop-detail-btn-external" id="modal-detail-open-full" target="_self" title="Buka di Halaman Penuh" aria-label="Buka di Halaman Penuh">
+                <i data-lucide="external-link"></i>
+            </a>
+        </div>
+    </div>
 </div>
 @endsection
 
@@ -937,12 +1439,515 @@
         }
     }
 
+    // ----------------------------------------------------
+    // Desktop Floating Detail Modal Catalog & Handlers
+    // ----------------------------------------------------
+    const mockReportsCatalog = {
+        '1': {
+            id: '1',
+            type: 'lost',
+            title: 'Samsung SM-A135F',
+            brand: 'Samsung Galaxy A13',
+            category: 'Elektronik & HP',
+            category_slug: 'elektronik',
+            location_campus: 'Kampus Meruya',
+            location_specific: 'Gedung Tower Lt. 7 R. 702',
+            location_full: 'Kampus Meruya — Gedung Tower Lt. 7 R. 702',
+            date: '2026-06-20',
+            date_display: '20 Jun 2026',
+            time: '14.30 WIB (Siang)',
+            storage: 'Disimpan Sendiri',
+            features: 'Smartphone Samsung warna hitam, terpasang casing transparan dengan stiker logo Informatika di bagian belakang. Layar dalam keadaan terkunci.',
+            image: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=800&auto=format&fit=crop&q=80',
+            reporter_name: 'Ahmad Fauzi (Saya)',
+            reporter_meta: 'Civitas Terverifikasi • Akun Saya',
+            is_mine: true
+        },
+        '2': {
+            id: '2',
+            type: 'lost',
+            title: 'Paspor & Berkas Beasiswa',
+            brand: 'Dokumen Resmi Imigrasi',
+            category: 'Buku, Dokumen & ATK',
+            category_slug: 'dokumen',
+            location_campus: 'Kampus Meruya',
+            location_specific: 'Gedung E R. 204',
+            location_full: 'Kampus Meruya — Gedung E R. 204',
+            date: '2026-05-12',
+            date_display: '12 Mei 2026',
+            time: '10.00 - 11.30 WIB',
+            storage: 'Disimpan Sendiri',
+            features: 'Map plastik biru berisi Paspor Republik Indonesia atas nama mahasiswa dan berkas pendaftaran beasiswa luar negeri.',
+            image: 'https://images.unsplash.com/photo-1544717305-2782549b5136?w=800&auto=format&fit=crop&q=80',
+            reporter_name: 'Mahasiswi FEB',
+            reporter_meta: 'Civitas Terverifikasi • NIM 4312***'
+        },
+        '3': {
+            id: '3',
+            type: 'found',
+            title: 'Tasbih & Gelang Manik Merah',
+            brand: 'Aksesoris Ibadah',
+            category: 'Jam & Aksesori',
+            category_slug: 'aksesoris',
+            location_campus: 'Kampus Meruya',
+            location_specific: 'Masjid Manarul \'Amal UMB, Area Saf Laki-laki',
+            location_full: 'Kampus Meruya — Masjid Manarul \'Amal UMB',
+            date: '2026-01-15',
+            date_display: '15 Jan 2026',
+            time: 'Ba\'da Salat Dzuhur',
+            storage: 'Dititipkan di Pengurus DKM Masjid',
+            features: 'Tasbih kayu berbutir merah marun berjumlah 33 butir dan gelang manik elastis. Saat ini diamankan di meja pengurus DKM.',
+            image: 'https://images.unsplash.com/photo-1590402494682-cd3fb53b1f70?w=800&auto=format&fit=crop&q=80',
+            reporter_name: 'Pengurus DKM Manarul \'Amal',
+            reporter_meta: 'Pengurus Masjid Kampus UMB'
+        },
+        '4': {
+            id: '4',
+            type: 'found',
+            status: 'resolved',
+            title: 'Kunci Motor Honda & Remote',
+            brand: 'Honda Smart Key',
+            category: 'Kunci Kendaraan / Ruangan',
+            category_slug: 'kunci',
+            location_campus: 'Kampus Meruya',
+            location_specific: 'Parkir Barat Kampus Meruya (Dekat Pohon Rindang)',
+            location_full: 'Kampus Meruya — Parkir Barat Kampus Meruya',
+            date: '2026-01-10',
+            date_display: '10 Jan 2026',
+            time: 'Pagi (± 08.15 WIB)',
+            storage: 'Dititipkan di Pos Satpam Parkir',
+            features: 'Kunci motor Honda dengan gantungan tali lanyard hitam bertuliskan One Heart dan remote alarm hitam.',
+            image: 'https://images.unsplash.com/photo-1582139329536-e7284fece509?w=800&auto=format&fit=crop&q=80',
+            reporter_name: 'Petugas Keamanan Parkir',
+            reporter_meta: 'Biro Keamanan & Ketertiban Kampus'
+        },
+        '5': {
+            id: '5',
+            type: 'lost',
+            title: 'Cincin Emas Berlian',
+            brand: 'Perhiasan Emas Kuning',
+            category: 'Jam & Aksesori',
+            category_slug: 'aksesoris',
+            location_campus: 'Kampus Meruya',
+            location_specific: 'Parkir Barat Kampus Meruya',
+            location_full: 'Kampus Meruya — Parkir Barat Kampus Meruya',
+            date: '2026-01-15',
+            date_display: '15 Jan 2026',
+            time: 'Siang saat menuju kendaraan',
+            storage: 'Disimpan Sendiri',
+            features: 'Cincin emas sepasang model pertunangan/pernikahan dengan ukiran inisial halus di lingkar dalam. Terjatuh di sekitar parkiran.',
+            image: 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=800&auto=format&fit=crop&q=80',
+            reporter_name: 'Ahmad Fauzi (Saya)',
+            reporter_meta: 'Civitas Terverifikasi • Akun Saya',
+            is_mine: true
+        },
+        '6': {
+            id: '6',
+            type: 'lost',
+            title: 'Tablet Samsung Tab S8',
+            brand: 'Samsung Galaxy Tab S8',
+            category: 'Elektronik & HP',
+            category_slug: 'elektronik',
+            location_campus: 'Kampus Meruya',
+            location_specific: 'Gedung E Lt. 3 Ruang Diskusi',
+            location_full: 'Kampus Meruya — Gedung E Lt. 3 Ruang Diskusi',
+            date: '2026-01-14',
+            date_display: '14 Jan 2026',
+            time: 'Sore (± 16.00 WIB)',
+            storage: 'Disimpan Sendiri',
+            features: 'Tablet warna graphite abu-abu tua dengan book cover magnetic hitam dan S-Pen menempel di punggung tablet.',
+            image: 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=800&auto=format&fit=crop&q=80',
+            reporter_name: 'Mahasiswa Desain (FDSK)',
+            reporter_meta: 'Civitas Terverifikasi • NIM 4232***'
+        },
+        '7': {
+            id: '7',
+            type: 'lost',
+            title: 'Tas Laptop Lenovo ThinkPad',
+            brand: 'ThinkPad Essential Backpack',
+            category: 'Tas & Ransel',
+            category_slug: 'tas',
+            location_campus: 'Kampus Meruya',
+            location_specific: 'Lab Komputer Gedung Tower Lt. 4',
+            location_full: 'Kampus Meruya — Lab Komputer Gedung Tower',
+            date: '2026-01-18',
+            date_display: '18 Jan 2026',
+            time: '13.00 WIB usai praktikum',
+            storage: 'Dititipkan di Lab Komputer Tower',
+            features: 'Ransel laptop hitam bergaris merah khas ThinkPad, di dalamnya ada charger laptop 65W dan buku catatan kuliah.',
+            image: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=800&auto=format&fit=crop&q=80',
+            reporter_name: 'Mahasiswa Teknik Elektro',
+            reporter_meta: 'Civitas Terverifikasi • NIM 4142***'
+        },
+        '8': {
+            id: '8',
+            type: 'lost',
+            title: 'Dompet Kulit & KTM Mahasiswa',
+            brand: 'Dompet Kulit Cokelat',
+            category: 'Dompet & Kartu',
+            category_slug: 'tas',
+            location_campus: 'Kampus Meruya',
+            location_specific: 'Kantin Gedung D Lantai 1',
+            location_full: 'Kampus Meruya — Kantin Gedung D',
+            date: '2026-02-08',
+            date_display: '08 Feb 2026',
+            time: 'Istirahat makan siang',
+            storage: 'Dititipkan di Pengelola Kantin',
+            features: 'Dompet kulit warna cokelat tua berisi KTM UMB, e-KTP, kartu debit bank, dan uang tunai.',
+            image: 'https://images.unsplash.com/photo-1627123424574-724758594e93?w=800&auto=format&fit=crop&q=80',
+            reporter_name: 'Mahasiswa Fikom',
+            reporter_meta: 'Civitas Terverifikasi • NIM 4422***'
+        },
+        '9': {
+            id: '9',
+            type: 'found',
+            title: 'Jaket Almamater UMB',
+            brand: 'Jas Almamater Resmi UMB',
+            category: 'Pakaian & Sepatu',
+            category_slug: 'pakaian',
+            location_campus: 'Kampus Meruya',
+            location_specific: 'Perpustakaan Pusat Lantai 2, Meja Baca Mandiri',
+            location_full: 'Kampus Meruya — Perpustakaan Pusat Lt. 2',
+            date: '2026-01-22',
+            date_display: '22 Jan 2026',
+            time: '17.00 WIB (Sore)',
+            storage: 'Dititipkan di Staf Perpustakaan',
+            features: 'Jaket almamater biru navy ukuran L dengan badge bordir logo Universitas Mercu Buana di dada kiri. Tertinggal di sandaran kursi.',
+            image: 'https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?w=800&auto=format&fit=crop&q=80',
+            reporter_name: 'Staf Perpustakaan UMB',
+            reporter_meta: 'Pengelola Fasilitas Perpustakaan'
+        },
+        '10': {
+            id: '10',
+            type: 'found',
+            title: 'Earphone TWS Anker Soundcore',
+            brand: 'Anker Soundcore R50i',
+            category: 'Elektronik & HP',
+            category_slug: 'elektronik',
+            location_campus: 'Kampus Meruya',
+            location_specific: 'Gazebo Taman Depan Gedung Tower',
+            location_full: 'Kampus Meruya — Gazebo Taman Kampus',
+            date: '2026-02-02',
+            date_display: '02 Feb 2026',
+            time: '15.45 WIB (Sore)',
+            storage: 'Dititipkan di Pos Keamanan Kampus',
+            features: 'Charging case TWS warna hitam matte beserta sepasang earphone di dalamnya. Kondisi baterai masih menyala.',
+            image: 'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=800&auto=format&fit=crop&q=80',
+            reporter_name: 'Civitas UMB',
+            reporter_meta: 'Civitas Terverifikasi • Kampus Meruya'
+        },
+        'featured-2': {
+            id: 'featured-2',
+            type: 'lost',
+            title: 'KTM Mahasiswa UMB',
+            brand: 'Kartu Tanda Mahasiswa',
+            category: 'Buku, Dokumen & ATK',
+            category_slug: 'dokumen',
+            location_campus: 'Kampus Meruya',
+            location_specific: 'Perpustakaan Pusat Lt. 1 Meja Diskusi',
+            location_full: 'Kampus Meruya — Perpustakaan',
+            date: '2026-01-16',
+            date_display: '16 Jan 2026',
+            time: '11.00 WIB',
+            storage: 'Disimpan Sendiri',
+            features: 'Kartu Tanda Mahasiswa (KTM) UMB atas nama mahasiswa Fakultas Ilmu Komputer dengan nomor induk 4152***. Terjatuh di sekitar meja baca perpustakaan.',
+            image: 'https://images.unsplash.com/photo-1544717305-2782549b5136?w=800&auto=format&fit=crop&q=80',
+            reporter_name: 'Mahasiswa Fasilkom',
+            reporter_meta: 'Civitas Terverifikasi • NIM 4152***'
+        },
+        'featured-4': {
+            id: 'featured-4',
+            type: 'found',
+            title: 'Smartwatch Apple Watch Series 8',
+            brand: 'Apple Inc.',
+            category: 'Jam & Aksesori',
+            category_slug: 'aksesoris',
+            location_campus: 'Kampus Meruya',
+            location_specific: 'Gedung Tower UMB Lantai Dasar',
+            location_full: 'Kampus Meruya — Tower UMB',
+            date: '2026-01-20',
+            date_display: '20 Jan 2026',
+            time: '14.00 WIB',
+            storage: 'Dititipkan di Pos Keamanan Tower',
+            features: 'Apple Watch Series 8 warna midnight/hitam dengan strap sport band silikon hitam. Kondisi layar menyala dan terkunci passcode.',
+            image: 'https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?w=800&auto=format&fit=crop&q=80',
+            reporter_name: 'Petugas Keamanan Tower',
+            reporter_meta: 'Biro Pengamanan Kampus UMB'
+        }
+    };
+
+    function getReportDataById(id) {
+        const idStr = String(id);
+        try {
+            const raw = localStorage.getItem('findumb_custom_reports');
+            if (raw) {
+                const list = JSON.parse(raw);
+                if (Array.isArray(list)) {
+                    const found = list.find(r => String(r.id) === idStr);
+                    if (found) {
+                        return {
+                            ...found,
+                            reporter_name: found.reporter_name || (found.is_mine ? 'Ahmad Fauzi (Saya)' : 'Civitas UMB'),
+                            reporter_meta: found.reporter_meta || 'Civitas Terverifikasi • NIM 4152***'
+                        };
+                    }
+                }
+            }
+        } catch(e) {}
+
+        if (mockReportsCatalog[idStr]) {
+            return mockReportsCatalog[idStr];
+        }
+
+        return mockReportsCatalog['1'];
+    }
+
+    function openDesktopDetailModal(id) {
+        const report = getReportDataById(id);
+        if (!report) return;
+
+        const modal = document.getElementById('modal-desktop-detail');
+        if (!modal) return;
+
+        // Title
+        const titleEl = document.getElementById('modal-detail-title');
+        if (titleEl) titleEl.textContent = report.title || 'Detail Laporan';
+
+        // Hero Image
+        const imgEl = document.getElementById('modal-detail-hero-img');
+        if (imgEl) {
+            imgEl.src = report.image || 'https://images.unsplash.com/photo-1584438784894-089d6a62b8fa?w=800&auto=format&fit=crop&q=80';
+            imgEl.alt = report.title || 'Foto Barang';
+        }
+
+        // Status Badge
+        const badgeEl = document.getElementById('modal-detail-status-badge');
+        if (badgeEl) {
+            if (report.status === 'resolved' || report.status === 'completed') {
+                badgeEl.className = 'badge-status badge-resolved';
+                badgeEl.textContent = 'Selesai';
+            } else if (report.type === 'found') {
+                badgeEl.className = 'badge-status badge-found';
+                badgeEl.textContent = 'Temuan';
+            } else {
+                badgeEl.className = 'badge-status badge-lost';
+                badgeEl.textContent = 'Hilang';
+            }
+        }
+
+        // Reporter & Date
+        const repNameEl = document.getElementById('modal-detail-reporter-name');
+        if (repNameEl) repNameEl.textContent = report.reporter_name || 'Civitas UMB';
+
+        const postDateEl = document.getElementById('modal-detail-post-date');
+        if (postDateEl) postDateEl.textContent = report.date_display || report.date || 'Baru Saja';
+
+        // Location
+        const locEl = document.getElementById('modal-detail-location');
+        if (locEl) locEl.textContent = report.location_full || report.location_campus || 'Kampus Meruya';
+
+        // Date Metric
+        const dateEl = document.getElementById('modal-detail-date');
+        const labelDateEl = document.getElementById('modal-label-prop-date');
+        if (dateEl) dateEl.textContent = report.date_display || report.date || 'Hari Ini';
+        if (labelDateEl) {
+            labelDateEl.textContent = report.type === 'found' ? 'Tanggal Temuan:' : 'Tanggal Hilang:';
+        }
+
+        // Time Metric
+        const timeEl = document.getElementById('modal-detail-time');
+        if (timeEl) {
+            if (report.time) {
+                timeEl.textContent = report.time.replace(/^waktu\s*:\s*/i, '').trim();
+            } else {
+                timeEl.textContent = 'Tidak ditentukan';
+            }
+        }
+
+        // Category & Brand
+        const catEl = document.getElementById('modal-detail-category');
+        if (catEl) catEl.textContent = report.category_label || report.category || 'Lainnya';
+
+        const brandEl = document.getElementById('modal-detail-brand');
+        if (brandEl) brandEl.textContent = report.brand || 'Sesuai Ciri Fisik';
+
+        // Storage status
+        const storageEl = document.getElementById('modal-detail-storage');
+        const storageRow = document.getElementById('modal-row-prop-storage');
+        if (storageEl && storageRow) {
+            if (report.storage) {
+                storageEl.textContent = report.storage;
+                storageRow.style.display = 'flex';
+            } else if (report.type === 'found') {
+                storageEl.textContent = 'Disimpan Sendiri';
+                storageRow.style.display = 'flex';
+            } else {
+                storageRow.style.display = 'none';
+            }
+        }
+
+        // Description & features
+        const descEl = document.getElementById('modal-detail-features');
+        if (descEl) {
+            descEl.textContent = report.features || 'Tidak ada catatan tambahan mengenai ciri khusus atau deskripsi fisik barang.';
+        }
+
+        // Primary Action Button
+        const primaryBtn = document.getElementById('modal-detail-primary-btn');
+        const btnLabel = document.getElementById('modal-detail-btn-label');
+        const btnIcon = document.getElementById('modal-detail-btn-icon');
+        const fallbackId = String(report.id).replace('featured-', '');
+
+        if (primaryBtn && btnLabel) {
+            if (report.status === 'resolved' || report.status === 'completed') {
+                btnLabel.textContent = 'Laporan Selesai';
+                if (btnIcon) btnIcon.setAttribute('data-lucide', 'check-circle-2');
+                primaryBtn.href = '#';
+                primaryBtn.style.background = '#64748b';
+                primaryBtn.style.pointerEvents = 'none';
+            } else if (report.is_mine || report.id === '1' || report.id === '5') {
+                btnLabel.textContent = 'Edit Laporan';
+                if (btnIcon) btnIcon.setAttribute('data-lucide', 'edit-3');
+                primaryBtn.href = `{{ url('/report') }}/${encodeURIComponent(fallbackId)}`;
+                primaryBtn.style.background = '#0f5791';
+                primaryBtn.style.pointerEvents = 'auto';
+            } else if (report.type === 'found') {
+                btnLabel.textContent = 'Ajukan Klaim Barang Ini';
+                if (btnIcon) btnIcon.setAttribute('data-lucide', 'shield-alert');
+                primaryBtn.href = `{{ route('messages') }}`;
+                primaryBtn.style.background = '#0f5791';
+                primaryBtn.style.pointerEvents = 'auto';
+            } else {
+                btnLabel.textContent = 'Saya Menemukan Barang Ini';
+                if (btnIcon) btnIcon.setAttribute('data-lucide', 'hand');
+                primaryBtn.href = `{{ route('messages') }}`;
+                primaryBtn.style.background = '#0f5791';
+                primaryBtn.style.pointerEvents = 'auto';
+            }
+        }
+
+        // External Link to Full Report Page
+        const fullPageBtn = document.getElementById('modal-detail-open-full');
+        if (fullPageBtn) {
+            fullPageBtn.href = `{{ url('/report') }}/${encodeURIComponent(fallbackId)}`;
+        }
+
+        // Set active id for bookmarks & shares
+        modal.setAttribute('data-active-id', report.id || id);
+        syncDetailModalBookmarkState(report.id || id);
+
+        modal.classList.add('active');
+        modal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
+    }
+
+    function closeDesktopDetailModal() {
+        const modal = document.getElementById('modal-desktop-detail');
+        if (modal) {
+            modal.classList.remove('active');
+            modal.setAttribute('aria-hidden', 'true');
+            document.body.style.overflow = '';
+        }
+    }
+
+    function closeDesktopDetailModalOnBackdrop(e) {
+        if (e.target.id === 'modal-desktop-detail') {
+            closeDesktopDetailModal();
+        }
+    }
+
+    function handleDetailModalBookmark() {
+        const modal = document.getElementById('modal-desktop-detail');
+        if (!modal) return;
+        const id = modal.getAttribute('data-active-id') || '1';
+
+        let bookmarks = [];
+        try {
+            bookmarks = JSON.parse(localStorage.getItem('findumb_bookmarks') || '[]');
+        } catch(e) {}
+
+        const index = bookmarks.indexOf(String(id));
+        if (index === -1) {
+            bookmarks.push(String(id));
+            showToast('Laporan disimpan ke daftar tersimpan.');
+        } else {
+            bookmarks.splice(index, 1);
+            showToast('Laporan dihapus dari daftar tersimpan.');
+        }
+
+        try {
+            localStorage.setItem('findumb_bookmarks', JSON.stringify(bookmarks));
+        } catch(e) {}
+
+        syncDetailModalBookmarkState(id);
+    }
+
+    function syncDetailModalBookmarkState(id) {
+        let bookmarks = [];
+        try {
+            bookmarks = JSON.parse(localStorage.getItem('findumb_bookmarks') || '[]');
+        } catch(e) {}
+        const isBookmarked = bookmarks.includes(String(id));
+
+        const topBtn = document.getElementById('modal-detail-top-bookmark');
+        const footerBtn = document.getElementById('modal-detail-footer-bookmark');
+
+        if (topBtn) topBtn.classList.toggle('bookmarked', isBookmarked);
+        if (footerBtn) footerBtn.classList.toggle('bookmarked', isBookmarked);
+    }
+
+    function handleDetailModalShare() {
+        const modal = document.getElementById('modal-desktop-detail');
+        const id = modal ? modal.getAttribute('data-active-id') || '1' : '1';
+        const titleEl = document.getElementById('modal-detail-title');
+        const title = titleEl ? titleEl.textContent : 'Laporan';
+        const fallbackId = String(id).replace('featured-', '');
+        const reportUrl = `${window.location.origin}/report/${encodeURIComponent(fallbackId)}`;
+
+        if (navigator.share) {
+            navigator.share({
+                title: title + ' — Find UMB',
+                text: 'Periksa laporan ' + title + ' di Find UMB (Campus Lost & Found).',
+                url: reportUrl,
+            }).catch(() => {});
+        } else {
+            navigator.clipboard.writeText(reportUrl).then(() => {
+                showToast('Tautan laporan disalin ke clipboard!');
+            }).catch(() => {
+                showToast('Tautan siap dibagikan.');
+            });
+        }
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            const lightbox = document.getElementById('modal-image-lightbox');
+            if (lightbox && lightbox.classList.contains('active')) {
+                return; // Lightbox will be closed by global handler
+            }
+            closeDesktopDetailModal();
+        }
+    });
+
     function handleCardClick(event, id, url) {
         const list = getStoredNotifications();
         const item = list.find(n => String(n.id) === String(id));
         if (item && !item.read) {
             item.read = true;
             saveNotifications(list);
+        }
+
+        // Check if URL points to a specific report (e.g. /report/1)
+        const reportMatch = url ? url.match(/\/report\/([a-zA-Z0-9_\-]+)/) : null;
+        if (reportMatch && window.innerWidth >= 1024) {
+            const reportId = reportMatch[1];
+            openDesktopDetailModal(reportId);
+            renderNotifications();
+            return;
         }
 
         if (url && url !== '#') {

@@ -322,12 +322,12 @@
     }
 
     .unread-bubble {
-        min-width: 19px;
-        height: 19px;
+        min-width: 20px;
+        height: 20px;
         padding: 0 5px;
-        background: var(--primary);
+        background: #ef4444;
         color: #ffffff;
-        font-size: 0.675rem;
+        font-size: 0.685rem;
         font-weight: 700;
         border-radius: var(--radius-pill);
         display: inline-flex;
@@ -1159,6 +1159,104 @@
         visibility: visible;
         transform: translateX(-50%) translateY(0);
     }
+
+    /* Responsive Desktop Adaptations (min-width: 1024px) */
+    @media (min-width: 1024px) {
+        /* 1. Hapus search bar baris kedua pada desktop karena bersifat redundan dengan header search bar */
+        .messages-search-wrapper {
+            display: none !important;
+        }
+
+        /* 2. Sembunyikan segmented filter track pada desktop karena telah digantikan oleh dropdown option button di header */
+        .messages-segmented-track {
+            display: none !important;
+        }
+
+        /* Container padding selaras dengan header desktop */
+        .messages-container {
+            padding: 0.65rem clamp(1.5rem, 3.5vw, 3.5rem) 3rem clamp(1.5rem, 3.5vw, 3.5rem);
+            max-width: 100%;
+            margin: 0;
+            gap: 1.15rem;
+        }
+
+        .messages-meta-row {
+            margin-top: 0.25rem;
+            padding: 0 0.2rem;
+        }
+
+        .messages-count-text {
+            font-size: 0.885rem;
+            font-weight: 600;
+            color: #475569;
+        }
+
+        .conversations-list {
+            gap: 0.8rem;
+        }
+
+        .conversation-card {
+            padding: 0.95rem 1.25rem;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .conversation-card:hover {
+            border-color: #cbd5e1;
+            box-shadow: 0 4px 18px rgba(15, 23, 42, 0.06);
+            transform: translateY(-1px);
+        }
+
+        .conversation-user-name {
+            font-size: 0.95rem;
+        }
+
+        /* Nama barang dibuat lengkap pada desktop */
+        .conversation-title-group {
+            max-width: none !important;
+            overflow: visible !important;
+        }
+
+        .conversation-item-tag {
+            max-width: none !important;
+            overflow: visible !important;
+            text-overflow: clip !important;
+            white-space: nowrap !important;
+            font-size: 0.775rem;
+            padding: 0.16rem 0.65rem;
+        }
+
+        .conversation-snippet {
+            font-size: 0.835rem;
+        }
+
+        /* Chat Thread Modal on Desktop: Elegan Centered Modal */
+        .chat-thread-overlay {
+            align-items: center;
+            padding: 1.5rem;
+        }
+
+        .chat-thread-card {
+            max-width: 580px;
+            height: 86vh;
+            max-height: 740px;
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.25);
+            animation: popChatDesktop 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes popChatDesktop {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+    }
 </style>
 @endpush
 
@@ -1204,8 +1302,8 @@
         <div class="conversation-card unread" 
              data-filter="active" 
              data-name="ahmad fauzi fti" 
-             data-item="samsung sm-a135f" 
-             onclick="openChatThread('Ahmad Fauzi (FTI)', 'Samsung SM-A135F', 'in_handover', 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=160&auto=format&fit=crop&q=80')">
+             data-item="samsung galaxy a13 sm-a135f" 
+             onclick="openChatThread('Ahmad Fauzi (FTI)', 'Samsung Galaxy A13 (SM-A135F)', 'in_handover', 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=160&auto=format&fit=crop&q=80')">
             <div class="conversation-avatar-wrap">
                 <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=160&auto=format&fit=crop&q=80" alt="Ahmad Fauzi" class="conversation-avatar" loading="lazy">
                 <span class="avatar-online-dot" title="Online"></span>
@@ -1214,7 +1312,7 @@
                 <div class="conversation-top-row">
                     <div class="conversation-title-group">
                         <span class="conversation-user-name">Ahmad Fauzi</span>
-                        <span class="conversation-item-tag">Samsung SM-A135F</span>
+                        <span class="conversation-item-tag">Samsung Galaxy A13 (SM-A135F)</span>
                     </div>
                     <span class="conversation-time">10:42</span>
                 </div>
@@ -1229,8 +1327,8 @@
         <div class="conversation-card unread" 
              data-filter="active" 
              data-name="siti nurhaliza feb" 
-             data-item="ktm dompet kulit cokelat" 
-             onclick="openChatThread('Siti Nurhaliza (FEB)', 'KTM & Dompet Kulit', 'submitted', 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=160&auto=format&fit=crop&q=80')">
+             data-item="dompet kulit ktm mahasiswa cokelat" 
+             onclick="openChatThread('Siti Nurhaliza (FEB)', 'Dompet Kulit & KTM Mahasiswa', 'submitted', 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=160&auto=format&fit=crop&q=80')">
             <div class="conversation-avatar-wrap">
                 <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=160&auto=format&fit=crop&q=80" alt="Siti Nurhaliza" class="conversation-avatar" loading="lazy">
                 <span class="avatar-online-dot" title="Online"></span>
@@ -1239,7 +1337,7 @@
                 <div class="conversation-top-row">
                     <div class="conversation-title-group">
                         <span class="conversation-user-name">Siti Nurhaliza</span>
-                        <span class="conversation-item-tag">KTM & Dompet Kulit</span>
+                        <span class="conversation-item-tag">Dompet Kulit & KTM Mahasiswa</span>
                     </div>
                     <span class="conversation-time">09:15</span>
                 </div>
@@ -1263,7 +1361,7 @@
                 <div class="conversation-top-row">
                     <div class="conversation-title-group">
                         <span class="conversation-user-name">Budi Santoso</span>
-                        <span class="conversation-item-tag">Tas Laptop ThinkPad</span>
+                        <span class="conversation-item-tag">Tas Laptop Lenovo ThinkPad</span>
                     </div>
                     <span class="conversation-time">Kemarin</span>
                 </div>
@@ -1278,7 +1376,7 @@
              data-filter="completed" 
              data-name="dinda kirana fdsk" 
              data-item="earphone tws anker soundcore" 
-             onclick="openChatThread('Dinda Kirana (FDSK)', 'Earphone TWS Anker', 'completed', 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=160&auto=format&fit=crop&q=80')">
+             onclick="openChatThread('Dinda Kirana (FDSK)', 'Earphone TWS Anker Soundcore', 'completed', 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=160&auto=format&fit=crop&q=80')">
             <div class="conversation-avatar-wrap">
                 <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=160&auto=format&fit=crop&q=80" alt="Dinda Kirana" class="conversation-avatar" loading="lazy">
             </div>
@@ -1286,7 +1384,7 @@
                 <div class="conversation-top-row">
                     <div class="conversation-title-group">
                         <span class="conversation-user-name">Dinda Kirana</span>
-                        <span class="conversation-item-tag">Earphone TWS Anker</span>
+                        <span class="conversation-item-tag">Earphone TWS Anker Soundcore</span>
                     </div>
                     <span class="conversation-time">22 Okt</span>
                 </div>
@@ -1309,7 +1407,7 @@
                 <div class="conversation-top-row">
                     <div class="conversation-title-group">
                         <span class="conversation-user-name">Rizky Pratama</span>
-                        <span class="conversation-item-tag">Paspor & Berkas</span>
+                        <span class="conversation-item-tag">Paspor & Berkas Beasiswa</span>
                     </div>
                     <span class="conversation-time">18 Okt</span>
                 </div>
@@ -1511,6 +1609,7 @@
             lucide.createIcons();
         }
 
+        // 1. Mobile local search input listener
         const searchInput = document.getElementById('live-messages-search');
         if (searchInput) {
             searchInput.addEventListener('input', (e) => {
@@ -1519,9 +1618,50 @@
                 if (clearBtn) {
                     clearBtn.style.display = currentMessagesQuery.length > 0 ? 'flex' : 'none';
                 }
+                // Sync with desktop top search input if present
+                const desktopInput = document.getElementById('desktop-messages-search-input');
+                if (desktopInput && desktopInput.value !== e.target.value) {
+                    desktopInput.value = e.target.value;
+                    const desktopClear = document.getElementById('btn-clear-desktop-messages');
+                    if (desktopClear) desktopClear.style.display = currentMessagesQuery.length > 0 ? 'inline-flex' : 'none';
+                }
                 applyMessagesFilter();
             });
         }
+
+        // 2. Desktop top header search input listener
+        const desktopSearchInput = document.getElementById('desktop-messages-search-input');
+        if (desktopSearchInput) {
+            desktopSearchInput.addEventListener('input', (e) => {
+                currentMessagesQuery = e.target.value.toLowerCase().trim();
+                const clearBtn = document.getElementById('btn-clear-desktop-messages');
+                if (clearBtn) {
+                    clearBtn.style.display = currentMessagesQuery.length > 0 ? 'inline-flex' : 'none';
+                }
+                // Sync with mobile search input if present
+                const mobileInput = document.getElementById('live-messages-search');
+                if (mobileInput && mobileInput.value !== e.target.value) {
+                    mobileInput.value = e.target.value;
+                    const mobileClear = document.getElementById('btn-clear-messages-search');
+                    if (mobileClear) mobileClear.style.display = currentMessagesQuery.length > 0 ? 'flex' : 'none';
+                }
+                applyMessagesFilter();
+            });
+        }
+
+        // 3. Close Dropdown when clicking outside or pressing Escape
+        document.addEventListener('click', (e) => {
+            const dropdownWrap = document.getElementById('messages-filter-dropdown-wrapper');
+            if (dropdownWrap && !dropdownWrap.contains(e.target)) {
+                closeMessagesFilterDropdown();
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeMessagesFilterDropdown();
+            }
+        });
 
         updateCounts();
 
@@ -1535,41 +1675,133 @@
         }
     });
 
-    // 1. Status Filter
-    function setMessagesStatusFilter(filter, el) {
-        currentMessagesFilter = filter;
-        document.querySelectorAll('.messages-segment-pill').forEach(btn => {
-            btn.classList.remove('active');
-            btn.setAttribute('aria-selected', 'false');
-        });
-        if (el) {
-            el.classList.add('active');
-            el.setAttribute('aria-selected', 'true');
+    // Dropdown Option Button Interactions (Top Header Desktop)
+    function toggleMessagesFilterDropdown(e) {
+        if (e) e.stopPropagation();
+        const btn = document.getElementById('btn-messages-filter-dropdown');
+        const menu = document.getElementById('messages-filter-menu');
+        if (!menu || !btn) return;
+
+        const isOpen = menu.classList.contains('open');
+        if (isOpen) {
+            closeMessagesFilterDropdown();
+        } else {
+            openMessagesFilterDropdown();
         }
+    }
+
+    function openMessagesFilterDropdown() {
+        const btn = document.getElementById('btn-messages-filter-dropdown');
+        const menu = document.getElementById('messages-filter-menu');
+        if (!menu || !btn) return;
+
+        menu.classList.add('open');
+        btn.classList.add('open');
+        btn.setAttribute('aria-expanded', 'true');
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+
+    function closeMessagesFilterDropdown() {
+        const btn = document.getElementById('btn-messages-filter-dropdown');
+        const menu = document.getElementById('messages-filter-menu');
+        if (menu) menu.classList.remove('open');
+        if (btn) {
+            btn.classList.remove('open');
+            btn.setAttribute('aria-expanded', 'false');
+        }
+    }
+
+    // Select Filter from Dropdown (Desktop) or Segment Pill (Mobile)
+    function selectMessagesFilter(filter, label) {
+        currentMessagesFilter = filter;
+
+        // 1. Update Dropdown Button UI (Desktop)
+        const labelEl = document.getElementById('messages-dropdown-label');
+        if (labelEl) labelEl.textContent = label;
+
+        // 2. Update active state in dropdown options
+        document.querySelectorAll('.messages-filter-option').forEach(opt => {
+            if (opt.getAttribute('data-filter') === filter) {
+                opt.classList.add('active');
+            } else {
+                opt.classList.remove('active');
+            }
+        });
+
+        // 3. Sync active state with mobile segmented pill buttons
+        document.querySelectorAll('.messages-segment-pill').forEach(btn => {
+            if (btn.getAttribute('data-filter') === filter) {
+                btn.classList.add('active');
+                btn.setAttribute('aria-selected', 'true');
+            } else {
+                btn.classList.remove('active');
+                btn.setAttribute('aria-selected', 'false');
+            }
+        });
+
+        // 4. Update dropdown badge count
+        updateDropdownBadge();
+
+        // 5. Close menu and apply filter
+        closeMessagesFilterDropdown();
         applyMessagesFilter();
     }
 
-    // 2. Clear Search Field
+    // Mobile Segment Pill Trigger
+    function setMessagesStatusFilter(filter, el) {
+        let label = 'Semua';
+        if (filter === 'active') label = 'Klaim Aktif';
+        if (filter === 'completed') label = 'Selesai';
+        selectMessagesFilter(filter, label);
+    }
+
+    // Clear Mobile Search Field
     function clearMessagesSearch() {
         const input = document.getElementById('live-messages-search');
         if (input) {
             input.value = '';
             input.focus();
         }
+        const desktopInput = document.getElementById('desktop-messages-search-input');
+        if (desktopInput) desktopInput.value = '';
+
         currentMessagesQuery = '';
         const clearBtn = document.getElementById('btn-clear-messages-search');
         if (clearBtn) clearBtn.style.display = 'none';
+        const desktopClearBtn = document.getElementById('btn-clear-desktop-messages');
+        if (desktopClearBtn) desktopClearBtn.style.display = 'none';
+
         applyMessagesFilter();
     }
 
-    // 3. Reset All Filters
+    // Clear Desktop Top Header Search Field
+    function clearDesktopMessagesSearch() {
+        const desktopInput = document.getElementById('desktop-messages-search-input');
+        if (desktopInput) {
+            desktopInput.value = '';
+            desktopInput.focus();
+        }
+        const mobileInput = document.getElementById('live-messages-search');
+        if (mobileInput) mobileInput.value = '';
+
+        currentMessagesQuery = '';
+        const desktopClearBtn = document.getElementById('btn-clear-desktop-messages');
+        if (desktopClearBtn) desktopClearBtn.style.display = 'none';
+        const mobileClearBtn = document.getElementById('btn-clear-messages-search');
+        if (mobileClearBtn) mobileClearBtn.style.display = 'none';
+
+        applyMessagesFilter();
+    }
+
+    // Reset All Filters
     function resetAllMessagesFilter() {
         clearMessagesSearch();
-        setMessagesStatusFilter('all', document.querySelector('.messages-segment-pill[data-filter="all"]'));
+        clearDesktopMessagesSearch();
+        selectMessagesFilter('all', 'Semua');
         showToast('Filter percakapan direset.');
     }
 
-    // 4. Update Badge Counts
+    // Update Counts across Mobile Pills and Desktop Dropdown
     function updateCounts() {
         const allCards = document.querySelectorAll('#conversations-container .conversation-card');
         let totalAll = allCards.length;
@@ -1582,6 +1814,7 @@
             if (filterType === 'completed') totalCompleted++;
         });
 
+        // Mobile pills counts
         const pillAll = document.getElementById('count-pill-all');
         const pillActive = document.getElementById('count-pill-active');
         const pillCompleted = document.getElementById('count-pill-completed');
@@ -1589,6 +1822,31 @@
         if (pillAll) pillAll.textContent = totalAll;
         if (pillActive) pillActive.textContent = totalActive;
         if (pillCompleted) pillCompleted.textContent = totalCompleted;
+
+        // Desktop dropdown option counts
+        const dropAll = document.getElementById('dropdown-count-all');
+        const dropActive = document.getElementById('dropdown-count-active');
+        const dropCompleted = document.getElementById('dropdown-count-completed');
+
+        if (dropAll) dropAll.textContent = totalAll;
+        if (dropActive) dropActive.textContent = totalActive;
+        if (dropCompleted) dropCompleted.textContent = totalCompleted;
+
+        updateDropdownBadge();
+    }
+
+    function updateDropdownBadge() {
+        const badgeEl = document.getElementById('messages-dropdown-badge');
+        if (!badgeEl) return;
+
+        const allCards = document.querySelectorAll('#conversations-container .conversation-card');
+        let count = allCards.length;
+        if (currentMessagesFilter === 'active') {
+            count = Array.from(allCards).filter(c => c.getAttribute('data-filter') === 'active').length;
+        } else if (currentMessagesFilter === 'completed') {
+            count = Array.from(allCards).filter(c => c.getAttribute('data-filter') === 'completed').length;
+        }
+        badgeEl.textContent = count;
     }
 
     // 5. Apply Filter & Search Logic

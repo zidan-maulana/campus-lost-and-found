@@ -106,17 +106,31 @@ class ExampleTest extends TestCase
         $response->assertDontSee('id="btn-notification"', false);
         $response->assertDontSee('user-verified-badge');
         $response->assertDontSee('Civitas UMB Terverifikasi');
-        $response->assertSee('btn-user-pencil');
         $response->assertSee('Pengaturan Aplikasi');
-        $response->assertSee('Laporan Saya');
-        $response->assertSee(route('my.reports'));
         $response->assertSee('Keluar dari Akun');
-        $response->assertSee('privacy-modal');
-        $response->assertSee('terms-modal');
-        $response->assertSee('about-modal');
+        $response->assertDontSee('btn-mobile-settings');
+        $response->assertSee('user-mobile-info-faculty');
+        $response->assertSee('user-mobile-info-prodi');
+        $response->assertSee('Tentang FindUMB');
         $response->assertSee('Kebijakan Privasi');
         $response->assertSee('Syarat &amp; Ketentuan', false);
-        $response->assertSee('Tentang FindUMB');
+        $response->assertSee('btn-user-pencil');
+        $response->assertSee('Aktivitas Saya');
+        $response->assertSee('Selamat Datang Kembali, Fauzi!');
+        $response->assertSee('Kelola informasi profil civitas');
+        $response->assertSee('Informasi Pribadi &amp; Akademik', false);
+        $response->assertSee('Laporan Saya');
+        $response->assertSee(route('my.reports'));
+        $response->assertSee(route('saved.reports'));
+        $response->assertSee('Barang Disimpan');
+        $response->assertSee('modal-edit-profile');
+        $response->assertSee('avatar-camera-btn');
+        $response->assertSee('btn-card-edit-profile');
+        $response->assertSee('btn-header-edit-profile');
+        $response->assertDontSee('btn-pill-edit');
+        $response->assertSee('user-info-faculty');
+        $response->assertSee('user-info-prodi');
+        $response->assertDontSee('Universitas Mercu Buana, Kampus Meruya');
         $response->assertDontSee('btn-header-settings');
         $response->assertDontSee('Mulai Di Sini');
         $response->assertDontSee('Akun &amp; Preferensi');
@@ -134,13 +148,22 @@ class ExampleTest extends TestCase
         $response->assertSee('Notifikasi Push Perangkat');
         $response->assertSee('Pemberitahuan Klaim Barang');
         $response->assertSee('Simpan Pengaturan');
+        $response->assertSee('Simpan');
         $response->assertSee('FindUMB');
+        $response->assertSee('Bantuan &amp; Informasi', false);
+        $response->assertSee('Buku Panduan &amp; Informasi', false);
+        $response->assertSee('Kebijakan Privasi');
+        $response->assertSee('Syarat &amp; Ketentuan', false);
+        $response->assertSee('Tentang FindUMB');
+        $response->assertSee('Keluar dari Akun');
+        $response->assertSee('privacy-modal');
+        $response->assertSee('terms-modal');
+        $response->assertSee('about-modal');
         $response->assertDontSee('Notifikasi Email');
         $response->assertDontSee('Privasi &amp; Keamanan Data');
         $response->assertDontSee('Lindungi Kontak Pribadi');
         $response->assertDontSee('Data &amp; Akun');
         $response->assertDontSee('Unduh Riwayat Laporan Saya');
-        $response->assertDontSee('Bantuan &amp; Legalitas');
         $response->assertDontSee('Bahasa Indonesia');
         $response->assertDontSee('English (US)');
         $response->assertDontSee('Pilih bahasa tampilan antarmuka');
@@ -181,5 +204,19 @@ class ExampleTest extends TestCase
         $response->assertSee('Earphone TWS Anker Soundcore');
         $response->assertSee('Pengingat 72 Jam');
         $response->assertSee('Serah Terima');
+    }
+
+    public function test_the_saved_reports_page_returns_a_successful_response(): void
+    {
+        $response = $this->get('/saved-reports');
+
+        $response->assertStatus(200);
+        $response->assertSee('Barang Disimpan');
+        $response->assertSee('header-saved-count');
+        $response->assertSee('Earphone TWS Anker Soundcore');
+        $response->assertSee('Tas Laptop Lenovo ThinkPad');
+        $response->assertSee('KTM & Dompet Kulit Cokelat', false);
+        $response->assertSee('modal-desktop-detail');
+        $response->assertSee('saved-reports-list');
     }
 }

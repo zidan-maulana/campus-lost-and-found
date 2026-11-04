@@ -73,9 +73,9 @@
         display: flex;
         align-items: center;
         background: #f1f5f9;
-        padding: 0.25rem;
-        border-radius: var(--radius-pill);
-        gap: 0.2rem;
+        padding: 4px;
+        border-radius: 14px;
+        gap: 4px;
         overflow-x: auto;
     }
 
@@ -83,10 +83,10 @@
         flex: 1;
         min-width: fit-content;
         text-align: center;
-        padding: 0.48rem 0.85rem;
-        border-radius: var(--radius-pill);
+        padding: 0.52rem 0.85rem;
+        border-radius: 10px;
         font-family: var(--font-main);
-        font-size: 0.775rem;
+        font-size: 0.825rem;
         font-weight: 600;
         color: #64748b;
         background: transparent;
@@ -646,6 +646,371 @@
         visibility: visible;
         transform: translateX(-50%) translateY(0);
     }
+
+    /* Desktop Responsive Adjustments (min-width: 1024px) */
+    @media (min-width: 1024px) {
+        .my-reports-container {
+            max-width: 1380px;
+            margin: 0 auto;
+            padding: 2.25rem clamp(1.75rem, 4vw, 4rem) 4rem clamp(1.75rem, 4vw, 4rem);
+            width: 100%;
+            box-sizing: border-box;
+            gap: 1.35rem;
+        }
+
+        .my-report-card {
+            cursor: pointer;
+            transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease, border-color 0.2s ease;
+        }
+
+        .my-report-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+            border-color: #cbd5e1;
+        }
+
+        /* Desktop Floating Detail Modal (Jendela Mengambang) */
+        .desktop-detail-modal-backdrop {
+            z-index: 150;
+            background: rgba(15, 23, 42, 0.45);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            align-items: center !important;
+            justify-content: center !important;
+            padding: 1.5rem;
+        }
+
+        .desktop-detail-modal-backdrop.active {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+        }
+
+        .desktop-detail-card {
+            background: #ffffff;
+            border-radius: 24px;
+            width: 100%;
+            max-width: 560px;
+            max-height: 86vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.25), 0 0 0 1px rgba(15, 23, 42, 0.06);
+            transform: scale(0.96);
+            transition: transform 0.24s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.24s ease;
+        }
+
+        .desktop-detail-modal-backdrop.active .desktop-detail-card {
+            transform: scale(1);
+        }
+
+        .desktop-detail-hero-box {
+            position: relative;
+            width: 100%;
+            height: 220px;
+            background: #f1f5f9;
+            flex-shrink: 0;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .desktop-detail-hero-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .desktop-detail-floating-header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 1rem 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: linear-gradient(180deg, rgba(15, 23, 42, 0.5) 0%, rgba(15, 23, 42, 0) 100%);
+            z-index: 2;
+        }
+
+        .desktop-detail-floating-actions-right {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .desktop-detail-circle-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.92);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            color: #1e293b;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .desktop-detail-circle-btn:hover {
+            background: #ffffff;
+            color: #0f172a;
+            transform: scale(1.06);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.16);
+        }
+
+        .desktop-detail-circle-btn.bookmarked {
+            background: #eff6ff;
+            color: #1572b8;
+            border-color: #bfdbfe;
+        }
+
+        .desktop-detail-circle-btn svg, .desktop-detail-circle-btn .lucide {
+            width: 17px;
+            height: 17px;
+            stroke-width: 2.2;
+        }
+
+        .desktop-detail-content-scroll {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.25rem 1.65rem 1.25rem 1.65rem;
+            scrollbar-width: thin;
+            scrollbar-color: #cbd5e1 transparent;
+        }
+
+        .desktop-detail-content-scroll::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .desktop-detail-content-scroll::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 9999px;
+        }
+
+        .desktop-detail-title {
+            font-family: var(--font-heading);
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin: 0 0 0.5rem 0;
+            line-height: 1.3;
+        }
+
+        .desktop-detail-author-row {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.825rem;
+            color: #64748b;
+            margin-bottom: 1.15rem;
+        }
+
+        .desktop-detail-author-avatar {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: #e0f2fe;
+            color: #0284c7;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .desktop-detail-author-avatar svg, .desktop-detail-author-avatar .lucide {
+            width: 14px;
+            height: 14px;
+        }
+
+        .desktop-detail-author-name {
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .reporter-badge-verified {
+            display: inline-flex;
+            align-items: center;
+            color: #0284c7;
+        }
+
+        .reporter-badge-verified svg, .reporter-badge-verified .lucide {
+            width: 14px;
+            height: 14px;
+        }
+
+        .desktop-detail-meta-dot {
+            color: #cbd5e1;
+        }
+
+        .desktop-detail-props-table {
+            border-top: 1px solid #f1f5f9;
+            margin-bottom: 1.1rem;
+        }
+
+        .desktop-detail-prop-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            font-size: 0.85rem;
+            line-height: 1.45;
+            padding: 0.55rem 0;
+            border-bottom: 1px solid #f8fafc;
+        }
+
+        .desktop-detail-prop-label {
+            display: flex;
+            align-items: center;
+            gap: 0.45rem;
+            width: 140px;
+            flex-shrink: 0;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .desktop-detail-prop-label svg, .desktop-detail-prop-label .lucide {
+            width: 15px;
+            height: 15px;
+            color: #64748b;
+            flex-shrink: 0;
+            stroke-width: 2.2;
+        }
+
+        .desktop-detail-prop-value {
+            flex: 1;
+            min-width: 0;
+            color: #0f172a;
+            font-weight: 600;
+            word-break: break-word;
+        }
+
+        .desktop-detail-desc-section {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 0.85rem 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+            margin-top: 0.25rem;
+        }
+
+        .desktop-detail-desc-heading {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin: 0;
+        }
+
+        .desktop-detail-desc-content {
+            font-size: 0.825rem;
+            line-height: 1.55;
+            color: #475569;
+            margin: 0;
+        }
+
+        .desktop-detail-footer-bar {
+            padding: 0.95rem 1.65rem 1.15rem 1.65rem;
+            background: #ffffff;
+            border-top: 1px solid #f1f5f9;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            flex-shrink: 0;
+        }
+
+        .desktop-detail-btn-primary {
+            flex: 1;
+            background: #0f5791;
+            color: #ffffff;
+            border: none;
+            height: 46px;
+            border-radius: 12px;
+            font-family: var(--font-main);
+            font-size: 0.9rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.2s ease, transform 0.15s ease;
+        }
+
+        .desktop-detail-btn-primary:hover {
+            background: #0b4372;
+        }
+
+        .desktop-detail-btn-primary svg, .desktop-detail-btn-primary .lucide {
+            width: 17px;
+            height: 17px;
+            stroke-width: 2.2;
+        }
+
+        .desktop-detail-btn-delete {
+            width: 46px;
+            height: 46px;
+            border-radius: 12px;
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #dc2626;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .desktop-detail-btn-delete:hover {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .desktop-detail-btn-delete svg, .desktop-detail-btn-delete .lucide {
+            width: 18px;
+            height: 18px;
+            stroke-width: 2.2;
+        }
+
+        .desktop-detail-btn-external {
+            width: 46px;
+            height: 46px;
+            border-radius: 12px;
+            background: #ffffff;
+            border: 1px solid var(--border-subtle);
+            color: #64748b;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .desktop-detail-btn-external:hover {
+            background: #f8fafc;
+            color: #0f172a;
+            border-color: #cbd5e1;
+        }
+
+        .desktop-detail-btn-external svg, .desktop-detail-btn-external .lucide {
+            width: 18px;
+            height: 18px;
+            stroke-width: 2.2;
+        }
+    }
+
+    @media (max-width: 1023px) {
+        .desktop-detail-modal-backdrop {
+            display: none !important;
+        }
+    }
 </style>
 @endpush
 
@@ -872,6 +1237,140 @@
     </div>
 </div>
 
+<!-- DESKTOP DETAIL MODAL (Floating Modal / Jendela Mengambang) -->
+<div class="modal-backdrop desktop-detail-modal-backdrop" id="modal-desktop-detail" onclick="closeDesktopDetailModalOnBackdrop(event)" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="desktop-detail-card" onclick="event.stopPropagation()">
+        <!-- Top Image with Floating Action Buttons & Zoom Trigger -->
+        <div class="desktop-detail-hero-box" onclick="openImageLightbox(document.getElementById('modal-detail-hero-img').src, document.getElementById('modal-detail-title').textContent)" title="Klik untuk lihat detail foto">
+            <img src="" alt="Foto Barang" class="desktop-detail-hero-img" id="modal-detail-hero-img">
+            <div class="desktop-detail-zoom-pill">
+                <i data-lucide="zoom-in"></i>
+                <span>Lihat Detail Foto</span>
+            </div>
+            <div class="desktop-detail-floating-header">
+                <button type="button" class="desktop-detail-circle-btn" onclick="event.stopPropagation(); closeDesktopDetailModal()" aria-label="Tutup Detail" title="Tutup">
+                    <i data-lucide="x"></i>
+                </button>
+                <div class="desktop-detail-floating-actions-right">
+                    <button type="button" class="desktop-detail-circle-btn" onclick="event.stopPropagation(); handleDetailModalShare()" aria-label="Bagikan Laporan" title="Bagikan Laporan">
+                        <i data-lucide="share-2"></i>
+                    </button>
+                    <button type="button" class="desktop-detail-circle-btn" id="modal-detail-top-bookmark" onclick="event.stopPropagation(); handleDetailModalBookmark()" aria-label="Simpan Laporan" title="Simpan Laporan">
+                        <i data-lucide="bookmark"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scrollable Modal Content -->
+        <div class="desktop-detail-content-scroll">
+            <!-- Heading Title -->
+            <h2 class="desktop-detail-title" id="modal-detail-title">Nama Barang</h2>
+
+            <!-- Author / Reporter Row -->
+            <div class="desktop-detail-author-row">
+                <div class="desktop-detail-author-avatar">
+                    <i data-lucide="user"></i>
+                </div>
+                <span class="desktop-detail-author-name" id="modal-detail-reporter-name">Ahmad Fauzi (Saya)</span>
+                <span class="reporter-badge-verified" title="Terverifikasi">
+                    <i data-lucide="check-circle-2"></i>
+                </span>
+                <span class="desktop-detail-meta-dot">•</span>
+                <span class="desktop-detail-post-date" id="modal-detail-post-date">12 Mei 2026</span>
+            </div>
+
+            <!-- Structured Properties List -->
+            <div class="desktop-detail-props-table">
+                <!-- Status Laporan -->
+                <div class="desktop-detail-prop-row">
+                    <div class="desktop-detail-prop-label">
+                        <i data-lucide="tag"></i>
+                        <span>Status:</span>
+                    </div>
+                    <div class="desktop-detail-prop-value">
+                        <span class="badge-status badge-lost" id="modal-detail-status-badge">Hilang</span>
+                    </div>
+                </div>
+
+                <!-- Tanggal -->
+                <div class="desktop-detail-prop-row">
+                    <div class="desktop-detail-prop-label">
+                        <i data-lucide="calendar"></i>
+                        <span id="modal-label-prop-date">Tanggal Hilang:</span>
+                    </div>
+                    <div class="desktop-detail-prop-value" id="modal-detail-date">12 Mei 2026</div>
+                </div>
+
+                <!-- Waktu -->
+                <div class="desktop-detail-prop-row">
+                    <div class="desktop-detail-prop-label">
+                        <i data-lucide="clock"></i>
+                        <span>Waktu:</span>
+                    </div>
+                    <div class="desktop-detail-prop-value" id="modal-detail-time">10.00 - 11.30 WIB</div>
+                </div>
+
+                <!-- Lokasi Kampus -->
+                <div class="desktop-detail-prop-row">
+                    <div class="desktop-detail-prop-label">
+                        <i data-lucide="map-pin"></i>
+                        <span>Lokasi Kampus:</span>
+                    </div>
+                    <div class="desktop-detail-prop-value" id="modal-detail-location">Kampus Meruya — Gedung Tower Lt. 7 R. 702</div>
+                </div>
+
+                <!-- Kategori Barang -->
+                <div class="desktop-detail-prop-row">
+                    <div class="desktop-detail-prop-label">
+                        <i data-lucide="layers"></i>
+                        <span>Kategori:</span>
+                    </div>
+                    <div class="desktop-detail-prop-value" id="modal-detail-category">Elektronik &amp; HP</div>
+                </div>
+
+                <!-- Merek / Tipe -->
+                <div class="desktop-detail-prop-row">
+                    <div class="desktop-detail-prop-label">
+                        <i data-lucide="bookmark"></i>
+                        <span>Merek / Tipe:</span>
+                    </div>
+                    <div class="desktop-detail-prop-value" id="modal-detail-brand">Samsung Galaxy A13</div>
+                </div>
+
+                <!-- Status Simpan / Pengamanan -->
+                <div class="desktop-detail-prop-row" id="modal-row-prop-storage">
+                    <div class="desktop-detail-prop-label">
+                        <i data-lucide="shield-check"></i>
+                        <span>Status Simpan:</span>
+                    </div>
+                    <div class="desktop-detail-prop-value" id="modal-detail-storage">Disimpan Sendiri</div>
+                </div>
+            </div>
+
+            <!-- Deskripsi & Ciri Khusus -->
+            <div class="desktop-detail-desc-section">
+                <h3 class="desktop-detail-desc-heading">Deskripsi &amp; Ciri Khusus</h3>
+                <p class="desktop-detail-desc-content" id="modal-detail-features">Smartphone Samsung warna hitam...</p>
+            </div>
+        </div>
+
+        <!-- Bottom Action Bar inside Modal -->
+        <div class="desktop-detail-footer-bar">
+            <button type="button" class="desktop-detail-btn-primary" id="modal-detail-primary-btn" onclick="handleDetailModalEdit()">
+                <i data-lucide="edit-3" id="modal-detail-btn-icon"></i>
+                <span id="modal-detail-btn-label">Edit Laporan</span>
+            </button>
+            <button type="button" class="desktop-detail-btn-delete" id="modal-detail-btn-delete" onclick="handleDetailModalDelete()" aria-label="Hapus Laporan" title="Hapus Laporan">
+                <i data-lucide="trash-2"></i>
+            </button>
+            <a href="#" class="desktop-detail-btn-external" id="modal-detail-open-full" target="_self" title="Buka di Halaman Penuh" aria-label="Buka di Halaman Penuh">
+                <i data-lucide="external-link"></i>
+            </a>
+        </div>
+    </div>
+</div>
+
 <!-- Toast Popup Notification -->
 <div class="toast-popup" id="toast-popup" role="status" aria-live="polite"></div>
 @endsection
@@ -1081,14 +1580,248 @@
     }
 
     function handleCardClick(event, id) {
-        if (event.target.closest('.card-actions-row') || 
+        if (event && (
+            event.target.closest('.card-actions-row') || 
             event.target.closest('.card-options-wrap') || 
             event.target.closest('.card-options-menu') || 
-            event.target.closest('.btn-card-action')) {
+            event.target.closest('.btn-card-action')
+        )) {
             return;
         }
-        window.location.href = `{{ url('/report') }}/${encodeURIComponent(id)}`;
+        if (window.innerWidth >= 1024) {
+            if (event) event.preventDefault();
+            openDesktopDetailModal(id);
+        } else {
+            window.location.href = `{{ url('/report') }}/${encodeURIComponent(id)}`;
+        }
     }
+
+    // ----------------------------------------------------
+    // Desktop Floating Detail Modal Functions
+    // ----------------------------------------------------
+    function getReportDataById(id) {
+        const reports = getUserReports();
+        return reports.find(r => String(r.id) === String(id));
+    }
+
+    function openDesktopDetailModal(id) {
+        const report = getReportDataById(id);
+        if (!report) return;
+
+        const modal = document.getElementById('modal-desktop-detail');
+        if (!modal) return;
+
+        // Populate Image
+        const heroImg = document.getElementById('modal-detail-hero-img');
+        if (heroImg) {
+            heroImg.src = report.image || 'https://images.unsplash.com/photo-1584438784894-089d6a62b8fa?w=800&auto=format&fit=crop&q=80';
+            heroImg.alt = report.title || 'Foto Barang';
+        }
+
+        // Title
+        const titleEl = document.getElementById('modal-detail-title');
+        if (titleEl) titleEl.textContent = report.title || 'Tanpa Judul';
+
+        // Author
+        const authorEl = document.getElementById('modal-detail-reporter-name');
+        if (authorEl) authorEl.textContent = 'Ahmad Fauzi (Saya)';
+
+        // Date posted
+        const postDateEl = document.getElementById('modal-detail-post-date');
+        if (postDateEl) postDateEl.textContent = report.date_display || report.date || 'Baru saja';
+
+        // Status badge
+        const badgeEl = document.getElementById('modal-detail-status-badge');
+        if (badgeEl) {
+            if (report.status === 'resolved' || report.status === 'completed') {
+                badgeEl.className = 'badge-status badge-resolved';
+                badgeEl.textContent = 'Terselesaikan';
+            } else if (report.type === 'found') {
+                badgeEl.className = 'badge-status badge-found';
+                badgeEl.textContent = 'Temuan';
+            } else {
+                badgeEl.className = 'badge-status badge-lost';
+                badgeEl.textContent = 'Hilang';
+            }
+        }
+
+        // Date label & value
+        const dateLabel = document.getElementById('modal-label-prop-date');
+        if (dateLabel) {
+            dateLabel.textContent = report.type === 'found' ? 'Tanggal Temuan:' : 'Tanggal Hilang:';
+        }
+        const dateEl = document.getElementById('modal-detail-date');
+        if (dateEl) dateEl.textContent = report.date_display || report.date || '-';
+
+        // Time
+        const timeEl = document.getElementById('modal-detail-time');
+        if (timeEl) timeEl.textContent = report.time || '10.00 - 11.30 WIB';
+
+        // Location
+        const locEl = document.getElementById('modal-detail-location');
+        if (locEl) locEl.textContent = report.location_full || report.location_campus || 'Kampus Meruya';
+
+        // Category
+        const catEl = document.getElementById('modal-detail-category');
+        if (catEl) catEl.textContent = report.category_label || report.category || 'Lainnya';
+
+        // Brand
+        const brandEl = document.getElementById('modal-detail-brand');
+        if (brandEl) brandEl.textContent = report.brand || 'Sesuai Ciri Fisik';
+
+        // Storage status
+        const storageEl = document.getElementById('modal-detail-storage');
+        const storageRow = document.getElementById('modal-row-prop-storage');
+        if (storageEl && storageRow) {
+            if (report.storage) {
+                storageEl.textContent = report.storage;
+                storageRow.style.display = 'flex';
+            } else {
+                storageEl.textContent = 'Disimpan Sendiri';
+                storageRow.style.display = 'flex';
+            }
+        }
+
+        // Description & features
+        const descEl = document.getElementById('modal-detail-features');
+        if (descEl) {
+            descEl.textContent = report.features || 'Tidak ada catatan tambahan mengenai ciri khusus atau deskripsi fisik barang.';
+        }
+
+        // External Link to Full Report Page
+        const fullPageBtn = document.getElementById('modal-detail-open-full');
+        if (fullPageBtn) {
+            fullPageBtn.href = `{{ url('/report') }}/${encodeURIComponent(id)}`;
+        }
+
+        // Set active id for modal actions
+        modal.setAttribute('data-active-id', id);
+        syncDetailModalBookmarkState(id);
+
+        modal.classList.add('active');
+        modal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
+    }
+
+    function closeDesktopDetailModal() {
+        const modal = document.getElementById('modal-desktop-detail');
+        if (modal) {
+            modal.classList.remove('active');
+            modal.setAttribute('aria-hidden', 'true');
+            document.body.style.overflow = '';
+        }
+    }
+
+    function closeDesktopDetailModalOnBackdrop(e) {
+        if (e.target.id === 'modal-desktop-detail') {
+            closeDesktopDetailModal();
+        }
+    }
+
+    function handleDetailModalEdit() {
+        const modal = document.getElementById('modal-desktop-detail');
+        const id = modal ? modal.getAttribute('data-active-id') : null;
+        if (!id) return;
+        closeDesktopDetailModal();
+        openEditModal(id);
+    }
+
+    function handleDetailModalDelete() {
+        const modal = document.getElementById('modal-desktop-detail');
+        const id = modal ? modal.getAttribute('data-active-id') : null;
+        if (!id) return;
+        closeDesktopDetailModal();
+        openDeleteModal(id);
+    }
+
+    function getStoredBookmarks() {
+        try {
+            const raw = localStorage.getItem('findumb_bookmarks');
+            if (raw) {
+                const parsed = JSON.parse(raw);
+                if (Array.isArray(parsed)) return parsed.map(String);
+            }
+        } catch(e) {}
+        const defaultBookmarks = ['2', '3', '7'];
+        try {
+            if (!localStorage.getItem('findumb_bookmarks_init')) {
+                localStorage.setItem('findumb_bookmarks', JSON.stringify(defaultBookmarks));
+                localStorage.setItem('findumb_bookmarks_init', 'true');
+            }
+        } catch(e) {}
+        return defaultBookmarks;
+    }
+
+    function setStoredBookmarks(bookmarks) {
+        try {
+            localStorage.setItem('findumb_bookmarks', JSON.stringify(bookmarks));
+            localStorage.setItem('findumb_bookmarks_init', 'true');
+        } catch(e) {}
+    }
+
+    function handleDetailModalBookmark() {
+        const modal = document.getElementById('modal-desktop-detail');
+        if (!modal) return;
+        const id = modal.getAttribute('data-active-id') || '1';
+
+        let bookmarks = getStoredBookmarks();
+        const index = bookmarks.indexOf(String(id));
+        if (index === -1) {
+            bookmarks.push(String(id));
+            showToast('Laporan disimpan ke daftar tersimpan.');
+        } else {
+            bookmarks.splice(index, 1);
+            showToast('Laporan dihapus dari daftar tersimpan.');
+        }
+
+        setStoredBookmarks(bookmarks);
+        syncDetailModalBookmarkState(id);
+    }
+
+    function syncDetailModalBookmarkState(id) {
+        const bookmarks = getStoredBookmarks();
+        const isBookmarked = bookmarks.includes(String(id));
+
+        const topBtn = document.getElementById('modal-detail-top-bookmark');
+        if (topBtn) topBtn.classList.toggle('bookmarked', isBookmarked);
+    }
+
+    function handleDetailModalShare() {
+        const modal = document.getElementById('modal-desktop-detail');
+        const id = modal ? modal.getAttribute('data-active-id') || '1' : '1';
+        const titleEl = document.getElementById('modal-detail-title');
+        const title = titleEl ? titleEl.textContent : 'Laporan';
+        const reportUrl = `${window.location.origin}/report/${encodeURIComponent(id)}`;
+
+        if (navigator.share) {
+            navigator.share({
+                title: title + ' — Find UMB',
+                text: 'Periksa laporan saya "' + title + '" di Find UMB.',
+                url: reportUrl,
+            }).catch(() => {});
+        } else {
+            navigator.clipboard.writeText(reportUrl).then(() => {
+                showToast('Tautan laporan disalin ke clipboard!');
+            }).catch(() => {
+                showToast('Tautan siap dibagikan.');
+            });
+        }
+    }
+
+    // Close on Escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            const lightbox = document.getElementById('modal-image-lightbox');
+            if (lightbox && lightbox.classList.contains('active')) {
+                return;
+            }
+            closeDesktopDetailModal();
+        }
+    });
 
     function toggleCardOptions(event, id) {
         if (event) {
@@ -1236,7 +1969,7 @@
 
         const statusVal = document.getElementById('edit-status').value;
 
-        // Validasi in-app modal jika mengubah status menjadi Terselesaikan
+        // Validate completion modal requirements
         if (statusVal === 'resolved' && reports[index].status !== 'resolved') {
             openEditStatusConfirmModal();
             return;

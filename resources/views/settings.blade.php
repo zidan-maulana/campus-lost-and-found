@@ -4,10 +4,17 @@
 
 @section('header')
 <header class="settings-header">
-    <button type="button" class="btn-header-back" onclick="handleSettingsBack()" aria-label="Kembali">
-        <i data-lucide="chevron-left"></i>
+    <div class="settings-header-left">
+        <button type="button" class="btn-header-back" onclick="handleSettingsBack()" aria-label="Kembali">
+            <i data-lucide="chevron-left"></i>
+        </button>
+        <h1 class="settings-header-title">Pengaturan</h1>
+    </div>
+    <button type="button" class="btn-save-settings" id="btn-save-settings" onclick="saveSettings()">
+        <i data-lucide="save"></i>
+        <span class="btn-save-text-desktop">Simpan Pengaturan</span>
+        <span class="btn-save-text-mobile">Simpan</span>
     </button>
-    <h1 class="settings-header-title">Pengaturan</h1>
 </header>
 @endsection
 
@@ -26,12 +33,18 @@
         padding: 0.85rem 1.15rem;
         display: flex;
         align-items: center;
-        gap: 0.5rem;
+        justify-content: space-between;
         background: #ffffff;
         border-bottom: 1px solid var(--border-subtle);
         position: sticky;
         top: 0;
         z-index: 40;
+    }
+
+    .settings-header-left {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
     }
 
     .btn-header-back {
@@ -272,29 +285,33 @@
         flex-shrink: 0;
     }
 
-    /* Primary Save Button */
+    /* Primary Save Button in Header */
     .btn-save-settings {
-        display: flex;
+        display: inline-flex;
         align-items: center;
         justify-content: center;
         gap: 0.5rem;
         background: var(--primary);
         color: #ffffff;
         font-family: var(--font-main);
-        font-size: 0.9rem;
+        font-size: 0.85rem;
         font-weight: 600;
-        padding: 0.85rem 1.5rem;
-        border-radius: var(--radius-md);
+        padding: 0.52rem 1.15rem;
+        height: 38px;
+        box-sizing: border-box;
+        border-radius: 10px;
         border: none;
         cursor: pointer;
         transition: var(--transition);
         box-shadow: 0 2px 6px rgba(21, 114, 184, 0.2);
-        margin-top: 0.25rem;
+        white-space: nowrap;
+        flex-shrink: 0;
     }
 
     .btn-save-settings:hover {
         background: var(--primary-dark);
         transform: translateY(-1px);
+        box-shadow: 0 4px 10px rgba(21, 114, 184, 0.28);
     }
 
     .btn-save-settings:active {
@@ -302,9 +319,27 @@
     }
 
     .btn-save-settings svg, .btn-save-settings .lucide {
-        width: 18px;
-        height: 18px;
+        width: 16px;
+        height: 16px;
         stroke-width: 2.2;
+    }
+
+    .btn-save-text-desktop {
+        display: none;
+    }
+
+    .btn-save-text-mobile {
+        display: inline;
+    }
+
+    @media (min-width: 1024px) {
+        .btn-save-text-desktop {
+            display: inline;
+        }
+
+        .btn-save-text-mobile {
+            display: none;
+        }
     }
 
     /* App Diagnostics Box */
@@ -386,6 +421,28 @@
         opacity: 1;
         visibility: visible;
         transform: translateX(-50%) translateY(0);
+    }
+
+    /* Desktop Responsive Adjustments (min-width: 1024px) */
+    @media (min-width: 1024px) {
+        .settings-header {
+            padding: 0.95rem clamp(1.75rem, 4vw, 4rem);
+        }
+
+        .settings-container {
+            max-width: 1380px;
+            margin: 0 auto;
+            padding: 2.25rem clamp(1.75rem, 4vw, 4rem) 4rem clamp(1.75rem, 4vw, 4rem);
+            width: 100%;
+            box-sizing: border-box;
+            gap: 1.5rem;
+        }
+
+        .btn-save-settings {
+            height: 40px;
+            padding: 0.55rem 1.35rem;
+            font-size: 0.88rem;
+        }
     }
 </style>
 @endpush
@@ -491,13 +548,69 @@
         </div>
     </div>
 
-    <!-- Tombol Simpan Perubahan -->
-    <button type="button" class="btn-save-settings" id="btn-save-settings" onclick="saveSettings()">
-        <i data-lucide="save"></i>
-        <span>Simpan Pengaturan</span>
-    </button>
+    <!-- 3. BANTUAN & INFORMASI (Dipindahkan dari Halaman Profile) -->
+    <div class="settings-group">
+        <span class="settings-group-label">Bantuan &amp; Informasi</span>
+        <div class="settings-card">
+            <!-- Buku Panduan & Informasi -->
+            <div class="settings-row settings-row-interactive" onclick="openGuideModal()">
+                <div class="settings-row-left">
+                    <div class="settings-icon-box">
+                        <i data-lucide="book-open"></i>
+                    </div>
+                    <div class="settings-row-text">
+                        <span class="settings-row-title">Buku Panduan &amp; Informasi</span>
+                        <span class="settings-row-desc">Panduan alur klaim, verifikasi kepemilikan, dan SOP serah terima</span>
+                    </div>
+                </div>
+                <i data-lucide="chevron-right" class="row-chevron"></i>
+            </div>
 
-    <!-- 3. DIAGNOSTIK SISTEM -->
+            <!-- Kebijakan Privasi -->
+            <div class="settings-row settings-row-interactive" onclick="openPrivacyModal()">
+                <div class="settings-row-left">
+                    <div class="settings-icon-box">
+                        <i data-lucide="shield-check"></i>
+                    </div>
+                    <div class="settings-row-text">
+                        <span class="settings-row-title">Kebijakan Privasi</span>
+                        <span class="settings-row-desc">Perlindungan data identitas dan privasi civitas UMB</span>
+                    </div>
+                </div>
+                <i data-lucide="chevron-right" class="row-chevron"></i>
+            </div>
+
+            <!-- Syarat & Ketentuan -->
+            <div class="settings-row settings-row-interactive" onclick="openTermsModal()">
+                <div class="settings-row-left">
+                    <div class="settings-icon-box">
+                        <i data-lucide="file-check"></i>
+                    </div>
+                    <div class="settings-row-text">
+                        <span class="settings-row-title">Syarat &amp; Ketentuan</span>
+                        <span class="settings-row-desc">Etika dan aturan penggunaan platform Lost &amp; Found kampus</span>
+                    </div>
+                </div>
+                <i data-lucide="chevron-right" class="row-chevron"></i>
+            </div>
+
+            <!-- Tentang FindUMB -->
+            <div class="settings-row settings-row-interactive" onclick="openAboutModal()">
+                <div class="settings-row-left">
+                    <div class="settings-icon-box">
+                        <i data-lucide="info"></i>
+                    </div>
+                    <div class="settings-row-text">
+                        <span class="settings-row-title">Tentang FindUMB</span>
+                        <span class="settings-row-desc">Pengembang mahasiswa dan ekosistem kampus Universitas Mercu Buana</span>
+                    </div>
+                </div>
+                <i data-lucide="chevron-right" class="row-chevron"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. DIAGNOSTIK SISTEM -->
     <div class="settings-group">
         <span class="settings-group-label">Diagnostik Sistem</span>
         <div class="settings-card">
@@ -522,10 +635,234 @@
         </div>
     </div>
 
+    <!-- 5. KELUAR DARI AKUN (SIGN OUT) -->
+    <div class="settings-group">
+        <div class="settings-card">
+            <div class="settings-row settings-row-interactive" onclick="handleSignOut()">
+                <div class="settings-row-left">
+                    <div class="settings-icon-box danger">
+                        <i data-lucide="log-out"></i>
+                    </div>
+                    <div class="settings-row-text">
+                        <span class="settings-row-title danger">Keluar dari Akun</span>
+                        <span class="settings-row-desc">Akhiri sesi akun civitas aktif di perangkat ini</span>
+                    </div>
+                </div>
+                <i data-lucide="chevron-right" class="row-chevron"></i>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <!-- Toast Popup Notification -->
 <div class="toast-popup" id="toast-popup" role="status" aria-live="polite"></div>
+
+<!-- Modal 1: Kebijakan Privasi -->
+<div class="modal-overlay" id="privacy-modal" onclick="closePrivacyModal(event)">
+    <div class="modal-sheet guide-modal-sheet" onclick="event.stopPropagation()">
+        <div class="modal-pill-drag"></div>
+        <h3 class="modal-title">Kebijakan Privasi</h3>
+        <p class="modal-desc">Kebijakan perlindungan data dan privasi civitas akademika Universitas Mercu Buana pada platform FindUMB.</p>
+        
+        <div class="guide-modal-body">
+            <div class="guide-card">
+                <div class="guide-card-header">
+                    <div class="guide-card-icon">
+                        <i data-lucide="shield-check"></i>
+                    </div>
+                    <h4 class="guide-card-title">Perlindungan Identitas Civitas</h4>
+                </div>
+                <ul class="guide-list">
+                    <li>Kontak pribadi civitas (nomor HP, WhatsApp, &amp; email) <strong>tidak pernah dipublikasikan terbuka</strong> untuk mencegah spam dan penipuan.</li>
+                    <li>Data akun civitas (NIM dan email student) hanya digunakan untuk keperluan verifikasi keabsahan civitas internal UMB.</li>
+                    <li>Tampilan publik pada laporan barang hanya mencantumkan nama panggilan/singkat dan fakultas pelapor.</li>
+                </ul>
+            </div>
+
+            <div class="guide-card">
+                <div class="guide-card-header">
+                    <div class="guide-card-icon">
+                        <i data-lucide="lock"></i>
+                    </div>
+                    <h4 class="guide-card-title">Keamanan Komunikasi Internal</h4>
+                </div>
+                <ul class="guide-list">
+                    <li>Seluruh koordinasi awal serah terima dilakukan melalui fitur <strong>Pesan / Chat</strong> resmi yang terisolasi di dalam FindUMB.</li>
+                    <li>Sistem tidak meminta dan melarang civitas membagikan informasi sensitif perbankan (PIN, kode OTP, atau transfer uang).</li>
+                </ul>
+            </div>
+
+            <div class="guide-card">
+                <div class="guide-card-header">
+                    <div class="guide-card-icon">
+                        <i data-lucide="eye-off"></i>
+                    </div>
+                    <h4 class="guide-card-title">Kerahasiaan Ciri Khusus Barang</h4>
+                </div>
+                <ul class="guide-list">
+                    <li>Rincian ciri khusus rahasia (seperti nomor seri, goresan mikro, atau stiker pembeda) tidak dipublikasikan ke publik.</li>
+                    <li>Ciri khusus hanya digunakan sebagai instrumen pencocokan bukti kepemilikan sah saat klaim serah terima berlangsung.</li>
+                </ul>
+            </div>
+
+            <div class="guide-card">
+                <div class="guide-card-header">
+                    <div class="guide-card-icon">
+                        <i data-lucide="database"></i>
+                    </div>
+                    <h4 class="guide-card-title">Retensi &amp; Kendali Data</h4>
+                </div>
+                <ul class="guide-list">
+                    <li>Civitas memiliki kendali penuh untuk memperbarui atau menghapus laporan barang melalui menu <strong>Laporan Saya</strong>.</li>
+                    <li>Laporan yang telah tuntas diubah statusnya menjadi <strong>Terselesaikan</strong> dan diarsipkan secara aman.</li>
+                </ul>
+            </div>
+        </div>
+
+        <button type="button" class="btn-guide-close" onclick="closePrivacyModal()">Tutup Kebijakan</button>
+    </div>
+</div>
+
+<!-- Modal 2: Syarat & Ketentuan -->
+<div class="modal-overlay" id="terms-modal" onclick="closeTermsModal(event)">
+    <div class="modal-sheet guide-modal-sheet" onclick="event.stopPropagation()">
+        <div class="modal-pill-drag"></div>
+        <h3 class="modal-title">Syarat &amp; Ketentuan</h3>
+        <p class="modal-desc">Pedoman etika dan aturan penggunaan layanan Lost &amp; Found di lingkungan Universitas Mercu Buana.</p>
+        
+        <div class="guide-modal-body">
+            <div class="guide-card">
+                <div class="guide-card-header">
+                    <div class="guide-card-icon">
+                        <i data-lucide="scale"></i>
+                    </div>
+                    <h4 class="guide-card-title">Integritas &amp; Kejujuran Pelaporan</h4>
+                </div>
+                <ul class="guide-list">
+                    <li>Setiap civitas wajib memberikan informasi pelaporan yang <strong>benar, akurat, dan dapat dipertanggungjawabkan</strong>.</li>
+                    <li>Dilarang keras membuat laporan fiktif, melakukan klaim sepihak tanpa bukti, atau mengunggah konten provokatif.</li>
+                </ul>
+            </div>
+
+            <div class="guide-card">
+                <div class="guide-card-header">
+                    <div class="guide-card-icon">
+                        <i data-lucide="user-check"></i>
+                    </div>
+                    <h4 class="guide-card-title">Prosedur Klaim Kepemilikan</h4>
+                </div>
+                <ul class="guide-list">
+                    <li>Pengklaim barang temuan <strong>wajib membuktikan ciri khusus rahasia</strong> kepada penemu atau petugas sebelum barang diserahkan.</li>
+                    <li>Penemu atau pos penitipan kampus berhak menolak klaim jika bukti kepemilikan tidak dapat dipertanggungjawabkan.</li>
+                    <li>Serah terima fisik diimbau dilakukan di area kampus yang ramai atau difasilitasi oleh Pos Satpam Resmi UMB.</li>
+                </ul>
+            </div>
+
+            <div class="guide-card">
+                <div class="guide-card-header">
+                    <div class="guide-card-icon">
+                        <i data-lucide="building-2"></i>
+                    </div>
+                    <h4 class="guide-card-title">Penanganan Barang Berharga</h4>
+                </div>
+                <ul class="guide-list">
+                    <li>Barang bernilai tinggi (laptop, dompet, perhiasan, KTP, KTM, &amp; dokumen negara) sangat disarankan segera dititipkan ke <strong>Pos Satpam Gerbang Barat / Gedung Tower</strong>.</li>
+                    <li>FindUMB berfungsi sebagai sarana publikasi informasi civitas dan tidak bertanggung jawab atas kelalaian fisik di luar sistem.</li>
+                </ul>
+            </div>
+
+            <div class="guide-card">
+                <div class="guide-card-header">
+                    <div class="guide-card-icon">
+                        <i data-lucide="alert-triangle"></i>
+                    </div>
+                    <h4 class="guide-card-title">Sanksi Kode Etik Kampus</h4>
+                </div>
+                <ul class="guide-list">
+                    <li>Upaya penggelapan barang temuan atau pemalsuan identitas akan diteruskan ke <strong>Biro Kemahasiswaan &amp; Komisi Disiplin UMB</strong>.</li>
+                    <li>Pelanggaran berat akan dikenakan sanksi akademik sesuai peraturan kode etik civitas akademika Universitas Mercu Buana.</li>
+                </ul>
+            </div>
+        </div>
+
+        <button type="button" class="btn-guide-close" onclick="closeTermsModal()">Tutup Ketentuan</button>
+    </div>
+</div>
+
+<!-- Modal 3: Tentang FindUMB -->
+<div class="modal-overlay" id="about-modal" onclick="closeAboutModal(event)">
+    <div class="modal-sheet guide-modal-sheet" onclick="event.stopPropagation()">
+        <div class="modal-pill-drag"></div>
+        <h3 class="modal-title">Tentang FindUMB</h3>
+        <p class="modal-desc">Platform digital Lost &amp; Found terpadu civitas akademika Universitas Mercu Buana.</p>
+        
+        <div class="guide-modal-body">
+            <div class="guide-card">
+                <div class="guide-card-header">
+                    <div class="guide-card-icon">
+                        <i data-lucide="sparkles"></i>
+                    </div>
+                    <h4 class="guide-card-title">Platform Lost &amp; Found Kampus</h4>
+                </div>
+                <ul class="guide-list">
+                    <li><strong>FindUMB</strong> dirancang untuk mewujudkan ekosistem kampus yang saling peduli, jujur, dan aman dalam mengembalikan barang hilang civitas.</li>
+                    <li>Dilengkapi fitur pelaporan cepat, pencarian kategori cerdas, sistem verifikasi chat internal, dan integrasi pos penitipan resmi.</li>
+                    <li>Versi Rilis: <strong>v1.0.0 (Responsive Web &amp; Mobile-Optimized)</strong>.</li>
+                </ul>
+            </div>
+
+            <div class="guide-card">
+                <div class="guide-card-header">
+                    <div class="guide-card-icon">
+                        <i data-lucide="map-pin"></i>
+                    </div>
+                    <h4 class="guide-card-title">Cakupan Wilayah Kampus UMB</h4>
+                </div>
+                <ul class="guide-list">
+                    <li><strong>Kampus Meruya (Pusat)</strong>: Gedung Tower, Blok A s/d E, Parkir Barat/Timur, Kantin, &amp; Masjid Manarul 'Amal.</li>
+                    <li><strong>Kampus Menteng, Kampus Pejaten, &amp; Kampus Warung Buncit</strong>.</li>
+                </ul>
+            </div>
+
+            <div class="guide-card">
+                <div class="guide-card-header">
+                    <div class="guide-card-icon">
+                        <i data-lucide="code-2"></i>
+                    </div>
+                    <h4 class="guide-card-title">Pengembang &amp; Civitas</h4>
+                </div>
+                <ul class="guide-list">
+                    <li>Pengembang:
+                        <ul style="margin-top: 0.3rem; padding-left: 1.15rem; list-style-type: disc; display: flex; flex-direction: column; gap: 0.2rem;">
+                            <li><strong>Muhammad Isya Zidan Maulana</strong> (NIM: 41524010001)</li>
+                            <li><strong>Faiz Muhammad Ridho</strong> (NIM: 41524010046)</li>
+                            <li><strong>Rifky Nabil Firdaus</strong> (41524010055)</li>
+                        </ul>
+                    </li>
+                    <li>Program Studi: <strong>Teknik Informatika — Fakultas Ilmu Komputer</strong>.</li>
+                    <li>Institusi: <strong>Universitas Mercu Buana</strong> Jakarta.</li>
+                </ul>
+            </div>
+
+            <div class="guide-card">
+                <div class="guide-card-header">
+                    <div class="guide-card-icon">
+                        <i data-lucide="help-circle"></i>
+                    </div>
+                    <h4 class="guide-card-title">Layanan Bantuan &amp; Helpdesk</h4>
+                </div>
+                <ul class="guide-list">
+                    <li>Email Dukungan: <strong>-</strong></li>
+                    <li>Lokasi Fisik: <strong>Pos Pelayanan Keamanan Kampus Meruya (24 Jam)</strong>.</li>
+                    <li>Saran &amp; Masukan: Hubungi biro administrasi kampus atau melalui pesan pengelola aplikasi.</li>
+                </ul>
+            </div>
+        </div>
+
+        <button type="button" class="btn-guide-close" onclick="closeAboutModal()">Tutup Informasi</button>
+    </div>
+</div>
 @endsection
 
 @push('scripts')
@@ -600,6 +937,75 @@
     function handleLanguageChange(val) {
         const name = val === 'en' ? 'English' : 'Indonesia';
         showToast(`Bahasa diatur ke ${name}`);
+    }
+
+    function handleSignOut() {
+        if (confirm('Apakah Anda ingin keluar dari sesi akun FindUMB?')) {
+            showToast('Anda telah keluar.');
+            setTimeout(() => {
+                window.location.href = "{{ route('home') }}";
+            }, 1000);
+        }
+    }
+
+    // Modal Kebijakan Privasi
+    function openPrivacyModal() {
+        const modal = document.getElementById('privacy-modal');
+        if (modal) {
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+        }
+    }
+
+    function closePrivacyModal(e) {
+        if (!e || e.target.id === 'privacy-modal' || e.target.classList.contains('btn-guide-close') || e.target.closest('.btn-guide-close')) {
+            const modal = document.getElementById('privacy-modal');
+            if (modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        }
+    }
+
+    // Modal Syarat & Ketentuan
+    function openTermsModal() {
+        const modal = document.getElementById('terms-modal');
+        if (modal) {
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+        }
+    }
+
+    function closeTermsModal(e) {
+        if (!e || e.target.id === 'terms-modal' || e.target.classList.contains('btn-guide-close') || e.target.closest('.btn-guide-close')) {
+            const modal = document.getElementById('terms-modal');
+            if (modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        }
+    }
+
+    // Modal Tentang FindUMB
+    function openAboutModal() {
+        const modal = document.getElementById('about-modal');
+        if (modal) {
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+        }
+    }
+
+    function closeAboutModal(e) {
+        if (!e || e.target.id === 'about-modal' || e.target.classList.contains('btn-guide-close') || e.target.closest('.btn-guide-close')) {
+            const modal = document.getElementById('about-modal');
+            if (modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        }
     }
 </script>
 @endpush

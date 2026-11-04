@@ -1099,7 +1099,7 @@
             }
         }
 
-        // 3. Update Bottom Nav Buttons (Tanpa icon arrow pada Lanjut)
+        // Update navigation buttons
         const btnBack = document.getElementById('btn-wizard-back');
         const btnNext = document.getElementById('btn-wizard-next');
 
