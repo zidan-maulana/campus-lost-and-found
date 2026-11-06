@@ -1300,10 +1300,12 @@
         
         <!-- Conversation 1: Ahmad Fauzi (Handover Ongoing) -->
         <div class="conversation-card unread" 
+             id="conv-card-ahmad"
+             data-conv-id="ahmad"
              data-filter="active" 
              data-name="ahmad fauzi fti" 
              data-item="samsung galaxy a13 sm-a135f" 
-             onclick="openChatThread('Ahmad Fauzi (FTI)', 'Samsung Galaxy A13 (SM-A135F)', 'in_handover', 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=160&auto=format&fit=crop&q=80')">
+             onclick="openChatThread('Ahmad Fauzi (FTI)', 'Samsung Galaxy A13 (SM-A135F)', 'in_handover', 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=160&auto=format&fit=crop&q=80', 'ahmad')">
             <div class="conversation-avatar-wrap">
                 <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=160&auto=format&fit=crop&q=80" alt="Ahmad Fauzi" class="conversation-avatar" loading="lazy">
                 <span class="avatar-online-dot" title="Online"></span>
@@ -1325,10 +1327,12 @@
 
         <!-- Conversation 2: Siti Nurhaliza (Claim Submitted) -->
         <div class="conversation-card unread" 
+             id="conv-card-siti"
+             data-conv-id="siti"
              data-filter="active" 
              data-name="siti nurhaliza feb" 
              data-item="dompet kulit ktm mahasiswa cokelat" 
-             onclick="openChatThread('Siti Nurhaliza (FEB)', 'Dompet Kulit & KTM Mahasiswa', 'submitted', 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=160&auto=format&fit=crop&q=80')">
+             onclick="openChatThread('Siti Nurhaliza (FEB)', 'Dompet Kulit & KTM Mahasiswa', 'submitted', 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=160&auto=format&fit=crop&q=80', 'siti')">
             <div class="conversation-avatar-wrap">
                 <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=160&auto=format&fit=crop&q=80" alt="Siti Nurhaliza" class="conversation-avatar" loading="lazy">
                 <span class="avatar-online-dot" title="Online"></span>
@@ -1350,10 +1354,12 @@
 
         <!-- Conversation 3: Budi Santoso (Handover Active) -->
         <div class="conversation-card" 
+             id="conv-card-budi"
+             data-conv-id="budi"
              data-filter="active" 
              data-name="budi santoso staf lab fti" 
              data-item="tas laptop lenovo thinkpad" 
-             onclick="openChatThread('Budi Santoso (Staf Lab)', 'Tas Laptop Lenovo ThinkPad', 'in_handover', 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=160&auto=format&fit=crop&q=80')">
+             onclick="openChatThread('Budi Santoso (Staf Lab)', 'Tas Laptop Lenovo ThinkPad', 'in_handover', 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=160&auto=format&fit=crop&q=80', 'budi')">
             <div class="conversation-avatar-wrap">
                 <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=160&auto=format&fit=crop&q=80" alt="Budi Santoso" class="conversation-avatar" loading="lazy">
             </div>
@@ -1373,10 +1379,12 @@
 
         <!-- Conversation 4: Dinda Kirana (Handover Completed) -->
         <div class="conversation-card" 
+             id="conv-card-dinda"
+             data-conv-id="dinda"
              data-filter="completed" 
              data-name="dinda kirana fdsk" 
              data-item="earphone tws anker soundcore" 
-             onclick="openChatThread('Dinda Kirana (FDSK)', 'Earphone TWS Anker Soundcore', 'completed', 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=160&auto=format&fit=crop&q=80')">
+             onclick="openChatThread('Dinda Kirana (FDSK)', 'Earphone TWS Anker Soundcore', 'completed', 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=160&auto=format&fit=crop&q=80', 'dinda')">
             <div class="conversation-avatar-wrap">
                 <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=160&auto=format&fit=crop&q=80" alt="Dinda Kirana" class="conversation-avatar" loading="lazy">
             </div>
@@ -1396,10 +1404,12 @@
 
         <!-- Conversation 5: Rizky Pratama (Handover Completed) -->
         <div class="conversation-card" 
+             id="conv-card-rizky"
+             data-conv-id="rizky"
              data-filter="completed" 
              data-name="rizky pratama fasilkom" 
              data-item="paspor berkas beasiswa" 
-             onclick="openChatThread('Rizky Pratama (FASILKOM)', 'Paspor & Berkas Beasiswa', 'completed', 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=160&auto=format&fit=crop&q=80')">
+             onclick="openChatThread('Rizky Pratama (FASILKOM)', 'Paspor & Berkas Beasiswa', 'completed', 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=160&auto=format&fit=crop&q=80', 'rizky')">
             <div class="conversation-avatar-wrap">
                 <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=160&auto=format&fit=crop&q=80" alt="Rizky Pratama" class="conversation-avatar" loading="lazy">
             </div>
@@ -1664,6 +1674,18 @@
         });
 
         updateCounts();
+        applyStoredUnreadStateToCards();
+
+        // Listen for storage changes across tabs or window updates
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'findumb_unread_conversations') {
+                applyStoredUnreadStateToCards();
+            }
+        });
+
+        window.addEventListener('findumb:messages-updated', () => {
+            applyStoredUnreadStateToCards();
+        });
 
         // Check if navigated from Report Detail with claim intent
         const urlParams = new URLSearchParams(window.location.search);
@@ -1893,8 +1915,67 @@
         }
     }
 
+    // Unread Conversation State Storage & Badge Sync
+    function getStoredUnreadConversations() {
+        if (typeof window.getStoredUserUnreadConversations === 'function') {
+            return window.getStoredUserUnreadConversations();
+        }
+        try {
+            const raw = localStorage.getItem('findumb_unread_conversations');
+            if (raw !== null) {
+                const parsed = JSON.parse(raw);
+                if (Array.isArray(parsed)) return parsed;
+            }
+        } catch(e) {}
+        return ['ahmad', 'siti'];
+    }
+
+    function applyStoredUnreadStateToCards() {
+        const unreadList = getStoredUnreadConversations();
+        const cards = document.querySelectorAll('#conversations-container .conversation-card');
+        cards.forEach(card => {
+            const convId = card.getAttribute('data-conv-id');
+            if (convId) {
+                const isUnread = unreadList.includes(convId);
+                const bubble = card.querySelector('.unread-bubble');
+                if (!isUnread) {
+                    card.classList.remove('unread');
+                    if (bubble) bubble.style.display = 'none';
+                } else {
+                    card.classList.add('unread');
+                    if (bubble) bubble.style.display = 'inline-flex';
+                }
+            }
+        });
+        if (typeof window.syncMessagesBadges === 'function') {
+            window.syncMessagesBadges(unreadList);
+        }
+    }
+
     // 6. Open & Close Chat Thread Modal
-    function openChatThread(name, item, status, avatarUrl) {
+    function openChatThread(name, item, status, avatarUrl, convId) {
+        if (convId) {
+            let unreadList = getStoredUnreadConversations();
+            if (unreadList.includes(convId)) {
+                unreadList = unreadList.filter(id => id !== convId);
+                try {
+                    localStorage.setItem('findumb_unread_conversations', JSON.stringify(unreadList));
+                } catch(e) {}
+
+                const card = document.getElementById('conv-card-' + convId) || document.querySelector(`[data-conv-id="${convId}"]`);
+                if (card) {
+                    card.classList.remove('unread');
+                    const bubble = card.querySelector('.unread-bubble');
+                    if (bubble) bubble.style.display = 'none';
+                }
+
+                if (typeof window.syncMessagesBadges === 'function') {
+                    window.syncMessagesBadges(unreadList);
+                }
+                window.dispatchEvent(new CustomEvent('findumb:messages-updated', { detail: { unreadList } }));
+            }
+        }
+
         document.getElementById('chat-thread-name').textContent = name;
         document.getElementById('chat-thread-item').textContent = item;
         if (avatarUrl) {

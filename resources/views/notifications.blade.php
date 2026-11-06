@@ -1276,13 +1276,22 @@
     function saveNotifications(list) {
         try {
             localStorage.setItem('findumb_notifications', JSON.stringify(list));
-            updateGlobalHeaderDot(list);
+            if (typeof window.syncNotificationBadges === 'function') {
+                window.syncNotificationBadges(list);
+            } else {
+                updateGlobalHeaderDot(list);
+            }
+            window.dispatchEvent(new CustomEvent('findumb:notif-updated', { detail: { list } }));
         } catch (e) {
             console.error('Failed to save notifications', e);
         }
     }
 
     function updateGlobalHeaderDot(list) {
+        if (typeof window.syncNotificationBadges === 'function') {
+            window.syncNotificationBadges(list);
+            return;
+        }
         const dot = document.getElementById('header-notif-dot');
         if (dot) {
             const hasUnread = list.some(n => !n.read);

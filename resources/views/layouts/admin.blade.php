@@ -1,19 +1,19 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-full bg-[#f8fafc]">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="bg-[#f8fafc]">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
     <meta name="description" content="Dashboard Administrator FindUMB — Sistem Moderasi dan Tata Kelola Lost & Found Universitas Mercu Buana.">
-    <meta name="theme-color" content="#09090b">
+    <meta name="theme-color" content="#1572b8">
 
     <title>@yield('title', 'Dashboard Administrator — FindUMB')</title>
 
-    <!-- Google Fonts: Inter (Shadcn default typography) -->
+    <!-- Google Fonts: Inter & Plus Jakarta Sans -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
 
-    <!-- Tailwind CSS (Vite / CDN Fallback for Admin Layout) -->
+    <!-- Tailwind CSS (Vite / CDN) -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -21,45 +21,37 @@
             theme: {
                 extend: {
                     colors: {
-                        border: "hsl(240 5.9% 90%)",
-                        input: "hsl(240 5.9% 90%)",
-                        ring: "hsl(240 5.9% 10%)",
-                        background: "hsl(0 0% 100%)",
-                        foreground: "hsl(240 10% 3.9%)",
                         primary: {
-                            DEFAULT: "hsl(240 5.9% 10%)",
-                            foreground: "hsl(0 0% 98%)",
-                            umb: "#1572b8",
-                            umbdark: "#0f5791",
+                            DEFAULT: "#1572b8",
+                            dark: "#0f5791",
+                            light: "#f0f7fd",
+                            50: "#f0f7fd",
+                            100: "#e0f2fe",
+                            200: "#bae6fd",
+                            500: "#1572b8",
+                            600: "#0f5791",
+                            700: "#0c487b",
                         },
-                        secondary: {
-                            DEFAULT: "hsl(240 4.8% 95.9%)",
-                            foreground: "hsl(240 5.9% 10%)",
-                        },
-                        destructive: {
-                            DEFAULT: "hsl(0 84.2% 60.2%)",
-                            foreground: "hsl(0 0% 98%)",
-                        },
+                        border: "#eaecf0",
+                        input: "#eaecf0",
+                        background: "#f8fafc",
+                        foreground: "#111827",
                         muted: {
-                            DEFAULT: "hsl(240 4.8% 95.9%)",
-                            foreground: "hsl(240 3.8% 46.1%)",
-                        },
-                        accent: {
-                            DEFAULT: "hsl(240 4.8% 95.9%)",
-                            foreground: "hsl(240 5.9% 10%)",
+                            DEFAULT: "#f3f4f6",
+                            foreground: "#6b7280",
                         },
                         card: {
-                            DEFAULT: "hsl(0 0% 100%)",
-                            foreground: "hsl(240 10% 3.9%)",
+                            DEFAULT: "#ffffff",
+                            foreground: "#111827",
                         },
                     },
                     borderRadius: {
-                        lg: "0.75rem",
-                        md: "calc(0.75rem - 2px)",
-                        sm: "calc(0.75rem - 4px)",
+                        xl: "0.75rem",
+                        '2xl': "1rem",
                     },
                     fontFamily: {
                         sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+                        heading: ['Plus Jakarta Sans', 'Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
                     }
                 }
             }
@@ -68,34 +60,595 @@
 
     <style>
         :root {
-            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            --font-main: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            --font-heading: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --primary: #1572b8;
+            --primary-dark: #0f5791;
+            --primary-gradient: linear-gradient(135deg, #0e5090 0%, #1572b8 60%, #29a0dc 100%);
+            --bg-page: #f8fafc;
+            --border-color: #eaecf0;
+            --border-subtle: #e2e8f0;
+            --text-title: #111827;
+            --text-body: #4b5563;
+            --text-muted: #9ca3af;
+            --transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         body {
-            font-family: var(--font-sans);
-            color: #09090b;
-            background-color: #f8fafc;
+            font-family: var(--font-main);
+            color: var(--text-title);
+            background-color: var(--bg-page);
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
         }
 
-        /* Custom scrollbar for data tables and dialogs */
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 9999px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
+        /* Desktop Left Sidebar (Exact Civitas Pointsale Style) */
+        .desktop-sidebar {
+            display: flex !important;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 260px;
+            min-width: 260px;
+            max-width: 260px;
+            height: 100vh;
+            height: 100dvh;
+            position: sticky;
+            top: 0;
+            background: #ffffff;
+            border-right: 1px solid #eaecf0;
+            padding: 0 0.95rem 1.25rem 0.95rem;
+            z-index: 60;
+            box-sizing: border-box;
+            transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
+                        min-width 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
+                        max-width 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
+                        padding 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            overflow-y: auto;
+            overflow-x: hidden;
+            white-space: nowrap;
+            scrollbar-width: none;
+            flex-shrink: 0;
+            align-self: flex-start;
         }
 
-        /* Toast styling */
+        .desktop-sidebar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .sidebar-top-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0.85rem;
+            width: 100%;
+        }
+
+        /* 1. Header Row (Fixed in when sidebar is scrolled) */
+        .sidebar-header-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.25rem 0.25rem 0.65rem 0.25rem;
+            min-height: 40px;
+            position: sticky;
+            top: 0;
+            background: #ffffff;
+            z-index: 30;
+            flex-shrink: 0;
+            width: 100%;
+        }
+
+        .sidebar-brand-wrap {
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+        }
+
+        .sidebar-logo-btn {
+            background: transparent;
+            border: none;
+            padding: 0;
+            margin: 0;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sidebar-logo-container {
+            width: 36px;
+            height: 36px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            border-radius: 9px;
+            transition: background-color 0.2s ease;
+        }
+
+        .sidebar-logo-btn:hover .sidebar-logo-container {
+            background-color: #f1f5f9;
+        }
+
+        .sidebar-logo-flipper {
+            width: 32px;
+            height: 32px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sidebar-logo-face {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .sidebar-logo-face-logo {
+            opacity: 1;
+            transform: scale(1) rotate(0deg);
+        }
+
+        .sidebar-logo-face-icon {
+            opacity: 0;
+            transform: scale(0.75) rotate(-10deg);
+            color: #1572b8;
+        }
+
+        .sidebar-open-slide-icon {
+            width: 22px;
+            height: 22px;
+            stroke-width: 2.3;
+            color: #1572b8;
+            stroke: #1572b8;
+        }
+
+        @keyframes logoSlideOut {
+            0%, 65% {
+                opacity: 1;
+                transform: scale(1) rotate(0deg);
+            }
+            72%, 92% {
+                opacity: 0;
+                transform: scale(0.7) rotate(12deg);
+            }
+            98%, 100% {
+                opacity: 1;
+                transform: scale(1) rotate(0deg);
+            }
+        }
+
+        @keyframes iconSlideIn {
+            0%, 65% {
+                opacity: 0;
+                transform: scale(0.7) rotate(-12deg);
+                pointer-events: none;
+            }
+            72%, 92% {
+                opacity: 1;
+                transform: scale(1) rotate(0deg);
+                pointer-events: auto;
+            }
+            98%, 100% {
+                opacity: 0;
+                transform: scale(0.7) rotate(-12deg);
+                pointer-events: none;
+            }
+        }
+
+        .sidebar-brand-title-link {
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            align-items: center;
+        }
+
+        .sidebar-logo-img {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+            flex-shrink: 0;
+        }
+
+        .sidebar-brand-name {
+            font-family: var(--font-heading);
+            font-weight: 800;
+            font-size: 1.25rem;
+            letter-spacing: -0.02em;
+            color: #1572b8;
+        }
+
+        .sidebar-brand-name span {
+            color: #0c487b;
+        }
+
+        .sidebar-collapse-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            border: 1px solid var(--border-subtle);
+            background: #ffffff;
+            color: #64748b;
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            flex-shrink: 0;
+        }
+
+        .sidebar-collapse-btn:hover {
+            background: #f8fafc;
+            color: var(--primary);
+            border-color: #cbd5e1;
+        }
+
+        .sidebar-collapse-btn svg, .sidebar-collapse-btn .lucide {
+            width: 17px;
+            height: 17px;
+            stroke-width: 2;
+        }
+
+        /* 2. Navigation Groups & Links */
+        .sidebar-links-group,
+        .sidebar-nav-list,
+        .sidebar-secondary-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+            width: 100%;
+        }
+
+        .sidebar-nav-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+            padding: 0.6rem 0.9rem;
+            border-radius: 10px;
+            color: #475569;
+            font-family: var(--font-main);
+            font-size: 0.875rem;
+            font-weight: 500;
+            text-decoration: none;
+            border: 1px solid transparent;
+            background: transparent;
+            cursor: pointer;
+            transition: var(--transition);
+            width: 100%;
+            box-sizing: border-box;
+            text-align: left;
+        }
+
+        .sidebar-nav-item:hover {
+            background-color: #f8fafc;
+            color: #0f172a;
+        }
+
+        /* Active Item: Shape biru gradient persis di referensi civitas, tanpa shadow */
+        .sidebar-nav-item.active {
+            background: linear-gradient(135deg, #0c559c 0%, #1572b8 52%, #2aa5e0 100%) !important;
+            border: none !important;
+            box-shadow: none !important;
+            color: #ffffff !important;
+            font-weight: 700 !important;
+        }
+
+        .sidebar-nav-item.active .sidebar-item-icon {
+            color: #ffffff !important;
+        }
+
+        .sidebar-nav-item.active .sidebar-item-label {
+            color: #ffffff !important;
+        }
+
+        /* Indikator notif warna putih ketika button dipilih */
+        .sidebar-nav-item.active .sidebar-badge-counter,
+        .sidebar-nav-item.active .sidebar-badge-counter.sidebar-badge-notif {
+            background-color: #ffffff !important;
+            color: #0c559c !important;
+            font-weight: 800 !important;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08) !important;
+        }
+
+        .sidebar-item-left {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .sidebar-item-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+            color: inherit;
+        }
+
+        .sidebar-item-icon svg, .sidebar-item-icon .lucide {
+            width: 19px;
+            height: 19px;
+            stroke-width: 2;
+            color: inherit;
+        }
+
+        .sidebar-item-label {
+            font-size: 0.875rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .sidebar-badge-counter {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.725rem;
+            font-weight: 700;
+            color: #475569;
+            min-width: 22px;
+            height: 20px;
+            padding: 0 6px;
+            border-radius: 9999px;
+            background: #f1f5f9;
+            line-height: 1;
+            box-sizing: border-box;
+            text-align: center;
+            flex-shrink: 0;
+            margin-left: auto;
+        }
+
+        /* Indikator Merah untuk Pesan Masuk & Notifikasi saat tidak dipilih */
+        .sidebar-badge-counter.sidebar-badge-notif {
+            background-color: #ef4444 !important;
+            color: #ffffff !important;
+            font-weight: 700;
+        }
+
+        .sidebar-divider {
+            height: 1px;
+            background-color: #f1f5f9;
+            width: 100%;
+            margin: 0.25rem 0;
+        }
+
+        .sidebar-section-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #64748b;
+            padding: 0 0.5rem;
+            margin-bottom: 0.4rem;
+            letter-spacing: 0.02em;
+        }
+
+        /* Container bawah sidebar untuk account */
+        .sidebar-bottom-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            width: 100%;
+            margin-top: auto;
+            flex-shrink: 0;
+        }
+
+        /* 5. Footer User Profile Card */
+        .sidebar-footer {
+            padding-top: 0.75rem;
+            border-top: 1px solid #f1f5f9;
+            margin-top: 0.75rem;
+            width: 100%;
+        }
+
+        .sidebar-user-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.65rem;
+            padding: 0.55rem 0.65rem;
+            border-radius: 10px;
+            background: transparent;
+            border: 1px solid transparent;
+            text-decoration: none;
+            color: inherit;
+            transition: var(--transition);
+            width: 100%;
+            box-sizing: border-box;
+            cursor: pointer;
+        }
+
+        .sidebar-user-card:hover {
+            background: #f8fafc;
+            border-color: #e2e8f0;
+        }
+
+        .sidebar-user-left {
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+            min-width: 0;
+        }
+
+        .sidebar-user-avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: #e0f2fe;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .sidebar-user-avatar svg, .sidebar-user-avatar .lucide {
+            width: 17px;
+            height: 17px;
+            stroke-width: 2.2;
+        }
+
+        .sidebar-user-info {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+
+        .sidebar-user-name {
+            font-size: 0.825rem;
+            font-weight: 700;
+            color: #0f172a;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 1.25;
+        }
+
+        .sidebar-user-role {
+            font-size: 0.7rem;
+            color: #64748b;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 1.2;
+        }
+
+        .sidebar-user-chevrons {
+            width: 16px;
+            height: 16px;
+            color: #94a3b8;
+            flex-shrink: 0;
+            stroke-width: 1.8;
+        }
+
+        /* Collapsed State (Mini-rail 64px) */
+        .admin-layout-wrapper.sidebar-collapsed .desktop-sidebar {
+            width: 64px !important;
+            min-width: 64px !important;
+            max-width: 64px !important;
+            padding: 0 0.4rem 1.15rem 0.4rem !important;
+            align-items: center;
+        }
+
+        .admin-layout-wrapper.sidebar-collapsed .sidebar-brand-name,
+        .admin-layout-wrapper.sidebar-collapsed .sidebar-brand-title-link,
+        .admin-layout-wrapper.sidebar-collapsed .sidebar-collapse-btn,
+        .admin-layout-wrapper.sidebar-collapsed .sidebar-item-label,
+        .admin-layout-wrapper.sidebar-collapsed .sidebar-badge-counter,
+        .admin-layout-wrapper.sidebar-collapsed .sidebar-section-title,
+        .admin-layout-wrapper.sidebar-collapsed .sidebar-user-info,
+        .admin-layout-wrapper.sidebar-collapsed .sidebar-user-chevrons {
+            display: none !important;
+        }
+
+        .admin-layout-wrapper.sidebar-collapsed .sidebar-header-row {
+            justify-content: center;
+            padding: 1.15rem 0 0.5rem 0 !important;
+            width: 100%;
+        }
+
+        .admin-layout-wrapper.sidebar-collapsed .sidebar-nav-item {
+            width: 44px;
+            height: 44px;
+            padding: 0;
+            justify-content: center;
+            margin: 0 auto;
+            border-radius: 12px;
+        }
+
+        .admin-layout-wrapper.sidebar-collapsed .sidebar-nav-item.active {
+            background: linear-gradient(135deg, #0c559c 0%, #1572b8 52%, #2aa5e0 100%) !important;
+            border: none !important;
+            box-shadow: none !important;
+            color: #ffffff !important;
+        }
+
+        .admin-layout-wrapper.sidebar-collapsed .sidebar-nav-item.active .sidebar-item-icon {
+            color: #ffffff !important;
+        }
+
+        .sidebar-rail-notif-dot {
+            display: none;
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background-color: #ef4444;
+            border: 1.5px solid #ffffff;
+        }
+
+        .admin-layout-wrapper.sidebar-collapsed .sidebar-rail-notif-dot {
+            display: block;
+        }
+
+        /* Persistent full-height sticky on desktop, fixed overlay on mobile */
+        @media (max-width: 1023px) {
+            .desktop-sidebar {
+                position: fixed !important;
+                top: 0 !important;
+                bottom: 0 !important;
+                left: 0 !important;
+                height: 100vh !important;
+                height: 100dvh !important;
+                z-index: 70 !important;
+                box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .desktop-sidebar {
+                position: sticky !important;
+                top: 0 !important;
+                height: 100vh !important;
+                height: 100dvh !important;
+                flex-shrink: 0 !important;
+                align-self: flex-start !important;
+                transform: none !important;
+            }
+        }
+
+        /* Clean Table Styles */
+        .clean-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            font-size: 0.8125rem;
+        }
+
+        .clean-table th {
+            background-color: #ffffff;
+            color: #6b7280;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border-color);
+            text-align: left;
+        }
+
+        .clean-table td {
+            padding: 0.875rem 1rem;
+            border-bottom: 1px solid #f3f4f6;
+            color: #374151;
+            vertical-align: middle;
+        }
+
+        .clean-table tr:hover td {
+            background-color: #fafbfc;
+        }
+
+        .clean-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Toast Popup */
         .admin-toast-popup {
             position: fixed;
             bottom: 24px;
@@ -104,13 +657,15 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            padding: 14px 18px;
-            background: #09090b;
-            color: #ffffff;
-            border-radius: 12px;
-            font-size: 0.875rem;
+            padding: 12px 18px;
+            background: #ffffff;
+            color: #111827;
+            border: 1px solid var(--border-color);
+            border-left: 4px solid #1572b8;
+            border-radius: 10px;
+            font-size: 0.825rem;
             font-weight: 500;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08);
             opacity: 0;
             transform: translateY(12px);
             visibility: hidden;
@@ -124,328 +679,288 @@
             visibility: visible;
         }
 
-        /* Table row hover & active */
-        .shadcn-table tr {
-            transition: background-color 0.15s ease;
+        /* Subtle Scrollbar */
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
         }
-        .shadcn-table tr:hover {
-            background-color: #f8fafc;
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #e5e7eb;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #cbd5e1;
         }
     </style>
 
     @stack('styles')
 </head>
-<body class="h-full flex flex-col antialiased bg-[#f8fafc] text-foreground">
+<body class="min-h-screen antialiased bg-[#f8fafc] text-[#111827]">
 
-    <!-- Application Shell Grid: Sidebar (Fixed/Collapsible) + Main Content Area -->
-    <div class="min-h-screen flex flex-col lg:flex-row bg-[#f8fafc]">
+    <div class="min-h-screen flex flex-col lg:flex-row bg-[#f8fafc] admin-layout-wrapper" id="admin-layout-wrapper">
+
+        <!-- Mobile Sidebar Backdrop -->
+        <div id="mobile-sidebar-backdrop" onclick="toggleAdminSidebar()" class="fixed inset-0 z-40 bg-black/30 backdrop-blur-xs lg:hidden hidden"></div>
 
         <!-- =======================================================================
-             1. SHADCN SIDEBAR (Desktop & Mobile Drawer)
+             DESKTOP LEFT SIDEBAR (Identical to Civitas Pointsale Style)
              ======================================================================= -->
-        
-        <!-- Mobile Sidebar Backdrop -->
-        <div id="mobile-sidebar-backdrop" onclick="toggleAdminSidebar()" class="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm lg:hidden hidden transition-opacity"></div>
-
-        <aside id="admin-sidebar" class="fixed top-0 bottom-0 left-0 z-50 w-72 bg-white border-r border-border flex flex-col transition-transform duration-300 ease-in-out -translate-x-full lg:translate-x-0 lg:static lg:h-screen lg:shrink-0">
-            <!-- Brand & Campus Header -->
-            <div class="h-16 px-5 border-b border-border flex items-center justify-between shrink-0">
-                <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-[#0e5090] via-[#1572b8] to-[#29a0dc] flex items-center justify-center text-white shadow-sm shadow-[#1572b8]/20">
-                        <i data-lucide="shield-check" class="w-5 h-5"></i>
+        <aside id="admin-sidebar" class="desktop-sidebar fixed top-0 bottom-0 left-0 z-50 lg:sticky lg:top-0 lg:h-screen lg:shrink-0 transition-transform duration-200 ease-in-out -translate-x-full lg:translate-x-0" aria-label="Navigasi Utama Admin">
+            
+            <div class="sidebar-top-container">
+                <!-- 1. Header Row (Logo dengan Animasi Open Slide + Brand Name + Toggle Button) -->
+                <div class="sidebar-header-row">
+                    <div class="sidebar-brand-wrap">
+                        <button type="button" class="sidebar-logo-btn" onclick="toggleDesktopSidebar()" title="Buka / Ciutkan Sidebar" aria-label="Buka / Ciutkan Sidebar">
+                            <div class="sidebar-logo-container">
+                                <div class="sidebar-logo-flipper">
+                                    <div class="sidebar-logo-face sidebar-logo-face-logo">
+                                        <picture>
+                                            <source srcset="{{ asset('images/logo.webp') }}" type="image/webp">
+                                            <img src="{{ asset('images/logo.png') }}" alt="Logo Find UMB" class="sidebar-logo-img" width="32" height="32" loading="eager">
+                                        </picture>
+                                    </div>
+                                    <div class="sidebar-logo-face sidebar-logo-face-icon">
+                                        <i data-lucide="panel-left-open" class="sidebar-open-slide-icon"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </button>
+                        <a href="{{ route('admin.dashboard') }}" class="sidebar-brand-title-link" title="Dashboard Administrator Find UMB">
+                            <span class="sidebar-brand-name">Find<span>UMB</span></span>
+                        </a>
                     </div>
-                    <div class="flex flex-col">
-                        <div class="flex items-center gap-2">
-                            <span class="font-bold text-base tracking-tight text-slate-900">Find<span class="text-[#1572b8]">UMB</span></span>
-                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-900 text-white tracking-wide uppercase">Admin</span>
-                        </div>
-                        <span class="text-[11px] text-muted-foreground font-medium">Universitas Mercu Buana</span>
-                    </div>
-                </a>
-                <button type="button" onclick="toggleAdminSidebar()" class="lg:hidden p-1.5 rounded-md hover:bg-slate-100 text-slate-500" aria-label="Tutup Menu">
-                    <i data-lucide="x" class="w-5 h-5"></i>
-                </button>
-            </div>
-
-            <!-- Organization Campus Switcher Widget -->
-            <div class="px-4 py-3 border-b border-border bg-slate-50/70">
-                <div class="flex items-center justify-between p-2 rounded-lg bg-white border border-border shadow-xs text-xs">
-                    <div class="flex items-center gap-2 min-w-0">
-                        <div class="w-6 h-6 rounded-md bg-[#e0f2fe] text-[#0284c7] flex items-center justify-center shrink-0">
-                            <i data-lucide="building-2" class="w-3.5 h-3.5"></i>
-                        </div>
-                        <div class="flex flex-col min-w-0">
-                            <span class="font-semibold text-slate-900 truncate">Pusat Kampus Meruya</span>
-                            <span class="text-[10px] text-slate-500 truncate">Semua Wilayah Operasional</span>
-                        </div>
-                    </div>
-                    <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 ring-4 ring-emerald-100 shrink-0" title="Sistem Aktif Normal"></span>
-                </div>
-            </div>
-
-            <!-- Navigation Links -->
-            <div class="flex-1 overflow-y-auto px-3 py-4 space-y-6">
-                <!-- Group 1: Moderasi & Pelaporan -->
-                <div class="space-y-1">
-                    <div class="px-3 pb-1 text-[11px] font-semibold text-muted-foreground tracking-wider uppercase">Menu Utama</div>
-                    <a href="#overview" onclick="switchAdminTab('overview')" id="nav-tab-overview" class="admin-nav-item flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-colors bg-slate-900 text-white shadow-xs">
-                        <div class="flex items-center gap-3">
-                            <i data-lucide="layout-dashboard" class="w-4 h-4 shrink-0"></i>
-                            <span>Ringkasan Dashboard</span>
-                        </div>
-                    </a>
-
-                    <a href="#moderation" onclick="switchAdminTab('moderation')" id="nav-tab-moderation" class="admin-nav-item flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-colors text-slate-700 hover:text-slate-900 hover:bg-slate-100">
-                        <div class="flex items-center gap-3">
-                            <i data-lucide="shield-alert" class="w-4 h-4 shrink-0 text-rose-500"></i>
-                            <span>Aduan &amp; Moderasi</span>
-                        </div>
-                        <span id="sidebar-abuse-badge" class="px-2 py-0.5 text-[11px] font-bold rounded-full bg-rose-100 text-rose-700">3</span>
-                    </a>
-
-                    <a href="#reports" onclick="switchAdminTab('reports')" id="nav-tab-reports" class="admin-nav-item flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-colors text-slate-700 hover:text-slate-900 hover:bg-slate-100">
-                        <div class="flex items-center gap-3">
-                            <i data-lucide="package-search" class="w-4 h-4 shrink-0 text-slate-500"></i>
-                            <span>Kelola Laporan Barang</span>
-                        </div>
-                        <span id="sidebar-reports-count" class="px-2 py-0.5 text-[11px] font-medium rounded-full bg-slate-100 text-slate-600">28</span>
-                    </a>
-                </div>
-
-                <!-- Group 2: Pengguna & Sistem -->
-                <div class="space-y-1">
-                    <div class="px-3 pb-1 text-[11px] font-semibold text-muted-foreground tracking-wider uppercase">Pengguna &amp; Keamanan</div>
-                    <a href="#users" onclick="switchAdminTab('users')" id="nav-tab-users" class="admin-nav-item flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-colors text-slate-700 hover:text-slate-900 hover:bg-slate-100">
-                        <div class="flex items-center gap-3">
-                            <i data-lucide="users" class="w-4 h-4 shrink-0 text-slate-500"></i>
-                            <span>Manajemen Pengguna</span>
-                        </div>
-                    </a>
-
-                    <a href="#audit" onclick="switchAdminTab('audit')" id="nav-tab-audit" class="admin-nav-item flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-colors text-slate-700 hover:text-slate-900 hover:bg-slate-100">
-                        <div class="flex items-center gap-3">
-                            <i data-lucide="history" class="w-4 h-4 shrink-0 text-slate-500"></i>
-                            <span>Log Audit Moderasi</span>
-                        </div>
-                    </a>
-
-                    <a href="#categories" onclick="switchAdminTab('categories')" id="nav-tab-categories" class="admin-nav-item flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-colors text-slate-700 hover:text-slate-900 hover:bg-slate-100">
-                        <div class="flex items-center gap-3">
-                            <i data-lucide="layers" class="w-4 h-4 shrink-0 text-slate-500"></i>
-                            <span>Kategori Barang</span>
-                        </div>
-                    </a>
-                </div>
-
-                <!-- Group 3: Navigasi Cepat -->
-                <div class="space-y-1 pt-2 border-t border-border">
-                    <div class="px-3 pb-1 text-[11px] font-semibold text-muted-foreground tracking-wider uppercase">Pintasan Portal</div>
-                    <a href="{{ route('home') }}" class="flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium text-slate-700 hover:text-[#1572b8] hover:bg-sky-50 transition-colors">
-                        <div class="flex items-center gap-3">
-                            <i data-lucide="external-link" class="w-4 h-4 shrink-0"></i>
-                            <span>Buka Portal Civitas</span>
-                        </div>
-                        <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-slate-400"></i>
-                    </a>
-                </div>
-            </div>
-
-            <!-- Footer: Admin Profile Card -->
-            <div class="p-3 border-t border-border bg-slate-50/50 shrink-0">
-                <div class="p-2.5 rounded-xl bg-white border border-border shadow-xs flex items-center justify-between">
-                    <div class="flex items-center gap-3 min-w-0">
-                        <div class="w-9 h-9 rounded-full bg-slate-900 text-white flex items-center justify-center font-semibold text-xs shrink-0 shadow-inner">
-                            AD
-                        </div>
-                        <div class="flex flex-col min-w-0">
-                            <span class="text-xs font-semibold text-slate-900 truncate" id="admin-user-display-name">Biro Kemahasiswaan</span>
-                            <span class="text-[11px] text-muted-foreground truncate" id="admin-user-display-email">admin.lostfound@mercubuana.ac.id</span>
-                        </div>
-                    </div>
-                    <button type="button" onclick="openAdminSettingsModal()" class="p-1.5 rounded-md hover:bg-slate-100 text-slate-500 hover:text-slate-900 transition-colors" title="Pengaturan Akun Admin" aria-label="Pengaturan Admin">
-                        <i data-lucide="settings" class="w-4 h-4"></i>
+                    <button type="button" class="sidebar-collapse-btn" onclick="toggleDesktopSidebar()" title="Ciutkan Sidebar" aria-label="Ciutkan Sidebar">
+                        <i data-lucide="panel-left"></i>
                     </button>
+                </div>
+
+                <!-- 2. Navigasi Menu Utama -->
+                <div class="sidebar-menu-section">
+                    <div class="sidebar-section-title">Menu</div>
+                    <nav class="sidebar-nav-list">
+                        <!-- Beranda / Overview -->
+                        <a href="#overview" onclick="switchAdminTab('overview')" id="nav-tab-overview" class="sidebar-nav-item active" title="Beranda Administrator">
+                            <div class="sidebar-item-left">
+                                <div class="sidebar-item-icon">
+                                    <i data-lucide="layout-grid"></i>
+                                </div>
+                                <span class="sidebar-item-label">Beranda</span>
+                            </div>
+                        </a>
+
+                        <!-- Kelola Laporan -->
+                        <a href="#reports" onclick="switchAdminTab('reports')" id="nav-tab-reports" class="sidebar-nav-item" title="Kelola Laporan">
+                            <div class="sidebar-item-left">
+                                <div class="sidebar-item-icon" style="position: relative;">
+                                    <i data-lucide="compass"></i>
+                                    <span class="sidebar-rail-notif-dot"></span>
+                                </div>
+                                <span class="sidebar-item-label">Kelola Laporan</span>
+                            </div>
+                            <span id="sidebar-reports-count" class="sidebar-badge-counter sidebar-badge-notif">28</span>
+                        </a>
+
+                        <!-- Aduan & Moderasi -->
+                        <a href="#moderation" onclick="switchAdminTab('moderation')" id="nav-tab-moderation" class="sidebar-nav-item" title="Aduan &amp; Moderasi">
+                            <div class="sidebar-item-left">
+                                <div class="sidebar-item-icon" style="position: relative;">
+                                    <i data-lucide="file-text"></i>
+                                    <span class="sidebar-rail-notif-dot"></span>
+                                </div>
+                                <span class="sidebar-item-label">Aduan &amp; Moderasi</span>
+                            </div>
+                            <span id="sidebar-abuse-badge" class="sidebar-badge-counter sidebar-badge-notif">3</span>
+                        </a>
+
+                        <!-- Manajemen Pengguna -->
+                        <a href="#users" onclick="switchAdminTab('users')" id="nav-tab-users" class="sidebar-nav-item" title="Manajemen Pengguna">
+                            <div class="sidebar-item-left">
+                                <div class="sidebar-item-icon">
+                                    <i data-lucide="users"></i>
+                                </div>
+                                <span class="sidebar-item-label">Manajemen Pengguna</span>
+                            </div>
+                        </a>
+
+                        <!-- Log Audit Moderasi -->
+                        <a href="#audit" onclick="switchAdminTab('audit')" id="nav-tab-audit" class="sidebar-nav-item" title="Log Audit Moderasi">
+                            <div class="sidebar-item-left">
+                                <div class="sidebar-item-icon">
+                                    <i data-lucide="history"></i>
+                                </div>
+                                <span class="sidebar-item-label">Log Audit Moderasi</span>
+                            </div>
+                        </a>
+
+                        <!-- Kategori Barang -->
+                        <a href="#categories" onclick="switchAdminTab('categories')" id="nav-tab-categories" class="sidebar-nav-item" title="Kategori Barang">
+                            <div class="sidebar-item-left">
+                                <div class="sidebar-item-icon">
+                                    <i data-lucide="layers"></i>
+                                </div>
+                                <span class="sidebar-item-label">Kategori Barang</span>
+                            </div>
+                        </a>
+                    </nav>
+                </div>
+
+                <div class="sidebar-divider"></div>
+
+                <!-- 4. Navigasi Tambahan (Web Civitas) -->
+                <div class="sidebar-secondary-group">
+                    <a href="{{ route('home') }}" class="sidebar-nav-item" title="Kembali ke Halaman Civitas / Web Civitas">
+                        <div class="sidebar-item-left">
+                            <div class="sidebar-item-icon">
+                                <i data-lucide="shield-check"></i>
+                            </div>
+                            <span class="sidebar-item-label">Web Civitas</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Bagian Bawah: Profile Pengguna (Card besar Laporkan Barang dikecualikan) -->
+            <div class="sidebar-bottom-container">
+                <div class="sidebar-footer">
+                    <a href="javascript:void(0)" onclick="openAdminSettingsModal()" class="sidebar-user-card" title="Buka Profil Administrator">
+                        <div class="sidebar-user-left">
+                            <div class="sidebar-user-avatar">
+                                <i data-lucide="user"></i>
+                            </div>
+                            <div class="sidebar-user-info">
+                                <span class="sidebar-user-name" id="admin-user-display-name">Zidan Maulana</span>
+                                <span class="sidebar-user-role" id="admin-user-display-email">Civitas Akademika UMB</span>
+                            </div>
+                        </div>
+                        <i data-lucide="chevrons-up-down" class="sidebar-user-chevrons"></i>
+                    </a>
                 </div>
             </div>
         </aside>
 
         <!-- =======================================================================
-             2. MAIN WRAPPER: Header + Content
+             MAIN AREA: Content (Top Navbar Removed on Desktop per Revision)
              ======================================================================= -->
         <div class="flex-1 flex flex-col min-w-0">
-            <!-- Top Navbar (Shadcn Header) -->
-            <header class="h-16 bg-white border-b border-border sticky top-0 z-30 flex items-center justify-between px-4 sm:px-6 lg:px-8">
-                <!-- Left: Sidebar toggle & Breadcrumbs -->
-                <div class="flex items-center gap-3">
-                    <button type="button" onclick="toggleAdminSidebar()" class="lg:hidden p-2 rounded-lg border border-border text-slate-600 hover:bg-slate-100" aria-label="Buka Menu">
+            
+            <!-- Mobile-only Bar for Toggling Sidebar on Phones/Tablets -->
+            <header class="lg:hidden h-14 bg-white border-b border-[#eaecf0] sticky top-0 z-30 flex items-center justify-between px-4">
+                <div class="flex items-center gap-2.5">
+                    <button type="button" onclick="toggleAdminSidebar()" class="p-1.5 text-[#6b7280] hover:text-[#111827] rounded-lg border border-[#eaecf0]" aria-label="Buka Menu Admin">
                         <i data-lucide="menu" class="w-5 h-5"></i>
                     </button>
-                    <div class="hidden sm:flex items-center gap-2 text-xs font-medium text-slate-500">
-                        <a href="{{ route('admin.dashboard') }}" class="hover:text-slate-900 transition-colors">Admin</a>
-                        <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-slate-400"></i>
-                        <span class="text-slate-900 font-semibold" id="top-breadcrumb-title">Ringkasan Dashboard</span>
-                    </div>
+                    <span class="font-bold text-base text-[#1572b8] tracking-tight">Find<span class="text-[#0c487b]">UMB</span> Admin</span>
                 </div>
-
-                <!-- Right: Global Actions & Profile -->
-                <div class="flex items-center gap-3">
-                    <!-- Status Mode Pill -->
-                    <div class="hidden md:flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-medium">
-                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                        <span>Mode Admin Aktif</span>
-                    </div>
-
-                    <!-- Quick Global Search Input -->
-                    <div class="relative hidden sm:block w-52 md:w-64">
-                        <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                        <input type="text" id="admin-global-search" oninput="handleAdminGlobalSearch(this.value)" placeholder="Cari laporan, NIM, aduan..." class="w-full pl-9 pr-8 py-1.5 text-xs bg-slate-50 border border-border rounded-lg text-slate-900 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-slate-900 transition-all">
-                        <span class="absolute right-2.5 top-1/2 -translate-y-1/2 text-[10px] font-mono text-slate-400 bg-white border border-border px-1.5 py-0.5 rounded shadow-2xs">⌘K</span>
-                    </div>
-
-                    <!-- Notifications Dropdown Trigger -->
-                    <button type="button" onclick="toggleAdminNotifications()" class="relative p-2 rounded-lg border border-border text-slate-600 hover:bg-slate-100 transition-colors" title="Pemberitahuan Aduan">
+                <div class="flex items-center gap-2">
+                    <button type="button" onclick="toggleAdminNotifications()" class="relative p-1.5 text-[#6b7280]">
                         <i data-lucide="bell" class="w-4 h-4"></i>
-                        <span id="header-notif-indicator" class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-rose-500"></span>
+                        <span id="header-notif-indicator" class="absolute top-1 right-1 w-2 h-2 rounded-full bg-rose-500"></span>
                     </button>
-
-                    <!-- Back to Civitas Portal Link -->
-                    <a href="{{ route('home') }}" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border bg-white text-xs font-semibold text-slate-700 hover:bg-slate-50 hover:text-slate-900 transition-colors shadow-2xs">
-                        <i data-lucide="home" class="w-3.5 h-3.5"></i>
-                        <span>Web Civitas</span>
+                    <a href="{{ route('home') }}" class="p-1.5 text-[#6b7280]" title="Web Civitas">
+                        <i data-lucide="home" class="w-4 h-4"></i>
                     </a>
-
-                    <!-- Admin Profile Quick Dropdown -->
-                    <div class="relative">
-                        <button type="button" onclick="toggleAdminDropdownMenu()" class="w-8 h-8 rounded-full bg-slate-900 text-white flex items-center justify-center text-xs font-bold hover:ring-2 hover:ring-slate-400 transition-all">
-                            AD
-                        </button>
-
-                        <div id="admin-user-dropdown" class="hidden absolute right-0 mt-2 w-56 bg-white border border-border rounded-xl shadow-lg py-1.5 z-50 text-xs">
-                            <div class="px-3.5 py-2 border-b border-border">
-                                <div class="font-semibold text-slate-900" id="dropdown-admin-name">Biro Kemahasiswaan</div>
-                                <div class="text-slate-500 text-[11px] truncate" id="dropdown-admin-email">admin.lostfound@mercubuana.ac.id</div>
-                            </div>
-                            <a href="#users" onclick="switchAdminTab('users')" class="flex items-center gap-2 px-3.5 py-2 hover:bg-slate-50 text-slate-700">
-                                <i data-lucide="users" class="w-4 h-4 text-slate-500"></i>
-                                <span>Manajemen Pengguna</span>
-                            </a>
-                            <a href="#audit" onclick="switchAdminTab('audit')" class="flex items-center gap-2 px-3.5 py-2 hover:bg-slate-50 text-slate-700">
-                                <i data-lucide="history" class="w-4 h-4 text-slate-500"></i>
-                                <span>Log Audit Moderasi</span>
-                            </a>
-                            <a href="{{ route('home') }}" class="flex items-center gap-2 px-3.5 py-2 hover:bg-slate-50 text-slate-700">
-                                <i data-lucide="external-link" class="w-4 h-4 text-slate-500"></i>
-                                <span>Kembali ke Halaman Civitas</span>
-                            </a>
-                            <div class="border-t border-border mt-1"></div>
-                            <button type="button" onclick="handleAdminSignOut()" class="w-full flex items-center gap-2 px-3.5 py-2 hover:bg-rose-50 text-rose-600 font-medium text-left">
-                                <i data-lucide="log-out" class="w-4 h-4"></i>
-                                <span>Keluar dari Admin</span>
-                            </button>
-                        </div>
-                    </div>
                 </div>
             </header>
 
-            <!-- Main Scrollable Content Area -->
-            <main class="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto">
+            <!-- Screen Reader & Compatibility Elements -->
+            <div class="sr-only" aria-hidden="true">
+                <span id="top-breadcrumb-title">Overview</span>
+                <span>Mode Admin Aktif</span>
+                <input type="text" id="admin-global-search" oninput="if(typeof handleAdminGlobalSearch==='function') handleAdminGlobalSearch(this.value)">
+                <a href="{{ route('home') }}">Kembali ke Halaman Civitas</a>
+                <div id="admin-user-dropdown" class="hidden"></div>
+            </div>
+
+            <!-- Main Content Container -->
+            <main class="flex-1 p-4 sm:p-6 lg:p-7 max-w-[1400px] w-full mx-auto">
                 @yield('content')
             </main>
         </div>
     </div>
 
-    <!-- Floating Global Toast Popup -->
+    <!-- Floating Global Toast -->
     <div id="admin-toast" class="admin-toast-popup" role="status" aria-live="polite">
-        <div id="admin-toast-icon" class="text-emerald-400">
-            <i data-lucide="check-circle-2" class="w-5 h-5"></i>
-        </div>
-        <div class="flex-1" id="admin-toast-message">Pemberitahuan admin.</div>
+        <i data-lucide="check-circle-2" class="w-4 h-4 text-[#1572b8] shrink-0"></i>
+        <span id="admin-toast-message" class="truncate">Operasi berhasil dilakukan.</span>
     </div>
 
-    <!-- Lucide Icons Scripts -->
-    <script src="{{ asset('js/lucide.min.js') }}"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Chart.js for High-End Eye-Catching Spline Line Charts -->
+    <script src="{{ asset('js/chart.umd.min.js') }}"></script>
     <script>
-        if (typeof lucide === 'undefined') {
-            document.write('<script src="https://unpkg.com/lucide@latest"><\/script>');
+        if (typeof Chart === 'undefined') {
+            document.write('<script src="https://cdn.jsdelivr.net/npm/chart.js"><\/script>');
         }
     </script>
-
     <script>
+        lucide.createIcons();
+
+        function toggleDesktopSidebar() {
+            const wrapper = document.getElementById('admin-layout-wrapper');
+            if (wrapper) {
+                wrapper.classList.toggle('sidebar-collapsed');
+                const isCollapsed = wrapper.classList.contains('sidebar-collapsed');
+                localStorage.setItem('findumb_admin_sidebar_collapsed', isCollapsed ? '1' : '0');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const isCollapsed = localStorage.getItem('findumb_admin_sidebar_collapsed') === '1';
+            const wrapper = document.getElementById('admin-layout-wrapper');
+            if (wrapper && isCollapsed) {
+                wrapper.classList.add('sidebar-collapsed');
+            }
+        });
+
         function toggleAdminSidebar() {
             const sidebar = document.getElementById('admin-sidebar');
             const backdrop = document.getElementById('mobile-sidebar-backdrop');
-            if (!sidebar || !backdrop) return;
-            const isClosed = sidebar.classList.contains('-translate-x-full');
-            if (isClosed) {
-                sidebar.classList.remove('-translate-x-full');
-                backdrop.classList.remove('hidden');
-                document.body.style.overflow = 'hidden';
-            } else {
-                sidebar.classList.add('-translate-x-full');
-                backdrop.classList.add('hidden');
-                document.body.style.overflow = '';
-            }
+            sidebar.classList.toggle('-translate-x-full');
+            backdrop.classList.toggle('hidden');
         }
 
         function toggleAdminDropdownMenu() {
-            const dropdown = document.getElementById('admin-user-dropdown');
-            if (dropdown) dropdown.classList.toggle('hidden');
+            document.getElementById('admin-user-dropdown').classList.toggle('hidden');
         }
 
-        function toggleAdminNotifications() {
-            switchAdminTab('moderation');
-            showAdminToast('Menampilkan daftar aduan penyalahgunaan yang perlu ditinjau.');
-        }
-
-        function showAdminToast(message, isError = false) {
-            const toast = document.getElementById('admin-toast');
-            const msgEl = document.getElementById('admin-toast-message');
-            const iconEl = document.getElementById('admin-toast-icon');
-            if (!toast || !msgEl) return;
-
-            msgEl.textContent = message;
-            if (iconEl) {
-                iconEl.innerHTML = isError ? '<i data-lucide="alert-triangle" class="w-5 h-5 text-rose-400"></i>' : '<i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-400"></i>';
-                if (typeof lucide !== 'undefined') lucide.createIcons();
-            }
-
-            toast.classList.add('show');
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 3000);
-        }
-
-        function handleAdminSignOut() {
-            if (confirm('Keluar dari sesi Administrator FindUMB?')) {
-                showAdminToast('Sesi administrator ditutup.');
-                setTimeout(() => {
-                    window.location.href = "{{ route('home') }}";
-                }, 800);
-            }
-        }
-
-        // Global click listener to close dropdowns
-        document.addEventListener('click', (e) => {
+        window.addEventListener('click', (e) => {
             const dropdown = document.getElementById('admin-user-dropdown');
             if (dropdown && !dropdown.contains(e.target) && !e.target.closest('button[onclick="toggleAdminDropdownMenu()"]')) {
                 dropdown.classList.add('hidden');
             }
         });
 
-        // Keyboard Shortcut ⌘K / Ctrl+K to focus search
-        document.addEventListener('keydown', (e) => {
+        window.addEventListener('keydown', (e) => {
             if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
                 e.preventDefault();
-                const search = document.getElementById('admin-global-search');
-                if (search) search.focus();
+                const searchInput = document.getElementById('admin-global-search');
+                if (searchInput) { searchInput.focus(); searchInput.select(); }
             }
         });
 
-        document.addEventListener('DOMContentLoaded', () => {
-            if (typeof lucide !== 'undefined') {
-                lucide.createIcons();
+        function showAdminToast(msg) {
+            const toast = document.getElementById('admin-toast');
+            const msgEl = document.getElementById('admin-toast-message');
+            msgEl.textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => { toast.classList.remove('show'); }, 3000);
+        }
+
+        function toggleAdminNotifications() {
+            showAdminToast('Terdapat 3 aduan civitas baru yang memerlukan tinjauan admin.');
+            switchAdminTab('moderation');
+        }
+
+        function handleAdminSignOut() {
+            if (confirm('Keluar dari Mode Administrator?')) {
+                window.location.href = "{{ route('home') }}";
             }
-        });
+        }
     </script>
 
     @stack('scripts')

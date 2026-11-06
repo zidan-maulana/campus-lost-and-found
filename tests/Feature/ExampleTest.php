@@ -232,7 +232,7 @@ class ExampleTest extends TestCase
         $response->assertSee('Aduan Menunggu Review');
         $response->assertSee('Akun Ditangguhkan');
         $response->assertSee('Aduan &amp; Moderasi', false);
-        $response->assertSee('Kelola Laporan Barang');
+        $response->assertSee('Kelola Laporan');
         $response->assertSee('Manajemen Pengguna');
         $response->assertSee('Log Audit Moderasi');
         $response->assertSee('Kategori Barang');

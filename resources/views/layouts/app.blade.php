@@ -720,7 +720,7 @@
                 top: 0;
                 background: #ffffff;
                 border-right: 1px solid #f1f5f9;
-                padding: 1.25rem 0.95rem;
+                padding: 0 0.95rem 1.25rem 0.95rem;
                 z-index: 60;
                 box-sizing: border-box;
                 transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
@@ -740,17 +740,23 @@
             .sidebar-top-container {
                 display: flex;
                 flex-direction: column;
-                gap: 1rem;
+                gap: 0.85rem;
                 width: 100%;
             }
 
-            /* 1. Header Row */
+            /* 1. Header Row (Fixed in when sidebar is scrolled) */
             .sidebar-header-row {
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
-                padding: 0 0.25rem;
+                padding: 1.25rem 0.25rem 0.65rem 0.25rem;
                 min-height: 40px;
+                position: sticky;
+                top: 0;
+                background: #ffffff;
+                z-index: 30;
+                flex-shrink: 0;
+                width: 100%;
             }
 
             .sidebar-brand-wrap {
@@ -925,7 +931,7 @@
                 align-items: center;
                 justify-content: space-between;
                 gap: 0.75rem;
-                padding: 0.6rem 0.75rem;
+                padding: 0.6rem 0.9rem;
                 border-radius: 10px;
                 color: #475569;
                 font-family: var(--font-main);
@@ -968,7 +974,8 @@
             .sidebar-nav-item.active .sidebar-badge-counter.sidebar-badge-notif {
                 background-color: #ffffff !important;
                 color: #0c559c !important;
-                font-weight: 700 !important;
+                font-weight: 800 !important;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08) !important;
             }
 
             .sidebar-item-left {
@@ -1005,17 +1012,19 @@
                 display: inline-flex;
                 align-items: center;
                 justify-content: center;
-                font-size: 0.7rem;
+                font-size: 0.725rem;
                 font-weight: 700;
                 color: #64748b;
-                min-width: 20px;
-                height: 18px;
-                padding: 1.5px 0.42rem 0 0.42rem;
+                min-width: 22px;
+                height: 20px;
+                padding: 0 6px;
                 border-radius: 9999px;
                 background: #f1f5f9;
                 line-height: 1;
                 box-sizing: border-box;
                 text-align: center;
+                flex-shrink: 0;
+                margin-left: auto;
             }
 
             /* Indikator Merah untuk Pesan Masuk & Notifikasi saat tidak dipilih */
@@ -1086,7 +1095,7 @@
                 align-items: center;
                 justify-content: center;
                 flex-shrink: 0;
-                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+                box-shadow: none !important;
             }
 
             .sidebar-card-plus-circle svg,
@@ -1135,14 +1144,14 @@
                 font-weight: 700;
                 cursor: pointer;
                 transition: var(--transition);
-                box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+                box-shadow: none !important;
                 width: 100%;
             }
 
             .sidebar-card-action-btn:hover {
                 background: #f8fafc !important;
                 transform: translateY(-1px);
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.16);
+                box-shadow: none !important;
             }
 
             .sidebar-card-action-btn svg, .sidebar-card-action-btn .lucide {
@@ -1166,13 +1175,13 @@
                 justify-content: center;
                 cursor: pointer;
                 transition: var(--transition);
-                box-shadow: 0 4px 12px rgba(12, 85, 156, 0.28) !important;
+                box-shadow: none !important;
                 margin: 0.35rem auto;
             }
 
             .sidebar-rail-sparkle-btn:hover {
                 transform: scale(1.06);
-                box-shadow: 0 6px 16px rgba(12, 85, 156, 0.35) !important;
+                box-shadow: none !important;
             }
 
             .sidebar-rail-sparkle-btn svg, .sidebar-rail-sparkle-btn .lucide {
@@ -1321,7 +1330,7 @@
                 width: 64px !important;
                 min-width: 64px !important;
                 max-width: 64px !important;
-                padding: 1.15rem 0.4rem !important;
+                padding: 0 0.4rem 1.15rem 0.4rem !important;
                 align-items: center;
             }
 
@@ -1349,7 +1358,8 @@
             .app-layout-wrapper.sidebar-collapsed .sidebar-header-row,
             .desktop-sidebar-pre-collapsed .app-layout-wrapper .sidebar-header-row {
                 justify-content: center;
-                padding: 0;
+                padding: 1.15rem 0 0.5rem 0 !important;
+                width: 100%;
             }
 
             /* Transition animation pada logo HANYA berlaku ketika sidebar tertutup (collapsed) */
@@ -2102,25 +2112,25 @@
 
                 <!-- 2. Komunikasi Cepat (Pesan Masuk & Notifikasi dengan Indikator Merah) -->
                 <div class="sidebar-links-group">
-                    <a href="{{ route('messages') }}" class="sidebar-nav-item {{ request()->is('messages*') ? 'active' : '' }}" title="Pesan Masuk Civitas (12 pesan)">
+                    <a href="{{ route('messages') }}" class="sidebar-nav-item {{ request()->is('messages*') ? 'active' : '' }}" title="Pesan Masuk Civitas">
                         <div class="sidebar-item-left">
                             <div class="sidebar-item-icon" style="position: relative;">
                                 <i data-lucide="inbox"></i>
-                                <span class="sidebar-rail-notif-dot"></span>
+                                <span class="sidebar-rail-notif-dot" id="sidebar-rail-messages-dot"></span>
                             </div>
                             <span class="sidebar-item-label">Pesan Masuk</span>
                         </div>
-                        <span class="sidebar-badge-counter sidebar-badge-notif">12</span>
+                        <span class="sidebar-badge-counter sidebar-badge-notif" id="sidebar-messages-badge">2</span>
                     </a>
-                    <a href="{{ route('notifications') }}" class="sidebar-nav-item {{ request()->is('notifications*') ? 'active' : '' }}" title="Notifikasi (15+ pemberitahuan)">
+                    <a href="{{ route('notifications') }}" class="sidebar-nav-item {{ request()->is('notifications*') ? 'active' : '' }}" title="Notifikasi">
                         <div class="sidebar-item-left">
                             <div class="sidebar-item-icon" style="position: relative;">
                                 <i data-lucide="bell"></i>
-                                <span class="sidebar-rail-notif-dot"></span>
+                                <span class="sidebar-rail-notif-dot" id="sidebar-rail-notif-dot"></span>
                             </div>
                             <span class="sidebar-item-label">Notifikasi</span>
                         </div>
-                        <span class="sidebar-badge-counter sidebar-badge-notif">15+</span>
+                        <span class="sidebar-badge-counter sidebar-badge-notif" id="sidebar-notif-badge">3</span>
                     </a>
                 </div>
 
@@ -2425,12 +2435,15 @@
 
                     <!-- 4. Pesan (Chat / Pesan Masuk Civitas - Relevan) -->
                     <a href="{{ route('messages') }}" class="nav-btn-item {{ request()->is('messages*') ? 'active' : '' }}" id="nav-inbox">
-                        <svg viewBox="0 0 24 24">
-                            <path d="M8.5 19H8C4 19 2 18 2 13V8C2 4 4 2 8 2H16C20 2 22 4 22 8V13C22 17 20 19 16 19H15.5C15.19 19 14.89 19.15 14.7 19.4L13.2 21.4C12.54 22.28 11.46 22.28 10.8 21.4L9.3 19.4C9.11 19.15 8.81 19 8.5 19Z" stroke-linecap="round" stroke-linejoin="round"/>
-                            <circle cx="7.5" cy="10.5" r="0.8" fill="currentColor"/>
-                            <circle cx="12" cy="10.5" r="0.8" fill="currentColor"/>
-                            <circle cx="16.5" cy="10.5" r="0.8" fill="currentColor"/>
-                        </svg>
+                        <div style="position: relative; display: inline-flex; align-items: center; justify-content: center;">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M8.5 19H8C4 19 2 18 2 13V8C2 4 4 2 8 2H16C20 2 22 4 22 8V13C22 17 20 19 16 19H15.5C15.19 19 14.89 19.15 14.7 19.4L13.2 21.4C12.54 22.28 11.46 22.28 10.8 21.4L9.3 19.4C9.11 19.15 8.81 19 8.5 19Z" stroke-linecap="round" stroke-linejoin="round"/>
+                                <circle cx="7.5" cy="10.5" r="0.8" fill="currentColor"/>
+                                <circle cx="12" cy="10.5" r="0.8" fill="currentColor"/>
+                                <circle cx="16.5" cy="10.5" r="0.8" fill="currentColor"/>
+                            </svg>
+                            <span class="badge-notification-dot" id="bottom-nav-messages-dot" style="top: -2px; right: -2px;"></span>
+                        </div>
                         <span>Pesan</span>
                     </a>
 
@@ -2782,17 +2795,139 @@
                 });
             }
 
-            // Sync notification dot with stored notifications
-            const headerDot = document.getElementById('header-notif-dot');
-            if (headerDot) {
-                try {
-                    const rawNotifs = localStorage.getItem('findumb_notifications');
-                    if (rawNotifs) {
-                        const notifs = JSON.parse(rawNotifs);
-                        const hasUnread = Array.isArray(notifs) && notifs.some(n => !n.read);
-                        headerDot.style.display = hasUnread ? 'block' : 'none';
-                    }
-                } catch(e) {}
+            // Real-time notification synchronization for role user
+            if (typeof window.syncNotificationBadges === 'function') {
+                window.syncNotificationBadges();
+            }
+        });
+
+        /* ===========================================================================
+           REAL-TIME NOTIFICATION INDICATOR ENGINE (ROLE USER)
+           =========================================================================== */
+        function getStoredUserNotifications() {
+            try {
+                const raw = localStorage.getItem('findumb_notifications');
+                if (raw) {
+                    const parsed = JSON.parse(raw);
+                    if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+                }
+            } catch(e) {}
+            // Default initial notifications (3 unread: id 1, 2, 3)
+            return [
+                { id: 1, read: false },
+                { id: 2, read: false },
+                { id: 3, read: false },
+                { id: 4, read: true },
+                { id: 5, read: true },
+                { id: 6, read: true }
+            ];
+        }
+
+        window.syncNotificationBadges = function(optionalList) {
+            try {
+                const list = optionalList || getStoredUserNotifications();
+                const unreadCount = Array.isArray(list) ? list.filter(n => !n.read).length : 0;
+
+                // 1. Desktop & Mobile Header Bell Dot
+                const headerDot = document.getElementById('header-notif-dot');
+                if (headerDot) {
+                    headerDot.style.setProperty('display', unreadCount > 0 ? 'block' : 'none', 'important');
+                }
+
+                // 2. Sidebar Badge Counter
+                const sidebarBadge = document.getElementById('sidebar-notif-badge');
+                if (sidebarBadge) {
+                    sidebarBadge.textContent = unreadCount > 99 ? '99+' : unreadCount;
+                    sidebarBadge.style.setProperty('display', unreadCount > 0 ? 'inline-flex' : 'none', 'important');
+                }
+
+                // 3. Sidebar Rail Dot (Collapsed Mini-Rail)
+                const railDot = document.getElementById('sidebar-rail-notif-dot');
+                if (railDot) {
+                    railDot.style.setProperty('display', unreadCount > 0 ? 'block' : 'none', 'important');
+                }
+
+                // 4. Notifications Page Header Badge (if on /notifications)
+                const pageBadge = document.getElementById('header-unread-badge');
+                if (pageBadge) {
+                    pageBadge.textContent = unreadCount;
+                    pageBadge.style.setProperty('display', unreadCount > 0 ? 'inline-flex' : 'none', 'important');
+                }
+            } catch (err) {
+                console.error('Error syncing notification badges:', err);
+            }
+        };
+
+        /* ===========================================================================
+           REAL-TIME MESSAGES INDICATOR ENGINE (ROLE USER)
+           =========================================================================== */
+        function getStoredUserUnreadConversations() {
+            try {
+                const raw = localStorage.getItem('findumb_unread_conversations');
+                if (raw !== null) {
+                    const parsed = JSON.parse(raw);
+                    if (Array.isArray(parsed)) return parsed;
+                }
+            } catch(e) {}
+            // Default initial unread conversations: ['ahmad', 'siti'] (Total: 2 unread)
+            return ['ahmad', 'siti'];
+        }
+
+        window.getStoredUserUnreadConversations = getStoredUserUnreadConversations;
+
+        window.syncMessagesBadges = function(optionalList) {
+            try {
+                const list = optionalList || getStoredUserUnreadConversations();
+                const unreadCount = Array.isArray(list) ? list.length : 0;
+
+                // 1. Sidebar Messages Badge
+                const msgBadge = document.getElementById('sidebar-messages-badge');
+                if (msgBadge) {
+                    msgBadge.textContent = unreadCount;
+                    msgBadge.style.setProperty('display', unreadCount > 0 ? 'inline-flex' : 'none', 'important');
+                }
+
+                // 2. Sidebar Rail Messages Dot (Mini-rail when collapsed)
+                const msgRailDot = document.getElementById('sidebar-rail-messages-dot');
+                if (msgRailDot) {
+                    msgRailDot.style.setProperty('display', unreadCount > 0 ? 'block' : 'none', 'important');
+                }
+
+                // 3. Mobile Bottom Navigation Messages Dot
+                const bottomMsgDot = document.getElementById('bottom-nav-messages-dot');
+                if (bottomMsgDot) {
+                    bottomMsgDot.style.setProperty('display', unreadCount > 0 ? 'block' : 'none', 'important');
+                }
+            } catch (err) {
+                console.error('Error syncing messages badges:', err);
+            }
+        };
+
+        // Real-time synchronization listeners across tabs & same-window updates
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'findumb_notifications') {
+                window.syncNotificationBadges();
+            }
+            if (e.key === 'findumb_unread_conversations') {
+                window.syncMessagesBadges();
+            }
+        });
+
+        window.addEventListener('findumb:notif-updated', () => {
+            window.syncNotificationBadges();
+        });
+
+        window.addEventListener('findumb:messages-updated', () => {
+            window.syncMessagesBadges();
+        });
+
+        // Initialize immediately on DOM load
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof window.syncNotificationBadges === 'function') {
+                window.syncNotificationBadges();
+            }
+            if (typeof window.syncMessagesBadges === 'function') {
+                window.syncMessagesBadges();
             }
         });
     </script>
