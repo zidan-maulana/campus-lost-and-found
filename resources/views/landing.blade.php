@@ -78,7 +78,7 @@
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            border-bottom: 1px solid rgba(226, 232, 240, 0.85);
+            border-bottom: none;
             transition: all 0.2s ease;
         }
 
@@ -88,7 +88,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0.85rem 1.5rem;
+            padding: 0.9rem 1.5rem;
         }
 
         .nav-brand {
@@ -155,7 +155,7 @@
         .nav-actions {
             display: flex;
             align-items: center;
-            gap: 0.75rem;
+            gap: 0.85rem;
         }
 
         .nav-login-btn {
@@ -163,7 +163,7 @@
             font-weight: 600;
             color: #334155;
             text-decoration: none;
-            padding: 0.52rem 1.05rem;
+            padding: 0.6rem 1.15rem;
             border-radius: 9999px;
             transition: all 0.15s ease;
         }
@@ -174,24 +174,25 @@
         }
 
         .nav-btn-app {
-            background: var(--color-blue-brand);
+            background: linear-gradient(135deg, #0c559c 0%, #1572b8 52%, #2aa5e0 100%);
             color: #ffffff;
-            font-size: 0.875rem;
-            font-weight: 600;
-            padding: 0.58rem 1.35rem;
+            font-size: 0.9rem;
+            font-weight: 700;
+            padding: 0.72rem 1.65rem;
             border-radius: 9999px;
             text-decoration: none;
             display: inline-flex;
             align-items: center;
-            gap: 0.45rem;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 4px 14px -2px rgba(21, 114, 184, 0.35);
+            justify-content: center;
+            line-height: 1.25;
+            transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 4px 14px -1px rgba(21, 114, 184, 0.35);
         }
 
         .nav-btn-app:hover {
-            background: #0c559c;
+            background: linear-gradient(135deg, #0a4d8d 0%, #1369aa 52%, #2499d3 100%);
             transform: translateY(-1px);
-            box-shadow: 0 6px 18px -2px rgba(21, 114, 184, 0.45);
+            box-shadow: 0 6px 18px -1px rgba(21, 114, 184, 0.45);
         }
 
         @media (max-width: 480px) {
@@ -206,15 +207,15 @@
                 font-size: 1.1rem;
             }
             .nav-actions {
-                gap: 0.35rem;
+                gap: 0.45rem;
             }
             .nav-login-btn {
-                padding: 0.45rem 0.65rem;
+                padding: 0.52rem 0.75rem;
                 font-size: 0.8125rem;
             }
             .nav-btn-app {
-                padding: 0.48rem 0.95rem;
-                font-size: 0.8125rem;
+                padding: 0.58rem 1.15rem;
+                font-size: 0.825rem;
             }
         }
 
@@ -291,26 +292,26 @@
         }
 
         .hero-download-btn {
-            background: var(--color-blue-brand);
+            background: linear-gradient(135deg, #0c559c 0%, #1572b8 52%, #2aa5e0 100%);
             color: #ffffff;
             font-size: 0.95rem;
-            font-weight: 600;
-            padding: 0.85rem 1.85rem;
+            font-weight: 700;
+            padding: 0.88rem 2rem;
             border-radius: 9999px;
             border: none;
             cursor: pointer;
             display: inline-flex;
             align-items: center;
             gap: 0.65rem;
-            box-shadow: 0 10px 25px -4px rgba(21, 114, 184, 0.4);
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 8px 24px -2px rgba(21, 114, 184, 0.38);
+            transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
             text-decoration: none;
         }
 
         .hero-download-btn:hover {
-            background: #0c559c;
+            background: linear-gradient(135deg, #0a4d8d 0%, #1369aa 52%, #2499d3 100%);
             transform: translateY(-2px);
-            box-shadow: 0 14px 30px -4px rgba(21, 114, 184, 0.5);
+            box-shadow: 0 12px 28px -2px rgba(21, 114, 184, 0.48);
         }
 
         .hero-download-btn:active {
@@ -540,10 +541,6 @@
                 </a>
                 <a href="{{ route('home') }}" class="nav-btn-app">
                     <span>Buka Aplikasi</span>
-                    <svg style="width: 14px; height: 14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M5 12h14"/>
-                        <path d="m12 5 7 7-7 7"/>
-                    </svg>
                 </a>
             </div>
         </nav>
