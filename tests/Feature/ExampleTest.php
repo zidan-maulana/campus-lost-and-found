@@ -39,9 +39,11 @@ class ExampleTest extends TestCase
         $response->assertSee('phone-mockup-2.webp');
         $response->assertSee('id="features"', false);
         $response->assertSee('Fitur Unggulan');
-        $response->assertSee('Validasi Keamanan Kampus');
+        $response->assertSee('Pelaporan Cepat');
+        $response->assertSee('Validasi');
+        $response->assertSee('Pos Satpam');
         $response->assertSee('Pencarian Cerdas');
-        $response->assertSee('Klaim Terverifikasi Civitas');
+        $response->assertSee('Verifikasi Kepemilikan Civitas');
         $response->assertSee('Apresiasi');
     }
 
