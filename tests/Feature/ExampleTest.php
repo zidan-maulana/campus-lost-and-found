@@ -34,8 +34,8 @@ class ExampleTest extends TestCase
         $response->assertSee('Barang berharga');
         $response->assertSee('kembali ke tanganmu');
         $response->assertSee('Unduh Aplikasi');
-        $response->assertSee('phone-mockup.webp');
-        $response->assertSee('Kampus Meruya');
+        $response->assertSee('phone-mockup-2.webp');
+        $response->assertSee('Temukan barangmu');
     }
 
     public function test_the_search_page_returns_a_successful_response(): void

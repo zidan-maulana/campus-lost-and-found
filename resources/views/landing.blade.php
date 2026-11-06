@@ -319,21 +319,6 @@
             flex-shrink: 0;
         }
 
-        .hero-web-link {
-            font-size: 0.875rem;
-            font-weight: 500;
-            color: #64748b;
-            text-decoration: none;
-            transition: color 0.15s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.3rem;
-        }
-
-        .hero-web-link:hover {
-            color: var(--color-blue-brand);
-        }
-
         /* ----------------------------------------------------
            Hero Mockup Stage (Hand holding Phone Mockup)
            ---------------------------------------------------- */
@@ -364,95 +349,12 @@
             z-index: 1;
         }
 
-        /* Floating 3D-styled Campus Badges */
-        .hero-float-badge {
-            position: absolute;
-            z-index: 15;
-            background: rgba(255, 255, 255, 0.92);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(226, 232, 240, 0.9);
-            box-shadow: 0 12px 32px -6px rgba(12, 72, 123, 0.12);
-            border-radius: 16px;
-            padding: 0.75rem 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            text-align: left;
-            transition: transform 0.3s ease;
-            animation: floatSlow 6s ease-in-out infinite;
-        }
-
-        .hero-float-left {
-            left: 4%;
-            top: 42%;
-            animation-delay: 0s;
-        }
-
-        .hero-float-right {
-            right: 4%;
-            top: 48%;
-            animation-delay: 2.5s;
-        }
-
-        @media (max-width: 860px) {
-            .hero-float-badge {
-                display: none;
-            }
-        }
-
-        @keyframes floatSlow {
-            0%, 100% {
-                transform: translateY(0px);
-            }
-            50% {
-                transform: translateY(-10px);
-            }
-        }
-
-        .float-badge-icon {
-            width: 38px;
-            height: 38px;
-            border-radius: 10px;
-            background: #e0f2fe;
-            color: #1572b8;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-
-        .float-badge-icon svg {
-            width: 20px;
-            height: 20px;
-            stroke-width: 2.2;
-        }
-
-        .float-badge-icon.green {
-            background: #dcfce7;
-            color: #10b981;
-        }
-
-        .float-badge-title {
-            font-size: 0.84rem;
-            font-weight: 700;
-            color: #0f172a;
-            line-height: 1.25;
-        }
-
-        .float-badge-subtitle {
-            font-size: 0.75rem;
-            color: #64748b;
-            line-height: 1.25;
-            margin-top: 2px;
-        }
-
         /* Mockup Container */
         .hero-mockup-wrapper {
             position: relative;
             z-index: 10;
             width: 100%;
-            max-width: 580px;
+            max-width: 540px;
             display: flex;
             justify-content: center;
             margin-bottom: -1px;
@@ -569,9 +471,6 @@
                     </svg>
                     <span>Unduh Aplikasi</span>
                 </button>
-                <a href="{{ route('home') }}" class="hero-web-link">
-                    atau buka langsung di web browser &rarr;
-                </a>
             </div>
 
             <!-- Centerpiece Smartphone Mockup Stage -->
@@ -579,39 +478,11 @@
                 <!-- Ambient Backdrop Glow in UMB Blue -->
                 <div class="hero-ambient-glow"></div>
 
-                <!-- Floating 3D-Styled Left Element -->
-                <div class="hero-float-badge hero-float-left">
-                    <div class="float-badge-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/>
-                            <circle cx="12" cy="10" r="3"/>
-                        </svg>
-                    </div>
-                    <div>
-                        <div class="float-badge-title">Kampus Meruya</div>
-                        <div class="float-badge-subtitle">6 Pos Satpam Terkoneksi</div>
-                    </div>
-                </div>
-
-                <!-- Floating 3D-Styled Right Element -->
-                <div class="hero-float-badge hero-float-right">
-                    <div class="float-badge-icon green">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/>
-                            <path d="m9 12 2 2 4-4"/>
-                        </svg>
-                    </div>
-                    <div>
-                        <div class="float-badge-title">Verifikasi Aman</div>
-                        <div class="float-badge-subtitle">Bebas Klaim Palsu</div>
-                    </div>
-                </div>
-
-                <!-- Hand holding iPhone Phone Mockup (Optimized WebP with PNG Fallback) -->
+                <!-- Hand holding iPhone Phone Mockup (New Version 2) -->
                 <div class="hero-mockup-wrapper">
                     <picture>
-                        <source srcset="{{ asset('images/phone-mockup.webp') }}?v=2" type="image/webp">
-                        <img src="{{ asset('images/phone-mockup.png') }}?v=2" alt="Mockup Aplikasi UMBFind di Ponsel" class="hero-phone-img" width="1297" height="1213" loading="eager">
+                        <source srcset="{{ asset('images/phone-mockup-2.webp') }}" type="image/webp">
+                        <img src="{{ asset('images/phone-mockup-2.png') }}" alt="Mockup Aplikasi UMBFind di Ponsel" class="hero-phone-img" width="1199" height="1312" loading="eager">
                     </picture>
                 </div>
             </div>
