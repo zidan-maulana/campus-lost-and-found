@@ -12,7 +12,7 @@
         gap: 1.25rem;
     }
 
-    /* Hero Banner Card - Uniform Proportional Scaling (Identik dengan Gambar 2) */
+    /* Hero Banner Card - Uniform Proportional Scaling */
     .hero-banner {
         container-type: inline-size;
         container-name: hero;
@@ -75,7 +75,7 @@
         display: block;
     }
 
-    /* Button Laporkan Barang - Pill Shape persis seperti Gambar 2 */
+    /* Hero Action Button */
     .btn-report-pill {
         display: inline-flex;
         align-items: center;
@@ -86,7 +86,7 @@
         font-weight: 700;
         font-size: clamp(0.74rem, 2.8cqw, 0.825rem);
         padding: clamp(0.44rem, 1.6cqw, 0.54rem) clamp(0.95rem, 3.4cqw, 1.2rem);
-        border-radius: 9999px; /* Smooth Pill Shape persis referensi */
+        border-radius: 9999px;
         text-decoration: none;
         border: none;
         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
@@ -320,7 +320,7 @@
         line-height: 1.25;
     }
 
-    /* Subtitle Meta persis referensi: "Lost · Kabul" / "Hilang · Lokasi" */
+    /* Report Meta Tag & Location */
     .featured-meta {
         display: flex;
         align-items: center;
@@ -333,7 +333,7 @@
     }
 
     .meta-status-lost {
-        color: #f43f5e; /* Soft red / coral persis seperti teks "Lost" pada referensi */
+        color: #f43f5e;
         font-weight: 600;
         flex-shrink: 0;
     }
@@ -528,7 +528,7 @@
         color: #16a34a;
     }
 
-    /* Card Action Icons (Share & Bookmark) - Persis posisi bawah kanan referensi */
+    /* Card Action Icons (Share & Bookmark) */
     .card-actions-row {
         display: flex;
         align-items: center;
@@ -1229,7 +1229,7 @@
         /* Mascot Box - Posisi diatur agar cakar menggenggam search bar secara pas & presisi */
         .hero-mascot-peeking-box {
             width: clamp(330px, 27vw, 385px);
-            margin-bottom: -39.1px; /* <-- UBAH NILAI INI UNTUK MENGATUR POSISI VERTIKAL MASKOT (semakin negatif semakin turun) */
+            margin-bottom: -39.1px; /* Align mascot baseline directly on search bar */
             position: relative;
             z-index: 6;
             pointer-events: none;
@@ -1349,7 +1349,7 @@
             width: 100%;
         }
 
-        /* Sembunyikan item yatim ke-10 pada desktop agar membentuk grid 3x3 simetris */
+        /* Maintain 3x3 symmetric grid on desktop */
         .reports-vertical-container .report-card:nth-child(n+10) {
             display: none !important;
         }
@@ -1807,7 +1807,7 @@
     $hasReports = isset($reports) ? (count($reports) > 0) : !request()->has('empty');
 @endphp
 <div class="home-container {{ !$hasReports ? 'is-empty-state' : '' }}" id="home-container">
-    <!-- Desktop New Layout Hero Showcase (Persis Referensi Mockup) -->
+    <!-- Desktop Hero Showcase -->
     <section class="hero-desktop-showcase" id="hero-desktop-showcase">
         <!-- Decorative Circle Shapes (FindUMB Color Palette - Komposisi Harmonis & Mengisi Ruang) -->
         <div class="hero-bg-circle-canvas" aria-hidden="true">
@@ -1838,8 +1838,8 @@
                 <!-- Mascot on Right (paws resting on search bar) -->
                 <div class="hero-mascot-peeking-box" aria-hidden="true">
                     <picture>
-                        <source srcset="{{ asset('images/mascot-peeking-3.webp') }}" type="image/webp">
-                        <img src="{{ asset('images/mascot-peeking-3.png') }}" alt="Maskot FindUMB" class="hero-mascot-v2-img">
+                        <source srcset="{{ asset('images/mascot-peeking.webp') }}" type="image/webp">
+                        <img src="{{ asset('images/mascot-peeking.png') }}" alt="Maskot FindUMB" class="hero-mascot-v2-img" width="385" height="385" loading="eager">
                     </picture>
                 </div>
             </div>
@@ -1910,7 +1910,7 @@
         </div>
 
         <div class="featured-track" id="featured-track">
-            <!-- Featured Item 1: Cincin Emas Berlian (Persis referensi Image 2: Lost Diamond...) -->
+            <!-- Featured Item 1: Cincin Emas Berlian -->
             <a href="{{ url('/report/5') }}" class="featured-card" data-id="5">
                 <div class="featured-thumb-box">
                     <img src="https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=360&auto=format&fit=crop&q=80" alt="Cincin Emas" class="featured-thumb-img" loading="lazy">
@@ -2397,7 +2397,7 @@
                 <span class="desktop-detail-post-date" id="modal-detail-post-date">12 Mei 2026</span>
             </div>
 
-            <!-- Structured Properties List (Persis Image 1) -->
+            <!-- Structured Properties List -->
             <div class="desktop-detail-props-table">
                 <!-- Status Laporan -->
                 <div class="desktop-detail-prop-row">

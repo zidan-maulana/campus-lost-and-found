@@ -1324,7 +1324,7 @@
                 display: none !important;
             }
 
-            /* Collapsed State (Mini-rail 64px persis seperti di referensi) */
+            /* Collapsed State (Mini-rail 64px width) */
             .app-layout-wrapper.sidebar-collapsed .desktop-sidebar,
             .desktop-sidebar-pre-collapsed .app-layout-wrapper .desktop-sidebar {
                 width: 64px !important;

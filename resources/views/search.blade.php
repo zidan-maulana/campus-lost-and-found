@@ -2042,7 +2042,7 @@
                 <span class="desktop-detail-post-date" id="modal-detail-post-date">12 Mei 2026</span>
             </div>
 
-            <!-- Structured Properties List (Persis Image 1) -->
+            <!-- Structured Properties List -->
             <div class="desktop-detail-props-table">
                 <!-- Status Laporan -->
                 <div class="desktop-detail-prop-row">

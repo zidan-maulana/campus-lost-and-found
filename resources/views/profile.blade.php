@@ -1242,7 +1242,7 @@
 
 <!-- ===========================================================================
      2. DESKTOP LAYOUT (min-width: 1024px)
-     Lebar Konsisten (max-width: 1380px) Sesuai Referensi Gambar 2
+     Standardized Container (max-width: 1380px)
      =========================================================================== -->
 <div class="profile-desktop-layout">
     <div class="profile-desktop-container">
@@ -1308,7 +1308,7 @@
             </div>
         </div>
 
-        <!-- CARD 3: Aktivitas Saya (Bagian yang Disisakan, Menggantikan Card 3 Gambar 2) -->
+        <!-- CARD 3: Aktivitas Saya -->
         <div class="profile-desktop-card profile-activity-card">
             <div class="card-section-header">
                 <div>

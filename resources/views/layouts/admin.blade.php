@@ -329,7 +329,7 @@
             color: #0f172a;
         }
 
-        /* Active Item: Shape biru gradient persis di referensi civitas, tanpa shadow */
+        /* Active Item: Unified brand gradient accent */
         .sidebar-nav-item.active {
             background: linear-gradient(135deg, #0c559c 0%, #1572b8 52%, #2aa5e0 100%) !important;
             border: none !important;

@@ -113,7 +113,7 @@
         margin: 0;
     }
 
-    /* Author / Reporter Row (seperti referensi: Avatar Jack Smith · Yesterday) */
+    /* Author / Reporter Information */
     .detail-author-row {
         display: flex;
         align-items: center;
@@ -190,11 +190,11 @@
         flex-shrink: 0;
     }
 
-    /* 3. Clean Structured Properties List (Persis seperti referensi Image 1) */
+    /* 3. Item Properties Table */
     .detail-properties-table {
         display: flex;
         flex-direction: column;
-        padding: 0 4px 0 8px; /* Digeser sedikit ke kanan agar sejajar dengan konten di atas */
+        padding: 0 4px 0 8px;
     }
 
     .detail-prop-row {
@@ -266,13 +266,13 @@
         margin: 0.25rem 0;
     }
 
-    /* 4. Description Section (Persis seperti referensi Image 1) */
+    /* 4. Description Section */
     .detail-description-section {
         display: flex;
         flex-direction: column;
         gap: 0.35rem;
         margin-top: 0.35rem;
-        padding: 0 4px 0 8px; /* Digeser sedikit ke kanan sejajar dengan properti & konten di atas */
+        padding: 0 4px 0 8px;
     }
 
     .detail-section-heading {
@@ -651,7 +651,7 @@
         <!-- Heading Title -->
         <h1 class="detail-heading-title" id="detail-title">Cincin Emas Berlian</h1>
 
-        <!-- Author / Subheader Row (seperti referensi: Avatar Jack Smith · Yesterday) -->
+        <!-- Author / Reporter Row -->
         <div class="detail-author-row">
             <div class="detail-author-avatar">
                 <i data-lucide="user"></i>
@@ -666,7 +666,7 @@
             </div>
         </div>
 
-        <!-- 3. Clean Structured Properties List (Persis seperti referensi Image 1) -->
+        <!-- 3. Structured Properties Table -->
         <div class="detail-properties-table">
             <!-- Status Laporan -->
             <div class="detail-prop-row">
