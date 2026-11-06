@@ -67,67 +67,54 @@
         }
 
         /* ----------------------------------------------------
-           Floating Pill Navigation Bar
+           Modern Seamless Navigation Bar (Sesuai Referensi, Tanpa Shape)
            ---------------------------------------------------- */
-        .landing-nav-wrapper {
-            position: fixed;
-            top: 1.25rem;
+        .landing-header {
+            position: sticky;
+            top: 0;
             left: 0;
             right: 0;
             z-index: 50;
-            display: flex;
-            justify-content: center;
-            padding: 0 1rem;
-            pointer-events: none;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.85);
+            transition: all 0.2s ease;
         }
 
         .landing-nav {
-            pointer-events: auto;
-            width: 100%;
-            max-width: 960px;
-            background: rgba(255, 255, 255, 0.88);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(226, 232, 240, 0.85);
-            border-radius: 9999px;
-            box-shadow: 0 4px 20px -2px rgba(12, 72, 123, 0.07);
+            max-width: 1240px;
+            margin: 0 auto;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0.55rem 0.85rem 0.55rem 1.25rem;
-            transition: all 0.25s ease;
+            padding: 0.85rem 1.5rem;
         }
 
         .nav-brand {
             display: flex;
             align-items: center;
-            gap: 0.65rem;
+            gap: 0.75rem;
             text-decoration: none;
+            transition: opacity 0.15s ease;
         }
 
-        .nav-brand-icon {
-            width: 32px;
-            height: 32px;
-            border-radius: 10px;
-            background: linear-gradient(135deg, #0c559c 0%, #1572b8 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #ffffff;
-            box-shadow: 0 2px 8px rgba(21, 114, 184, 0.25);
+        .nav-brand:hover {
+            opacity: 0.9;
         }
 
-        .nav-brand-icon svg {
-            width: 17px;
-            height: 17px;
-            stroke-width: 2.3;
+        .nav-brand-logo {
+            width: 36px;
+            height: 36px;
+            object-fit: contain;
+            display: block;
         }
 
         .nav-brand-text {
             font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
             font-weight: 800;
-            font-size: 1.15rem;
-            letter-spacing: -0.02em;
+            font-size: 1.25rem;
+            letter-spacing: -0.025em;
             color: var(--color-blue-brand);
         }
 
@@ -138,17 +125,17 @@
         .nav-links {
             display: none;
             align-items: center;
-            gap: 2rem;
+            gap: 2.25rem;
         }
 
-        @media (min-width: 768px) {
+        @media (min-width: 820px) {
             .nav-links {
                 display: flex;
             }
         }
 
         .nav-link-item {
-            font-size: 0.875rem;
+            font-size: 0.9125rem;
             font-weight: 500;
             color: #475569;
             text-decoration: none;
@@ -156,28 +143,79 @@
         }
 
         .nav-link-item:hover {
+            color: var(--color-blue-brand);
+        }
+
+        .nav-link-item.active {
             color: var(--color-navy-brand);
+            font-weight: 600;
+        }
+
+        /* Action Buttons on Right */
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .nav-login-btn {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #334155;
+            text-decoration: none;
+            padding: 0.52rem 1.05rem;
+            border-radius: 9999px;
+            transition: all 0.15s ease;
+        }
+
+        .nav-login-btn:hover {
+            color: var(--color-blue-brand);
+            background-color: #f1f5f9;
         }
 
         .nav-btn-app {
-            background: var(--color-navy-dark);
+            background: var(--color-blue-brand);
             color: #ffffff;
-            font-size: 0.85rem;
+            font-size: 0.875rem;
             font-weight: 600;
-            padding: 0.52rem 1.15rem;
+            padding: 0.58rem 1.35rem;
             border-radius: 9999px;
             text-decoration: none;
             display: inline-flex;
             align-items: center;
             gap: 0.45rem;
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 2px 8px rgba(11, 25, 44, 0.15);
+            box-shadow: 0 4px 14px -2px rgba(21, 114, 184, 0.35);
         }
 
         .nav-btn-app:hover {
-            background: #1e293b;
+            background: #0c559c;
             transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(11, 25, 44, 0.25);
+            box-shadow: 0 6px 18px -2px rgba(21, 114, 184, 0.45);
+        }
+
+        @media (max-width: 480px) {
+            .landing-nav {
+                padding: 0.75rem 1rem;
+            }
+            .nav-brand-logo {
+                width: 30px;
+                height: 30px;
+            }
+            .nav-brand-text {
+                font-size: 1.1rem;
+            }
+            .nav-actions {
+                gap: 0.35rem;
+            }
+            .nav-login-btn {
+                padding: 0.45rem 0.65rem;
+                font-size: 0.8125rem;
+            }
+            .nav-btn-app {
+                padding: 0.48rem 0.95rem;
+                font-size: 0.8125rem;
+            }
         }
 
         /* ----------------------------------------------------
@@ -185,7 +223,7 @@
            ---------------------------------------------------- */
         .hero-section {
             position: relative;
-            padding-top: 7rem;
+            padding-top: 3.5rem;
             padding-bottom: 0;
             background: #ffffff;
             overflow: hidden;
@@ -253,26 +291,26 @@
         }
 
         .hero-download-btn {
-            background: var(--color-navy-dark);
+            background: var(--color-blue-brand);
             color: #ffffff;
-            font-size: 0.9375rem;
+            font-size: 0.95rem;
             font-weight: 600;
-            padding: 0.82rem 1.75rem;
+            padding: 0.85rem 1.85rem;
             border-radius: 9999px;
             border: none;
             cursor: pointer;
             display: inline-flex;
             align-items: center;
             gap: 0.65rem;
-            box-shadow: 0 8px 24px -4px rgba(11, 25, 44, 0.25);
+            box-shadow: 0 10px 25px -4px rgba(21, 114, 184, 0.4);
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
             text-decoration: none;
         }
 
         .hero-download-btn:hover {
-            background: #1e293b;
+            background: #0c559c;
             transform: translateY(-2px);
-            box-shadow: 0 12px 28px -4px rgba(11, 25, 44, 0.32);
+            box-shadow: 0 14px 30px -4px rgba(21, 114, 184, 0.5);
         }
 
         .hero-download-btn:active {
@@ -475,35 +513,39 @@
 </head>
 <body>
 
-    <!-- 1. Floating Pill Navigation Bar -->
-    <header class="landing-nav-wrapper">
+    <!-- 1. Modern Seamless Navigation Bar (Sesuai Referensi, Tanpa Shape) -->
+    <header class="landing-header">
         <nav class="landing-nav" aria-label="Navigasi Utama">
-            <!-- Brand Wordmark -->
+            <!-- Brand Logo & Wordmark -->
             <a href="{{ route('landing') }}" class="nav-brand">
-                <div class="nav-brand-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="11" cy="11" r="8"/>
-                        <path d="m21 21-4.3-4.3"/>
-                    </svg>
-                </div>
+                <picture>
+                    <source srcset="{{ asset('images/logo.webp') }}" type="image/webp">
+                    <img src="{{ asset('images/logo.png') }}" alt="Logo UMBFind" class="nav-brand-logo" width="36" height="36" loading="eager">
+                </picture>
                 <span class="nav-brand-text"><span>UMB</span>Find</span>
             </a>
 
             <!-- Navigation Links -->
             <div class="nav-links">
+                <a href="{{ route('landing') }}" class="nav-link-item active">Beranda</a>
                 <a href="#features" class="nav-link-item">Fitur Utama</a>
                 <a href="#security" class="nav-link-item">Keamanan</a>
                 <a href="#faq" class="nav-link-item">Tanya Jawab</a>
             </div>
 
-            <!-- Action CTA Button -->
-            <a href="{{ route('home') }}" class="nav-btn-app">
-                <span>Buka Aplikasi</span>
-                <svg style="width: 14px; height: 14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M5 12h14"/>
-                    <path d="m12 5 7 7-7 7"/>
-                </svg>
-            </a>
+            <!-- Action Buttons Group (Login & Buka Aplikasi) -->
+            <div class="nav-actions">
+                <a href="{{ route('home') }}" class="nav-login-btn">
+                    Masuk
+                </a>
+                <a href="{{ route('home') }}" class="nav-btn-app">
+                    <span>Buka Aplikasi</span>
+                    <svg style="width: 14px; height: 14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M5 12h14"/>
+                        <path d="m12 5 7 7-7 7"/>
+                    </svg>
+                </a>
+            </div>
         </nav>
     </header>
 

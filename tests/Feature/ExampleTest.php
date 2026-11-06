@@ -29,6 +29,8 @@ class ExampleTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertSee('UMBFind');
+        $response->assertSee('Masuk');
+        $response->assertSee('logo.webp');
         $response->assertSee('Barang berharga');
         $response->assertSee('kembali ke tanganmu');
         $response->assertSee('Pasang Aplikasi (PWA)');
