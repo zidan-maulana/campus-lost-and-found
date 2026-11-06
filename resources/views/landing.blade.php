@@ -159,18 +159,28 @@
         }
 
         .nav-login-btn {
-            font-size: 0.9rem;
+            background: linear-gradient(135deg, #0c559c 0%, #1572b8 52%, #2aa5e0 100%);
+            color: #ffffff;
+            font-size: 0.885rem;
             font-weight: 500;
-            color: #475569;
-            text-decoration: none;
-            padding: 0.6rem 1.25rem;
+            padding: 0.62rem 1.45rem;
             border-radius: 9999px;
-            transition: color 0.15s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1.25;
+            transition: background 0.2s ease;
+            box-shadow: none;
+            letter-spacing: -0.01em;
+            transform: none;
         }
 
         .nav-login-btn:hover {
-            color: var(--color-blue-brand);
-            background-color: transparent;
+            background: linear-gradient(135deg, #0a4d8d 0%, #1369aa 52%, #2499d3 100%);
+            color: #ffffff;
+            transform: none;
+            box-shadow: none;
         }
 
         @media (max-width: 480px) {
@@ -188,8 +198,8 @@
                 gap: 0.45rem;
             }
             .nav-login-btn {
-                padding: 0.52rem 0.75rem;
-                font-size: 0.8125rem;
+                padding: 0.52rem 1rem;
+                font-size: 0.825rem;
             }
         }
 
@@ -226,14 +236,14 @@
         /* Big Hero Headline */
         .hero-title {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            font-size: clamp(2.2rem, 3.8vw, 3.35rem);
-            font-weight: 500;
-            line-height: 1.18;
+            font-size: clamp(2.35rem, 4.2vw, 3.65rem);
+            font-weight: 600;
+            line-height: 1.16;
             letter-spacing: -0.03em;
             color: #0b192c;
             margin: 0 0 2rem 0;
             padding: 0 1rem;
-            max-width: 980px;
+            max-width: 1040px;
         }
 
         /* CTA Actions */
@@ -350,8 +360,9 @@
 
         @media (max-width: 768px) {
             .hero-title {
-                font-size: clamp(1.85rem, 6.5vw, 2.45rem);
-                line-height: 1.2;
+                font-size: clamp(1.95rem, 6.8vw, 2.55rem);
+                font-weight: 600;
+                line-height: 1.18;
                 margin-bottom: 1.65rem;
             }
             .hero-mockup-stage {
