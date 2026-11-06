@@ -37,6 +37,12 @@ class ExampleTest extends TestCase
         $response->assertSee('Unduh Aplikasi');
         $response->assertSee('Buka Aplikasi');
         $response->assertSee('phone-mockup-2.webp');
+        $response->assertSee('id="features"', false);
+        $response->assertSee('Fitur Unggulan');
+        $response->assertSee('Validasi Keamanan Kampus');
+        $response->assertSee('Pencarian Cerdas');
+        $response->assertSee('Klaim Terverifikasi Civitas');
+        $response->assertSee('Apresiasi');
     }
 
     public function test_the_search_page_returns_a_successful_response(): void
