@@ -3,10 +3,10 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-    <meta name="description" content="Dashboard Administrator FindUMB — Sistem Moderasi dan Tata Kelola Lost & Found Universitas Mercu Buana.">
+    <meta name="description" content="Dashboard Administrator UMBFind — Sistem Moderasi dan Tata Kelola Lost & Found Universitas Mercu Buana.">
     <meta name="theme-color" content="#1572b8">
 
-    <title>@yield('title', 'Dashboard Administrator — FindUMB')</title>
+    <title>@yield('title', 'Dashboard Administrator — UMBFind')</title>
 
     <!-- Google Fonts: Inter & Plus Jakarta Sans -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -720,7 +720,7 @@
                                     <div class="sidebar-logo-face sidebar-logo-face-logo">
                                         <picture>
                                             <source srcset="{{ asset('images/logo.webp') }}" type="image/webp">
-                                            <img src="{{ asset('images/logo.png') }}" alt="Logo Find UMB" class="sidebar-logo-img" width="32" height="32" loading="eager">
+                                            <img src="{{ asset('images/logo.png') }}" alt="Logo UMBFind" class="sidebar-logo-img" width="32" height="32" loading="eager">
                                         </picture>
                                     </div>
                                     <div class="sidebar-logo-face sidebar-logo-face-icon">
@@ -729,8 +729,8 @@
                                 </div>
                             </div>
                         </button>
-                        <a href="{{ route('admin.dashboard') }}" class="sidebar-brand-title-link" title="Dashboard Administrator Find UMB">
-                            <span class="sidebar-brand-name">Find<span>UMB</span></span>
+                        <a href="{{ route('admin.dashboard') }}" class="sidebar-brand-title-link" title="Dashboard Administrator UMBFind">
+                            <span class="sidebar-brand-name"><span>UMB</span>Find</span>
                         </a>
                     </div>
                     <button type="button" class="sidebar-collapse-btn" onclick="toggleDesktopSidebar()" title="Ciutkan Sidebar" aria-label="Ciutkan Sidebar">

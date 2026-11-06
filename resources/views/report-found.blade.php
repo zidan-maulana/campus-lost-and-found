@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Lapor Barang Temuan — Find UMB')
+@section('title', 'Lapor Barang Temuan — UMBFind')
 
 @section('header')
 <!-- Custom Header: Back Arrow & Judul Halaman sejajar di sebelah kiri -->
@@ -112,7 +112,7 @@
     }
 
     .stepper-bar-segment.active {
-        background: #0f5791; /* FindUMB Blue */
+        background: #0f5791; /* UMBFind Blue */
     }
 
     /* Form Card Container */
@@ -562,7 +562,7 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        background: #0f5791; /* FindUMB Blue */
+        background: #0f5791; /* UMBFind Blue */
         border: none;
         border-radius: 14px;
         padding: 0.8rem 1rem;
@@ -907,7 +907,7 @@
                 </div>
                 <div class="privacy-notice-text">
                     <h4>Verifikasi Kepemilikan Aman</h4>
-                    <p>Kontak pribadi aman. Pemilik sah wajib memverifikasi ciri barang via <strong>Chat FindUMB</strong> sebelum serah terima.</p>
+                    <p>Kontak pribadi aman. Pemilik sah wajib memverifikasi ciri barang via <strong>Chat UMBFind</strong> sebelum serah terima.</p>
                 </div>
             </div>
 
@@ -935,7 +935,7 @@
                 </div>
                 <div class="review-row">
                     <span class="review-label">Kanal Verifikasi:</span>
-                    <span class="review-value" style="color: #0f5791; font-weight: 700;">Chat Internal FindUMB</span>
+                    <span class="review-value" style="color: #0f5791; font-weight: 700;">Chat Internal UMBFind</span>
                 </div>
             </div>
 
@@ -956,7 +956,7 @@
             <i data-lucide="check"></i>
         </div>
         <h3 class="success-title">Laporan Diterbitkan!</h3>
-        <p class="success-desc">Laporan barang temuan Anda telah berhasil dipublikasikan di FindUMB. Pemilik barang yang merasa kehilangan akan menghubungi Anda via menu Pesan.</p>
+        <p class="success-desc">Laporan barang temuan Anda telah berhasil dipublikasikan di UMBFind. Pemilik barang yang merasa kehilangan akan menghubungi Anda via menu Pesan.</p>
         <div class="success-actions">
             <a href="{{ route('home') }}" class="btn-success-primary">Kembali ke Beranda</a>
             <a href="{{ route('search') }}" class="btn-success-secondary">Lihat di Daftar Pencarian</a>

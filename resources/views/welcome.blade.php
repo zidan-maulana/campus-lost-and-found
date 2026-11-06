@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Find UMB — Layanan Pelaporan & Pencarian Barang Kampus')
+@section('title', 'UMBFind — Layanan Pelaporan & Pencarian Barang Kampus')
 
 @push('styles')
 <style>
@@ -101,7 +101,7 @@
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
     }
 
-    /* FindUMB Campus Mascot Graphic - Posisi pas seimbang antara teks dan tepi kanan */
+    /* UMBFind Campus Mascot Graphic - Posisi pas seimbang antara teks dan tepi kanan */
     .hero-mascot-wrap {
         position: absolute;
         right: clamp(-12px, -1.8cqw, -2px);
@@ -1090,7 +1090,7 @@
             box-sizing: border-box;
         }
 
-        /* Decorative Circle Shapes (FindUMB Color Palette - Komposisi Harmonis & Mengisi Ruang) */
+        /* Decorative Circle Shapes (UMBFind Color Palette - Komposisi Harmonis & Mengisi Ruang) */
         .hero-bg-circle-canvas {
             position: absolute;
             inset: 0;
@@ -1809,7 +1809,7 @@
 <div class="home-container {{ !$hasReports ? 'is-empty-state' : '' }}" id="home-container">
     <!-- Desktop Hero Showcase -->
     <section class="hero-desktop-showcase" id="hero-desktop-showcase">
-        <!-- Decorative Circle Shapes (FindUMB Color Palette - Komposisi Harmonis & Mengisi Ruang) -->
+        <!-- Decorative Circle Shapes (UMBFind Color Palette - Komposisi Harmonis & Mengisi Ruang) -->
         <div class="hero-bg-circle-canvas" aria-hidden="true">
             <div class="hero-bg-circle circle-bottom-left"></div>
             <div class="hero-bg-circle circle-top-left"></div>
@@ -1839,7 +1839,7 @@
                 <div class="hero-mascot-peeking-box" aria-hidden="true">
                     <picture>
                         <source srcset="{{ asset('images/mascot-peeking.webp') }}" type="image/webp">
-                        <img src="{{ asset('images/mascot-peeking.png') }}" alt="Maskot FindUMB" class="hero-mascot-v2-img" width="385" height="385" loading="eager">
+                        <img src="{{ asset('images/mascot-peeking.png') }}" alt="Maskot UMBFind" class="hero-mascot-v2-img" width="385" height="385" loading="eager">
                     </picture>
                 </div>
             </div>
@@ -1880,12 +1880,12 @@
             </button>
         </div>
 
-        <!-- FindUMB Campus Mascot Graphic -->
+        <!-- UMBFind Campus Mascot Graphic -->
         <div class="hero-mascot-wrap" aria-hidden="true">
             <div class="hero-mascot-glow"></div>
             <picture>
                 <source srcset="{{ asset('images/mascot.webp') }}" type="image/webp">
-                <img src="{{ asset('images/mascot.png') }}" alt="Maskot FindUMB" class="hero-mascot-img" width="160" height="160" loading="eager">
+                <img src="{{ asset('images/mascot.png') }}" alt="Maskot UMBFind" class="hero-mascot-img" width="160" height="160" loading="eager">
             </picture>
         </div>
     </section>
@@ -2660,8 +2660,8 @@
     function handleShare(title) {
         if (navigator.share) {
             navigator.share({
-                title: title + ' — Find UMB',
-                text: 'Periksa laporan ' + title + ' di Find UMB (Campus Lost & Found Universitas Mercu Buana).',
+                title: title + ' — UMBFind',
+                text: 'Periksa laporan ' + title + ' di UMBFind (Campus Lost & Found Universitas Mercu Buana).',
                 url: window.location.href,
             }).catch(() => {});
         } else {
@@ -3519,8 +3519,8 @@
 
         if (navigator.share) {
             navigator.share({
-                title: title + ' — Find UMB',
-                text: 'Periksa laporan ' + title + ' di Find UMB (Campus Lost & Found).',
+                title: title + ' — UMBFind',
+                text: 'Periksa laporan ' + title + ' di UMBFind (Campus Lost & Found).',
                 url: reportUrl,
             }).catch(() => {});
         } else {

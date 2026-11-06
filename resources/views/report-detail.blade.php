@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Detail Laporan Barang — Find UMB')
+@section('title', 'Detail Laporan Barang — UMBFind')
 @section('app_shell_class', 'bg-white')
 
 @section('header')
@@ -313,7 +313,7 @@
 
     .btn-action-primary {
         flex: 1;
-        background: #0f5791; /* FindUMB Blue */
+        background: #0f5791; /* UMBFind Blue */
         color: #ffffff;
         border: none;
         height: 48px;
@@ -1173,7 +1173,7 @@
         if (!report) return;
 
         // Title & Document Title
-        document.title = `${report.title} — Detail Laporan FindUMB`;
+        document.title = `${report.title} — Detail Laporan UMBFind`;
         const titleEl = document.getElementById('detail-title');
         if (titleEl) titleEl.textContent = report.title;
 
@@ -1517,8 +1517,8 @@
         const title = activeReportData ? activeReportData.title : 'Laporan Barang Temuan/Hilang';
         if (navigator.share) {
             navigator.share({
-                title: `${title} — Find UMB`,
-                text: `Lihat detail laporan ${title} di Find UMB (Campus Lost & Found).`,
+                title: `${title} — UMBFind`,
+                text: `Lihat detail laporan ${title} di UMBFind (Campus Lost & Found).`,
                 url: window.location.href
             }).catch(() => {});
         } else {

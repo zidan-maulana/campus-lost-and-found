@@ -28,7 +28,7 @@ class ExampleTest extends TestCase
         $response = $this->get('/search');
 
         $response->assertStatus(200);
-        $response->assertSee('FindUMB');
+        $response->assertSee('UMBFind');
         $response->assertSee('report-modal');
         $response->assertSee('nav-fab-report');
         $response->assertSee('btn-guide-info');
@@ -46,7 +46,7 @@ class ExampleTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertSee('Pesan & Klaim');
-        $response->assertSee('FindUMB');
+        $response->assertSee('UMBFind');
         $response->assertSee('report-modal');
         $response->assertSee('nav-fab-report');
     }
@@ -111,7 +111,7 @@ class ExampleTest extends TestCase
         $response->assertDontSee('btn-mobile-settings');
         $response->assertSee('user-mobile-info-faculty');
         $response->assertSee('user-mobile-info-prodi');
-        $response->assertSee('Tentang FindUMB');
+        $response->assertSee('Tentang UMBFind');
         $response->assertSee('Kebijakan Privasi');
         $response->assertSee('Syarat &amp; Ketentuan', false);
         $response->assertSee('btn-user-pencil');
@@ -149,12 +149,12 @@ class ExampleTest extends TestCase
         $response->assertSee('Pemberitahuan Klaim Barang');
         $response->assertSee('Simpan Pengaturan');
         $response->assertSee('Simpan');
-        $response->assertSee('FindUMB');
+        $response->assertSee('UMBFind');
         $response->assertSee('Bantuan &amp; Informasi', false);
         $response->assertSee('Buku Panduan &amp; Informasi', false);
         $response->assertSee('Kebijakan Privasi');
         $response->assertSee('Syarat &amp; Ketentuan', false);
-        $response->assertSee('Tentang FindUMB');
+        $response->assertSee('Tentang UMBFind');
         $response->assertSee('Keluar dari Akun');
         $response->assertSee('privacy-modal');
         $response->assertSee('terms-modal');

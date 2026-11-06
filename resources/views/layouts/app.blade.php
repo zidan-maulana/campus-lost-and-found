@@ -3,12 +3,12 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-    <meta name="description" content="Find UMB — Layanan pelaporan dan pencarian barang hilang atau temuan civitas kampus Universitas Mercu Buana.">
+    <meta name="description" content="UMBFind — Layanan pelaporan dan pencarian barang hilang atau temuan civitas kampus Universitas Mercu Buana.">
     <meta name="theme-color" content="#1e40af">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
 
-    <title>@yield('title', 'Find UMB — Campus Lost & Found Universitas Mercu Buana')</title>
+    <title>@yield('title', 'UMBFind — Campus Lost & Found Universitas Mercu Buana')</title>
 
     <!-- Google Fonts: Inter, Nunito, Quicksand, & Poppins -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -2092,7 +2092,7 @@
                                     <div class="sidebar-logo-face sidebar-logo-face-logo">
                                         <picture>
                                             <source srcset="{{ asset('images/logo.webp') }}" type="image/webp">
-                                            <img src="{{ asset('images/logo.png') }}" alt="Logo Find UMB" class="sidebar-logo-img" width="32" height="32" loading="eager">
+                                            <img src="{{ asset('images/logo.png') }}" alt="Logo UMBFind" class="sidebar-logo-img" width="32" height="32" loading="eager">
                                         </picture>
                                     </div>
                                     <div class="sidebar-logo-face sidebar-logo-face-icon">
@@ -2101,8 +2101,8 @@
                                 </div>
                             </div>
                         </button>
-                        <a href="{{ url('/') }}" class="sidebar-brand-title-link" title="Beranda Find UMB">
-                            <span class="sidebar-brand-name">Find<span>UMB</span></span>
+                        <a href="{{ url('/') }}" class="sidebar-brand-title-link" title="Beranda UMBFind">
+                            <span class="sidebar-brand-name"><span>UMB</span>Find</span>
                         </a>
                     </div>
                     <button type="button" class="sidebar-collapse-btn" onclick="toggleDesktopSidebar()" title="Ciutkan Sidebar" aria-label="Ciutkan Sidebar">
@@ -2200,7 +2200,7 @@
                             <span class="sidebar-item-label">Pusat Bantuan</span>
                         </div>
                     </button>
-                    <a href="{{ route('admin.dashboard') }}" class="sidebar-nav-item {{ request()->is('admin*') ? 'active' : '' }}" title="Dashboard Administrator FindUMB">
+                    <a href="{{ route('admin.dashboard') }}" class="sidebar-nav-item {{ request()->is('admin*') ? 'active' : '' }}" title="Dashboard Administrator UMBFind">
                         <div class="sidebar-item-left">
                             <div class="sidebar-item-icon">
                                 <i data-lucide="shield-check"></i>
@@ -2262,9 +2262,9 @@
                     <a href="{{ url('/') }}" class="brand-logo-area" id="brand-logo">
                         <picture>
                             <source srcset="{{ asset('images/logo.webp') }}" type="image/webp">
-                            <img src="{{ asset('images/logo.png') }}" alt="Logo Find UMB" class="brand-logo-img" width="38" height="38" loading="eager">
+                            <img src="{{ asset('images/logo.png') }}" alt="Logo UMBFind" class="brand-logo-img" width="38" height="38" loading="eager">
                         </picture>
-                        <div class="brand-name">Find<span>UMB</span></div>
+                        <div class="brand-name"><span>UMB</span>Find</div>
                     </a>
 
                     <!-- Desktop Top Search Bar (Menggantikan Navigasi di Header pada Desktop) -->
@@ -2514,7 +2514,7 @@
                         </div>
                         <ul class="guide-list">
                             <li>Kontak pribadi civitas UMB <strong>tidak dipublikasikan terbuka</strong> demi menjaga privasi dan mencegah spam/penipuan.</li>
-                            <li>Komunikasi awal antar civitas dilakukan secara aman melalui fitur <strong>Pesan / Chat</strong> resmi FindUMB.</li>
+                            <li>Komunikasi awal antar civitas dilakukan secara aman melalui fitur <strong>Pesan / Chat</strong> resmi UMBFind.</li>
                             <li>Pemilik yang sah <strong>wajib membuktikan ciri khusus</strong> rahasia barang sebelum proses serah terima.</li>
                             <li>Lakukan serah terima di area kampus yang ramai atau melalui <strong>Pos Penitipan Resmi</strong> UMB.</li>
                         </ul>

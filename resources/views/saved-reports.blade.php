@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Barang Disimpan — Find UMB')
+@section('title', 'Barang Disimpan — UMBFind')
 
 @section('header')
 <header class="saved-header">
@@ -134,7 +134,7 @@
         gap: 0.65rem;
     }
 
-    /* Card Item - FindUMB standard compact layout */
+    /* Card Item - UMBFind standard compact layout */
     .saved-card {
         background: #ffffff;
         border: 1px solid rgba(15, 23, 42, 0.055);
@@ -1126,7 +1126,7 @@
         if (navigator.share) {
             navigator.share({
                 title: activeSavedModalItem.title,
-                text: `Lihat barang ${activeSavedModalItem.title} di FindUMB Kampus Mercu Buana.`,
+                text: `Lihat barang ${activeSavedModalItem.title} di UMBFind Kampus Mercu Buana.`,
                 url: window.location.href
             }).catch(() => {});
         } else {

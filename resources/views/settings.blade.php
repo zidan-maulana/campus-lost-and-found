@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Pengaturan — Find UMB')
+@section('title', 'Pengaturan — UMBFind')
 
 @section('header')
 <header class="settings-header">
@@ -594,14 +594,14 @@
                 <i data-lucide="chevron-right" class="row-chevron"></i>
             </div>
 
-            <!-- Tentang FindUMB -->
+            <!-- Tentang UMBFind -->
             <div class="settings-row settings-row-interactive" onclick="openAboutModal()">
                 <div class="settings-row-left">
                     <div class="settings-icon-box">
                         <i data-lucide="info"></i>
                     </div>
                     <div class="settings-row-text">
-                        <span class="settings-row-title">Tentang FindUMB</span>
+                        <span class="settings-row-title">Tentang UMBFind</span>
                         <span class="settings-row-desc">Pengembang mahasiswa dan ekosistem kampus Universitas Mercu Buana</span>
                     </div>
                 </div>
@@ -616,7 +616,7 @@
         <div class="settings-card">
             <div class="diagnostics-header">
                 <i data-lucide="info"></i>
-                <span>FindUMB — Campus Lost &amp; Found</span>
+                <span>UMBFind — Campus Lost &amp; Found</span>
             </div>
             <div class="diagnostics-grid">
                 <div class="diag-item">
@@ -663,7 +663,7 @@
     <div class="modal-sheet guide-modal-sheet" onclick="event.stopPropagation()">
         <div class="modal-pill-drag"></div>
         <h3 class="modal-title">Kebijakan Privasi</h3>
-        <p class="modal-desc">Kebijakan perlindungan data dan privasi civitas akademika Universitas Mercu Buana pada platform FindUMB.</p>
+        <p class="modal-desc">Kebijakan perlindungan data dan privasi civitas akademika Universitas Mercu Buana pada platform UMBFind.</p>
         
         <div class="guide-modal-body">
             <div class="guide-card">
@@ -688,7 +688,7 @@
                     <h4 class="guide-card-title">Keamanan Komunikasi Internal</h4>
                 </div>
                 <ul class="guide-list">
-                    <li>Seluruh koordinasi awal serah terima dilakukan melalui fitur <strong>Pesan / Chat</strong> resmi yang terisolasi di dalam FindUMB.</li>
+                    <li>Seluruh koordinasi awal serah terima dilakukan melalui fitur <strong>Pesan / Chat</strong> resmi yang terisolasi di dalam UMBFind.</li>
                     <li>Sistem tidak meminta dan melarang civitas membagikan informasi sensitif perbankan (PIN, kode OTP, atau transfer uang).</li>
                 </ul>
             </div>
@@ -768,7 +768,7 @@
                 </div>
                 <ul class="guide-list">
                     <li>Barang bernilai tinggi (laptop, dompet, perhiasan, KTP, KTM, &amp; dokumen negara) sangat disarankan segera dititipkan ke <strong>Pos Satpam Gerbang Barat / Gedung Tower</strong>.</li>
-                    <li>FindUMB berfungsi sebagai sarana publikasi informasi civitas dan tidak bertanggung jawab atas kelalaian fisik di luar sistem.</li>
+                    <li>UMBFind berfungsi sebagai sarana publikasi informasi civitas dan tidak bertanggung jawab atas kelalaian fisik di luar sistem.</li>
                 </ul>
             </div>
 
@@ -790,11 +790,11 @@
     </div>
 </div>
 
-<!-- Modal 3: Tentang FindUMB -->
+<!-- Modal 3: Tentang UMBFind -->
 <div class="modal-overlay" id="about-modal" onclick="closeAboutModal(event)">
     <div class="modal-sheet guide-modal-sheet" onclick="event.stopPropagation()">
         <div class="modal-pill-drag"></div>
-        <h3 class="modal-title">Tentang FindUMB</h3>
+        <h3 class="modal-title">Tentang UMBFind</h3>
         <p class="modal-desc">Platform digital Lost &amp; Found terpadu civitas akademika Universitas Mercu Buana.</p>
         
         <div class="guide-modal-body">
@@ -806,7 +806,7 @@
                     <h4 class="guide-card-title">Platform Lost &amp; Found Kampus</h4>
                 </div>
                 <ul class="guide-list">
-                    <li><strong>FindUMB</strong> dirancang untuk mewujudkan ekosistem kampus yang saling peduli, jujur, dan aman dalam mengembalikan barang hilang civitas.</li>
+                    <li><strong>UMBFind</strong> dirancang untuk mewujudkan ekosistem kampus yang saling peduli, jujur, dan aman dalam mengembalikan barang hilang civitas.</li>
                     <li>Dilengkapi fitur pelaporan cepat, pencarian kategori cerdas, sistem verifikasi chat internal, dan integrasi pos penitipan resmi.</li>
                     <li>Versi Rilis: <strong>v1.0.0 (Responsive Web &amp; Mobile-Optimized)</strong>.</li>
                 </ul>
@@ -940,7 +940,7 @@
     }
 
     function handleSignOut() {
-        if (confirm('Apakah Anda ingin keluar dari sesi akun FindUMB?')) {
+        if (confirm('Apakah Anda ingin keluar dari sesi akun UMBFind?')) {
             showToast('Anda telah keluar.');
             setTimeout(() => {
                 window.location.href = "{{ route('home') }}";
@@ -988,7 +988,7 @@
         }
     }
 
-    // Modal Tentang FindUMB
+    // Modal Tentang UMBFind
     function openAboutModal() {
         const modal = document.getElementById('about-modal');
         if (modal) {

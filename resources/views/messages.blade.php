@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Pesan & Klaim — Find UMB')
+@section('title', 'Pesan & Klaim — UMBFind')
 
 @push('styles')
 <style>
@@ -1434,7 +1434,7 @@
         <div class="empty-mascot-box">
             <picture>
                 <source srcset="{{ asset('images/mascot.webp') }}" type="image/webp">
-                <img src="{{ asset('images/mascot.png') }}" alt="Maskot FindUMB" class="empty-mascot-img" width="105" height="105" loading="lazy">
+                <img src="{{ asset('images/mascot.png') }}" alt="Maskot UMBFind" class="empty-mascot-img" width="105" height="105" loading="lazy">
             </picture>
         </div>
         <h3 class="empty-title">Tidak Ada Percakapan yang Cocok</h3>

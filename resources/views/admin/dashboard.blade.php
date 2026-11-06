@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Dashboard Administrator — FindUMB')
+@section('title', 'Dashboard Administrator — UMBFind')
 
 @section('content')
 <div id="tab-panel-overview" class="admin-tab-panel space-y-5">
@@ -11,7 +11,7 @@
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
             <h1 class="text-xl sm:text-2xl font-bold tracking-tight text-[#111827]">Overview</h1>
-            <p class="text-xs text-[#6b7280] mt-0.5">Pusat komando moderasi pelaporan dan tata kelola platform FindUMB.</p>
+            <p class="text-xs text-[#6b7280] mt-0.5">Pusat komando moderasi pelaporan dan tata kelola platform UMBFind.</p>
         </div>
         <div class="flex items-center gap-2 shrink-0">
             <button type="button" onclick="exportAdminReportsCSV()" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border border-[#eaecf0] bg-white text-[#374151] hover:bg-[#f9fafb] hover:text-[#111827] transition-all cursor-pointer shadow-2xs">
@@ -621,7 +621,7 @@
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <div>
                 <h1 class="text-xl sm:text-2xl font-bold tracking-tight text-[#111827]">Manajemen Pengguna</h1>
-                <p class="text-xs text-[#6b7280] mt-0.5">Direktori hak akses civitas akademika dan administrator FindUMB.</p>
+                <p class="text-xs text-[#6b7280] mt-0.5">Direktori hak akses civitas akademika dan administrator UMBFind.</p>
             </div>
             <div class="flex items-center gap-2">
                 <button type="button" onclick="openCreateAdminModal()" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-[#1572b8] hover:bg-[#0f5791] text-white text-xs font-semibold shadow-2xs transition-all cursor-pointer">
@@ -637,7 +637,7 @@
             <span><strong>Kebijakan Email:</strong> Mahasiswa wajib email kampus (<code class="bg-[#e0f2fe] px-1.5 py-0.5 rounded text-[11px] font-mono text-[#0284c7]">@student.mercubuana.ac.id</code>). Administrator diizinkan email institusi atau Gmail terverifikasi.</span>
         </div>
 
-        <!-- 3. KPI Stat Cards (4 Cards - Synchronized with FindUMB Design Language) -->
+        <!-- 3. KPI Stat Cards (4 Cards - Synchronized with UMBFind Design Language) -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             
             <!-- Card 1: Total Pengguna -->
