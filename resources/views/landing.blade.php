@@ -386,7 +386,7 @@
         }
 
         /* ----------------------------------------------------
-           Fitur Utama Bento Grid Section (Tema Kampus UMBFind)
+           Fitur Utama 3-Card Grid Section (Tema Kampus UMBFind)
            ---------------------------------------------------- */
         .features-section {
             position: relative;
@@ -439,15 +439,15 @@
             margin: 0 auto;
         }
 
-        /* 3-Column Bento Grid */
-        .bento-grid {
+        /* Clean, Symmetrical 3-Column Features Grid */
+        .features-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 1.25rem;
+            gap: 1.5rem;
         }
 
-        /* Base Bento Card */
-        .bento-card {
+        /* Base Feature Card */
+        .feature-card {
             background: #ffffff;
             border: 1px solid rgba(226, 232, 240, 0.85);
             border-radius: 24px;
@@ -457,18 +457,19 @@
             flex-direction: column;
             position: relative;
             overflow: hidden;
-            transition: box-shadow 0.25s ease, border-color 0.25s ease;
+            transition: transform 0.2s ease, box-shadow 0.25s ease, border-color 0.25s ease;
         }
 
-        .bento-card:hover {
+        .feature-card:hover {
+            transform: translateY(-2px);
             box-shadow: 0 16px 36px -8px rgba(16, 110, 194, 0.12), 0 4px 12px -2px rgba(16, 110, 194, 0.04);
             border-color: rgba(53, 165, 234, 0.55);
         }
 
         /* Card Upper Visual Window */
-        .bento-visual {
+        .feature-visual {
             width: 100%;
-            height: 165px;
+            height: 180px;
             border-radius: 18px;
             background: linear-gradient(180deg, #f2f8fe 0%, #f9fcff 100%);
             border: 1px solid rgba(200, 225, 252, 0.75);
@@ -480,21 +481,21 @@
             margin-bottom: 1.25rem;
         }
 
-        .bento-visual svg {
+        .feature-visual svg {
             width: 100%;
             height: 100%;
             display: block;
         }
 
         /* Card Lower Content */
-        .bento-content {
+        .feature-content {
             display: flex;
             flex-direction: column;
             align-items: flex-start;
             flex: 1;
         }
 
-        .bento-card-title {
+        .feature-card-title {
             font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
             font-size: 1.15rem;
             font-weight: 700;
@@ -503,176 +504,20 @@
             line-height: 1.3;
         }
 
-        .bento-card-desc {
+        .feature-card-desc {
             font-size: 0.8875rem;
             color: #64748b;
             line-height: 1.55;
             margin: 0;
         }
 
-        /* Card 4: Wide Verification Card (Span 2 Cols) */
-        .bento-card-wide {
-            grid-column: 1 / span 2;
-            grid-row: 2;
-            display: grid;
-            grid-template-columns: 1.15fr 1fr;
-            gap: 1.5rem;
-            align-items: center;
-            padding: 1.35rem 1.6rem 1.35rem 1.35rem;
-        }
-
-        .bento-card-wide .bento-visual {
-            height: 100%;
-            min-height: 170px;
-            margin-bottom: 0;
-        }
-
-        /* Card 5: Tall Reputasi / User Card (Col 3, Span 2 Rows) */
-        .bento-card-tall {
-            grid-column: 3;
-            grid-row: 2 / span 2;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .bento-card-tall .bento-visual {
-            height: 235px;
-            flex-shrink: 0;
-        }
-
-        /* Card 6: Wide CTA Banner (Span 2 Cols under Card 4) */
-        .bento-card-banner {
-            grid-column: 1 / span 2;
-            grid-row: 3;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 1.5rem;
-            padding: 1.6rem 2rem;
-            background: linear-gradient(90deg, #ffffff 0%, #f4f9fe 65%, #edf6fd 100%);
-            border: 1px solid rgba(200, 225, 252, 0.95);
-            border-radius: 24px;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 10px 30px -5px rgba(16, 110, 194, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02);
-        }
-
-        .bento-card-banner::before {
-            content: '';
-            position: absolute;
-            right: 15%;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 240px;
-            height: 140px;
-            background: radial-gradient(circle, rgba(53, 165, 234, 0.22) 0%, transparent 70%);
-            pointer-events: none;
-        }
-
-        .bento-banner-content {
-            position: relative;
-            z-index: 2;
-        }
-
-        .bento-banner-title {
-            font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: #0b192c;
-            margin-bottom: 0.25rem;
-            line-height: 1.3;
-        }
-
-        .bento-banner-title span {
-            color: #106ec2;
-        }
-
-        .bento-banner-desc {
-            font-size: 0.8875rem;
-            color: #64748b;
-            margin: 0;
-        }
-
-        .bento-banner-btn {
-            position: relative;
-            z-index: 2;
-            background: linear-gradient(135deg, #106ec2 0%, #1572b8 50%, #35a5ea 100%);
-            color: #ffffff;
-            font-size: 0.9rem;
-            font-weight: 500;
-            padding: 0.72rem 1.65rem;
-            border-radius: 9999px;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            box-shadow: 0 10px 24px -4px rgba(16, 110, 194, 0.38);
-            transition: background 0.2s ease, box-shadow 0.2s ease;
-            flex-shrink: 0;
-            white-space: nowrap;
-        }
-
-        .bento-banner-btn:hover {
-            background: linear-gradient(135deg, #0e5ea8 0%, #1366a6 50%, #2ba0e5 100%);
-            box-shadow: 0 12px 28px -4px rgba(16, 110, 194, 0.48);
-            color: #ffffff;
-        }
-
         /* Responsive Breakpoints */
         @media (max-width: 960px) {
-            .bento-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            .bento-card-wide {
-                grid-column: 1 / span 2;
-                grid-row: auto;
-            }
-            .bento-card-tall {
-                grid-column: 1 / span 2;
-                grid-row: auto;
-                display: grid;
-                grid-template-columns: 1.15fr 1fr;
-                gap: 1.5rem;
-                align-items: center;
-            }
-            .bento-card-tall .bento-visual {
-                height: 100%;
-                min-height: 170px;
-                margin-bottom: 0;
-            }
-            .bento-card-banner {
-                grid-column: 1 / span 2;
-                grid-row: auto;
-            }
-        }
-
-        @media (max-width: 640px) {
-            .bento-grid {
+            .features-grid {
                 grid-template-columns: 1fr;
-                gap: 1rem;
-            }
-            .bento-card-wide,
-            .bento-card-tall {
-                grid-column: 1;
-                display: flex;
-                flex-direction: column;
-            }
-            .bento-card-wide .bento-visual,
-            .bento-card-tall .bento-visual {
-                height: 160px;
-                min-height: auto;
-                margin-bottom: 1.15rem;
-            }
-            .bento-card-banner {
-                grid-column: 1;
-                flex-direction: column;
-                align-items: flex-start;
                 gap: 1.25rem;
-                padding: 1.5rem;
-            }
-            .bento-banner-btn {
-                width: 100%;
-                justify-content: center;
+                max-width: 520px;
+                margin: 0 auto;
             }
         }
 
@@ -799,15 +644,15 @@
                     </p>
                 </div>
 
-                <!-- 3-Column Bento Grid Bertema Kampus UMBFind -->
-                <div class="bento-grid">
-                    <!-- Card 1: Pelaporan Cepat & Privasi Terjaga -->
-                    <div class="bento-card">
-                        <div class="bento-visual">
-                            <svg viewBox="0 0 320 165" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- 3 Feature Cards Grid (Symmetrical 3-Column Layout) -->
+                <div class="features-grid">
+                    <!-- Card 1: Pelaporan Cepat & Privasi Aman -->
+                    <div class="feature-card">
+                        <div class="feature-visual">
+                            <svg viewBox="0 0 340 180" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <defs>
                                     <radialGradient id="heroGlow1" cx="50%" cy="50%" r="50%">
-                                        <stop offset="0%" stop-color="#35a5ea" stop-opacity="0.35"/>
+                                        <stop offset="0%" stop-color="#35a5ea" stop-opacity="0.32"/>
                                         <stop offset="100%" stop-color="#106ec2" stop-opacity="0"/>
                                     </radialGradient>
                                     <linearGradient id="heroGrad1" x1="0" y1="0" x2="1" y2="1">
@@ -816,56 +661,57 @@
                                         <stop offset="100%" stop-color="#35a5ea"/>
                                     </linearGradient>
                                     <filter id="heroShadow1" x="-20%" y="-20%" width="140%" height="140%">
-                                        <feDropShadow dx="0" dy="5" stdDeviation="7" flood-color="#106ec2" flood-opacity="0.2"/>
+                                        <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#106ec2" flood-opacity="0.12"/>
                                     </filter>
                                 </defs>
-                                <!-- Soft decorative grid dots -->
-                                <g fill="rgba(16, 110, 194, 0.15)">
-                                    <circle cx="28" cy="24" r="1.5"/><circle cx="44" cy="24" r="1.5"/><circle cx="60" cy="24" r="1.5"/>
-                                    <circle cx="28" cy="40" r="1.5"/><circle cx="44" cy="40" r="1.5"/><circle cx="60" cy="40" r="1.5"/>
-                                    <circle cx="260" cy="24" r="1.5"/><circle cx="276" cy="24" r="1.5"/><circle cx="292" cy="24" r="1.5"/>
-                                    <circle cx="260" cy="40" r="1.5"/><circle cx="276" cy="40" r="1.5"/><circle cx="292" cy="40" r="1.5"/>
+                                <!-- Soft decorative background dots -->
+                                <g fill="rgba(16, 110, 194, 0.12)">
+                                    <circle cx="36" cy="28" r="1.5"/><circle cx="52" cy="28" r="1.5"/><circle cx="68" cy="28" r="1.5"/>
+                                    <circle cx="36" cy="44" r="1.5"/><circle cx="52" cy="44" r="1.5"/><circle cx="68" cy="44" r="1.5"/>
+                                    <circle cx="272" cy="28" r="1.5"/><circle cx="288" cy="28" r="1.5"/><circle cx="304" cy="28" r="1.5"/>
+                                    <circle cx="272" cy="44" r="1.5"/><circle cx="288" cy="44" r="1.5"/><circle cx="304" cy="44" r="1.5"/>
                                 </g>
                                 <!-- Central Blue Aura -->
-                                <circle cx="160" cy="80" r="55" fill="url(#heroGlow1)"/>
+                                <circle cx="170" cy="85" r="55" fill="url(#heroGlow1)"/>
                                 <!-- Floating Report Item Preview Card -->
                                 <g filter="url(#heroShadow1)">
-                                    <rect x="52" y="32" width="216" height="102" rx="14" fill="#ffffff" stroke="rgba(53, 165, 234, 0.35)" stroke-width="1.2"/>
+                                    <rect x="62" y="30" width="216" height="106" rx="14" fill="#ffffff" stroke="rgba(53, 165, 234, 0.35)" stroke-width="1.2"/>
                                     <!-- Card Header Bar -->
-                                    <rect x="66" y="46" width="60" height="7" rx="3.5" fill="#e2e8f0"/>
-                                    <rect x="194" y="44" width="60" height="18" rx="9" fill="#e0f2fe"/>
-                                    <text x="202" y="56.5" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="700" fill="#106ec2">Terverifikasi</text>
+                                    <rect x="76" y="44" width="60" height="7" rx="3.5" fill="#e2e8f0"/>
+                                    <rect x="204" y="42" width="60" height="18" rx="9" fill="#e0f2fe"/>
+                                    <text x="212" y="54.5" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="700" fill="#106ec2">Terverifikasi</text>
                                     <!-- Item Thumbnail Box -->
-                                    <rect x="66" y="64" width="46" height="46" rx="8" fill="#f0f7ff" stroke="rgba(53, 165, 234, 0.25)" stroke-width="1"/>
+                                    <rect x="76" y="62" width="46" height="46" rx="8" fill="#f0f7ff" stroke="rgba(53, 165, 234, 0.25)" stroke-width="1"/>
                                     <!-- Bag / Item Icon -->
-                                    <path d="M 83 78 V 75 A 6 6 0 0 1 95 75 V 78 M 76 78 H 102 V 96 H 76 Z" fill="none" stroke="#106ec2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M 93 76 V 73 A 6 6 0 0 1 105 73 V 76 M 86 76 H 112 V 94 H 86 Z" fill="none" stroke="#106ec2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                     <!-- Item Text Rows -->
-                                    <rect x="122" y="68" width="95" height="8" rx="4" fill="#0b192c" opacity="0.85"/>
-                                    <rect x="122" y="82" width="75" height="6" rx="3" fill="#94a3b8"/>
-                                    <rect x="122" y="94" width="55" height="6" rx="3" fill="#cbd5e1"/>
+                                    <rect x="132" y="66" width="95" height="8" rx="4" fill="#0b192c" opacity="0.85"/>
+                                    <rect x="132" y="80" width="75" height="6" rx="3" fill="#94a3b8"/>
+                                    <rect x="132" y="92" width="55" height="6" rx="3" fill="#cbd5e1"/>
                                 </g>
                                 <!-- Floating Privacy Lock Shield Badge on Corner -->
                                 <g filter="url(#heroShadow1)">
-                                    <rect x="180" y="88" width="92" height="26" rx="13" fill="url(#heroGrad1)"/>
-                                    <circle cx="193" cy="101" r="5.5" fill="none" stroke="#ffffff" stroke-width="1.6"/>
-                                    <path d="M 193 94 V 97" stroke="#ffffff" stroke-width="1.6" stroke-linecap="round"/>
-                                    <text x="204" y="104.5" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="700" fill="#ffffff">Kontak Aman</text>
+                                    <rect x="180" y="94" width="96" height="26" rx="13" fill="url(#heroGrad1)"/>
+                                    <!-- Vector Lock Icon -->
+                                    <rect x="192" y="106" width="9" height="7" rx="1.5" fill="#ffffff"/>
+                                    <path d="M 194 106 V 104 A 2.5 2.5 0 0 1 199 104 V 106" fill="none" stroke="#ffffff" stroke-width="1.3"/>
+                                    <text x="206" y="110.5" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="700" fill="#ffffff">Kontak Aman</text>
                                 </g>
                             </svg>
                         </div>
-                        <div class="bento-content">
-                            <h3 class="bento-card-title">Pelaporan Cepat & Privasi Terjaga</h3>
-                            <p class="bento-card-desc">Laporkan barang hilang atau temuan dalam hitungan menit. Identitas dan kontak pelapor aman terlindungi dari spam.</p>
+                        <div class="feature-content">
+                            <h3 class="feature-card-title">Pelaporan Cepat & Privasi Aman</h3>
+                            <p class="feature-card-desc">Laporkan barang hilang atau temuan dalam hitungan menit dengan data kontak yang terproteksi privasinya.</p>
                         </div>
                     </div>
 
-                    <!-- Card 2: Validasi & Penitipan Pos Satpam Kampus -->
-                    <div class="bento-card">
-                        <div class="bento-visual">
-                            <svg viewBox="0 0 320 165" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Card 2: Titip Validasi Pos Satpam -->
+                    <div class="feature-card">
+                        <div class="feature-visual">
+                            <svg viewBox="0 0 340 180" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <defs>
                                     <radialGradient id="heroGlow2" cx="50%" cy="50%" r="50%">
-                                        <stop offset="0%" stop-color="#35a5ea" stop-opacity="0.38"/>
+                                        <stop offset="0%" stop-color="#35a5ea" stop-opacity="0.35"/>
                                         <stop offset="100%" stop-color="#106ec2" stop-opacity="0"/>
                                     </radialGradient>
                                     <linearGradient id="heroGrad2" x1="0" y1="0" x2="0" y2="1">
@@ -874,51 +720,51 @@
                                         <stop offset="100%" stop-color="#35a5ea"/>
                                     </linearGradient>
                                     <filter id="heroShadow2" x="-20%" y="-20%" width="140%" height="140%">
-                                        <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#106ec2" flood-opacity="0.22"/>
+                                        <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#106ec2" flood-opacity="0.14"/>
                                     </filter>
                                 </defs>
                                 <!-- Perspective Security Checkpoint Stage Lines in Hero Blue -->
-                                <path d="M 24 160 Q 160 115 296 160" fill="none" stroke="rgba(53, 165, 234, 0.2)" stroke-width="1.2"/>
-                                <path d="M 50 148 Q 160 108 270 148" fill="none" stroke="rgba(53, 165, 234, 0.16)" stroke-width="1"/>
-                                <path d="M 80 138 Q 160 102 240 138" fill="none" stroke="rgba(53, 165, 234, 0.14)" stroke-width="1"/>
-                                <path d="M 110 130 Q 160 98 210 130" fill="none" stroke="rgba(53, 165, 234, 0.12)" stroke-width="1"/>
-                                <path d="M 160 105 V 160" stroke="rgba(53, 165, 234, 0.18)" stroke-width="1"/>
-                                <path d="M 132 108 Q 110 132 80 160" stroke="rgba(53, 165, 234, 0.15)" stroke-width="1"/>
-                                <path d="M 188 108 Q 210 132 240 160" stroke="rgba(53, 165, 234, 0.15)" stroke-width="1"/>
-                                <!-- Floating Drop Shadow -->
-                                <ellipse cx="160" cy="120" rx="32" ry="7" fill="rgba(16, 110, 194, 0.22)" filter="blur(5px)"/>
+                                <path d="M 34 168 Q 170 125 306 168" fill="none" stroke="rgba(53, 165, 234, 0.2)" stroke-width="1.2"/>
+                                <path d="M 60 156 Q 170 118 280 156" fill="none" stroke="rgba(53, 165, 234, 0.16)" stroke-width="1"/>
+                                <path d="M 90 146 Q 170 112 250 146" fill="none" stroke="rgba(53, 165, 234, 0.14)" stroke-width="1"/>
+                                <path d="M 120 138 Q 170 108 220 138" fill="none" stroke="rgba(53, 165, 234, 0.12)" stroke-width="1"/>
+                                <path d="M 170 115 V 170" stroke="rgba(53, 165, 234, 0.18)" stroke-width="1"/>
+                                <path d="M 142 118 Q 120 142 90 170" stroke="rgba(53, 165, 234, 0.15)" stroke-width="1"/>
+                                <path d="M 198 118 Q 220 142 250 170" stroke="rgba(53, 165, 234, 0.15)" stroke-width="1"/>
+                                <!-- Floating Drop Shadow under Shield -->
+                                <ellipse cx="170" cy="128" rx="34" ry="7" fill="rgba(16, 110, 194, 0.18)" filter="blur(5px)"/>
                                 <!-- Central Blue Aura -->
-                                <circle cx="160" cy="62" r="50" fill="url(#heroGlow2)"/>
+                                <circle cx="170" cy="68" r="50" fill="url(#heroGlow2)"/>
                                 <!-- 3D Security Checkpoint Shield in Hero Blue -->
-                                <path d="M 132 24 Q 160 20 188 24 V 66 Q 188 102 160 115 Q 132 102 132 66 Z" fill="url(#heroGrad2)" filter="url(#heroShadow2)"/>
+                                <path d="M 142 24 Q 170 20 198 24 V 68 Q 198 106 170 120 Q 142 106 142 68 Z" fill="url(#heroGrad2)" filter="url(#heroShadow2)"/>
                                 <!-- Right Bevel Shading for 3D depth -->
-                                <path d="M 160 22 Q 174 23 188 24 V 66 Q 188 102 160 115 Z" fill="rgba(11, 25, 44, 0.15)"/>
+                                <path d="M 170 22 Q 184 23 198 24 V 68 Q 198 106 170 120 Z" fill="rgba(11, 25, 44, 0.15)"/>
                                 <!-- Specular light highlight -->
-                                <path d="M 135 26 Q 160 22.5 185 26" fill="none" stroke="rgba(255, 255, 255, 0.6)" stroke-width="2"/>
+                                <path d="M 145 26 Q 170 22.5 195 26" fill="none" stroke="rgba(255, 255, 255, 0.6)" stroke-width="2"/>
                                 <!-- Checkpoint Checkmark Symbol inside shield -->
-                                <path d="M 150 64 L 157 71 L 171 55" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M 160 66 L 167 73 L 181 57" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
                                 <!-- Floating Campus Security Pill Badge -->
                                 <g filter="url(#heroShadow2)">
-                                    <rect x="85" y="102" width="150" height="26" rx="13" fill="#ffffff" stroke="rgba(53, 165, 234, 0.35)" stroke-width="1.2"/>
-                                    <circle cx="100" cy="115" r="5.5" fill="#e0f2fe"/>
-                                    <path d="M 97.5 115 L 99.5 117 L 102.5 113" fill="none" stroke="#106ec2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                    <text x="111" y="118.5" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" font-weight="700" fill="#0b192c">Pos Satpam UMB</text>
+                                    <rect x="93" y="112" width="154" height="26" rx="13" fill="#ffffff" stroke="rgba(53, 165, 234, 0.35)" stroke-width="1.2"/>
+                                    <circle cx="109" cy="125" r="5.5" fill="#e0f2fe"/>
+                                    <path d="M 106.5 125 L 108.5 127 L 111.5 123" fill="none" stroke="#106ec2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <text x="120" y="128.5" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" font-weight="700" fill="#0b192c">Pos Satpam Resmi UMB</text>
                                 </g>
                             </svg>
                         </div>
-                        <div class="bento-content">
-                            <h3 class="bento-card-title">Validasi & Titip Pos Satpam</h3>
-                            <p class="bento-card-desc">Barang berharga dapat dititipkan dan divalidasi langsung oleh petugas keamanan di pos satpam resmi kampus.</p>
+                        <div class="feature-content">
+                            <h3 class="feature-card-title">Titip Validasi Pos Satpam</h3>
+                            <p class="feature-card-desc">Barang bernilai tinggi dapat dititipkan dan diverifikasi langsung oleh petugas keamanan kampus.</p>
                         </div>
                     </div>
 
-                    <!-- Card 3: Pencarian Cerdas & Lokasi Gedung Kampus -->
-                    <div class="bento-card">
-                        <div class="bento-visual">
-                            <svg viewBox="0 0 320 165" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Card 3: Pencarian Cerdas & Lokasi -->
+                    <div class="feature-card">
+                        <div class="feature-visual">
+                            <svg viewBox="0 0 340 180" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <defs>
                                     <radialGradient id="heroGlow3" cx="50%" cy="50%" r="50%">
-                                        <stop offset="0%" stop-color="#35a5ea" stop-opacity="0.38"/>
+                                        <stop offset="0%" stop-color="#35a5ea" stop-opacity="0.32"/>
                                         <stop offset="100%" stop-color="#106ec2" stop-opacity="0"/>
                                     </radialGradient>
                                     <linearGradient id="heroGrad3" x1="0" y1="0" x2="1" y2="1">
@@ -926,164 +772,64 @@
                                         <stop offset="50%" stop-color="#197fce"/>
                                         <stop offset="100%" stop-color="#35a5ea"/>
                                     </linearGradient>
-                                    <filter id="heroShadow3" x="-20%" y="-20%" width="140%" height="140%">
-                                        <feDropShadow dx="0" dy="5" stdDeviation="7" flood-color="#106ec2" flood-opacity="0.2"/>
+                                    <filter id="heroShadow3" x="-25%" y="-25%" width="150%" height="150%">
+                                        <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#106ec2" flood-opacity="0.10"/>
                                     </filter>
                                 </defs>
-                                <!-- Radar locator wave rings in hero sky blue -->
-                                <circle cx="150" cy="62" r="68" fill="none" stroke="rgba(53, 165, 234, 0.15)" stroke-width="1.2" stroke-dasharray="4 4"/>
-                                <circle cx="150" cy="62" r="48" fill="none" stroke="rgba(53, 165, 234, 0.22)" stroke-width="1.2"/>
-                                <circle cx="150" cy="62" r="28" fill="none" stroke="rgba(53, 165, 234, 0.28)" stroke-width="1"/>
+                                <!-- Radar locator concentric rings centered at (165, 75) -->
+                                <circle cx="165" cy="75" r="68" fill="none" stroke="rgba(53, 165, 234, 0.15)" stroke-width="1.2" stroke-dasharray="4 4"/>
+                                <circle cx="165" cy="75" r="48" fill="none" stroke="rgba(53, 165, 234, 0.22)" stroke-width="1.2"/>
+                                <circle cx="165" cy="75" r="28" fill="none" stroke="rgba(53, 165, 234, 0.28)" stroke-width="1"/>
                                 <!-- Central Blue Aura -->
-                                <circle cx="150" cy="62" r="45" fill="url(#heroGlow3)"/>
-                                <!-- Floating Campus Building Location Tags -->
+                                <circle cx="165" cy="75" r="45" fill="url(#heroGlow3)"/>
+                                
+                                <!-- Floating Campus Building Location Tag 1 (Top Left) -->
                                 <g filter="url(#heroShadow3)">
-                                    <rect x="25" y="30" width="98" height="22" rx="11" fill="#ffffff" stroke="rgba(53, 165, 234, 0.35)" stroke-width="1"/>
-                                    <text x="36" y="44.5" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="700" fill="#106ec2">📍 Gedung E Lt. 3</text>
+                                    <rect x="38" y="28" width="102" height="24" rx="12" fill="#ffffff" stroke="rgba(53, 165, 234, 0.35)" stroke-width="1"/>
+                                    <!-- Vector Pin Icon -->
+                                    <g transform="translate(48, 34)">
+                                        <path d="M 4 0 C 1.8 0 0 1.8 0 4 C 0 7 4 11 4 11 C 4 11 8 7 8 4 C 8 1.8 6.2 0 4 0 Z" fill="#106ec2"/>
+                                        <circle cx="4" cy="4" r="1.4" fill="#ffffff"/>
+                                    </g>
+                                    <text x="61" y="44" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="700" fill="#106ec2">Gedung E Lt. 3</text>
                                 </g>
+
+                                <!-- Floating Campus Building Location Tag 2 (Top Right) -->
                                 <g filter="url(#heroShadow3)">
-                                    <rect x="198" y="24" width="95" height="22" rx="11" fill="#ffffff" stroke="rgba(53, 165, 234, 0.35)" stroke-width="1"/>
-                                    <text x="208" y="38.5" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="700" fill="#106ec2">📍 Kantin Utama</text>
+                                    <rect x="198" y="24" width="98" height="24" rx="12" fill="#ffffff" stroke="rgba(53, 165, 234, 0.35)" stroke-width="1"/>
+                                    <!-- Vector Pin Icon -->
+                                    <g transform="translate(208, 30)">
+                                        <path d="M 4 0 C 1.8 0 0 1.8 0 4 C 0 7 4 11 4 11 C 4 11 8 7 8 4 C 8 1.8 6.2 0 4 0 Z" fill="#106ec2"/>
+                                        <circle cx="4" cy="4" r="1.4" fill="#ffffff"/>
+                                    </g>
+                                    <text x="221" y="40" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="700" fill="#106ec2">Kantin Utama</text>
                                 </g>
+
+                                <!-- Floating Campus Building Location Tag 3 (Bottom Left) -->
                                 <g filter="url(#heroShadow3)">
-                                    <rect x="42" y="104" width="85" height="22" rx="11" fill="#ffffff" stroke="rgba(53, 165, 234, 0.35)" stroke-width="1"/>
-                                    <text x="52" y="118.5" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="700" fill="#106ec2">📍 Lab Komputer</text>
+                                    <rect x="48" y="118" width="100" height="24" rx="12" fill="#ffffff" stroke="rgba(53, 165, 234, 0.35)" stroke-width="1"/>
+                                    <!-- Vector Pin Icon -->
+                                    <g transform="translate(58, 124)">
+                                        <path d="M 4 0 C 1.8 0 0 1.8 0 4 C 0 7 4 11 4 11 C 4 11 8 7 8 4 C 8 1.8 6.2 0 4 0 Z" fill="#106ec2"/>
+                                        <circle cx="4" cy="4" r="1.4" fill="#ffffff"/>
+                                    </g>
+                                    <text x="71" y="134" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="700" fill="#106ec2">Lab Komputer</text>
                                 </g>
+
                                 <!-- 3D Royal Blue Magnifying Glass Tilted -->
                                 <g filter="url(#heroShadow3)">
-                                    <circle cx="150" cy="62" r="28" fill="rgba(235, 246, 255, 0.8)" stroke="url(#heroGrad3)" stroke-width="6.5"/>
-                                    <path d="M 133 50 A 21 21 0 0 1 164 40" fill="none" stroke="rgba(255, 255, 255, 0.85)" stroke-width="2.5" stroke-linecap="round"/>
-                                    <path d="M 170 82 L 196 108" stroke="url(#heroGrad3)" stroke-width="7.5" stroke-linecap="round"/>
+                                    <circle cx="165" cy="75" r="28" fill="rgba(235, 246, 255, 0.85)" stroke="url(#heroGrad3)" stroke-width="6.5"/>
+                                    <path d="M 148 63 A 21 21 0 0 1 179 53" fill="none" stroke="rgba(255, 255, 255, 0.85)" stroke-width="2.5" stroke-linecap="round"/>
+                                    <path d="M 185 95 L 211 121" stroke="url(#heroGrad3)" stroke-width="7.5" stroke-linecap="round"/>
                                 </g>
                             </svg>
                         </div>
-                        <div class="bento-content">
-                            <h3 class="bento-card-title">Pencarian Cerdas & Lokasi Gedung</h3>
-                            <p class="bento-card-desc">Filter presisi berdasarkan nama gedung kampus, lantai, area umum, kategori barang, hingga tanggal kejadian.</p>
+                        <div class="feature-content">
+                            <h3 class="feature-card-title">Pencarian Cerdas & Lokasi</h3>
+                            <p class="feature-card-desc">Temukan barang berdasarkan lokasi gedung fakultas, area kampus, hingga kategori secara instan.</p>
                         </div>
                     </div>
 
-                    <!-- Card 4: Verifikasi Kepemilikan Civitas (Wide Card - 2 Columns) -->
-                    <div class="bento-card bento-card-wide">
-                        <div class="bento-visual">
-                            <svg viewBox="0 0 340 165" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <defs>
-                                    <radialGradient id="heroGlow4" cx="50%" cy="50%" r="50%">
-                                        <stop offset="0%" stop-color="#35a5ea" stop-opacity="0.32"/>
-                                        <stop offset="100%" stop-color="#106ec2" stop-opacity="0"/>
-                                    </radialGradient>
-                                    <linearGradient id="heroGrad4" x1="0" y1="0" x2="1" y2="1">
-                                        <stop offset="0%" stop-color="#106ec2"/>
-                                        <stop offset="100%" stop-color="#35a5ea"/>
-                                    </linearGradient>
-                                    <filter id="heroShadow4" x="-20%" y="-20%" width="140%" height="140%">
-                                        <feDropShadow dx="0" dy="5" stdDeviation="7" flood-color="#106ec2" flood-opacity="0.18"/>
-                                    </filter>
-                                </defs>
-                                <!-- Central Blue Aura -->
-                                <circle cx="170" cy="72" r="55" fill="url(#heroGlow4)"/>
-                                <!-- Digital Student ID (KTM Civitas) Card Mockup in Hero Blue -->
-                                <g filter="url(#heroShadow4)">
-                                    <rect x="58" y="24" width="224" height="118" rx="14" fill="#ffffff" stroke="rgba(53, 165, 234, 0.35)" stroke-width="1.2"/>
-                                    <!-- KTM Header Ribbon -->
-                                    <rect x="58" y="24" width="224" height="28" rx="14" fill="url(#heroGrad4)"/>
-                                    <rect x="58" y="42" width="224" height="10" fill="url(#heroGrad4)"/>
-                                    <text x="74" y="42" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" font-weight="800" fill="#ffffff" letter-spacing="0.5">KARTU TANDA CIVITAS UMB</text>
-                                    <!-- Photo Avatar Box -->
-                                    <rect x="74" y="60" width="46" height="52" rx="8" fill="#f0f7ff" stroke="rgba(53, 165, 234, 0.3)" stroke-width="1"/>
-                                    <circle cx="97" cy="78" r="10" fill="#106ec2" opacity="0.85"/>
-                                    <path d="M 83 103 C 83 93, 89 89, 97 89 C 105 89, 111 93, 111 103 Z" fill="#106ec2" opacity="0.85"/>
-                                    <!-- Student Info Details -->
-                                    <rect x="132" y="64" width="105" height="8" rx="4" fill="#0b192c" opacity="0.85"/>
-                                    <rect x="132" y="78" width="80" height="6" rx="3" fill="#64748b"/>
-                                    <rect x="132" y="90" width="95" height="6" rx="3" fill="#94a3b8"/>
-                                    <!-- Match Check Pill Badge -->
-                                    <rect x="132" y="104" width="134" height="22" rx="11" fill="#ecfdf5" stroke="#a7f3d0" stroke-width="1"/>
-                                    <circle cx="143" cy="115" r="4.5" fill="#10b981"/>
-                                    <path d="M 141 115 L 142.5 116.5 L 145.5 113.5" fill="none" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-                                    <text x="152" y="118" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="700" fill="#065f46">Bukti Ciri Khusus Cocok</text>
-                                </g>
-                            </svg>
-                        </div>
-                        <div class="bento-content">
-                            <h3 class="bento-card-title">Verifikasi Kepemilikan Civitas</h3>
-                            <p class="bento-card-desc">Mencegah salah klaim dengan validasi identitas civitas resmi UMB serta pencocokan bukti ciri khusus barang sebelum serah terima.</p>
-                        </div>
-                    </div>
-
-                    <!-- Card 5: Status Real-Time & Budaya Jujur (Tall Card - Col 3, Span 2 Rows) -->
-                    <div class="bento-card bento-card-tall">
-                        <div class="bento-visual">
-                            <svg viewBox="0 0 320 225" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <defs>
-                                    <radialGradient id="heroGlow5" cx="50%" cy="50%" r="50%">
-                                        <stop offset="0%" stop-color="#35a5ea" stop-opacity="0.35"/>
-                                        <stop offset="100%" stop-color="#106ec2" stop-opacity="0"/>
-                                    </radialGradient>
-                                    <linearGradient id="heroGrad5" x1="0" y1="0" x2="1" y2="1">
-                                        <stop offset="0%" stop-color="#106ec2"/>
-                                        <stop offset="50%" stop-color="#197fce"/>
-                                        <stop offset="100%" stop-color="#35a5ea"/>
-                                    </linearGradient>
-                                    <filter id="heroShadow5" x="-20%" y="-20%" width="140%" height="140%">
-                                        <feDropShadow dx="0" dy="5" stdDeviation="7" flood-color="#106ec2" flood-opacity="0.18"/>
-                                    </filter>
-                                </defs>
-                                <!-- Central Blue Aura -->
-                                <circle cx="160" cy="110" r="60" fill="url(#heroGlow5)"/>
-                                <!-- Vertical Tracking Timeline Pipeline in Hero Blue -->
-                                <line x1="85" y1="42" x2="85" y2="135" stroke="rgba(53, 165, 234, 0.35)" stroke-width="2.5" stroke-dasharray="4 4"/>
-                                <!-- Step 1: Laporan Dibuat -->
-                                <g filter="url(#heroShadow5)">
-                                    <rect x="70" y="28" width="180" height="30" rx="15" fill="#ffffff" stroke="rgba(53, 165, 234, 0.35)" stroke-width="1"/>
-                                    <circle cx="85" cy="43" r="8" fill="url(#heroGrad5)"/>
-                                    <path d="M 82 43 L 84 45 L 88 41" fill="none" stroke="#ffffff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-                                    <text x="102" y="47" font-family="'Plus Jakarta Sans', sans-serif" font-size="9.5" font-weight="700" fill="#0b192c">Laporan Dibuat</text>
-                                </g>
-                                <!-- Step 2: Diverifikasi Pos Satpam -->
-                                <g filter="url(#heroShadow5)">
-                                    <rect x="70" y="74" width="180" height="30" rx="15" fill="#ffffff" stroke="rgba(53, 165, 234, 0.35)" stroke-width="1"/>
-                                    <circle cx="85" cy="89" r="8" fill="url(#heroGrad5)"/>
-                                    <path d="M 82 89 L 84 91 L 88 87" fill="none" stroke="#ffffff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-                                    <text x="102" y="93" font-family="'Plus Jakarta Sans', sans-serif" font-size="9.5" font-weight="700" fill="#0b192c">Diverifikasi Satpam</text>
-                                </g>
-                                <!-- Step 3: Siap Diambil Pemilik -->
-                                <g filter="url(#heroShadow5)">
-                                    <rect x="70" y="120" width="180" height="30" rx="15" fill="#ffffff" stroke="rgba(53, 165, 234, 0.35)" stroke-width="1"/>
-                                    <circle cx="85" cy="135" r="8" fill="#10b981"/>
-                                    <path d="M 82 135 L 84 137 L 88 133" fill="none" stroke="#ffffff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-                                    <text x="102" y="139" font-family="'Plus Jakarta Sans', sans-serif" font-size="9.5" font-weight="700" fill="#065f46">Barang Dikembalikan</text>
-                                </g>
-                                <!-- Honesty & Integrity Badge Banner -->
-                                <g filter="url(#heroShadow5)">
-                                    <rect x="58" y="172" width="204" height="32" rx="16" fill="url(#heroGrad5)"/>
-                                    <circle cx="78" cy="188" r="8" fill="#ffffff"/>
-                                    <!-- Star icon in gold/blue -->
-                                    <path d="M 78 183 L 79.5 186.5 L 83 186.8 L 80.3 189.2 L 81.1 192.7 L 78 190.8 L 74.9 192.7 L 75.7 189.2 L 73 186.8 L 76.5 186.5 Z" fill="#f59e0b"/>
-                                    <text x="94" y="192" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" font-weight="700" fill="#ffffff">Apresiasi Kejujuran Civitas</text>
-                                </g>
-                            </svg>
-                        </div>
-                        <div class="bento-content">
-                            <h3 class="bento-card-title">Status Real-Time & Budaya Jujur</h3>
-                            <p class="bento-card-desc">Pantau status barang secara transparan dari pelaporan hingga serah terima, sekaligus mengapresiasi integritas civitas penemu.</p>
-                        </div>
-                    </div>
-
-                    <!-- Card 6: CTA Banner (Span 2 Cols under Card 4) -->
-                    <div class="bento-card-banner">
-                        <div class="bento-banner-content">
-                            <h3 class="bento-banner-title">Kehilangan atau Menemukan <span>Barang di Kampus?</span></h3>
-                            <p class="bento-banner-desc">Gunakan UMBFind sekarang untuk pelaporan cepat dan pencarian langsung via web browser.</p>
-                        </div>
-                        <a href="{{ route('home') }}" class="bento-banner-btn">
-                            <span>Buka Aplikasi</span>
-                            <svg style="width: 16px; height: 16px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                                <line x1="5" y1="12" x2="19" y2="12"/>
-                                <polyline points="12 5 19 12 12 19"/>
-                            </svg>
-                        </a>
-                    </div>
                 </div>
             </div>
         </section>

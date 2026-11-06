@@ -40,11 +40,10 @@ class ExampleTest extends TestCase
         $response->assertSee('id="features"', false);
         $response->assertSee('Fitur Unggulan');
         $response->assertSee('Pelaporan Cepat');
-        $response->assertSee('Validasi');
         $response->assertSee('Pos Satpam');
         $response->assertSee('Pencarian Cerdas');
-        $response->assertSee('Verifikasi Kepemilikan Civitas');
-        $response->assertSee('Apresiasi');
+        $response->assertDontSee('Verifikasi Kepemilikan Civitas');
+        $response->assertDontSee('Status Real-Time');
     }
 
     public function test_the_search_page_returns_a_successful_response(): void
