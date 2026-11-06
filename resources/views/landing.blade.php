@@ -148,7 +148,7 @@
 
         .nav-link-item.active {
             color: var(--color-navy-brand);
-            font-weight: 600;
+            font-weight: 700;
         }
 
         /* Action Buttons on Right */
@@ -185,14 +185,15 @@
             align-items: center;
             justify-content: center;
             line-height: 1.25;
-            transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: background 0.2s ease;
             box-shadow: none;
             letter-spacing: -0.01em;
+            transform: none;
         }
 
         .nav-btn-app:hover {
             background: linear-gradient(135deg, #0a4d8d 0%, #1369aa 52%, #2499d3 100%);
-            transform: translateY(-1px);
+            transform: none;
             box-shadow: none;
         }
 
@@ -213,12 +214,10 @@
             .nav-login-btn {
                 padding: 0.52rem 0.75rem;
                 font-size: 0.8125rem;
-                font-weight: 450;
             }
             .nav-btn-app {
-                padding: 0.55rem 1.15rem;
-                font-size: 0.8125rem;
-                font-weight: 500;
+                padding: 0.58rem 1.15rem;
+                font-size: 0.825rem;
             }
         }
 
@@ -289,7 +288,7 @@
             background: linear-gradient(135deg, #0c559c 0%, #1572b8 52%, #2aa5e0 100%);
             color: #ffffff;
             font-size: 0.95rem;
-            font-weight: 700;
+            font-weight: 600;
             padding: 0.88rem 2rem;
             border-radius: 9999px;
             border: none;
@@ -298,13 +297,14 @@
             align-items: center;
             gap: 0.65rem;
             box-shadow: none;
-            transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: background 0.2s ease;
             text-decoration: none;
+            transform: none;
         }
 
         .hero-download-btn:hover {
             background: linear-gradient(135deg, #0a4d8d 0%, #1369aa 52%, #2499d3 100%);
-            transform: translateY(-2px);
+            transform: none;
             box-shadow: none;
         }
 
@@ -521,11 +521,11 @@
             </a>
 
             <!-- Navigation Links -->
-            <div class="nav-links" id="landing-nav-links">
-                <a href="#hero" class="nav-link-item active" onclick="setActiveNav(this)">Beranda</a>
-                <a href="#features" class="nav-link-item" onclick="setActiveNav(this)">Fitur Utama</a>
-                <a href="#security" class="nav-link-item" onclick="setActiveNav(this)">Keamanan</a>
-                <a href="#faq" class="nav-link-item" onclick="setActiveNav(this)">Tanya Jawab</a>
+            <div class="nav-links">
+                <a href="{{ route('landing') }}" class="nav-link-item active">Beranda</a>
+                <a href="#features" class="nav-link-item">Fitur Utama</a>
+                <a href="#security" class="nav-link-item">Keamanan</a>
+                <a href="#faq" class="nav-link-item">Tanya Jawab</a>
             </div>
 
             <!-- Action Buttons Group (Login & Buka Aplikasi) -->
@@ -542,7 +542,7 @@
 
     <!-- 2. Hero Section (Persis Sesuai Layout Referensi) -->
     <main>
-        <section class="hero-section" id="hero">
+        <section class="hero-section">
             <!-- Top Pill Badge -->
             <div class="hero-badge-pill">
                 <span>Now available as Progressive Web App (PWA)</span>
@@ -563,10 +563,11 @@
             <div class="hero-actions-wrap">
                 <button type="button" class="hero-download-btn" id="btn-pwa-install" onclick="handlePWAInstall()">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-                        <rect width="14" height="20" x="5" y="2" rx="2" ry="2"/>
-                        <path d="M12 18h.01"/>
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="7 10 12 15 17 10"/>
+                        <line x1="12" x2="12" y1="15" y2="3"/>
                     </svg>
-                    <span>Pasang Aplikasi (PWA)</span>
+                    <span>Unduh Aplikasi</span>
                 </button>
                 <a href="{{ route('home') }}" class="hero-web-link">
                     atau buka langsung di web browser &rarr;
@@ -693,36 +694,6 @@
                 modal.classList.remove('active');
             }
         }
-
-        // Dynamic Nav Item Active Highlight (Font-weight increases on active)
-        function setActiveNav(element) {
-            document.querySelectorAll('.nav-link-item').forEach(el => el.classList.remove('active'));
-            element.classList.add('active');
-        }
-
-        window.addEventListener('DOMContentLoaded', () => {
-            const sections = document.querySelectorAll('section[id]');
-            const navLinks = document.querySelectorAll('.nav-link-item');
-
-            function highlightNavOnScroll() {
-                const scrollY = window.pageYOffset;
-                sections.forEach(current => {
-                    const sectionHeight = current.offsetHeight;
-                    const sectionTop = current.offsetTop - 120;
-                    const sectionId = current.getAttribute('id');
-                    if (scrollY >= sectionTop && scrollY < sectionTop + sectionHeight) {
-                        navLinks.forEach(link => {
-                            if (link.getAttribute('href') === `#${sectionId}`) {
-                                link.classList.add('active');
-                            } else if (link.getAttribute('href').startsWith('#')) {
-                                link.classList.remove('active');
-                            }
-                        });
-                    }
-                });
-            }
-            window.addEventListener('scroll', highlightNavOnScroll, { passive: true });
-        });
     </script>
 </body>
 </html>
