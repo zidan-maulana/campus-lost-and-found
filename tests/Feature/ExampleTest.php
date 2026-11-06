@@ -33,6 +33,7 @@ class ExampleTest extends TestCase
         $response->assertSee('logo.webp');
         $response->assertSee('Cara tercepat temukan');
         $response->assertSee('barang hilang di area kampus');
+        $response->assertSee('Platform resmi civitas Universitas Mercu Buana');
         $response->assertSee('Unduh Aplikasi');
         $response->assertSee('Buka Aplikasi');
         $response->assertSee('phone-mockup-2.webp');
