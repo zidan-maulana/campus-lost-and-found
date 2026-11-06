@@ -67,34 +67,40 @@
         }
 
         /* ----------------------------------------------------
-           Modern Seamless Navigation Bar (Sesuai Referensi, Tanpa Shape)
+           Modern Seamless Navigation Bar (Floating White Pill)
            ---------------------------------------------------- */
         .landing-header {
-            position: sticky;
-            top: 0;
+            position: fixed;
+            top: 1.25rem;
             left: 0;
             right: 0;
             z-index: 50;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border-bottom: none;
+            padding: 0 1rem;
+            pointer-events: none;
             transition: all 0.2s ease;
         }
 
         .landing-nav {
-            max-width: 1240px;
+            max-width: 840px;
+            width: 100%;
             margin: 0 auto;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0.9rem 1.5rem;
+            padding: 0.5rem 0.55rem 0.5rem 1.25rem;
+            background: #ffffff;
+            border-radius: 9999px;
+            box-shadow: 0 10px 25px -5px rgba(16, 110, 194, 0.16), 0 8px 10px -6px rgba(16, 110, 194, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.95);
+            pointer-events: auto;
         }
 
         .nav-brand {
+            flex: 1;
             display: flex;
             align-items: center;
-            gap: 0.75rem;
+            justify-content: flex-start;
+            gap: 0.65rem;
             text-decoration: none;
             transition: opacity 0.15s ease;
         }
@@ -104,8 +110,8 @@
         }
 
         .nav-brand-logo {
-            width: 36px;
-            height: 36px;
+            width: 32px;
+            height: 32px;
             object-fit: contain;
             display: block;
         }
@@ -113,7 +119,7 @@
         .nav-brand-text {
             font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
             font-weight: 800;
-            font-size: 1.25rem;
+            font-size: 1.15rem;
             letter-spacing: -0.025em;
             color: var(--color-blue-brand);
         }
@@ -123,9 +129,11 @@
         }
 
         .nav-links {
+            flex: 0 0 auto;
             display: none;
             align-items: center;
-            gap: 2.25rem;
+            justify-content: center;
+            gap: 1.85rem;
         }
 
         @media (min-width: 820px) {
@@ -135,11 +143,11 @@
         }
 
         .nav-link-item {
-            font-size: 0.9125rem;
-            font-weight: 400;
+            font-size: 0.8875rem;
+            font-weight: 500;
             color: #64748b;
             text-decoration: none;
-            transition: color 0.15s ease, font-weight 0.15s ease;
+            transition: color 0.15s ease;
         }
 
         .nav-link-item:hover {
@@ -153,64 +161,67 @@
 
         /* Action Buttons on Right */
         .nav-actions {
+            flex: 1;
             display: flex;
             align-items: center;
-            gap: 0.85rem;
+            justify-content: flex-end;
         }
 
         .nav-login-btn {
-            background: linear-gradient(135deg, #0c559c 0%, #1572b8 52%, #2aa5e0 100%);
+            background: linear-gradient(135deg, #0c5ea8 0%, #1572b8 55%, #2aa5e0 100%);
             color: #ffffff;
-            font-size: 0.885rem;
-            font-weight: 500;
-            padding: 0.62rem 1.45rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            padding: 0.52rem 1.35rem;
             border-radius: 9999px;
             text-decoration: none;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             line-height: 1.25;
-            transition: background 0.2s ease;
-            box-shadow: none;
+            transition: background 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 4px 12px rgba(12, 94, 168, 0.22);
             letter-spacing: -0.01em;
             transform: none;
         }
 
         .nav-login-btn:hover {
-            background: linear-gradient(135deg, #0a4d8d 0%, #1369aa 52%, #2499d3 100%);
+            background: linear-gradient(135deg, #0a4d8d 0%, #1369aa 55%, #2499d3 100%);
             color: #ffffff;
             transform: none;
-            box-shadow: none;
+            box-shadow: 0 6px 16px rgba(12, 94, 168, 0.28);
         }
 
         @media (max-width: 480px) {
+            .landing-header {
+                top: 0.85rem;
+                padding: 0 0.75rem;
+            }
             .landing-nav {
-                padding: 0.75rem 1rem;
+                padding: 0.45rem 0.5rem 0.45rem 1rem;
             }
             .nav-brand-logo {
-                width: 30px;
-                height: 30px;
+                width: 28px;
+                height: 28px;
             }
             .nav-brand-text {
-                font-size: 1.1rem;
-            }
-            .nav-actions {
-                gap: 0.45rem;
+                font-size: 1.05rem;
             }
             .nav-login-btn {
-                padding: 0.52rem 1rem;
-                font-size: 0.825rem;
+                padding: 0.45rem 1rem;
+                font-size: 0.8125rem;
             }
         }
 
         /* ----------------------------------------------------
-           Hero Section Styling
+           Hero Section Styling (Vibrant Royal Blue Gradient)
            ---------------------------------------------------- */
         .hero-section {
             position: relative;
-            padding-top: 3.5rem;
+            padding-top: 6.25rem;
             padding-bottom: 0;
-            background: #ffffff;
+            background: radial-gradient(ellipse at 50% 18%, rgba(255, 255, 255, 0.12) 0%, transparent 60%),
+                        linear-gradient(180deg, #106ec2 0%, #197fce 35%, #35a5ea 72%, #ffffff 100%);
             overflow: hidden;
             display: flex;
             flex-direction: column;
@@ -222,15 +233,17 @@
         .hero-badge-pill {
             display: inline-flex;
             align-items: center;
-            background: #f1f5f9;
-            border: 1px solid #e2e8f0;
-            color: #475569;
+            background: rgba(255, 255, 255, 0.18);
+            border: 1px solid rgba(255, 255, 255, 0.32);
+            color: #ffffff;
             font-size: 0.8125rem;
             font-weight: 500;
             padding: 0.38rem 1.1rem;
             border-radius: 9999px;
             margin-bottom: 1.5rem;
-            box-shadow: none;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
         }
 
         /* Big Hero Headline */
@@ -240,10 +253,11 @@
             font-weight: 600;
             line-height: 1.16;
             letter-spacing: -0.03em;
-            color: #0b192c;
+            color: #ffffff;
             margin: 0 0 2rem 0;
             padding: 0 1rem;
             max-width: 1040px;
+            text-shadow: 0 2px 16px rgba(12, 72, 123, 0.18);
         }
 
         /* CTA Actions */
@@ -259,10 +273,10 @@
         }
 
         .hero-download-btn {
-            background: linear-gradient(135deg, #0c559c 0%, #1572b8 52%, #2aa5e0 100%);
-            color: #ffffff;
+            background: #ffffff;
+            color: #0c5ea8;
             font-size: 0.95rem;
-            font-weight: 500;
+            font-weight: 600;
             padding: 0.84rem 1.85rem;
             border-radius: 9999px;
             border: none;
@@ -270,17 +284,18 @@
             display: inline-flex;
             align-items: center;
             gap: 0.6rem;
-            box-shadow: none;
-            transition: background 0.2s ease;
+            box-shadow: 0 4px 18px rgba(10, 48, 84, 0.18);
+            transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
             text-decoration: none;
             transform: none;
             line-height: 1.25;
         }
 
         .hero-download-btn:hover {
-            background: linear-gradient(135deg, #0a4d8d 0%, #1369aa 52%, #2499d3 100%);
+            background: #f8fafc;
+            color: #094780;
             transform: none;
-            box-shadow: none;
+            box-shadow: 0 6px 22px rgba(10, 48, 84, 0.22);
         }
 
         .hero-download-btn:active {
@@ -297,8 +312,8 @@
         /* Outline Secondary Button: Buka Aplikasi */
         .hero-outline-btn {
             background: transparent;
-            color: #1572b8;
-            border: 1.5px solid #1572b8;
+            color: #ffffff;
+            border: 1.5px solid rgba(255, 255, 255, 0.85);
             font-size: 0.95rem;
             font-weight: 500;
             padding: 0.84rem 1.85rem;
@@ -308,16 +323,16 @@
             align-items: center;
             justify-content: center;
             box-shadow: none;
-            transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+            transition: background 0.15s ease, border-color 0.15s ease;
             text-decoration: none;
             transform: none;
             line-height: 1.25;
         }
 
         .hero-outline-btn:hover {
-            background: rgba(21, 114, 184, 0.06);
-            border-color: #0c559c;
-            color: #0c559c;
+            background: rgba(255, 255, 255, 0.14);
+            border-color: #ffffff;
+            color: #ffffff;
             transform: none;
             box-shadow: none;
         }
@@ -345,7 +360,7 @@
             display: flex;
             justify-content: center;
             margin-bottom: -1px;
-            transform: translateX(-8%);
+            transform: translateX(-11%);
         }
 
         .hero-phone-img {
@@ -370,7 +385,7 @@
             }
             .hero-mockup-wrapper {
                 max-width: 100%;
-                transform: translateX(-7%);
+                transform: translateX(-9%);
             }
         }
 
