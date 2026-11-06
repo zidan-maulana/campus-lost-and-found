@@ -325,39 +325,25 @@
         .hero-mockup-stage {
             position: relative;
             width: 100%;
-            max-width: 1100px;
-            margin-top: 1.5rem;
+            max-width: 1200px;
+            margin-top: 2rem;
             display: flex;
             justify-content: center;
             align-items: flex-end;
             overflow: visible;
         }
 
-        /* Ambient Glow & 3D Lighting behind Mockup */
-        .hero-ambient-glow {
-            position: absolute;
-            top: 25%;
-            left: 50%;
-            transform: translate(-50%, -25%);
-            width: 100%;
-            max-width: 1200px;
-            height: 600px;
-            background: 
-                radial-gradient(circle at 18% 45%, rgba(21, 114, 184, 0.20) 0%, rgba(21, 114, 184, 0.05) 35%, transparent 60%),
-                radial-gradient(circle at 82% 45%, rgba(12, 72, 123, 0.18) 0%, rgba(12, 72, 123, 0.04) 35%, transparent 60%);
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        /* Mockup Container */
+        /* Mockup Container (Ukuran Lebih Besar & Proporsional Sesuai Referensi) */
         .hero-mockup-wrapper {
             position: relative;
             z-index: 10;
             width: 100%;
-            max-width: 540px;
+            max-width: 720px;
             display: flex;
             justify-content: center;
             margin-bottom: -1px;
+            -webkit-mask-image: linear-gradient(to bottom, #000000 0%, #000000 60%, rgba(0,0,0,0.45) 82%, transparent 100%);
+            mask-image: linear-gradient(to bottom, #000000 0%, #000000 60%, rgba(0,0,0,0.45) 82%, transparent 100%);
         }
 
         .hero-phone-img {
@@ -365,9 +351,32 @@
             height: auto;
             display: block;
             object-fit: contain;
-            filter: drop-shadow(0 20px 40px rgba(12, 72, 123, 0.12));
+            filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.08));
             user-select: none;
             pointer-events: none;
+        }
+
+        /* Soft Fade Blur Edge di Ujung Bawah Mockup */
+        .hero-fade-blur-edge {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 140px;
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.6) 45%, rgba(255, 255, 255, 0.95) 80%, #ffffff 100%);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            pointer-events: none;
+            z-index: 20;
+        }
+
+        @media (max-width: 768px) {
+            .hero-mockup-wrapper {
+                max-width: 100%;
+            }
+            .hero-fade-blur-edge {
+                height: 90px;
+            }
         }
 
         /* PWA Install Instructions Modal (for iOS or Unsupported browsers) */
@@ -475,9 +484,6 @@
 
             <!-- Centerpiece Smartphone Mockup Stage -->
             <div class="hero-mockup-stage">
-                <!-- Ambient Backdrop Glow in UMB Blue -->
-                <div class="hero-ambient-glow"></div>
-
                 <!-- Hand holding iPhone Phone Mockup (New Version 2) -->
                 <div class="hero-mockup-wrapper">
                     <picture>
@@ -485,6 +491,9 @@
                         <img src="{{ asset('images/phone-mockup-2.png') }}" alt="Mockup Aplikasi UMBFind di Ponsel" class="hero-phone-img" width="1199" height="1312" loading="eager">
                     </picture>
                 </div>
+
+                <!-- Soft Fade Blur Overlay di Ujung Bawah Mockup -->
+                <div class="hero-fade-blur-edge"></div>
             </div>
         </section>
     </main>
