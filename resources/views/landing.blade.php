@@ -333,12 +333,12 @@
             overflow: visible;
         }
 
-        /* Mockup Container (Ukuran Proporsional & Transisi Fade Alami) */
+        /* Mockup Container (Ukuran Lebih Besar & Transisi Fade Horizontal Alami) */
         .hero-mockup-wrapper {
             position: relative;
             z-index: 10;
             width: 100%;
-            max-width: 720px;
+            max-width: 960px;
             display: flex;
             justify-content: center;
             margin-bottom: -1px;
@@ -465,11 +465,11 @@
 
             <!-- Centerpiece Smartphone Mockup Stage -->
             <div class="hero-mockup-stage">
-                <!-- Hand holding iPhone Phone Mockup (New Version 2 with Smooth Native Fade) -->
+                <!-- Hand holding iPhone Phone Mockup (New Version 2 with Uniform Horizontal Fade) -->
                 <div class="hero-mockup-wrapper">
                     <picture>
                         <source srcset="{{ asset('images/phone-mockup-2.webp') }}" type="image/webp">
-                        <img src="{{ asset('images/phone-mockup-2.png') }}" alt="Mockup Aplikasi UMBFind di Ponsel" class="hero-phone-img" width="1199" height="1180" loading="eager">
+                        <img src="{{ asset('images/phone-mockup-2.png') }}" alt="Mockup Aplikasi UMBFind di Ponsel" class="hero-phone-img" width="1199" height="1110" loading="eager">
                     </picture>
                 </div>
             </div>
