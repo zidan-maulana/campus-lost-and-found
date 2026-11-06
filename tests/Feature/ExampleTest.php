@@ -23,6 +23,19 @@ class ExampleTest extends TestCase
         $response->assertSee('search-calendar-btn');
     }
 
+    public function test_the_landing_page_hero_section_returns_a_successful_response(): void
+    {
+        $response = $this->get('/landing');
+
+        $response->assertStatus(200);
+        $response->assertSee('UMBFind');
+        $response->assertSee('Barang berharga');
+        $response->assertSee('kembali ke tanganmu');
+        $response->assertSee('Pasang Aplikasi (PWA)');
+        $response->assertSee('phone-mockup.webp');
+        $response->assertSee('Kampus Meruya');
+    }
+
     public function test_the_search_page_returns_a_successful_response(): void
     {
         $response = $this->get('/search');
