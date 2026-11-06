@@ -2284,8 +2284,8 @@
                                 <i data-lucide="search"></i>
                             </span>
                             <input type="text" name="q" id="header-search-input" class="header-search-input" placeholder="Cari barang hilang atau temuan di kampus..." autocomplete="off">
-                            <button type="button" class="search-calendar-btn header-search-calendar-btn" aria-label="Filter Bulan" title="Filter Bulan" onclick="window.location.href='{{ url('/search?open_month=1') }}';">
-                                <i data-lucide="calendar"></i>
+                            <button type="button" class="search-calendar-btn header-search-calendar-btn" aria-label="Filter Pencarian Barang" title="Filter Pencarian" onclick="window.location.href='{{ url('/search') }}';">
+                                <i data-lucide="sliders-horizontal"></i>
                             </button>
                         </form>
                     @endif

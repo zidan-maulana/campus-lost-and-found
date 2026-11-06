@@ -188,11 +188,10 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        width: 36px;
-        height: 36px;
-        background: #f0f7ff;
-        border: 1px solid rgba(21, 114, 184, 0.16);
-        border-radius: 10px;
+        width: 32px;
+        height: 32px;
+        background: transparent;
+        border: none;
         color: var(--primary);
         flex-shrink: 0;
         transition: var(--transition);
@@ -201,8 +200,8 @@
     }
 
     .search-calendar-btn svg, .search-calendar-btn .lucide {
-        width: 17px;
-        height: 17px;
+        width: 19px;
+        height: 19px;
         stroke-width: 2.1;
         color: var(--primary);
         stroke: var(--primary);
@@ -210,8 +209,8 @@
     }
 
     .search-box-wrap:hover .search-calendar-btn {
-        background: #e0f0fe;
-        border-color: rgba(21, 114, 184, 0.28);
+        background: transparent;
+        border-color: transparent;
         color: var(--primary-dark, #0d5a94);
     }
 
@@ -219,6 +218,7 @@
     .search-box-wrap:hover .search-calendar-btn .lucide {
         color: var(--primary-dark, #0d5a94);
         stroke: var(--primary-dark, #0d5a94);
+        transform: scale(1.08);
     }
 
     /* Section Headings */
@@ -1896,8 +1896,8 @@
             <i data-lucide="search"></i>
         </span>
         <span class="search-input" style="color: var(--text-muted); display: flex; align-items: center; user-select: none;">Cari barang hilang atau temuan...</span>
-        <span class="search-calendar-btn" id="btn-filter" aria-label="Filter Berdasarkan Bulan" title="Filter Bulan" onclick="event.preventDefault(); window.location.href='{{ url('/search?open_month=1') }}';">
-            <i data-lucide="calendar"></i>
+        <span class="search-calendar-btn" id="btn-filter" aria-label="Filter Pencarian Barang" title="Filter Pencarian" onclick="event.preventDefault(); window.location.href='{{ url('/search') }}';">
+            <i data-lucide="sliders-horizontal"></i>
         </span>
     </a>
 
@@ -1910,73 +1910,73 @@
         </div>
 
         <div class="featured-track" id="featured-track">
-            <!-- Featured Item 1: Cincin Emas Berlian -->
-            <a href="{{ url('/report/5') }}" class="featured-card" data-id="5">
+            <!-- Featured Item 1: Dompet Kulit & KTM Mahasiswa -->
+            <a href="{{ url('/report/8') }}" class="featured-card" data-id="8">
                 <div class="featured-thumb-box">
-                    <img src="https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=360&auto=format&fit=crop&q=80" alt="Cincin Emas" class="featured-thumb-img" loading="lazy">
+                    <img src="https://images.unsplash.com/photo-1627123424574-724758594e93?w=360&auto=format&fit=crop&q=80" alt="Dompet Kulit & KTM" class="featured-thumb-img" loading="lazy">
                 </div>
                 <div class="featured-body">
-                    <h3 class="featured-item-title">Cincin Emas Berlian</h3>
+                    <h3 class="featured-item-title">Dompet Kulit &amp; KTM</h3>
                     <div class="featured-meta">
                         <span class="meta-status-lost">Hilang</span>
+                        <span class="meta-dot">·</span>
+                        <span class="meta-location">Kantin Gedung D</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Featured Item 2: iPad Air 5 & Apple Pencil -->
+            <a href="{{ url('/report/6') }}" class="featured-card" data-id="6">
+                <div class="featured-thumb-box">
+                    <img src="https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=360&auto=format&fit=crop&q=80" alt="iPad Air & Apple Pencil" class="featured-thumb-img" loading="lazy">
+                </div>
+                <div class="featured-body">
+                    <h3 class="featured-item-title">iPad Air 5 &amp; Pencil</h3>
+                    <div class="featured-meta">
+                        <span class="meta-status-lost">Hilang</span>
+                        <span class="meta-dot">·</span>
+                        <span class="meta-location">Gedung E Lt. 3</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Featured Item 3: iPhone 13 Midnight -->
+            <a href="{{ url('/report/1') }}" class="featured-card" data-id="1">
+                <div class="featured-thumb-box">
+                    <img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=360&auto=format&fit=crop&q=80" alt="iPhone 13 Midnight" class="featured-thumb-img" loading="lazy">
+                </div>
+                <div class="featured-body">
+                    <h3 class="featured-item-title">iPhone 13 Midnight</h3>
+                    <div class="featured-meta">
+                        <span class="meta-status-lost">Hilang</span>
+                        <span class="meta-dot">·</span>
+                        <span class="meta-location">Tower Lt. 7</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Featured Item 4: Earphone TWS Anker Soundcore -->
+            <a href="{{ url('/report/4') }}" class="featured-card" data-id="4">
+                <div class="featured-thumb-box">
+                    <img src="https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=360&auto=format&fit=crop&q=80" alt="Earphone TWS Anker" class="featured-thumb-img" loading="lazy">
+                </div>
+                <div class="featured-body">
+                    <h3 class="featured-item-title">Earphone TWS Anker</h3>
+                    <div class="featured-meta">
+                        <span class="meta-status-found">Ditemukan</span>
                         <span class="meta-dot">·</span>
                         <span class="meta-location">Parkir Barat</span>
                     </div>
                 </div>
             </a>
 
-            <!-- Featured Item 2: Tablet Samsung -->
-            <a href="{{ url('/report/6') }}" class="featured-card" data-id="6">
+            <!-- Featured Item 5: Smartwatch Apple Watch (Ditemukan) -->
+            <a href="{{ url('/report/10') }}" class="featured-card" data-id="10">
                 <div class="featured-thumb-box">
-                    <img src="https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=360&auto=format&fit=crop&q=80" alt="Tablet" class="featured-thumb-img" loading="lazy">
+                    <img src="https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?w=360&auto=format&fit=crop&q=80" alt="Apple Watch Series 8" class="featured-thumb-img" loading="lazy">
                 </div>
                 <div class="featured-body">
-                    <h3 class="featured-item-title">Tablet Samsung Tab</h3>
-                    <div class="featured-meta">
-                        <span class="meta-status-lost">Hilang</span>
-                        <span class="meta-dot">·</span>
-                        <span class="meta-location">Gedung E</span>
-                    </div>
-                </div>
-            </a>
-
-            <!-- Featured Item 3: Samsung Phone -->
-            <a href="{{ url('/report/1') }}" class="featured-card" data-id="1">
-                <div class="featured-thumb-box">
-                    <img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=360&auto=format&fit=crop&q=80" alt="Samsung Galaxy" class="featured-thumb-img" loading="lazy">
-                </div>
-                <div class="featured-body">
-                    <h3 class="featured-item-title">Samsung Galaxy A13</h3>
-                    <div class="featured-meta">
-                        <span class="meta-status-lost">Hilang</span>
-                        <span class="meta-dot">·</span>
-                        <span class="meta-location">Meruya</span>
-                    </div>
-                </div>
-            </a>
-
-            <!-- Featured Item 4: KTM Mahasiswa -->
-            <a href="{{ url('/report/2') }}" class="featured-card" data-id="featured-2">
-                <div class="featured-thumb-box">
-                    <img src="https://images.unsplash.com/photo-1544717305-2782549b5136?w=360&auto=format&fit=crop&q=80" alt="KTM Mahasiswa" class="featured-thumb-img" loading="lazy">
-                </div>
-                <div class="featured-body">
-                    <h3 class="featured-item-title">KTM Mahasiswa UMB</h3>
-                    <div class="featured-meta">
-                        <span class="meta-status-lost">Hilang</span>
-                        <span class="meta-dot">·</span>
-                        <span class="meta-location">Perpustakaan</span>
-                    </div>
-                </div>
-            </a>
-
-            <!-- Featured Item 5: Smartwatch Apple (Ditemukan) -->
-            <a href="{{ url('/report/4') }}" class="featured-card" data-id="featured-4">
-                <div class="featured-thumb-box">
-                    <img src="https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?w=360&auto=format&fit=crop&q=80" alt="Smart Watch" class="featured-thumb-img" loading="lazy">
-                </div>
-                <div class="featured-body">
-                    <h3 class="featured-item-title">Smartwatch Apple...</h3>
+                    <h3 class="featured-item-title">Apple Watch Series 8</h3>
                     <div class="featured-meta">
                         <span class="meta-status-found">Ditemukan</span>
                         <span class="meta-dot">·</span>
@@ -2003,11 +2003,11 @@
         </div>
 
         <div class="reports-vertical-container" id="reports-container">
-            <!-- 1. Samsung SM-A135F (Hilang) -->
-            <article class="report-card" data-id="1" data-title="Samsung SM-A135F">
-                <img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=160&auto=format&fit=crop&q=80" alt="Samsung SM-A135F" class="report-thumb" loading="lazy">
+            <!-- 1. iPhone 13 Hitam (Hilang) -->
+            <article class="report-card" data-id="1" data-title="iPhone 13 Hitam (Case Bening)">
+                <img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=160&auto=format&fit=crop&q=80" alt="iPhone 13 Hitam" class="report-thumb" loading="lazy">
                 <div class="report-info">
-                    <h3 class="report-title">Samsung SM-A135F</h3>
+                    <h3 class="report-title">iPhone 13 Hitam (Case Bening)</h3>
                     <div class="report-location">
                         <i data-lucide="map-pin"></i>
                         <span>Gedung Tower Lt. 7</span>
@@ -2017,7 +2017,7 @@
                 <div class="report-aside">
                     <span class="badge-status badge-lost">Hilang</span>
                     <div class="card-actions-row">
-                        <button type="button" class="btn-action-icon" aria-label="Bagikan" onclick="handleShare('Samsung SM-A135F')">
+                        <button type="button" class="btn-action-icon" aria-label="Bagikan" onclick="handleShare('iPhone 13 Hitam')">
                             <i data-lucide="share-2"></i>
                         </button>
                         <button type="button" class="btn-action-icon" aria-label="Simpan" onclick="toggleBookmark(this)">
@@ -2027,11 +2027,11 @@
                 </div>
             </article>
 
-            <!-- 2. Paspor & Berkas Beasiswa (Hilang) -->
-            <article class="report-card" data-id="2" data-title="Paspor & Berkas Beasiswa">
-                <img src="https://images.unsplash.com/photo-1544717305-2782549b5136?w=160&auto=format&fit=crop&q=80" alt="Paspor dan Dokumen" class="report-thumb" loading="lazy">
+            <!-- 2. Map Berkas Beasiswa & KTM (Hilang) -->
+            <article class="report-card" data-id="2" data-title="Map Berkas Beasiswa & KTM">
+                <img src="https://images.unsplash.com/photo-1544717305-2782549b5136?w=160&auto=format&fit=crop&q=80" alt="Map Berkas Beasiswa" class="report-thumb" loading="lazy">
                 <div class="report-info">
-                    <h3 class="report-title">Paspor &amp; Berkas Beasiswa</h3>
+                    <h3 class="report-title">Map Berkas Beasiswa &amp; KTM</h3>
                     <div class="report-location">
                         <i data-lucide="map-pin"></i>
                         <span>Gedung E R. 204</span>
@@ -2041,7 +2041,7 @@
                 <div class="report-aside">
                     <span class="badge-status badge-lost">Hilang</span>
                     <div class="card-actions-row">
-                        <button type="button" class="btn-action-icon" aria-label="Bagikan" onclick="handleShare('Paspor & Berkas')">
+                        <button type="button" class="btn-action-icon" aria-label="Bagikan" onclick="handleShare('Map Berkas Beasiswa')">
                             <i data-lucide="share-2"></i>
                         </button>
                         <button type="button" class="btn-action-icon" aria-label="Simpan" onclick="toggleBookmark(this)">
@@ -2051,11 +2051,11 @@
                 </div>
             </article>
 
-            <!-- 3. Tasbih & Gelang Manik Merah (Ditemukan) -->
-            <article class="report-card" data-id="3" data-title="Tasbih & Gelang Manik Merah">
-                <img src="https://images.unsplash.com/photo-1590402494682-cd3fb53b1f70?w=160&auto=format&fit=crop&q=80" alt="Tasbih Manik Merah" class="report-thumb" loading="lazy">
+            <!-- 3. KTM Mahasiswa & Kartu Flazz UMB (Ditemukan) -->
+            <article class="report-card" data-id="3" data-title="KTM Mahasiswa & Kartu Flazz UMB">
+                <img src="https://images.unsplash.com/photo-1627123424574-724758594e93?w=160&auto=format&fit=crop&q=80" alt="KTM & Kartu Flazz" class="report-thumb" loading="lazy">
                 <div class="report-info">
-                    <h3 class="report-title">Tasbih &amp; Gelang Manik Merah</h3>
+                    <h3 class="report-title">KTM Mahasiswa &amp; Kartu Flazz</h3>
                     <div class="report-location">
                         <i data-lucide="map-pin"></i>
                         <span>Masjid Manarul 'Amal UMB</span>
@@ -2065,7 +2065,7 @@
                 <div class="report-aside">
                     <span class="badge-status badge-found">Temuan</span>
                     <div class="card-actions-row">
-                        <button type="button" class="btn-action-icon" aria-label="Bagikan" onclick="handleShare('Tasbih Manik')">
+                        <button type="button" class="btn-action-icon" aria-label="Bagikan" onclick="handleShare('KTM Mahasiswa & Flazz')">
                             <i data-lucide="share-2"></i>
                         </button>
                         <button type="button" class="btn-action-icon" aria-label="Simpan" onclick="toggleBookmark(this)">
@@ -2075,21 +2075,21 @@
                 </div>
             </article>
 
-            <!-- 4. Kunci Motor Honda & Remote (Ditemukan) -->
-            <article class="report-card" data-id="4" data-title="Kunci Motor Honda & Remote">
-                <img src="https://images.unsplash.com/photo-1582139329536-e7284fece509?w=160&auto=format&fit=crop&q=80" alt="Kunci Motor Honda" class="report-thumb" loading="lazy">
+            <!-- 4. Jaket Almamater Biru UMB (Ditemukan) -->
+            <article class="report-card" data-id="4" data-title="Jaket Almamater Biru UMB (Size L)">
+                <img src="https://images.unsplash.com/photo-1551028719-00167b16eac5?w=160&auto=format&fit=crop&q=80" alt="Jaket Almamater UMB" class="report-thumb" loading="lazy">
                 <div class="report-info">
-                    <h3 class="report-title">Kunci Motor Honda &amp; Remote</h3>
+                    <h3 class="report-title">Jaket Almamater UMB (Size L)</h3>
                     <div class="report-location">
                         <i data-lucide="map-pin"></i>
-                        <span>Parkiran Sepeda Motor</span>
+                        <span>Perpustakaan Pusat Lt. 2</span>
                     </div>
                     <span class="report-date">10 Jan 2026</span>
                 </div>
                 <div class="report-aside">
                     <span class="badge-status badge-found">Temuan</span>
                     <div class="card-actions-row">
-                        <button type="button" class="btn-action-icon" aria-label="Bagikan" onclick="handleShare('Kunci Motor Honda')">
+                        <button type="button" class="btn-action-icon" aria-label="Bagikan" onclick="handleShare('Jaket Almamater UMB')">
                             <i data-lucide="share-2"></i>
                         </button>
                         <button type="button" class="btn-action-icon" aria-label="Simpan" onclick="toggleBookmark(this)">
@@ -2099,11 +2099,11 @@
                 </div>
             </article>
 
-            <!-- 5. Cincin Emas Berlian (Hilang) -->
-            <article class="report-card" data-id="5" data-title="Cincin Emas Berlian">
-                <img src="https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=160&auto=format&fit=crop&q=80" alt="Cincin Emas" class="report-thumb" loading="lazy">
+            <!-- 5. Earphone TWS Anker Soundcore (Hilang) -->
+            <article class="report-card" data-id="5" data-title="Earphone TWS Anker Soundcore">
+                <img src="https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=160&auto=format&fit=crop&q=80" alt="Earphone TWS Anker" class="report-thumb" loading="lazy">
                 <div class="report-info">
-                    <h3 class="report-title">Cincin Emas Berlian</h3>
+                    <h3 class="report-title">Earphone TWS Anker Soundcore</h3>
                     <div class="report-location">
                         <i data-lucide="map-pin"></i>
                         <span>Parkir Barat Kampus Meruya</span>
@@ -2113,7 +2113,7 @@
                 <div class="report-aside">
                     <span class="badge-status badge-lost">Hilang</span>
                     <div class="card-actions-row">
-                        <button type="button" class="btn-action-icon" aria-label="Bagikan" onclick="handleShare('Cincin Emas')">
+                        <button type="button" class="btn-action-icon" aria-label="Bagikan" onclick="handleShare('Earphone TWS Anker')">
                             <i data-lucide="share-2"></i>
                         </button>
                         <button type="button" class="btn-action-icon" aria-label="Simpan" onclick="toggleBookmark(this)">
@@ -2123,21 +2123,21 @@
                 </div>
             </article>
 
-            <!-- 6. Tablet Samsung Tab S8 (Hilang) -->
-            <article class="report-card" data-id="6" data-title="Tablet Samsung Tab S8">
-                <img src="https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=160&auto=format&fit=crop&q=80" alt="Tablet Samsung" class="report-thumb" loading="lazy">
+            <!-- 6. iPad Air 5 Space Grey (Hilang) -->
+            <article class="report-card" data-id="6" data-title="iPad Air 5 Space Grey & Pen">
+                <img src="https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=160&auto=format&fit=crop&q=80" alt="iPad Air 5" class="report-thumb" loading="lazy">
                 <div class="report-info">
-                    <h3 class="report-title">Tablet Samsung Tab S8</h3>
+                    <h3 class="report-title">iPad Air 5 Space Grey &amp; Pen</h3>
                     <div class="report-location">
                         <i data-lucide="map-pin"></i>
-                        <span>Gedung E Lt. 3</span>
+                        <span>Gedung E Lt. 3 Ruang 302</span>
                     </div>
                     <span class="report-date">14 Jan 2026</span>
                 </div>
                 <div class="report-aside">
                     <span class="badge-status badge-lost">Hilang</span>
                     <div class="card-actions-row">
-                        <button type="button" class="btn-action-icon" aria-label="Bagikan" onclick="handleShare('Tablet Samsung')">
+                        <button type="button" class="btn-action-icon" aria-label="Bagikan" onclick="handleShare('iPad Air 5')">
                             <i data-lucide="share-2"></i>
                         </button>
                         <button type="button" class="btn-action-icon" aria-label="Simpan" onclick="toggleBookmark(this)">
@@ -2147,11 +2147,11 @@
                 </div>
             </article>
 
-            <!-- 7. Tas Laptop Lenovo ThinkPad (Hilang) -->
-            <article class="report-card" data-id="7" data-title="Tas Laptop Lenovo ThinkPad">
+            <!-- 7. Tas Ransel Laptop Lenovo ThinkPad (Hilang) -->
+            <article class="report-card" data-id="7" data-title="Tas Ransel Laptop Lenovo ThinkPad">
                 <img src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=160&auto=format&fit=crop&q=80" alt="Tas Laptop" class="report-thumb" loading="lazy">
                 <div class="report-info">
-                    <h3 class="report-title">Tas Laptop Lenovo ThinkPad</h3>
+                    <h3 class="report-title">Tas Ransel Laptop Lenovo ThinkPad</h3>
                     <div class="report-location">
                         <i data-lucide="map-pin"></i>
                         <span>Lab Komputer Gedung Tower</span>
@@ -2195,21 +2195,21 @@
                 </div>
             </article>
 
-            <!-- 9. Jaket Almamater Biru UMB (Ditemukan) -->
-            <article class="report-card" data-id="9" data-title="Jaket Almamater Biru UMB">
-                <img src="https://images.unsplash.com/photo-1551028719-00167b16eac5?w=160&auto=format&fit=crop&q=80" alt="Jaket Almamater" class="report-thumb" loading="lazy">
+            <!-- 9. Laptop Asus Vivobook 14" (Ditemukan) -->
+            <article class="report-card" data-id="9" data-title="Laptop Asus Vivobook 14 Silver">
+                <img src="https://images.unsplash.com/photo-1584438784894-089d6a62b8fa?w=160&auto=format&fit=crop&q=80" alt="Laptop Asus Vivobook" class="report-thumb" loading="lazy">
                 <div class="report-info">
-                    <h3 class="report-title">Jaket Almamater Biru UMB</h3>
+                    <h3 class="report-title">Laptop Asus Vivobook 14"</h3>
                     <div class="report-location">
                         <i data-lucide="map-pin"></i>
-                        <span>Perpustakaan Pusat Lt. 2</span>
+                        <span>Lab Jaringan Gedung B Lt. 3</span>
                     </div>
                     <span class="report-date">22 Jan 2026</span>
                 </div>
                 <div class="report-aside">
                     <span class="badge-status badge-found">Temuan</span>
                     <div class="card-actions-row">
-                        <button type="button" class="btn-action-icon" aria-label="Bagikan" onclick="handleShare('Jaket Almamater')">
+                        <button type="button" class="btn-action-icon" aria-label="Bagikan" onclick="handleShare('Laptop Asus Vivobook')">
                             <i data-lucide="share-2"></i>
                         </button>
                         <button type="button" class="btn-action-icon" aria-label="Simpan" onclick="toggleBookmark(this)">
@@ -2219,21 +2219,21 @@
                 </div>
             </article>
 
-            <!-- 10. Earphone TWS Anker Soundcore (Ditemukan) -->
-            <article class="report-card" data-id="10" data-title="Earphone TWS Anker Soundcore">
-                <img src="https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=160&auto=format&fit=crop&q=80" alt="Earphone TWS" class="report-thumb" loading="lazy">
+            <!-- 10. Smartwatch Apple Watch Series 8 (Ditemukan) -->
+            <article class="report-card" data-id="10" data-title="Apple Watch Series 8">
+                <img src="https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?w=160&auto=format&fit=crop&q=80" alt="Apple Watch Series 8" class="report-thumb" loading="lazy">
                 <div class="report-info">
-                    <h3 class="report-title">Earphone TWS Anker Soundcore</h3>
+                    <h3 class="report-title">Smartwatch Apple Watch Series 8</h3>
                     <div class="report-location">
                         <i data-lucide="map-pin"></i>
-                        <span>Gazebo Taman Kampus</span>
+                        <span>Lobby Gedung Tower</span>
                     </div>
                     <span class="report-date">02 Feb 2026</span>
                 </div>
                 <div class="report-aside">
                     <span class="badge-status badge-found">Temuan</span>
                     <div class="card-actions-row">
-                        <button type="button" class="btn-action-icon" aria-label="Bagikan" onclick="handleShare('Earphone TWS Anker')">
+                        <button type="button" class="btn-action-icon" aria-label="Bagikan" onclick="handleShare('Apple Watch Series 8')">
                             <i data-lucide="share-2"></i>
                         </button>
                         <button type="button" class="btn-action-icon" aria-label="Simpan" onclick="toggleBookmark(this)">
@@ -2501,8 +2501,8 @@
         {
             id: '1',
             type: 'lost',
-            title: 'Samsung SM-A135F',
-            brand: 'Samsung Galaxy A13',
+            title: 'iPhone 13 Hitam (Case Bening)',
+            brand: 'Apple iPhone 13',
             category: 'Elektronik & HP',
             category_slug: 'elektronik',
             category_label: 'Elektronik & HP',
@@ -2513,7 +2513,7 @@
             date_display: '20 Jun 2026',
             time: '14.30 WIB (Siang)',
             storage: 'Disimpan Sendiri',
-            features: 'Smartphone Samsung warna hitam, terpasang casing transparan dengan stiker logo Informatika di bagian belakang. Layar dalam keadaan terkunci.',
+            features: 'Smartphone iPhone 13 warna hitam midnight, terpasang casing transparan dengan stiker logo Informatika di bagian belakang. Layar dalam keadaan terkunci.',
             image: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=800&auto=format&fit=crop&q=80',
             status: 'lost',
             is_mine: true,
@@ -2522,11 +2522,11 @@
         {
             id: '5',
             type: 'lost',
-            title: 'Cincin Emas Berlian',
-            brand: 'Perhiasan Emas Kuning',
-            category: 'Jam & Aksesori',
-            category_slug: 'aksesoris',
-            category_label: 'Jam & Aksesori',
+            title: 'Earphone TWS Anker Soundcore',
+            brand: 'Anker Soundcore Life P2',
+            category: 'Elektronik & HP',
+            category_slug: 'elektronik',
+            category_label: 'Elektronik & HP',
             location_campus: 'Kampus Meruya',
             location_specific: 'Parkir Barat Kampus Meruya',
             location_full: 'Kampus Meruya — Parkir Barat Kampus Meruya',
@@ -2534,8 +2534,8 @@
             date_display: '15 Jan 2026',
             time: 'Siang saat menuju kendaraan',
             storage: 'Disimpan Sendiri',
-            features: 'Cincin emas sepasang model pertunangan/pernikahan dengan ukiran inisial halus di lingkar dalam. Terjatuh di sekitar parkiran.',
-            image: 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=800&auto=format&fit=crop&q=80',
+            features: 'Charging case hitam doff berisi sepasang earphone TWS nirkabel Anker Soundcore. Tertinggal di dekat tiang P3 parkir barat.',
+            image: 'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=800&auto=format&fit=crop&q=80',
             status: 'lost',
             is_mine: true,
             created_at: '2026-01-15T12:00:00.000Z'
@@ -3094,8 +3094,8 @@
         '1': {
             id: '1',
             type: 'lost',
-            title: 'Samsung SM-A135F',
-            brand: 'Samsung Galaxy A13',
+            title: 'iPhone 13 Hitam (Case Bening)',
+            brand: 'Apple iPhone 13',
             category: 'Elektronik & HP',
             category_slug: 'elektronik',
             location_campus: 'Kampus Meruya',
@@ -3105,7 +3105,7 @@
             date_display: '20 Jun 2026',
             time: '14.30 WIB (Siang)',
             storage: 'Disimpan Sendiri',
-            features: 'Smartphone Samsung warna hitam, terpasang casing transparan dengan stiker logo Informatika di bagian belakang. Layar dalam keadaan terkunci.',
+            features: 'Smartphone iPhone 13 warna hitam midnight, terpasang casing transparan dengan stiker logo Informatika di bagian belakang. Layar dalam keadaan terkunci.',
             image: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=800&auto=format&fit=crop&q=80',
             reporter_name: 'Mahasiswa Fasilkom',
             reporter_meta: 'Civitas Terverifikasi • NIM 4152***'
@@ -3170,10 +3170,10 @@
         '5': {
             id: '5',
             type: 'lost',
-            title: 'Cincin Emas Berlian',
-            brand: 'Perhiasan Emas Kuning',
-            category: 'Jam & Aksesori',
-            category_slug: 'aksesoris',
+            title: 'Earphone TWS Anker Soundcore',
+            brand: 'Anker Soundcore Life P2',
+            category: 'Elektronik & HP',
+            category_slug: 'elektronik',
             location_campus: 'Kampus Meruya',
             location_specific: 'Parkir Barat Kampus Meruya',
             location_full: 'Kampus Meruya — Parkir Barat Kampus Meruya',
@@ -3181,8 +3181,8 @@
             date_display: '15 Jan 2026',
             time: 'Siang saat menuju kendaraan',
             storage: 'Disimpan Sendiri',
-            features: 'Cincin emas sepasang model pertunangan/pernikahan dengan ukiran inisial halus di lingkar dalam. Terjatuh di sekitar parkiran.',
-            image: 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=800&auto=format&fit=crop&q=80',
+            features: 'Charging case hitam doff berisi sepasang earphone TWS nirkabel Anker Soundcore. Tertinggal di dekat tiang P3 parkir barat.',
+            image: 'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=800&auto=format&fit=crop&q=80',
             reporter_name: 'Civitas UMB',
             reporter_meta: 'Civitas Terverifikasi • UMB Meruya'
         },
