@@ -226,24 +226,14 @@
         /* Big Hero Headline */
         .hero-title {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            font-size: clamp(2.35rem, 5.5vw, 4.15rem);
+            font-size: clamp(2.2rem, 3.8vw, 3.35rem);
             font-weight: 500;
-            line-height: 1.1;
-            letter-spacing: -0.035em;
+            line-height: 1.18;
+            letter-spacing: -0.03em;
             color: #0b192c;
-            margin: 0;
+            margin: 0 0 2rem 0;
             padding: 0 1rem;
-            max-width: 900px;
-        }
-
-        /* Hero Subheadline */
-        .hero-subtitle {
-            font-size: clamp(0.95rem, 1.8vw, 1.075rem);
-            line-height: 1.6;
-            color: #64748b;
-            max-width: 490px;
-            margin: 1.15rem auto 1.85rem auto;
-            padding: 0 1.25rem;
+            max-width: 980px;
         }
 
         /* CTA Actions */
@@ -329,7 +319,7 @@
             position: relative;
             width: 100%;
             max-width: 1200px;
-            margin-top: 2rem;
+            margin-top: 3.75rem;
             display: flex;
             justify-content: center;
             align-items: flex-end;
@@ -359,6 +349,14 @@
         }
 
         @media (max-width: 768px) {
+            .hero-title {
+                font-size: clamp(1.85rem, 6.5vw, 2.45rem);
+                line-height: 1.2;
+                margin-bottom: 1.65rem;
+            }
+            .hero-mockup-stage {
+                margin-top: 2.5rem;
+            }
             .hero-mockup-wrapper {
                 max-width: 100%;
                 transform: translateX(-7%);
@@ -442,16 +440,11 @@
                 <span>Now available as Progressive Web App (PWA)</span>
             </div>
 
-            <!-- Big Main Headline (2 Baris Presisi) -->
+            <!-- Big Main Headline (2 Baris Presisi & Langsung Dipahami Sekali Baca) -->
             <h1 class="hero-title">
-                Barang berharga,<br>
-                kembali ke tanganmu
+                Cara tercepat temukan<br>
+                barang hilang di area kampus.
             </h1>
-
-            <!-- Subtitle Persuasif Kampus (Ringkas & User Friendly) -->
-            <p class="hero-subtitle">
-                Temukan barangmu yang tertinggal di area kampus lebih cepat, mudah, dan aman.
-            </p>
 
             <!-- Pill Action Group (Unduh Aplikasi & Buka Aplikasi) -->
             <div class="hero-actions-wrap">

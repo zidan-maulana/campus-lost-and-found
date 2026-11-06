@@ -31,12 +31,11 @@ class ExampleTest extends TestCase
         $response->assertSee('UMBFind');
         $response->assertSee('Masuk');
         $response->assertSee('logo.webp');
-        $response->assertSee('Barang berharga');
-        $response->assertSee('kembali ke tanganmu');
+        $response->assertSee('Cara tercepat temukan');
+        $response->assertSee('barang hilang di area kampus');
         $response->assertSee('Unduh Aplikasi');
         $response->assertSee('Buka Aplikasi');
         $response->assertSee('phone-mockup-2.webp');
-        $response->assertSee('Temukan barangmu');
     }
 
     public function test_the_search_page_returns_a_successful_response(): void
