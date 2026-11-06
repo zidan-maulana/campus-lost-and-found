@@ -1896,9 +1896,6 @@
             <i data-lucide="search"></i>
         </span>
         <span class="search-input" style="color: var(--text-muted); display: flex; align-items: center; user-select: none;">Cari barang hilang atau temuan...</span>
-        <span class="search-calendar-btn" id="btn-filter" aria-label="Filter Pencarian Barang" title="Filter Pencarian" onclick="event.preventDefault(); window.location.href='{{ url('/search') }}';">
-            <i data-lucide="sliders-horizontal"></i>
-        </span>
     </a>
 
     @if($hasReports)
