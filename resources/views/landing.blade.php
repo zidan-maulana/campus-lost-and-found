@@ -165,12 +165,12 @@
             text-decoration: none;
             padding: 0.6rem 1.15rem;
             border-radius: 9999px;
-            transition: all 0.15s ease;
+            transition: color 0.15s ease;
         }
 
         .nav-login-btn:hover {
             color: var(--color-blue-brand);
-            background-color: #f1f5f9;
+            background-color: transparent;
         }
 
         .nav-btn-app {
@@ -186,13 +186,13 @@
             justify-content: center;
             line-height: 1.25;
             transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
-            box-shadow: 0 4px 14px -1px rgba(21, 114, 184, 0.35);
+            box-shadow: none;
         }
 
         .nav-btn-app:hover {
             background: linear-gradient(135deg, #0a4d8d 0%, #1369aa 52%, #2499d3 100%);
             transform: translateY(-1px);
-            box-shadow: 0 6px 18px -1px rgba(21, 114, 184, 0.45);
+            box-shadow: none;
         }
 
         @media (max-width: 480px) {
@@ -238,32 +238,23 @@
         .hero-badge-pill {
             display: inline-flex;
             align-items: center;
-            gap: 0.45rem;
             background: #f1f5f9;
             border: 1px solid #e2e8f0;
             color: #475569;
             font-size: 0.8125rem;
             font-weight: 500;
-            padding: 0.35rem 0.95rem;
+            padding: 0.38rem 1.1rem;
             border-radius: 9999px;
             margin-bottom: 1.5rem;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
-        }
-
-        .hero-badge-dot {
-            width: 6px;
-            height: 6px;
-            border-radius: 9999px;
-            background: #10b981;
-            box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+            box-shadow: none;
         }
 
         /* Big Hero Headline */
         .hero-title {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             font-size: clamp(2.35rem, 5.5vw, 4.15rem);
-            font-weight: 600;
-            line-height: 1.08;
+            font-weight: 500;
+            line-height: 1.1;
             letter-spacing: -0.035em;
             color: #0b192c;
             margin: 0;
@@ -274,10 +265,10 @@
         /* Hero Subheadline */
         .hero-subtitle {
             font-size: clamp(0.95rem, 1.8vw, 1.075rem);
-            line-height: 1.62;
+            line-height: 1.6;
             color: #64748b;
-            max-width: 540px;
-            margin: 1.25rem auto 1.85rem auto;
+            max-width: 490px;
+            margin: 1.15rem auto 1.85rem auto;
             padding: 0 1.25rem;
         }
 
@@ -303,7 +294,7 @@
             display: inline-flex;
             align-items: center;
             gap: 0.65rem;
-            box-shadow: 0 8px 24px -2px rgba(21, 114, 184, 0.38);
+            box-shadow: none;
             transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
             text-decoration: none;
         }
@@ -311,7 +302,7 @@
         .hero-download-btn:hover {
             background: linear-gradient(135deg, #0a4d8d 0%, #1369aa 52%, #2499d3 100%);
             transform: translateY(-2px);
-            box-shadow: 0 12px 28px -2px rgba(21, 114, 184, 0.48);
+            box-shadow: none;
         }
 
         .hero-download-btn:active {
@@ -551,7 +542,6 @@
         <section class="hero-section">
             <!-- Top Pill Badge -->
             <div class="hero-badge-pill">
-                <span class="hero-badge-dot"></span>
                 <span>Now available as Progressive Web App (PWA)</span>
             </div>
 
@@ -561,9 +551,9 @@
                 kembali ke tanganmu
             </h1>
 
-            <!-- Subtitle Persuasif Kampus -->
+            <!-- Subtitle Persuasif Kampus (Ringkas & User Friendly) -->
             <p class="hero-subtitle">
-                UMBFind memberi kepastian dan rasa aman untuk setiap barang yang tertinggal di kampus. Cepat, terverifikasi resmi oleh satpam, dan bebas klaim palsu — semua dalam satu tempat.
+                Temukan barangmu yang tertinggal di area kampus lebih cepat, mudah, dan aman.
             </p>
 
             <!-- Pill Download Action Group -->
