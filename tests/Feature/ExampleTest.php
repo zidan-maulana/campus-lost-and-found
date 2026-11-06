@@ -34,6 +34,7 @@ class ExampleTest extends TestCase
         $response->assertSee('Barang berharga');
         $response->assertSee('kembali ke tanganmu');
         $response->assertSee('Unduh Aplikasi');
+        $response->assertSee('Buka Aplikasi');
         $response->assertSee('phone-mockup-2.webp');
         $response->assertSee('Temukan barangmu');
     }

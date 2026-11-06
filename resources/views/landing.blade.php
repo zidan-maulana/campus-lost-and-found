@@ -159,11 +159,11 @@
         }
 
         .nav-login-btn {
-            font-size: 0.875rem;
-            font-weight: 450;
+            font-size: 0.9rem;
+            font-weight: 500;
             color: #475569;
             text-decoration: none;
-            padding: 0.6rem 1.15rem;
+            padding: 0.6rem 1.25rem;
             border-radius: 9999px;
             transition: color 0.15s ease;
         }
@@ -171,30 +171,6 @@
         .nav-login-btn:hover {
             color: var(--color-blue-brand);
             background-color: transparent;
-        }
-
-        .nav-btn-app {
-            background: linear-gradient(135deg, #0c559c 0%, #1572b8 52%, #2aa5e0 100%);
-            color: #ffffff;
-            font-size: 0.885rem;
-            font-weight: 500;
-            padding: 0.68rem 1.6rem;
-            border-radius: 9999px;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            line-height: 1.25;
-            transition: background 0.2s ease;
-            box-shadow: none;
-            letter-spacing: -0.01em;
-            transform: none;
-        }
-
-        .nav-btn-app:hover {
-            background: linear-gradient(135deg, #0a4d8d 0%, #1369aa 52%, #2499d3 100%);
-            transform: none;
-            box-shadow: none;
         }
 
         @media (max-width: 480px) {
@@ -214,10 +190,6 @@
             .nav-login-btn {
                 padding: 0.52rem 0.75rem;
                 font-size: 0.8125rem;
-            }
-            .nav-btn-app {
-                padding: 0.58rem 1.15rem;
-                font-size: 0.825rem;
             }
         }
 
@@ -277,9 +249,11 @@
         /* CTA Actions */
         .hero-actions-wrap {
             display: flex;
-            flex-direction: column;
+            flex-direction: row;
             align-items: center;
-            gap: 0.75rem;
+            justify-content: center;
+            gap: 0.85rem;
+            flex-wrap: wrap;
             z-index: 20;
             position: relative;
         }
@@ -288,18 +262,19 @@
             background: linear-gradient(135deg, #0c559c 0%, #1572b8 52%, #2aa5e0 100%);
             color: #ffffff;
             font-size: 0.95rem;
-            font-weight: 600;
-            padding: 0.88rem 2rem;
+            font-weight: 500;
+            padding: 0.84rem 1.85rem;
             border-radius: 9999px;
             border: none;
             cursor: pointer;
             display: inline-flex;
             align-items: center;
-            gap: 0.65rem;
+            gap: 0.6rem;
             box-shadow: none;
             transition: background 0.2s ease;
             text-decoration: none;
             transform: none;
+            line-height: 1.25;
         }
 
         .hero-download-btn:hover {
@@ -313,10 +288,38 @@
         }
 
         .hero-download-btn svg {
-            width: 19px;
-            height: 19px;
+            width: 18px;
+            height: 18px;
             stroke-width: 2.2;
             flex-shrink: 0;
+        }
+
+        /* Outline Secondary Button: Buka Aplikasi */
+        .hero-outline-btn {
+            background: transparent;
+            color: #1572b8;
+            border: 1.5px solid #1572b8;
+            font-size: 0.95rem;
+            font-weight: 500;
+            padding: 0.84rem 1.85rem;
+            border-radius: 9999px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: none;
+            transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+            text-decoration: none;
+            transform: none;
+            line-height: 1.25;
+        }
+
+        .hero-outline-btn:hover {
+            background: rgba(21, 114, 184, 0.06);
+            border-color: #0c559c;
+            color: #0c559c;
+            transform: none;
+            box-shadow: none;
         }
 
         /* ----------------------------------------------------
@@ -342,6 +345,7 @@
             display: flex;
             justify-content: center;
             margin-bottom: -1px;
+            transform: translateX(-8%);
         }
 
         .hero-phone-img {
@@ -357,6 +361,7 @@
         @media (max-width: 768px) {
             .hero-mockup-wrapper {
                 max-width: 100%;
+                transform: translateX(-7%);
             }
         }
 
@@ -420,13 +425,10 @@
                 <a href="#faq" class="nav-link-item">Tanya Jawab</a>
             </div>
 
-            <!-- Action Buttons Group (Login & Buka Aplikasi) -->
+            <!-- Action Buttons Group (Login) -->
             <div class="nav-actions">
                 <a href="{{ route('home') }}" class="nav-login-btn">
                     Masuk
-                </a>
-                <a href="{{ route('home') }}" class="nav-btn-app">
-                    <span>Buka Aplikasi</span>
                 </a>
             </div>
         </nav>
@@ -451,7 +453,7 @@
                 Temukan barangmu yang tertinggal di area kampus lebih cepat, mudah, dan aman.
             </p>
 
-            <!-- Pill Download Action Group -->
+            <!-- Pill Action Group (Unduh Aplikasi & Buka Aplikasi) -->
             <div class="hero-actions-wrap">
                 <button type="button" class="hero-download-btn" id="btn-pwa-install" onclick="handlePWAInstall()">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
@@ -461,6 +463,9 @@
                     </svg>
                     <span>Unduh Aplikasi</span>
                 </button>
+                <a href="{{ route('home') }}" class="hero-outline-btn">
+                    <span>Buka Aplikasi</span>
+                </a>
             </div>
 
             <!-- Centerpiece Smartphone Mockup Stage -->
