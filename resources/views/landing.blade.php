@@ -386,116 +386,173 @@
         }
 
         /* ----------------------------------------------------
-           Fitur Utama 3-Card Grid Section (Tema Kampus UMBFind)
+           Fitur Utama Clean Split Layout (Sesuai Referensi)
            ---------------------------------------------------- */
         .features-section {
             position: relative;
-            padding: 5rem 1.5rem 6.5rem 1.5rem;
+            padding: 5.5rem 1.5rem 6.5rem 1.5rem;
             background: #ffffff;
             border-top: 1px solid rgba(226, 232, 240, 0.6);
             scroll-margin-top: 6.5rem;
         }
 
         .features-container {
-            max-width: 1140px;
+            max-width: 1160px;
             margin: 0 auto;
         }
 
-        .features-header {
-            text-align: center;
-            max-width: 720px;
-            margin: 0 auto 3.5rem auto;
+        /* 2-Column Split Layout */
+        .features-layout {
+            display: grid;
+            grid-template-columns: 1fr 1.28fr;
+            gap: 4.5rem;
+            align-items: center;
+        }
+
+        /* Left Column: Heading & CTA */
+        .features-intro {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
         }
 
         .features-pill-tag {
             display: inline-flex;
             align-items: center;
-            background: #e0f2fe;
-            color: #106ec2;
-            font-size: 0.8125rem;
-            font-weight: 600;
-            padding: 0.35rem 1rem;
+            background: #ffffff;
+            color: #0b192c;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.38rem 1.15rem;
             border-radius: 9999px;
-            border: 1px solid rgba(16, 110, 194, 0.22);
-            margin-bottom: 1rem;
-            letter-spacing: 0.04em;
+            border: 1px solid rgba(15, 23, 42, 0.22);
+            margin-bottom: 1.35rem;
+            letter-spacing: 0.06em;
             text-transform: uppercase;
         }
 
-        .features-title {
+        .features-main-title {
             font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
-            font-size: clamp(2rem, 3.5vw, 2.75rem);
+            font-size: clamp(2.15rem, 3.2vw, 2.85rem);
             font-weight: 700;
             color: #0b192c;
-            line-height: 1.22;
-            letter-spacing: -0.025em;
-            margin-bottom: 1rem;
+            line-height: 1.2;
+            letter-spacing: -0.03em;
+            margin-bottom: 1.15rem;
         }
 
-        .features-subtitle {
-            font-size: 1.05rem;
+        .features-main-desc {
+            font-size: 0.975rem;
             color: #64748b;
-            line-height: 1.6;
-            margin: 0 auto;
+            line-height: 1.65;
+            margin: 0 0 2.25rem 0;
+            max-width: 440px;
         }
 
-        /* Clean, Symmetrical 3-Column Features Grid */
-        .features-grid {
+        .features-cta-wrap {
+            display: flex;
+            align-items: center;
+        }
+
+        /* Clean CTA Button (Tanpa Arrow Sesuai Instruksi User) */
+        .features-cta-btn {
+            background: linear-gradient(135deg, #106ec2 0%, #1572b8 50%, #1e87db 100%);
+            color: #ffffff;
+            font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+            font-size: 0.9375rem;
+            font-weight: 600;
+            padding: 0.82rem 2.2rem;
+            border-radius: 9999px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 22px -3px rgba(16, 110, 194, 0.38);
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+        }
+
+        .features-cta-btn:hover {
+            background: linear-gradient(135deg, #0e5ea8 0%, #1263a0 50%, #1773be 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 26px -3px rgba(16, 110, 194, 0.48);
+            color: #ffffff;
+        }
+
+        /* Right Column: 2x2 Clean Cards Grid */
+        .features-cards-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1.5rem;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.25rem;
         }
 
-        /* Base Feature Card */
-        .feature-card {
-            background: #ffffff;
+        /* Base Feature Box (Light Style) */
+        .feature-box {
+            background: #f8fafc;
             border: 1px solid rgba(226, 232, 240, 0.85);
-            border-radius: 24px;
-            padding: 1.35rem;
-            box-shadow: 0 10px 30px -5px rgba(16, 110, 194, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02);
+            border-radius: 22px;
+            padding: 2.15rem 1.75rem 1.95rem 1.75rem;
             display: flex;
             flex-direction: column;
-            position: relative;
-            overflow: hidden;
-            transition: transform 0.2s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+            justify-content: space-between;
+            min-height: 215px;
+            transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+            box-shadow: 0 2px 10px -2px rgba(15, 23, 42, 0.02);
         }
 
-        .feature-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 16px 36px -8px rgba(16, 110, 194, 0.12), 0 4px 12px -2px rgba(16, 110, 194, 0.04);
-            border-color: rgba(53, 165, 234, 0.55);
+        .feature-box:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 14px 28px -6px rgba(16, 110, 194, 0.1);
+            border-color: rgba(53, 165, 234, 0.45);
         }
 
-        /* Card Upper Visual Window */
-        .feature-visual {
-            width: 100%;
-            height: 180px;
-            border-radius: 18px;
-            background: linear-gradient(180deg, #f2f8fe 0%, #f9fcff 100%);
-            border: 1px solid rgba(200, 225, 252, 0.75);
-            position: relative;
-            overflow: hidden;
+        /* Featured Box: Hero Blue Background (Top Left) */
+        .feature-box-primary {
+            background: linear-gradient(145deg, #106ec2 0%, #1579cc 55%, #1f8ee2 100%);
+            border: 1px solid rgba(16, 110, 194, 0.15);
+            box-shadow: 0 12px 30px -5px rgba(16, 110, 194, 0.32);
+        }
+
+        .feature-box-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 18px 36px -6px rgba(16, 110, 194, 0.44);
+        }
+
+        /* Circular Icon Badge */
+        .feature-box-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: #106ec2;
+            color: #ffffff;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 1.25rem;
+            margin-bottom: 2.5rem;
+            flex-shrink: 0;
+            box-shadow: 0 4px 12px -2px rgba(16, 110, 194, 0.28);
         }
 
-        .feature-visual svg {
-            width: 100%;
-            height: 100%;
+        .feature-box-icon svg {
+            width: 20px;
+            height: 20px;
             display: block;
         }
 
-        /* Card Lower Content */
-        .feature-content {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            flex: 1;
+        /* Primary Card Icon Badge: Translucent White */
+        .feature-box-primary .feature-box-icon {
+            background: rgba(255, 255, 255, 0.22);
+            color: #ffffff;
+            backdrop-filter: blur(4px);
+            box-shadow: none;
         }
 
-        .feature-card-title {
+        /* Card Content Body */
+        .feature-box-body {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .feature-box-title {
             font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
             font-size: 1.15rem;
             font-weight: 700;
@@ -504,20 +561,55 @@
             line-height: 1.3;
         }
 
-        .feature-card-desc {
+        .feature-box-desc {
             font-size: 0.8875rem;
             color: #64748b;
             line-height: 1.55;
             margin: 0;
         }
 
+        /* Primary Card Typography */
+        .feature-box-primary .feature-box-title {
+            color: #ffffff;
+        }
+
+        .feature-box-primary .feature-box-desc {
+            color: rgba(255, 255, 255, 0.88);
+        }
+
         /* Responsive Breakpoints */
-        @media (max-width: 960px) {
-            .features-grid {
+        @media (max-width: 992px) {
+            .features-layout {
                 grid-template-columns: 1fr;
-                gap: 1.25rem;
-                max-width: 520px;
+                gap: 3.5rem;
+            }
+            .features-intro {
+                max-width: 600px;
                 margin: 0 auto;
+                text-align: center;
+                align-items: center;
+            }
+            .features-main-desc {
+                margin-left: auto;
+                margin-right: auto;
+            }
+            .features-cards-grid {
+                max-width: 640px;
+                margin: 0 auto;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .features-cards-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            .feature-box {
+                padding: 1.75rem 1.5rem;
+                min-height: auto;
+            }
+            .feature-box-icon {
+                margin-bottom: 1.75rem;
             }
         }
 
@@ -632,204 +724,96 @@
             </div>
         </section>
 
-        <!-- 3. Fitur Utama Bento Grid Section (Persis Sesuai Referensi) -->
+        <!-- 3. Fitur Utama Section (Clean Split Layout Sesuai Referensi) -->
         <section id="features" class="features-section">
             <div class="features-container">
-                <!-- Section Header -->
-                <div class="features-header">
-                    <div class="features-pill-tag">Fitur Unggulan</div>
-                    <h2 class="features-title">Dirancang Khusus untuk Keamanan Kampus</h2>
-                    <p class="features-subtitle">
-                        Solusi terintegrasi pelaporan dan penemuan barang hilang dengan alur verifikasi resmi dan perlindungan data civitas.
-                    </p>
-                </div>
-
-                <!-- 3 Feature Cards Grid (Symmetrical 3-Column Layout) -->
-                <div class="features-grid">
-                    <!-- Card 1: Pelaporan Cepat & Privasi Aman -->
-                    <div class="feature-card">
-                        <div class="feature-visual">
-                            <svg viewBox="0 0 340 180" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <defs>
-                                    <radialGradient id="heroGlow1" cx="50%" cy="50%" r="50%">
-                                        <stop offset="0%" stop-color="#35a5ea" stop-opacity="0.32"/>
-                                        <stop offset="100%" stop-color="#106ec2" stop-opacity="0"/>
-                                    </radialGradient>
-                                    <linearGradient id="heroGrad1" x1="0" y1="0" x2="1" y2="1">
-                                        <stop offset="0%" stop-color="#106ec2"/>
-                                        <stop offset="50%" stop-color="#197fce"/>
-                                        <stop offset="100%" stop-color="#35a5ea"/>
-                                    </linearGradient>
-                                    <filter id="heroShadow1" x="-20%" y="-20%" width="140%" height="140%">
-                                        <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#106ec2" flood-opacity="0.12"/>
-                                    </filter>
-                                </defs>
-                                <!-- Soft decorative background dots -->
-                                <g fill="rgba(16, 110, 194, 0.12)">
-                                    <circle cx="36" cy="28" r="1.5"/><circle cx="52" cy="28" r="1.5"/><circle cx="68" cy="28" r="1.5"/>
-                                    <circle cx="36" cy="44" r="1.5"/><circle cx="52" cy="44" r="1.5"/><circle cx="68" cy="44" r="1.5"/>
-                                    <circle cx="272" cy="28" r="1.5"/><circle cx="288" cy="28" r="1.5"/><circle cx="304" cy="28" r="1.5"/>
-                                    <circle cx="272" cy="44" r="1.5"/><circle cx="288" cy="44" r="1.5"/><circle cx="304" cy="44" r="1.5"/>
-                                </g>
-                                <!-- Central Blue Aura -->
-                                <circle cx="170" cy="85" r="55" fill="url(#heroGlow1)"/>
-                                <!-- Floating Report Item Preview Card -->
-                                <g filter="url(#heroShadow1)">
-                                    <rect x="62" y="30" width="216" height="106" rx="14" fill="#ffffff" stroke="rgba(53, 165, 234, 0.35)" stroke-width="1.2"/>
-                                    <!-- Card Header Bar -->
-                                    <rect x="76" y="44" width="60" height="7" rx="3.5" fill="#e2e8f0"/>
-                                    <rect x="204" y="42" width="60" height="18" rx="9" fill="#e0f2fe"/>
-                                    <text x="212" y="54.5" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="700" fill="#106ec2">Terverifikasi</text>
-                                    <!-- Item Thumbnail Box -->
-                                    <rect x="76" y="62" width="46" height="46" rx="8" fill="#f0f7ff" stroke="rgba(53, 165, 234, 0.25)" stroke-width="1"/>
-                                    <!-- Bag / Item Icon -->
-                                    <path d="M 93 76 V 73 A 6 6 0 0 1 105 73 V 76 M 86 76 H 112 V 94 H 86 Z" fill="none" stroke="#106ec2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                    <!-- Item Text Rows -->
-                                    <rect x="132" y="66" width="95" height="8" rx="4" fill="#0b192c" opacity="0.85"/>
-                                    <rect x="132" y="80" width="75" height="6" rx="3" fill="#94a3b8"/>
-                                    <rect x="132" y="92" width="55" height="6" rx="3" fill="#cbd5e1"/>
-                                </g>
-                                <!-- Floating Privacy Lock Shield Badge on Corner -->
-                                <g filter="url(#heroShadow1)">
-                                    <rect x="180" y="94" width="96" height="26" rx="13" fill="url(#heroGrad1)"/>
-                                    <!-- Vector Lock Icon -->
-                                    <rect x="192" y="106" width="9" height="7" rx="1.5" fill="#ffffff"/>
-                                    <path d="M 194 106 V 104 A 2.5 2.5 0 0 1 199 104 V 106" fill="none" stroke="#ffffff" stroke-width="1.3"/>
-                                    <text x="206" y="110.5" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="700" fill="#ffffff">Kontak Aman</text>
-                                </g>
-                            </svg>
-                        </div>
-                        <div class="feature-content">
-                            <h3 class="feature-card-title">Pelaporan Cepat & Privasi Aman</h3>
-                            <p class="feature-card-desc">Laporkan barang hilang atau temuan dalam hitungan menit dengan data kontak yang terproteksi privasinya.</p>
+                <div class="features-layout">
+                    <!-- Left Column: Intro & CTA -->
+                    <div class="features-intro">
+                        <div class="features-pill-tag">Fitur Utama</div>
+                        <h2 class="features-main-title">
+                            Solusi terpadu penanganan barang hilang di kampus
+                        </h2>
+                        <p class="features-main-desc">
+                            Platform resmi civitas Universitas Mercu Buana untuk melaporkan, melacak, serta mengembalikan barang tertinggal dengan alur verifikasi resmi yang aman dan terpercaya.
+                        </p>
+                        <div class="features-cta-wrap">
+                            <a href="{{ route('home') }}" class="features-cta-btn">
+                                Buka Aplikasi
+                            </a>
                         </div>
                     </div>
 
-                    <!-- Card 2: Titip Validasi Pos Satpam -->
-                    <div class="feature-card">
-                        <div class="feature-visual">
-                            <svg viewBox="0 0 340 180" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <defs>
-                                    <radialGradient id="heroGlow2" cx="50%" cy="50%" r="50%">
-                                        <stop offset="0%" stop-color="#35a5ea" stop-opacity="0.35"/>
-                                        <stop offset="100%" stop-color="#106ec2" stop-opacity="0"/>
-                                    </radialGradient>
-                                    <linearGradient id="heroGrad2" x1="0" y1="0" x2="0" y2="1">
-                                        <stop offset="0%" stop-color="#106ec2"/>
-                                        <stop offset="50%" stop-color="#197fce"/>
-                                        <stop offset="100%" stop-color="#35a5ea"/>
-                                    </linearGradient>
-                                    <filter id="heroShadow2" x="-20%" y="-20%" width="140%" height="140%">
-                                        <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#106ec2" flood-opacity="0.14"/>
-                                    </filter>
-                                </defs>
-                                <!-- Perspective Security Checkpoint Stage Lines in Hero Blue -->
-                                <path d="M 34 168 Q 170 125 306 168" fill="none" stroke="rgba(53, 165, 234, 0.2)" stroke-width="1.2"/>
-                                <path d="M 60 156 Q 170 118 280 156" fill="none" stroke="rgba(53, 165, 234, 0.16)" stroke-width="1"/>
-                                <path d="M 90 146 Q 170 112 250 146" fill="none" stroke="rgba(53, 165, 234, 0.14)" stroke-width="1"/>
-                                <path d="M 120 138 Q 170 108 220 138" fill="none" stroke="rgba(53, 165, 234, 0.12)" stroke-width="1"/>
-                                <path d="M 170 115 V 170" stroke="rgba(53, 165, 234, 0.18)" stroke-width="1"/>
-                                <path d="M 142 118 Q 120 142 90 170" stroke="rgba(53, 165, 234, 0.15)" stroke-width="1"/>
-                                <path d="M 198 118 Q 220 142 250 170" stroke="rgba(53, 165, 234, 0.15)" stroke-width="1"/>
-                                <!-- Floating Drop Shadow under Shield -->
-                                <ellipse cx="170" cy="128" rx="34" ry="7" fill="rgba(16, 110, 194, 0.18)" filter="blur(5px)"/>
-                                <!-- Central Blue Aura -->
-                                <circle cx="170" cy="68" r="50" fill="url(#heroGlow2)"/>
-                                <!-- 3D Security Checkpoint Shield in Hero Blue -->
-                                <path d="M 142 24 Q 170 20 198 24 V 68 Q 198 106 170 120 Q 142 106 142 68 Z" fill="url(#heroGrad2)" filter="url(#heroShadow2)"/>
-                                <!-- Right Bevel Shading for 3D depth -->
-                                <path d="M 170 22 Q 184 23 198 24 V 68 Q 198 106 170 120 Z" fill="rgba(11, 25, 44, 0.15)"/>
-                                <!-- Specular light highlight -->
-                                <path d="M 145 26 Q 170 22.5 195 26" fill="none" stroke="rgba(255, 255, 255, 0.6)" stroke-width="2"/>
-                                <!-- Checkpoint Checkmark Symbol inside shield -->
-                                <path d="M 160 66 L 167 73 L 181 57" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-                                <!-- Floating Campus Security Pill Badge -->
-                                <g filter="url(#heroShadow2)">
-                                    <rect x="93" y="112" width="154" height="26" rx="13" fill="#ffffff" stroke="rgba(53, 165, 234, 0.35)" stroke-width="1.2"/>
-                                    <circle cx="109" cy="125" r="5.5" fill="#e0f2fe"/>
-                                    <path d="M 106.5 125 L 108.5 127 L 111.5 123" fill="none" stroke="#106ec2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                    <text x="120" y="128.5" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" font-weight="700" fill="#0b192c">Pos Satpam Resmi UMB</text>
-                                </g>
-                            </svg>
+                    <!-- Right Column: 2x2 Clean Cards Grid -->
+                    <div class="features-cards-grid">
+                        <!-- Card 1: Featured (Hero Blue Background) -->
+                        <div class="feature-box feature-box-primary">
+                            <div class="feature-box-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                    <polyline points="14 2 14 8 20 8"/>
+                                    <line x1="12" y1="18" x2="12" y2="12"/>
+                                    <line x1="9" y1="15" x2="15" y2="15"/>
+                                </svg>
+                            </div>
+                            <div class="feature-box-body">
+                                <h3 class="feature-box-title">Pelaporan Cepat</h3>
+                                <p class="feature-box-desc">
+                                    Publikasikan laporan kehilangan atau penemuan barang secara instan dalam hitungan menit.
+                                </p>
+                            </div>
                         </div>
-                        <div class="feature-content">
-                            <h3 class="feature-card-title">Titip Validasi Pos Satpam</h3>
-                            <p class="feature-card-desc">Barang bernilai tinggi dapat dititipkan dan diverifikasi langsung oleh petugas keamanan kampus.</p>
+
+                        <!-- Card 2: Validasi Pos Satpam (Light Style) -->
+                        <div class="feature-box">
+                            <div class="feature-box-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                                    <polyline points="9 12 11 14 15 10"/>
+                                </svg>
+                            </div>
+                            <div class="feature-box-body">
+                                <h3 class="feature-box-title">Validasi Pos Satpam</h3>
+                                <p class="feature-box-desc">
+                                    Barang bernilai tinggi dapat dititipkan dan diverifikasi langsung oleh petugas keamanan kampus.
+                                </p>
+                            </div>
                         </div>
-                    </div>
 
-                    <!-- Card 3: Pencarian Cerdas & Lokasi -->
-                    <div class="feature-card">
-                        <div class="feature-visual">
-                            <svg viewBox="0 0 340 180" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <defs>
-                                    <radialGradient id="heroGlow3" cx="50%" cy="50%" r="50%">
-                                        <stop offset="0%" stop-color="#35a5ea" stop-opacity="0.32"/>
-                                        <stop offset="100%" stop-color="#106ec2" stop-opacity="0"/>
-                                    </radialGradient>
-                                    <linearGradient id="heroGrad3" x1="0" y1="0" x2="1" y2="1">
-                                        <stop offset="0%" stop-color="#106ec2"/>
-                                        <stop offset="50%" stop-color="#197fce"/>
-                                        <stop offset="100%" stop-color="#35a5ea"/>
-                                    </linearGradient>
-                                    <filter id="heroShadow3" x="-25%" y="-25%" width="150%" height="150%">
-                                        <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#106ec2" flood-opacity="0.10"/>
-                                    </filter>
-                                </defs>
-                                <!-- Radar locator concentric rings centered at (165, 75) -->
-                                <circle cx="165" cy="75" r="68" fill="none" stroke="rgba(53, 165, 234, 0.15)" stroke-width="1.2" stroke-dasharray="4 4"/>
-                                <circle cx="165" cy="75" r="48" fill="none" stroke="rgba(53, 165, 234, 0.22)" stroke-width="1.2"/>
-                                <circle cx="165" cy="75" r="28" fill="none" stroke="rgba(53, 165, 234, 0.28)" stroke-width="1"/>
-                                <!-- Central Blue Aura -->
-                                <circle cx="165" cy="75" r="45" fill="url(#heroGlow3)"/>
-                                
-                                <!-- Floating Campus Building Location Tag 1 (Top Left) -->
-                                <g filter="url(#heroShadow3)">
-                                    <rect x="38" y="28" width="102" height="24" rx="12" fill="#ffffff" stroke="rgba(53, 165, 234, 0.35)" stroke-width="1"/>
-                                    <!-- Vector Pin Icon -->
-                                    <g transform="translate(48, 34)">
-                                        <path d="M 4 0 C 1.8 0 0 1.8 0 4 C 0 7 4 11 4 11 C 4 11 8 7 8 4 C 8 1.8 6.2 0 4 0 Z" fill="#106ec2"/>
-                                        <circle cx="4" cy="4" r="1.4" fill="#ffffff"/>
-                                    </g>
-                                    <text x="61" y="44" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="700" fill="#106ec2">Gedung E Lt. 3</text>
-                                </g>
-
-                                <!-- Floating Campus Building Location Tag 2 (Top Right) -->
-                                <g filter="url(#heroShadow3)">
-                                    <rect x="198" y="24" width="98" height="24" rx="12" fill="#ffffff" stroke="rgba(53, 165, 234, 0.35)" stroke-width="1"/>
-                                    <!-- Vector Pin Icon -->
-                                    <g transform="translate(208, 30)">
-                                        <path d="M 4 0 C 1.8 0 0 1.8 0 4 C 0 7 4 11 4 11 C 4 11 8 7 8 4 C 8 1.8 6.2 0 4 0 Z" fill="#106ec2"/>
-                                        <circle cx="4" cy="4" r="1.4" fill="#ffffff"/>
-                                    </g>
-                                    <text x="221" y="40" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="700" fill="#106ec2">Kantin Utama</text>
-                                </g>
-
-                                <!-- Floating Campus Building Location Tag 3 (Bottom Left) -->
-                                <g filter="url(#heroShadow3)">
-                                    <rect x="48" y="118" width="100" height="24" rx="12" fill="#ffffff" stroke="rgba(53, 165, 234, 0.35)" stroke-width="1"/>
-                                    <!-- Vector Pin Icon -->
-                                    <g transform="translate(58, 124)">
-                                        <path d="M 4 0 C 1.8 0 0 1.8 0 4 C 0 7 4 11 4 11 C 4 11 8 7 8 4 C 8 1.8 6.2 0 4 0 Z" fill="#106ec2"/>
-                                        <circle cx="4" cy="4" r="1.4" fill="#ffffff"/>
-                                    </g>
-                                    <text x="71" y="134" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="700" fill="#106ec2">Lab Komputer</text>
-                                </g>
-
-                                <!-- 3D Royal Blue Magnifying Glass Tilted -->
-                                <g filter="url(#heroShadow3)">
-                                    <circle cx="165" cy="75" r="28" fill="rgba(235, 246, 255, 0.85)" stroke="url(#heroGrad3)" stroke-width="6.5"/>
-                                    <path d="M 148 63 A 21 21 0 0 1 179 53" fill="none" stroke="rgba(255, 255, 255, 0.85)" stroke-width="2.5" stroke-linecap="round"/>
-                                    <path d="M 185 95 L 211 121" stroke="url(#heroGrad3)" stroke-width="7.5" stroke-linecap="round"/>
-                                </g>
-                            </svg>
+                        <!-- Card 3: Pencarian Cerdas (Light Style) -->
+                        <div class="feature-box">
+                            <div class="feature-box-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="11" cy="11" r="8"/>
+                                    <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                                    <line x1="11" y1="8" x2="11" y2="14"/>
+                                    <line x1="8" y1="11" x2="14" y2="11"/>
+                                </svg>
+                            </div>
+                            <div class="feature-box-body">
+                                <h3 class="feature-box-title">Pencarian Cerdas</h3>
+                                <p class="feature-box-desc">
+                                    Filter presisi berdasarkan lokasi gedung, area umum, lantai fakultas, hingga kategori barang.
+                                </p>
+                            </div>
                         </div>
-                        <div class="feature-content">
-                            <h3 class="feature-card-title">Pencarian Cerdas & Lokasi</h3>
-                            <p class="feature-card-desc">Temukan barang berdasarkan lokasi gedung fakultas, area kampus, hingga kategori secara instan.</p>
+
+                        <!-- Card 4: Klaim & Kontak Aman (Light Style) -->
+                        <div class="feature-box">
+                            <div class="feature-box-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                                </svg>
+                            </div>
+                            <div class="feature-box-body">
+                                <h3 class="feature-box-title">Klaim & Kontak Aman</h3>
+                                <p class="feature-box-desc">
+                                    Validasi bukti kepemilikan khusus sebelum serah terima dengan data kontak pelapor yang terlindungi.
+                                </p>
+                            </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </section>
