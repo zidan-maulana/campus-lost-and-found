@@ -136,10 +136,10 @@
 
         .nav-link-item {
             font-size: 0.9125rem;
-            font-weight: 500;
-            color: #475569;
+            font-weight: 400;
+            color: #64748b;
             text-decoration: none;
-            transition: color 0.15s ease;
+            transition: color 0.15s ease, font-weight 0.15s ease;
         }
 
         .nav-link-item:hover {
@@ -160,8 +160,8 @@
 
         .nav-login-btn {
             font-size: 0.875rem;
-            font-weight: 600;
-            color: #334155;
+            font-weight: 450;
+            color: #475569;
             text-decoration: none;
             padding: 0.6rem 1.15rem;
             border-radius: 9999px;
@@ -176,9 +176,9 @@
         .nav-btn-app {
             background: linear-gradient(135deg, #0c559c 0%, #1572b8 52%, #2aa5e0 100%);
             color: #ffffff;
-            font-size: 0.9rem;
-            font-weight: 700;
-            padding: 0.72rem 1.65rem;
+            font-size: 0.885rem;
+            font-weight: 500;
+            padding: 0.68rem 1.6rem;
             border-radius: 9999px;
             text-decoration: none;
             display: inline-flex;
@@ -187,6 +187,7 @@
             line-height: 1.25;
             transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
             box-shadow: none;
+            letter-spacing: -0.01em;
         }
 
         .nav-btn-app:hover {
@@ -212,10 +213,12 @@
             .nav-login-btn {
                 padding: 0.52rem 0.75rem;
                 font-size: 0.8125rem;
+                font-weight: 450;
             }
             .nav-btn-app {
-                padding: 0.58rem 1.15rem;
-                font-size: 0.825rem;
+                padding: 0.55rem 1.15rem;
+                font-size: 0.8125rem;
+                font-weight: 500;
             }
         }
 
@@ -518,11 +521,11 @@
             </a>
 
             <!-- Navigation Links -->
-            <div class="nav-links">
-                <a href="{{ route('landing') }}" class="nav-link-item active">Beranda</a>
-                <a href="#features" class="nav-link-item">Fitur Utama</a>
-                <a href="#security" class="nav-link-item">Keamanan</a>
-                <a href="#faq" class="nav-link-item">Tanya Jawab</a>
+            <div class="nav-links" id="landing-nav-links">
+                <a href="#hero" class="nav-link-item active" onclick="setActiveNav(this)">Beranda</a>
+                <a href="#features" class="nav-link-item" onclick="setActiveNav(this)">Fitur Utama</a>
+                <a href="#security" class="nav-link-item" onclick="setActiveNav(this)">Keamanan</a>
+                <a href="#faq" class="nav-link-item" onclick="setActiveNav(this)">Tanya Jawab</a>
             </div>
 
             <!-- Action Buttons Group (Login & Buka Aplikasi) -->
@@ -539,7 +542,7 @@
 
     <!-- 2. Hero Section (Persis Sesuai Layout Referensi) -->
     <main>
-        <section class="hero-section">
+        <section class="hero-section" id="hero">
             <!-- Top Pill Badge -->
             <div class="hero-badge-pill">
                 <span>Now available as Progressive Web App (PWA)</span>
@@ -690,6 +693,36 @@
                 modal.classList.remove('active');
             }
         }
+
+        // Dynamic Nav Item Active Highlight (Font-weight increases on active)
+        function setActiveNav(element) {
+            document.querySelectorAll('.nav-link-item').forEach(el => el.classList.remove('active'));
+            element.classList.add('active');
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const sections = document.querySelectorAll('section[id]');
+            const navLinks = document.querySelectorAll('.nav-link-item');
+
+            function highlightNavOnScroll() {
+                const scrollY = window.pageYOffset;
+                sections.forEach(current => {
+                    const sectionHeight = current.offsetHeight;
+                    const sectionTop = current.offsetTop - 120;
+                    const sectionId = current.getAttribute('id');
+                    if (scrollY >= sectionTop && scrollY < sectionTop + sectionHeight) {
+                        navLinks.forEach(link => {
+                            if (link.getAttribute('href') === `#${sectionId}`) {
+                                link.classList.add('active');
+                            } else if (link.getAttribute('href').startsWith('#')) {
+                                link.classList.remove('active');
+                            }
+                        });
+                    }
+                });
+            }
+            window.addEventListener('scroll', highlightNavOnScroll, { passive: true });
+        });
     </script>
 </body>
 </html>
