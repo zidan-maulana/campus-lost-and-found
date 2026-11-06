@@ -87,7 +87,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0.72rem 0.75rem 0.72rem 1.45rem;
+            padding: 0.72rem 0.65rem 0.72rem 0.95rem;
             background: #ffffff;
             border-radius: 9999px;
             box-shadow: 0 12px 32px -4px rgba(16, 110, 194, 0.18), 0 4px 12px -2px rgba(16, 110, 194, 0.08);
@@ -100,7 +100,7 @@
             display: flex;
             align-items: center;
             justify-content: flex-start;
-            gap: 0.75rem;
+            gap: 0.65rem;
             text-decoration: none;
             transition: opacity 0.15s ease;
         }
@@ -171,7 +171,7 @@
             background: linear-gradient(135deg, #0c5ea8 0%, #1572b8 55%, #2aa5e0 100%);
             color: #ffffff;
             font-size: 0.9rem;
-            font-weight: 600;
+            font-weight: 500;
             padding: 0.65rem 1.6rem;
             border-radius: 9999px;
             text-decoration: none;
@@ -198,7 +198,7 @@
                 padding: 0 0.75rem;
             }
             .landing-nav {
-                padding: 0.6rem 0.65rem 0.6rem 1.15rem;
+                padding: 0.58rem 0.55rem 0.58rem 0.85rem;
             }
             .nav-brand-logo {
                 width: 30px;
@@ -208,7 +208,7 @@
                 font-size: 1.08rem;
             }
             .nav-login-btn {
-                padding: 0.52rem 1.15rem;
+                padding: 0.5rem 1.15rem;
                 font-size: 0.825rem;
             }
         }
@@ -218,7 +218,7 @@
            ---------------------------------------------------- */
         .hero-section {
             position: relative;
-            padding-top: 7.25rem;
+            padding-top: 10rem;
             padding-bottom: 0;
             background: radial-gradient(ellipse at 50% 18%, rgba(255, 255, 255, 0.12) 0%, transparent 60%),
                         linear-gradient(180deg, #106ec2 0%, #197fce 35%, #35a5ea 72%, #ffffff 100%);
@@ -237,21 +237,21 @@
             line-height: 1.16;
             letter-spacing: -0.03em;
             color: #ffffff;
-            margin: 0 0 1rem 0;
+            margin: 0 0 1.15rem 0;
             padding: 0 1rem;
             max-width: 1040px;
             text-shadow: 0 2px 16px rgba(12, 72, 123, 0.18);
         }
 
-        /* Hero Subheadline */
+        /* Hero Subheadline (Maksimal 2 Baris Elegan) */
         .hero-subtitle {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            font-size: clamp(1rem, 1.8vw, 1.15rem);
+            font-size: clamp(0.95rem, 1.55vw, 1.075rem);
             font-weight: 400;
-            line-height: 1.6;
+            line-height: 1.55;
             color: rgba(255, 255, 255, 0.92);
-            max-width: 580px;
-            margin: 0 auto 2.25rem auto;
+            max-width: 680px;
+            margin: 0 auto 2.35rem auto;
             padding: 0 1.25rem;
             text-shadow: 0 1px 12px rgba(12, 72, 123, 0.15);
         }
@@ -463,9 +463,10 @@
                 barang hilang di area kampus.
             </h1>
 
-            <!-- Hero Subtitle (Penjelas Ringkas & Informatif) -->
+            <!-- Hero Subtitle (Penjelas Ringkas, Maksimal 2 Baris Presisi) -->
             <p class="hero-subtitle">
-                Platform resmi civitas Universitas Mercu Buana untuk melaporkan dan menemukan barang tertinggal secara cepat, aman, dan terpercaya.
+                Platform resmi civitas Universitas Mercu Buana untuk melaporkan<br class="hidden sm:inline">
+                dan menemukan barang tertinggal secara cepat, aman, dan terpercaya.
             </p>
 
             <!-- Pill Action Group (Unduh Aplikasi & Buka Aplikasi) -->
