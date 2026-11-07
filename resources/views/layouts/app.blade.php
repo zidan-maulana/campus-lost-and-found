@@ -2020,9 +2020,11 @@
 
         .desktop-detail-zoom-pill {
             position: absolute;
-            bottom: 12px;
+            /* Kartu putih di bawah narik ke atas 26px, jadi pill harus naik
+               di atas garis itu supaya tidak ketutupan. */
+            bottom: 40px;
             right: 14px;
-            z-index: 4;
+            z-index: 11;
             background: rgba(15, 23, 42, 0.72);
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
@@ -2796,7 +2798,7 @@
         window.FindUMB_USER_ID = {{ auth()->id() ?? 'null' }};
         window.FindUMB_USER_NAME = @json(auth()->user()?->name);
         window.FindUMB_USER_ROLE = @json(auth()->user()?->isAdmin() ? 'Administrator Platform' : 'Civitas Akademika UMB');
-        window.FindUMB_CATEGORIES = @json(\App\Models\ItemCategory::query()->pluck('id', 'slug'));
+        window.FindUMB_CATEGORIES = @json(\App\Models\ItemCategory::cachedSlugMap());
     </script>
     <script src="{{ asset('js/findumb-api.js') }}"></script>
 </body>

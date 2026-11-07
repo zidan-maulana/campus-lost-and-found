@@ -622,7 +622,7 @@
 
     <!-- 1. Hero Image Container with Edge-to-Edge Visual & Lightbox Trigger -->
     <div class="detail-hero-wrapper" onclick="openImageLightbox(document.getElementById('detail-hero-img').src, document.getElementById('detail-title').textContent)" style="cursor: zoom-in;" title="Klik untuk lihat detail foto">
-        <img src="https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=800&auto=format&fit=crop&q=80" alt="Foto Barang" class="detail-hero-img" id="detail-hero-img">
+        <img src="{{ $reportData['image'] ?? asset('images/samples/bag.png') }}" alt="Foto Barang" class="detail-hero-img" id="detail-hero-img">
         
         <div class="desktop-detail-zoom-pill">
             <i data-lucide="zoom-in"></i>
@@ -649,7 +649,7 @@
     <article class="detail-content-card">
         
         <!-- Heading Title -->
-        <h1 class="detail-heading-title" id="detail-title">Cincin Emas Berlian</h1>
+        <h1 class="detail-heading-title" id="detail-title">{{ $reportData['title'] ?? 'Detail Laporan' }}</h1>
 
         <!-- Author / Subheader Row (seperti referensi: Avatar Jack Smith · Yesterday) -->
         <div class="detail-author-row">
@@ -870,6 +870,10 @@
 <script>
     // Current Report ID passed from Laravel route
     const currentReportId = @json($id ?? '1');
+
+    // Data asli dari server (sumber utama). Mock di bawah hanya fallback
+    // untuk halaman statis lama yang tidak lewat controller.
+    const serverReport = @json($reportData ?? null);
 
     // Default Seed Reports for User
     const DEFAULT_USER_REPORTS = [
@@ -1150,6 +1154,13 @@
 
     // Load active report data
     function loadReportData() {
+        // 1) Data asli dari server selalu menang (tidak ada kedip ganti barang).
+        if (serverReport && String(serverReport.id) === String(currentReportId)) {
+            activeReportData = serverReport;
+            renderReportDetails(activeReportData);
+            return;
+        }
+
         const userReports = getUserReports();
         const foundCustom = userReports.find(r => String(r.id) === String(currentReportId));
         if (foundCustom) {
@@ -1262,7 +1273,7 @@
         }
 
         // Owner Checking Logic: jika laporan milik user sendiri
-        const isOwner = isMyReport(report.id) || report.is_mine;
+        const isOwner = serverReport ? !!report.is_mine : (isMyReport(report.id) || !!report.is_mine);
         const topBookmarkBtn = document.getElementById('btn-top-bookmark');
         const bottomBookmarkBtn = document.getElementById('btn-bookmark-action');
         const bottomDeleteBtn = document.getElementById('btn-action-delete-mine');

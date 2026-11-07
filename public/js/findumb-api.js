@@ -133,7 +133,7 @@
             node.setAttribute('data-title', String(r.title || '').toLowerCase());
             node.setAttribute('data-date', r.date || '');
             if (r.location_slug) node.setAttribute('data-location', r.location_slug);
-            node.setAttribute('onclick', 'window.FindUMB.openReport(\'' + r.id + '\')');
+            node.setAttribute('onclick', 'window.FindUMB.openReport(\'' + r.id + '\', event)');
 
             const img = node.querySelector('.report-thumb');
             if (img) {
@@ -222,7 +222,21 @@
         }
     }
 
-    function openReport(id) {
+    function openReport(id, event) {
+        // Desktop (>=1024px) memakai modal detail di halaman yang sama;
+        // mobile membuka halaman /report/{id}. Sebelumnya handler ini selalu
+        // navigasi, sehingga modal sempat terbuka lalu halaman pindah (kedip).
+        const pakaiModal = window.innerWidth >= 1024
+            && typeof window.openDesktopDetailModal === 'function';
+
+        if (pakaiModal) {
+            if (event && typeof event.stopPropagation === 'function') {
+                event.stopPropagation();
+            }
+            window.openDesktopDetailModal(id);
+            return;
+        }
+
         window.location.href = '/report/' + id;
     }
 

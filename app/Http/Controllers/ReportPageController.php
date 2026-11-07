@@ -27,7 +27,7 @@ class ReportPageController extends Controller
         return view($type === 'lost' ? 'report-lost' : 'report-found', [
             'viewer' => $request->user(),
             'reportType' => $type,
-            'categories' => ItemCategory::query()->active()->ordered()->get(),
+            'categories' => ItemCategory::cachedActive(),
         ]);
     }
 
@@ -46,6 +46,8 @@ class ReportPageController extends Controller
 
         return view('report-detail', [
             'viewer' => $viewer,
+            'id' => (string) $report->id,
+            'reportData' => $report->toUiArray($viewer),
             'report' => $report,
             'isOwner' => $report->isOwnedBy($viewer),
             'canClaim' => $viewer

@@ -28,7 +28,7 @@ class ReportSeeder extends Seeder
                 'description' => 'Smartphone Samsung warna hitam, terpasang casing transparan dengan stiker logo Informatika di bagian belakang. Layar dalam keadaan terkunci.',
                 'campus_location' => 'Kampus Meruya', 'location' => 'Gedung Tower Lt. 7 R. 702',
                 'incident_date' => '2026-06-20', 'incident_time' => '14.30 WIB (Siang)',
-                'storage_note' => 'Disimpan Sendiri', 'image' => 'images/samples/phone.png',
+                'storage_note' => 'Disimpan Sendiri', 'image' => 'images/samples/real/samsung-a13.jpg',
             ],
             [
                 'owner' => 'ahmad.fauzi@student.mercubuana.ac.id', 'category' => 'dokumen',
@@ -37,7 +37,7 @@ class ReportSeeder extends Seeder
                 'description' => 'Map transparan biru berisi paspor, slip beasiswa, transkrip nilai, dan surat rekomendasi dosen. Di dalamnya juga ada kartu nama.',
                 'campus_location' => 'Kampus Meruya', 'location' => 'Ruang BAAK Gedung Tower Lt. 2',
                 'incident_date' => '2026-01-10', 'incident_time' => '11.00 WIB (Pagi)',
-                'storage_note' => 'Disimpan Sendiri', 'image' => 'images/samples/wallet.png',
+                'storage_note' => 'Disimpan Sendiri', 'image' => 'images/samples/real/paspor-dokumen.jpg',
             ],
             [
                 'owner' => 'rizky.pratama@student.mercubuana.ac.id', 'category' => 'lain',
@@ -46,7 +46,7 @@ class ReportSeeder extends Seeder
                 'description' => 'Tasbih kayu kuning dengan gelang manik-manik merah menyatu. Ditemukan di area musala kampus.',
                 'campus_location' => 'Kampus Meruya', 'location' => 'Musala Gedung D Lantai 3',
                 'incident_date' => '2026-05-02', 'incident_time' => '12.15 WIB (Siang)',
-                'storage_note' => 'Dititipkan di Pengurus Musala', 'image' => 'images/samples/keys.png',
+                'storage_note' => 'Dititipkan di Pengurus Musala', 'image' => 'images/samples/real/tasbih-manik.jpg',
             ],
             [
                 'owner' => 'rizky.pratama@student.mercubuana.ac.id', 'category' => 'lain',
@@ -55,7 +55,7 @@ class ReportSeeder extends Seeder
                 'description' => 'Kunci motor Honda dengan remote alarm dan gantungan karet kuning bertuliskan nama. Ditemukan di area parkir.',
                 'campus_location' => 'Kampus Meruya', 'location' => 'Parkir Barat',
                 'incident_date' => '2026-05-20', 'incident_time' => '16.00 WIB (Sore)',
-                'storage_note' => 'Dititipkan di Pos Keamanan', 'image' => 'images/samples/keys.png',
+                'storage_note' => 'Dititipkan di Pos Keamanan', 'image' => 'images/samples/real/kunci-motor.jpg',
             ],
             [
                 'owner' => 'ahmad.fauzi@student.mercubuana.ac.id', 'category' => 'aksesoris',
@@ -64,7 +64,7 @@ class ReportSeeder extends Seeder
                 'description' => 'Cincin emas sepasang model pertunangan dengan ukiran inisial halus di lingkar dalam. Terjatuh di sekitar parkiran.',
                 'campus_location' => 'Kampus Meruya', 'location' => 'Parkir Barat Kampus Meruya',
                 'incident_date' => '2026-01-15', 'incident_time' => 'Siang saat menuju kendaraan',
-                'storage_note' => 'Disimpan Sendiri', 'image' => 'images/samples/jewelry.png',
+                'storage_note' => 'Disimpan Sendiri', 'image' => 'images/samples/real/cincin-emas.jpg',
             ],
             [
                 'owner' => 'ahmad.fauzi@student.mercubuana.ac.id', 'category' => 'elektronik',
@@ -73,7 +73,7 @@ class ReportSeeder extends Seeder
                 'description' => 'Tablet warna graphite abu-abu tua dengan book cover magnetic hitam dan S-Pen menempel di punggung tablet.',
                 'campus_location' => 'Kampus Meruya', 'location' => 'Gedung E Lt. 3 Ruang Diskusi',
                 'incident_date' => '2026-01-14', 'incident_time' => 'Sore (± 16.00 WIB)',
-                'storage_note' => 'Disimpan Sendiri', 'image' => 'images/samples/phone.png',
+                'storage_note' => 'Disimpan Sendiri', 'image' => 'images/samples/real/tablet-tab-s8.jpg',
             ],
             [
                 'owner' => 'ahmad.fauzi@student.mercubuana.ac.id', 'category' => 'tas',
@@ -82,7 +82,7 @@ class ReportSeeder extends Seeder
                 'description' => 'Ransel laptop hitam bergaris merah khas ThinkPad, di dalamnya ada charger laptop 65W dan buku catatan kuliah.',
                 'campus_location' => 'Kampus Meruya', 'location' => 'Lab Komputer Gedung Tower Lt. 4',
                 'incident_date' => '2026-01-18', 'incident_time' => '13.00 WIB usai praktikum',
-                'storage_note' => 'Dititipkan di Lab Komputer Tower', 'image' => 'images/samples/bag.png',
+                'storage_note' => 'Dititipkan di Lab Komputer Tower', 'image' => 'images/samples/real/tas-laptop.jpg',
             ],
             [
                 'owner' => 'ahmad.fauzi@student.mercubuana.ac.id', 'category' => 'dompet',
@@ -91,7 +91,7 @@ class ReportSeeder extends Seeder
                 'description' => 'Dompet kulit warna cokelat tua berisi KTM UMB, e-KTP, kartu debit bank, dan uang tunai.',
                 'campus_location' => 'Kampus Meruya', 'location' => 'Kantin Gedung D Lantai 1',
                 'incident_date' => '2026-02-08', 'incident_time' => 'Istirahat makan siang',
-                'storage_note' => 'Dititipkan di Pengelola Kantin', 'image' => 'images/samples/wallet.png',
+                'storage_note' => 'Dititipkan di Pengelola Kantin', 'image' => 'images/samples/real/dompet-ktm.jpg',
             ],
             [
                 'owner' => 'siti.rahma@student.mercubuana.ac.id', 'category' => 'pakaian',
@@ -100,7 +100,7 @@ class ReportSeeder extends Seeder
                 'description' => 'Jaket almamater biru navy ukuran L dengan badge bordir logo Universitas Mercu Buana di dada kiri. Tertinggal di sandaran kursi.',
                 'campus_location' => 'Kampus Meruya', 'location' => 'Perpustakaan Pusat Lantai 2, Meja Baca Mandiri',
                 'incident_date' => '2026-01-22', 'incident_time' => '17.00 WIB (Sore)',
-                'storage_note' => 'Dititipkan di Staf Perpustakaan', 'image' => 'images/samples/bag.png',
+                'storage_note' => 'Dititipkan di Staf Perpustakaan', 'image' => 'images/samples/real/jaket-almamater.jpg',
             ],
             [
                 'owner' => 'dinda.kirana@student.mercubuana.ac.id', 'category' => 'elektronik',
@@ -109,7 +109,7 @@ class ReportSeeder extends Seeder
                 'description' => 'Charging case TWS warna hitam matte beserta sepasang earphone di dalamnya. Kondisi baterai masih menyala.',
                 'campus_location' => 'Kampus Meruya', 'location' => 'Gazebo Taman Depan Gedung Tower',
                 'incident_date' => '2026-02-02', 'incident_time' => '15.45 WIB (Sore)',
-                'storage_note' => 'Dititipkan di Pos Keamanan Kampus', 'image' => 'images/samples/keys.png',
+                'storage_note' => 'Dititipkan di Pos Keamanan Kampus', 'image' => 'images/samples/real/earphone-tws.jpg',
             ],
         ];
 

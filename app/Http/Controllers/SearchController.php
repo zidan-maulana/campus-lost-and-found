@@ -49,7 +49,7 @@ class SearchController extends Controller
         return view('search', [
             'viewer' => $request->user(),
             'reports' => $reports,
-            'categories' => ItemCategory::query()->active()->ordered()->get(),
+            'categories' => ItemCategory::cachedActive(),
             'filters' => [
                 'q' => (string) $request->query('q', ''),
                 'type' => $request->query('type'),

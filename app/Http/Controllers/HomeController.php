@@ -25,23 +25,35 @@ class HomeController extends Controller
             ->limit(10)
             ->get();
 
-        $featured = Report::query()
+        // "Featured" adalah bagian dari "recent" (5 teratas). Sebelumnya ini
+        // query terpisah yang mengulang 3 query eager-load yang sama.
+        $featured = $recent->take(5);
+
+        // Dua hitungan digabung jadi satu query (portabel Postgres & SQLite).
+        $row = Report::query()
+            ->selectRaw(
+                "sum(case when type = 'lost' then 1 else 0 end) as total_lost,
+                 sum(case when type = 'found' then 1 else 0 end) as total_found"
+            )
             ->publiclyVisible()
-            ->with(['user', 'category'])
-            ->withCount('claims')
-            ->latest('created_at')
-            ->limit(5)
-            ->get();
+            ->first();
+
+        $counts = [
+            'lost' => (int) ($row->total_lost ?? 0),
+            'found' => (int) ($row->total_found ?? 0),
+        ];
+
+        $resolved = Report::query()->where('status', 'resolved')->count();
 
         return view('welcome', [
             'viewer' => $viewer,
             'recentReports' => $recent,
             'featuredReports' => $featured,
-            'categories' => ItemCategory::query()->active()->ordered()->get(),
+            'categories' => ItemCategory::cachedActive(),
             'stats' => [
-                'lost' => Report::query()->publiclyVisible()->where('type', 'lost')->count(),
-                'found' => Report::query()->publiclyVisible()->where('type', 'found')->count(),
-                'resolved' => Report::query()->where('status', 'resolved')->count(),
+                'lost' => (int) ($counts['lost'] ?? 0),
+                'found' => (int) ($counts['found'] ?? 0),
+                'resolved' => $resolved,
             ],
         ]);
     }
