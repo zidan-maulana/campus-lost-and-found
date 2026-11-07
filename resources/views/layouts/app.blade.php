@@ -2789,5 +2789,15 @@
         });
     </script>
     @stack('scripts')
+
+    {{-- Jembatan API: menyambungkan antarmuka ke backend (markup/CSS tidak diubah). --}}
+    <script>
+        window.FindUMB_CSRF = '{{ csrf_token() }}';
+        window.FindUMB_USER_ID = {{ auth()->id() ?? 'null' }};
+        window.FindUMB_USER_NAME = @json(auth()->user()?->name);
+        window.FindUMB_USER_ROLE = @json(auth()->user()?->isAdmin() ? 'Administrator Platform' : 'Civitas Akademika UMB');
+        window.FindUMB_CATEGORIES = @json(\App\Models\ItemCategory::query()->pluck('id', 'slug'));
+    </script>
+    <script src="{{ asset('js/findumb-api.js') }}"></script>
 </body>
 </html>

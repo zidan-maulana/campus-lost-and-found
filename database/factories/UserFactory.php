@@ -29,8 +29,24 @@ class UserFactory extends Factory
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
+            'role' => \App\Enums\UserRole::User,
+            'status' => \App\Enums\UserStatus::Active,
             'remember_token' => Str::random(10),
         ];
+    }
+
+    public function admin(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'role' => \App\Enums\UserRole::Admin,
+        ]);
+    }
+
+    public function suspended(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'status' => \App\Enums\UserStatus::Suspended,
+        ]);
     }
 
     /**
