@@ -44,6 +44,17 @@ class ExampleTest extends TestCase
         $response->assertSee('Pencarian Cerdas');
         $response->assertDontSee('Verifikasi Kepemilikan Civitas');
         $response->assertDontSee('Status Real-Time');
+        $response->assertSee('id="faq"', false);
+        $response->assertDontSee('/ FAQS');
+        $response->assertSee('Pertanyaan yang');
+        $response->assertSee('sering diajukan');
+        $response->assertSee('Untuk apa platform UMBFind digunakan?');
+        $response->assertSee('Akun & Keamanan');
+        $response->assertSee('Pelaporan & Klaim');
+        $response->assertDontSee('href="#security"', false);
+        $response->assertSee('landing-footer');
+        $response->assertSee('admin.lostfound@mercubuana.ac.id');
+        $response->assertSee('Universitas Mercu Buana');
     }
 
     public function test_the_search_page_returns_a_successful_response(): void
@@ -266,5 +277,142 @@ class ExampleTest extends TestCase
         $response->assertSee('modal-abuse-detail');
         $response->assertSee('modal-create-admin');
         $response->assertSee('modal-admin-settings');
+    }
+
+    public function test_the_login_page_returns_a_successful_response(): void
+    {
+        $response = $this->get('/login');
+
+        $response->assertStatus(200);
+        $response->assertSee('Selamat Datang');
+        $response->assertSee('Masuk');
+        $response->assertSee('Daftar');
+        $response->assertSee('Masukkan email kampus (@mercubuana.ac.id)');
+        $response->assertSee('Masukkan kata sandi');
+        $response->assertSee('Ingat saya');
+        $response->assertSee('Lupa kata sandi?');
+        $response->assertSee('Masuk dengan Google');
+    }
+
+    public function test_the_register_page_returns_a_successful_response(): void
+    {
+        $response = $this->get('/register');
+
+        $response->assertStatus(200);
+        $response->assertSee('Daftar Akun');
+        $response->assertSee('Masukkan nama lengkap');
+        $response->assertSee('Buat kata sandi baru');
+        $response->assertSee('Tulis ulang kata sandi');
+        $response->assertSee('Daftar Sekarang');
+        $response->assertSee('Daftar dengan Google');
+    }
+
+    public function test_landing_page_buttons_direct_guests_to_login(): void
+    {
+        $response = $this->get('/landing');
+
+        $response->assertStatus(200);
+        $response->assertSee(route('login'));
+    }
+
+    public function test_login_submission_authenticates_and_redirects_to_home(): void
+    {
+        $response = $this->post('/login', [
+            'email' => 'fauzi.mahasiswa@mercubuana.ac.id',
+            'password' => 'password123',
+        ]);
+
+        $response->assertRedirect(route('home'));
+        $this->assertTrue(session('authenticated') === true);
+    }
+
+    public function test_login_fails_with_non_mercubuana_email(): void
+    {
+        $response = $this->post('/login', [
+            'email' => 'hacker@gmail.com',
+            'password' => 'password123',
+        ]);
+
+        $response->assertSessionHasErrors('email');
+    }
+
+    public function test_register_fails_with_non_mercubuana_email(): void
+    {
+        $response = $this->post('/register', [
+            'name' => 'John Doe',
+            'email' => 'johndoe@yahoo.com',
+            'password' => 'password123',
+            'password_confirmation' => 'password123',
+        ]);
+
+        $response->assertSessionHasErrors('email');
+    }
+
+    public function test_register_fails_with_mismatched_password_confirmation(): void
+    {
+        $response = $this->post('/register', [
+            'name' => 'John Doe',
+            'email' => 'johndoe@student.mercubuana.ac.id',
+            'password' => 'password123',
+            'password_confirmation' => 'mismatchedpass',
+        ]);
+
+        $response->assertSessionHasErrors('password');
+    }
+
+    public function test_register_succeeds_and_redirects_to_verify_otp(): void
+    {
+        $response = $this->post('/register', [
+            'name' => 'Siti Nurhaliza',
+            'email' => 'siti.nurhaliza@student.mercubuana.ac.id',
+            'password' => 'password123',
+            'password_confirmation' => 'password123',
+        ]);
+
+        $response->assertRedirect(route('verification.otp'));
+        $this->assertEquals('siti.nurhaliza@student.mercubuana.ac.id', session('pending_email'));
+    }
+
+    public function test_the_verify_otp_page_returns_a_successful_response(): void
+    {
+        $response = $this->withSession(['pending_email' => 'siti.nurhaliza@student.mercubuana.ac.id'])
+                         ->get('/verify-otp');
+
+        $response->assertStatus(200);
+        $response->assertSee('Verifikasi Kode OTP');
+        $response->assertSee('siti.nurhaliza@student.mercubuana.ac.id');
+        $response->assertSee('Verifikasi Akun');
+        $response->assertSee('Kirim Ulang');
+    }
+
+    public function test_verify_otp_fails_with_invalid_length(): void
+    {
+        $response = $this->post('/verify-otp', [
+            'otp' => '123',
+        ]);
+
+        $response->assertSessionHasErrors('otp');
+    }
+
+    public function test_verify_otp_submission_authenticates_and_redirects_to_home(): void
+    {
+        $response = $this->withSession([
+            'pending_email' => 'siti.nurhaliza@student.mercubuana.ac.id',
+            'pending_name' => 'Siti Nurhaliza',
+        ])->post('/verify-otp', [
+            'otp' => '654321',
+        ]);
+
+        $response->assertRedirect(route('home'));
+        $this->assertTrue(session('authenticated') === true);
+        $this->assertEquals('siti.nurhaliza@student.mercubuana.ac.id', session('user.email'));
+    }
+
+    public function test_resend_otp_returns_back_with_success_message(): void
+    {
+        $response = $this->from('/verify-otp')->post('/verify-otp/resend');
+
+        $response->assertRedirect('/verify-otp');
+        $response->assertSessionHas('success');
     }
 }

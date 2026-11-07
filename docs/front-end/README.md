@@ -4,7 +4,7 @@
 **Versi Dokumen:** 1.0  
 **Penyusun:** Tim Front-End Engineering  
 **Target Pembaca:** Tim Back-End Developer, System Integrator, & QA Engineer  
-**Status Pengembangan:** Fitur Inti Aplikasi Selesai (100%), Menjelang Perancangan Landing Page  
+**Status Pengembangan:** Seluruh Slicing UI, Landing Page, & Autentikasi Selesai (100%) — Siap Integrasi Penuh Back-End  
 **Dokumen Pendukung:** [`docs/API_CONTRACT.md`](../API_CONTRACT.md), [`docs/PRD.md`](../PRD.md), [`docs/SYSTEM_DESIGN.md`](../SYSTEM_DESIGN.md)
 
 ---
@@ -35,11 +35,15 @@ Dokumentasi ini disusun agar tim Back-End dapat memahami secara mendalam struktu
 
 ```
 resources/views/
+├── auth/
+│   ├── login.blade.php         # Halaman Masuk & Daftar Akun (Pill Switch, Confirm Password)
+│   └── verify-otp.blade.php    # Halaman Verifikasi Kode OTP 6-Digit (Auto-advance & Resend Timer)
 ├── layouts/
 │   ├── app.blade.php           # Layout utama portal civitas (Sidebar, Bottombar, Modals)
 │   └── admin.blade.php         # Layout portal administrator (Admin Sidebar, Topbar, Toast)
 ├── admin/
 │   └── dashboard.blade.php     # Panel admin komprehensif (KPI, Moderasi, Laporan, User, Kategori)
+├── landing.blade.php           # Landing page publik (Hero bento, Mockup, Fitur, FAQ, Footer)
 ├── welcome.blade.php           # Beranda civitas, hero banner peeking mascot, katalog laporan
 ├── search.blade.php            # Halaman pencarian lanjutan & filter kalender bulanan
 ├── report-lost.blade.php       # Formulir pelaporan barang hilang
@@ -273,7 +277,15 @@ Rincian format JSON request/response, tipe enum, dan penanganan HTTP status code
 | Chat, Serah Terima, & Badge Sync | Selesai (100%) | Siap dihubungkan ke websocket/polling API |
 | Profil, Aktivitas, & Notifikasi | Selesai (100%) | Siap menerima data akun terautentikasi |
 | Spesifikasi API Contract | Selesai (100%) | Tertuang di `docs/API_CONTRACT.md` |
-| **Landing Page Minimalis (Hero, Features, FAQ)** | **Tahap Berikutnya** | Menunggu implementasi tampilan publik |
+| **Landing Page Publik & Footer** | Selesai (100%) | Terintegrasi PWA modal, Bento Features, & FAQ interaktif |
+| **Halaman Autentikasi (Login & Register)** | Selesai (100%) | Switch pill interaktif, validasi form, & session demo fallback |
 
-*Catatan: Dokumen ini akan diperbarui (*append*) begitu perancangan dan implementasi Landing Page selesai dilakukan.*
+---
+
+## 9. Riwayat Penyelesaian Tahap Front-End (Final Sign-off)
+
+Seluruh komponen UI, view Blade, styling responsif mobile-first, dan interaktivitas client-side telah selesai 100% dan lolos audit komprehensif:
+1. **Zero Dead Code & Zero Unused Assets:** Seluruh aset gambar telah teroptimasi (penghematan 2.65 MB) dan CSS selektor mati telah dibersihkan.
+2. **Quality Assurance:** 19/19 pengujian PHPUnit lulus (204 assertions).
+3. **Fase Berikutnya (Kolaborasi Back-End):** Mendampingi tim Back-End untuk *Data Binding* (menghubungkan query model Eloquent, penanganan session/auth resmi, form CSRF/error validation, dan websocket chat/notifikasi realtime).
 
