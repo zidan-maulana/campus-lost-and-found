@@ -7,6 +7,7 @@ use App\Enums\UserStatus;
 use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -28,6 +29,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'role',
         'status',
         'avatar_path',
+        'preferences',
     ];
 
     /**
@@ -36,6 +38,7 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $hidden = [
         'password',
         'remember_token',
+        'email_otp_hash',
     ];
 
     /**
@@ -56,11 +59,65 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return [
             'email_verified_at' => 'datetime',
+            'email_otp_expires_at' => 'datetime',
             'last_seen_at' => 'datetime',
             'password' => 'hashed',
+            'preferences' => 'array',
             'role' => UserRole::class,
             'status' => UserStatus::class,
         ];
+    }
+
+    // ------------------------------------------------------ verifikasi OTP
+
+    /**
+     * Terbitkan kode OTP 6 digit baru (berlaku 15 menit, maksimal 5 percobaan).
+     *
+     * @return string kode mentah yang dikirim ke email pengguna
+     */
+    public function issueEmailOtp(int $ttlMinutes = 15): string
+    {
+        $code = (string) random_int(100000, 999999);
+
+        $this->forceFill([
+            'email_otp_hash' => \Illuminate\Support\Facades\Hash::make($code),
+            'email_otp_expires_at' => now()->addMinutes($ttlMinutes),
+            'email_otp_attempts' => 0,
+        ])->save();
+
+        return $code;
+    }
+
+    /**
+     * Validasi kode OTP. Mengembalikan true dan menghapus kode bila cocok.
+     */
+    public function verifyEmailOtp(string $code, int $maxAttempts = 5): bool
+    {
+        if (! $this->email_otp_hash || $this->email_otp_expires_at === null) {
+            return false;
+        }
+
+        if ($this->email_otp_expires_at->isPast()) {
+            return false;
+        }
+
+        if ((int) $this->email_otp_attempts >= $maxAttempts) {
+            return false;
+        }
+
+        if (! \Illuminate\Support\Facades\Hash::check($code, (string) $this->email_otp_hash)) {
+            $this->forceFill(['email_otp_attempts' => (int) $this->email_otp_attempts + 1])->save();
+
+            return false;
+        }
+
+        $this->forceFill([
+            'email_otp_hash' => null,
+            'email_otp_expires_at' => null,
+            'email_otp_attempts' => 0,
+        ])->save();
+
+        return true;
     }
 
     // ---------------------------------------------------------------- relasi
@@ -78,6 +135,12 @@ class User extends Authenticatable implements MustVerifyEmail
     public function notifications(): HasMany
     {
         return $this->hasMany(AppNotification::class);
+    }
+
+    /** Laporan yang disimpan (bookmark) oleh pengguna ini. */
+    public function savedReports(): BelongsToMany
+    {
+        return $this->belongsToMany(Report::class, 'saved_reports')->withTimestamps();
     }
 
     public function abuseReports(): HasMany

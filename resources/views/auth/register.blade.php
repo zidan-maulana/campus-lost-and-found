@@ -72,7 +72,7 @@
             </div>
         @endif
 
-        <form method="POST" action="{{ route('register.store') }}">
+        <form method="POST" action="{{ route('register.post') }}">
             @csrf
 
             <div class="field">

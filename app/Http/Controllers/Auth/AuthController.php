@@ -7,12 +7,14 @@ use App\Enums\UserStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
+use App\Mail\OtpCodeMail;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\View\View;
 
 /**
@@ -28,7 +30,10 @@ class AuthController extends Controller
             return redirect()->route('home');
         }
 
-        return view('auth.login');
+        return view('auth.login', [
+            // `mode` dipakai view front-end (satu file untuk login & daftar).
+            'mode' => 'login',
+        ]);
     }
 
     public function login(LoginRequest $request): RedirectResponse
@@ -69,6 +74,7 @@ class AuthController extends Controller
 
         return view('auth.register', [
             'domains' => config('findumb.campus_email_domains', []),
+            'mode' => 'register',
         ]);
     }
 
@@ -87,11 +93,11 @@ class AuthController extends Controller
         Auth::login($user);
         $request->session()->regenerate();
 
-        // Kirim tautan verifikasi email kampus (BR-02).
-        $user->sendEmailVerificationNotification();
+        // Kirim kode OTP 6 digit ke email kampus (BR-02) — dipakai layar verifikasi front-end.
+        Mail::to($user->email)->send(new OtpCodeMail($user, $user->issueEmailOtp()));
 
         return redirect()->route('verification.notice')
-            ->with('status', 'Akun berhasil dibuat. Silakan verifikasi email kampus Anda.');
+            ->with('status', 'Akun berhasil dibuat. Masukkan kode OTP yang dikirim ke email kampus Anda.');
     }
 
     public function logout(Request $request): RedirectResponse
