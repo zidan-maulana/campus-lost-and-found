@@ -903,6 +903,42 @@
         box-shadow: none;
     }
 
+    .btn-action-handover:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+    /* Kartu keputusan klaim (status: submitted) */
+    .claim-decision-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 0.45rem;
+        margin-top: 0.7rem;
+    }
+
+    .btn-claim-reject {
+        width: 100%;
+        padding: 0.6rem 1rem;
+        border-radius: var(--radius-pill);
+        border: 1px solid #fecaca;
+        background: #ffffff;
+        color: #b91c1c;
+        font-family: var(--font-main);
+        font-size: 0.75rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: background 0.15s ease;
+    }
+
+    .btn-claim-reject:hover {
+        background: #fef2f2;
+    }
+
+    .btn-claim-reject:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
     /* Handover Confirmation Dialog Modal (PRD PR-06) */
     .confirm-modal-overlay {
         position: fixed;
@@ -1297,126 +1333,51 @@
 
     <!-- 4. Conversations List (Vertical Stack) -->
     <div class="conversations-list" id="conversations-container">
-        
-        <!-- Conversation 1: Ahmad Fauzi (Handover Ongoing) -->
-        <div class="conversation-card unread" 
-             data-filter="active" 
-             data-name="ahmad fauzi fti" 
-             data-item="samsung galaxy a13 sm-a135f" 
-             onclick="openChatThread('Ahmad Fauzi (FTI)', 'Samsung Galaxy A13 (SM-A135F)', 'in_handover', 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=160&auto=format&fit=crop&q=80')">
-            <div class="conversation-avatar-wrap">
-                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=160&auto=format&fit=crop&q=80" alt="Ahmad Fauzi" class="conversation-avatar" loading="lazy">
-                <span class="avatar-online-dot" title="Online"></span>
-            </div>
-            <div class="conversation-info">
-                <div class="conversation-top-row">
-                    <div class="conversation-title-group">
-                        <span class="conversation-user-name">Ahmad Fauzi</span>
-                        <span class="conversation-item-tag">Samsung Galaxy A13 (SM-A135F)</span>
+        @forelse ($conversations as $c)
+            @php
+                $counterpart = $c['counterpart_name'] ?: 'Civitas UMB';
+                $initials = $c['counterpart_initials'] ?: \Illuminate\Support\Str::upper(\Illuminate\Support\Str::substr($counterpart, 0, 1));
+                $isDone = $c['status'] === 'completed';
+            @endphp
+            <div class="conversation-card {{ $c['unread'] ? 'unread' : '' }}"
+                 data-filter="{{ $c['is_active'] ? 'active' : ($isDone ? 'completed' : 'other') }}"
+                 data-name="{{ \Illuminate\Support\Str::lower($counterpart) }}"
+                 data-item="{{ \Illuminate\Support\Str::lower($c['item_title'] ?? '') }}"
+                 data-claim="{{ $c['claim_id'] }}"
+                 onclick="openClaimThread(@js($c['claim_id']), @js($counterpart), @js($c['item_title'] ?? 'Laporan'), @js($c['status']), @js($c['item_image']))">
+                <div class="conversation-avatar-wrap">
+                    @if ($c['item_image'])
+                        <img src="{{ $c['item_image'] }}" alt="{{ $counterpart }}" class="conversation-avatar" loading="lazy">
+                    @else
+                        <span class="conversation-avatar" style="display:flex;align-items:center;justify-content:center;background:#e2e8f0;color:#475569;font-weight:800;font-size:15px;">{{ $initials }}</span>
+                    @endif
+                    @if ($c['is_active'])
+                        <span class="avatar-online-dot" title="Percakapan aktif"></span>
+                    @endif
+                </div>
+                <div class="conversation-info">
+                    <div class="conversation-top-row">
+                        <div class="conversation-title-group">
+                            <span class="conversation-user-name">{{ $counterpart }}</span>
+                            <span class="conversation-item-tag">{{ $c['item_title'] ?? 'Laporan' }}</span>
+                        </div>
+                        <span class="conversation-time">{{ $c['time_display'] ?? '' }}</span>
                     </div>
-                    <span class="conversation-time">10:42</span>
-                </div>
-                <div class="conversation-bottom-row">
-                    <span class="conversation-snippet">Bisa ketemuan di Lobby Gedung Tower jam 13.00 untuk serah terima?</span>
-                    <span class="unread-bubble">1</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Conversation 2: Siti Nurhaliza (Claim Submitted) -->
-        <div class="conversation-card unread" 
-             data-filter="active" 
-             data-name="siti nurhaliza feb" 
-             data-item="dompet kulit ktm mahasiswa cokelat" 
-             onclick="openChatThread('Siti Nurhaliza (FEB)', 'Dompet Kulit & KTM Mahasiswa', 'submitted', 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=160&auto=format&fit=crop&q=80')">
-            <div class="conversation-avatar-wrap">
-                <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=160&auto=format&fit=crop&q=80" alt="Siti Nurhaliza" class="conversation-avatar" loading="lazy">
-                <span class="avatar-online-dot" title="Online"></span>
-            </div>
-            <div class="conversation-info">
-                <div class="conversation-top-row">
-                    <div class="conversation-title-group">
-                        <span class="conversation-user-name">Siti Nurhaliza</span>
-                        <span class="conversation-item-tag">Dompet Kulit & KTM Mahasiswa</span>
+                    <div class="conversation-bottom-row">
+                        <span class="conversation-snippet">{{ $c['snippet'] ?: $c['status_label'] }}</span>
+                        @if ($c['unread'])
+                            <span class="unread-bubble">1</span>
+                        @endif
                     </div>
-                    <span class="conversation-time">09:15</span>
-                </div>
-                <div class="conversation-bottom-row">
-                    <span class="conversation-snippet">Halo kak, saya sudah lampirkan foto identitas KTM yang tertinggal di Kantin D.</span>
-                    <span class="unread-bubble">2</span>
                 </div>
             </div>
-        </div>
-
-        <!-- Conversation 3: Budi Santoso (Handover Active) -->
-        <div class="conversation-card" 
-             data-filter="active" 
-             data-name="budi santoso staf lab fti" 
-             data-item="tas laptop lenovo thinkpad" 
-             onclick="openChatThread('Budi Santoso (Staf Lab)', 'Tas Laptop Lenovo ThinkPad', 'in_handover', 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=160&auto=format&fit=crop&q=80')">
-            <div class="conversation-avatar-wrap">
-                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=160&auto=format&fit=crop&q=80" alt="Budi Santoso" class="conversation-avatar" loading="lazy">
+        @empty
+            <div class="messages-empty-state" style="display:flex;">
+                <p style="font-size:14px;color:#64748b;text-align:center;padding:24px 12px;margin:0;">
+                    Belum ada percakapan. Percakapan muncul setelah ada klaim atas laporan Anda atau klaim yang Anda ajukan.
+                </p>
             </div>
-            <div class="conversation-info">
-                <div class="conversation-top-row">
-                    <div class="conversation-title-group">
-                        <span class="conversation-user-name">Budi Santoso</span>
-                        <span class="conversation-item-tag">Tas Laptop Lenovo ThinkPad</span>
-                    </div>
-                    <span class="conversation-time">Kemarin</span>
-                </div>
-                <div class="conversation-bottom-row">
-                    <span class="conversation-snippet">Barang sudah diamankan di Ruang Lab Komputer Lt. 3 ya. Silakan mampir.</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Conversation 4: Dinda Kirana (Handover Completed) -->
-        <div class="conversation-card" 
-             data-filter="completed" 
-             data-name="dinda kirana fdsk" 
-             data-item="earphone tws anker soundcore" 
-             onclick="openChatThread('Dinda Kirana (FDSK)', 'Earphone TWS Anker Soundcore', 'completed', 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=160&auto=format&fit=crop&q=80')">
-            <div class="conversation-avatar-wrap">
-                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=160&auto=format&fit=crop&q=80" alt="Dinda Kirana" class="conversation-avatar" loading="lazy">
-            </div>
-            <div class="conversation-info">
-                <div class="conversation-top-row">
-                    <div class="conversation-title-group">
-                        <span class="conversation-user-name">Dinda Kirana</span>
-                        <span class="conversation-item-tag">Earphone TWS Anker Soundcore</span>
-                    </div>
-                    <span class="conversation-time">22 Okt</span>
-                </div>
-                <div class="conversation-bottom-row">
-                    <span class="conversation-snippet">Alhamdulillah earphone-nya sudah kembali dengan aman. Terima kasih banyak kak!</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Conversation 5: Rizky Pratama (Handover Completed) -->
-        <div class="conversation-card" 
-             data-filter="completed" 
-             data-name="rizky pratama fasilkom" 
-             data-item="paspor berkas beasiswa" 
-             onclick="openChatThread('Rizky Pratama (FASILKOM)', 'Paspor & Berkas Beasiswa', 'completed', 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=160&auto=format&fit=crop&q=80')">
-            <div class="conversation-avatar-wrap">
-                <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=160&auto=format&fit=crop&q=80" alt="Rizky Pratama" class="conversation-avatar" loading="lazy">
-            </div>
-            <div class="conversation-info">
-                <div class="conversation-top-row">
-                    <div class="conversation-title-group">
-                        <span class="conversation-user-name">Rizky Pratama</span>
-                        <span class="conversation-item-tag">Paspor & Berkas Beasiswa</span>
-                    </div>
-                    <span class="conversation-time">18 Okt</span>
-                </div>
-                <div class="conversation-bottom-row">
-                    <span class="conversation-snippet">Serah terima dokumen beasiswa telah dikonfirmasi kedua pihak.</span>
-                </div>
-            </div>
-        </div>
-
+        @endforelse
     </div>
 
     <!-- 5. Friendly Empty State (When no chats match) -->
@@ -1444,18 +1405,53 @@
             <button type="button" class="chat-back-btn" onclick="closeChatThread()" aria-label="Tutup Obrolan">
                 <i data-lucide="chevron-left"></i>
             </button>
-            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=160&auto=format&fit=crop&q=80" alt="Avatar" id="chat-thread-avatar" class="chat-header-avatar">
+            <img src="" alt="Avatar" id="chat-thread-avatar" class="chat-header-avatar" style="display:none;">
+            <span id="chat-thread-avatar-fallback" class="chat-header-avatar" style="display:flex;align-items:center;justify-content:center;background:#e2e8f0;color:#475569;font-weight:800;font-size:14px;"></span>
             <div class="chat-header-meta">
                 <div class="chat-header-name">
-                    <span id="chat-thread-name">Ahmad Fauzi</span>
+                    <span id="chat-thread-name">Pilih Percakapan</span>
                 </div>
-                <div class="chat-header-item-title" id="chat-thread-item">Samsung SM-A135F</div>
+                <div class="chat-header-item-title" id="chat-thread-item"></div>
             </div>
         </div>
 
         <!-- Top Handover Action Widget (PRD PR-06 - Replaces old stepper) -->
         <div class="chat-claim-tracker" id="chat-claim-tracker">
-            <div class="handover-confirm-box" id="handover-confirm-card">
+            <!-- 0. Keputusan klaim (status: submitted) — penemu menyetujui/menolak -->
+            <div class="handover-confirm-box" id="claim-decision-card" style="display: none;">
+                <div class="handover-card-header static">
+                    <div class="handover-title-wrapper">
+                        <div class="handover-icon-badge">
+                            <i data-lucide="clock"></i>
+                        </div>
+                        <div class="handover-title-text-group">
+                            <h4 class="handover-confirm-title" id="claim-decision-title">Klaim Menunggu Persetujuan</h4>
+                            <span class="handover-step-subtitle" id="claim-decision-subtitle">Penemu barang perlu memeriksa klaim ini.</span>
+                        </div>
+                    </div>
+                    <div class="handover-header-right">
+                        <span class="handover-step-tag" id="claim-decision-tag">Menunggu</span>
+                    </div>
+                </div>
+
+                <div class="claim-decision-actions" id="claim-decision-actions" style="display: none;">
+                    <button type="button" class="btn-action-handover" id="btn-approve-claim" onclick="approveClaimFromChat()">
+                        <span>Setujui &amp; Mulai Serah Terima</span>
+                    </button>
+                    <button type="button" class="btn-claim-reject" id="btn-reject-claim" onclick="rejectClaimFromChat()">
+                        Tolak Klaim
+                    </button>
+                </div>
+
+                <!-- Bukti dari pengklaim (DEC-027) -->
+                <div id="claim-proof-detail" style="display: none; margin-top: 0.65rem; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 0.6rem 0.7rem;">
+                    <span style="display: block; font-size: 0.65rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: .04em;">Bukti dari pengklaim</span>
+                    <p id="claim-proof-answer-text" style="margin: 0.3rem 0 0; font-size: 0.76rem; color: #0f172a; line-height: 1.5; white-space: pre-wrap;"></p>
+                    <a id="claim-proof-photo-link" href="#" target="_blank" rel="noopener" style="display: none; margin-top: 0.4rem; font-size: 0.72rem; font-weight: 700; color: #2563eb; text-decoration: underline;">Lihat foto bukti</a>
+                </div>
+            </div>
+
+            <div class="handover-confirm-box" id="handover-confirm-card" style="display: none;">
                 <!-- 1. Action State (Pending Confirmation) -->
                 <div class="handover-card-pending" id="handover-pending-section">
                     <!-- Clickable Header Row for Accordion Dropdown -->
@@ -1521,30 +1517,11 @@
             </div>
         </div>
 
-        <!-- Messages Chat Body -->
+        <!-- Messages Chat Body — diisi dari Supabase oleh loadThread() -->
         <div class="chat-messages-body" id="chat-messages-body">
-            
-            <div class="chat-bubble-row incoming">
-                <div class="chat-bubble">
-                    Halo kak, terima kasih banyak sudah mempublikasikan barang temuan ini. Samsung Galaxy ini memang milik saya yang tertinggal di Lt. 7.
-                </div>
-                <span class="chat-bubble-time">10:30</span>
+            <div class="chat-thread-empty" id="chat-thread-empty" style="text-align:center;padding:28px 16px;color:#64748b;font-size:13.5px;line-height:1.6;">
+                Belum ada pesan. Mulai percakapan dengan menyapa pihak terkait.
             </div>
-
-            <div class="chat-bubble-row outgoing">
-                <div class="chat-bubble">
-                    Halo mas Ahmad! Sama-sama. Saya temukan di bangku depan lift Lt. 7. Untuk serah terima barangnya mau janjian jam berapa dan di mana?
-                </div>
-                <span class="chat-bubble-time">10:35</span>
-            </div>
-
-            <div class="chat-bubble-row incoming">
-                <div class="chat-bubble">
-                    Bisa ketemuan di Lobby Gedung Tower jam 13.00 untuk serah terima mas? Nanti saya tunjukkan bukti passcode layarnya.
-                </div>
-                <span class="chat-bubble-time">10:42</span>
-            </div>
-
         </div>
 
         <!-- Chat Input Footer -->
@@ -1576,7 +1553,7 @@
             </div>
             <div class="confirm-summary-row">
                 <span class="summary-label">Pihak Terkait</span>
-                <span class="summary-value" id="modal-user-name">Ahmad Fauzi (FTI)</span>
+                <span class="summary-value" id="modal-user-name">Civitas UMB</span>
             </div>
             <div class="confirm-summary-row">
                 <span class="summary-label">Status Akhir</span>
@@ -1893,12 +1870,62 @@
         }
     }
 
+    // Buka thread percakapan: set claim aktif DULU supaya kirim pesan langsung jalan
+    // (tidak bergantung pada jembatan API yang mungkin belum selesai loading).
+    function openClaimThread(claimId, name, item, status, avatarUrl) {
+        window.FindUMB = window.FindUMB || {};
+        window.FindUMB.activeClaimId = claimId;
+
+        openChatThread(name, item, status, avatarUrl);
+
+        const body = document.getElementById('chat-messages-body');
+        if (body) {
+            body.innerHTML = '<div class="chat-thread-empty" style="text-align:center;padding:28px 16px;color:#64748b;font-size:13.5px;">Memuat pesan...</div>';
+        }
+
+        if (window.FindUMB && typeof window.FindUMB.loadThread === 'function') {
+            window.FindUMB.loadThread(claimId).catch(showThreadLoadError);
+        } else {
+            // Jembatan API belum siap — coba lagi sampai bisa (maks ~4 detik).
+            let attempt = 0;
+            const retry = () => {
+                if (window.FindUMB && typeof window.FindUMB.loadThread === 'function') {
+                    window.FindUMB.loadThread(claimId).catch(showThreadLoadError);
+                    return;
+                }
+                if (attempt++ < 12) setTimeout(retry, 350);
+                else showThreadLoadError();
+            };
+            setTimeout(retry, 150);
+        }
+
+        function showThreadLoadError() {
+            const el = document.getElementById('chat-messages-body');
+            if (el) {
+                el.innerHTML = '<div class="chat-thread-empty" style="text-align:center;padding:28px 16px;color:#b91c1c;font-size:13.5px;">Gagal memuat pesan. Tutup lalu buka percakapan lagi.</div>';
+            }
+        }
+    }
+
     // 6. Open & Close Chat Thread Modal
     function openChatThread(name, item, status, avatarUrl) {
         document.getElementById('chat-thread-name').textContent = name;
-        document.getElementById('chat-thread-item').textContent = item;
-        if (avatarUrl) {
-            document.getElementById('chat-thread-avatar').src = avatarUrl;
+        document.getElementById('chat-thread-item').textContent = item || '';
+
+        // Avatar: pakai foto kalau ada, kalau tidak tampilkan inisial (bukan foto stok).
+        const avatarImg = document.getElementById('chat-thread-avatar');
+        const avatarFallback = document.getElementById('chat-thread-avatar-fallback');
+        if (avatarImg && avatarFallback) {
+            if (avatarUrl) {
+                avatarImg.src = avatarUrl;
+                avatarImg.style.display = 'block';
+                avatarFallback.style.display = 'none';
+            } else {
+                avatarImg.removeAttribute('src');
+                avatarImg.style.display = 'none';
+                avatarFallback.textContent = (name || '?').trim().charAt(0).toUpperCase();
+                avatarFallback.style.display = 'flex';
+            }
         }
 
         const handoverCard = document.getElementById('handover-confirm-card');
@@ -1914,6 +1941,16 @@
         if (checkWrap) checkWrap.classList.remove('error');
         toggleHandoverCardAccordion(false);
 
+        // Kartu keputusan klaim diisi ulang dari status server oleh loadThread().
+        const decisionCard = document.getElementById('claim-decision-card');
+        if (decisionCard) decisionCard.style.display = 'none';
+
+        const handoverBtn = document.getElementById('btn-submit-handover');
+        if (handoverBtn) {
+            handoverBtn.disabled = false;
+            handoverBtn.innerHTML = '<span>Konfirmasi Barang Diterima</span>';
+        }
+
         if (status === 'completed') {
             if (handoverCard) {
                 handoverCard.style.display = 'flex';
@@ -1921,13 +1958,17 @@
             }
             if (pendingSection) pendingSection.style.display = 'none';
             if (successSection) successSection.style.display = 'flex';
-        } else {
+        } else if (status === 'in_handover') {
+            // Baru di tahap serah terima yang boleh menampilkan widget ini.
             if (handoverCard) {
                 handoverCard.style.display = 'flex';
                 handoverCard.classList.remove('confirmed');
             }
             if (pendingSection) pendingSection.style.display = 'flex';
             if (successSection) successSection.style.display = 'none';
+        } else {
+            // submitted / rejected / cancelled / expired → widget disembunyikan.
+            if (handoverCard) handoverCard.style.display = 'none';
         }
 
         const overlay = document.getElementById('chat-thread-sheet');
@@ -1971,6 +2012,10 @@
         if (!e || e.target.id === 'chat-thread-sheet' || (e.target && e.target.closest && e.target.closest('.chat-back-btn'))) {
             document.getElementById('chat-thread-sheet').classList.remove('active');
             document.body.style.overflow = '';
+            // Hentikan polling pesan selama thread tertutup.
+            if (window.FindUMB && typeof window.FindUMB.stopThreadPolling === 'function') {
+                window.FindUMB.stopThreadPolling();
+            }
         }
     }
 
@@ -1980,16 +2025,44 @@
         const text = input.value.trim();
         if (!text) return;
 
-        const body = document.getElementById('chat-messages-body');
-        const bubbleRow = document.createElement('div');
-        bubbleRow.className = 'chat-bubble-row outgoing';
-        bubbleRow.innerHTML = `
-            <div class="chat-bubble">${escapeHtml(text)}</div>
-            <span class="chat-bubble-time">Baru saja</span>
-        `;
-        body.appendChild(bubbleRow);
+        const claimId = window.FindUMB && window.FindUMB.activeClaimId;
+        if (!claimId) {
+            showToast('Pilih percakapan terlebih dahulu.');
+            return;
+        }
+
+        // Kirim ke Supabase, lalu render ulang dari DB (bukan bubble palsu).
         input.value = '';
-        body.scrollTop = body.scrollHeight;
+        input.disabled = true;
+
+        fetch(`{{ url('/api/claims') }}/${claimId}/messages`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': window.FindUMB_CSRF || '',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({ message: text }),
+        })
+            .then(async (res) => {
+                const payload = await res.json().catch(() => ({}));
+                if (!res.ok) throw new Error(payload.message || 'Pesan gagal dikirim.');
+                return payload;
+            })
+            .then(() => {
+                if (window.FindUMB && typeof window.FindUMB.loadThread === 'function') {
+                    return window.FindUMB.loadThread(claimId);
+                }
+                window.location.reload();
+            })
+            .catch((err) => {
+                input.value = text;
+                showToast(err.message || 'Pesan gagal dikirim.');
+            })
+            .finally(() => {
+                input.disabled = false;
+                input.focus();
+            });
     }
 
     // 8. Handover Validation & Modal Interactions (PRD PR-06)
@@ -2050,30 +2123,93 @@
             confirmBtn.innerHTML = `<span>Menyimpan...</span>`;
         }
 
-        setTimeout(() => {
-            const modal = document.getElementById('confirm-handover-modal');
-            if (modal) modal.classList.remove('active');
+        const modal = document.getElementById('confirm-handover-modal');
+        if (modal) modal.classList.remove('active');
 
-            handleConfirmHandover();
-
+        Promise.resolve(handleConfirmHandover()).finally(() => {
             if (confirmBtn) {
                 confirmBtn.disabled = false;
                 confirmBtn.innerHTML = `<span>Ya, Selesaikan</span>`;
             }
-        }, 250);
+        });
     }
 
-    function handleConfirmHandover() {
+    // Simpan konfirmasi serah terima ke server (BR-07: selesai bila dua pihak konfirmasi).
+    async function handleConfirmHandover() {
+        const claimId = window.FindUMB && window.FindUMB.activeClaimId;
+        if (!claimId) {
+            showToast('Pilih percakapan terlebih dahulu.');
+            return;
+        }
+
         const pendingSection = document.getElementById('handover-pending-section');
         const successSection = document.getElementById('handover-success-section');
         const handoverCard = document.getElementById('handover-confirm-card');
+        const submitBtn = document.getElementById('btn-submit-handover');
 
-        if (pendingSection) pendingSection.style.display = 'none';
-        if (successSection) successSection.style.display = 'flex';
-        if (handoverCard) handoverCard.classList.add('confirmed');
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span>Menyimpan...</span>';
+        }
 
-        if (typeof lucide !== 'undefined') lucide.createIcons();
-        showToast('Konfirmasi serah terima berhasil disimpan!');
+        try {
+            const res = await window.FindUMB.api.post('/api/claims/' + claimId + '/confirm-handover');
+
+            if (res.completed) {
+                if (pendingSection) pendingSection.style.display = 'none';
+                if (successSection) successSection.style.display = 'flex';
+                if (handoverCard) handoverCard.classList.add('confirmed');
+                showToast('Serah terima selesai. Laporan telah ditutup.');
+            } else {
+                showToast('Konfirmasi tercatat. Menunggu konfirmasi pihak lain.');
+            }
+
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+            await window.FindUMB.loadThread(claimId);
+        } catch (err) {
+            showToast(err.message || 'Konfirmasi gagal disimpan.');
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<span>Konfirmasi Barang Diterima</span>';
+            }
+        }
+    }
+
+    // ------------------------------------------------- keputusan klaim
+    // Penemu menyetujui klaim → status in_handover, tahap serah terima terbuka.
+    function approveClaimFromChat() {
+        return submitClaimDecision('select');
+    }
+
+    function rejectClaimFromChat() {
+        return submitClaimDecision('reject');
+    }
+
+    async function submitClaimDecision(action) {
+        const claimId = window.FindUMB && window.FindUMB.activeClaimId;
+        if (!claimId) {
+            showToast('Pilih percakapan terlebih dahulu.');
+            return;
+        }
+
+        if (action === 'reject' && !window.confirm('Tolak klaim ini? Pengklaim tidak dapat mengajukan klaim lagi pada laporan ini.')) {
+            return;
+        }
+
+        const buttons = document.querySelectorAll('#claim-decision-actions button');
+        buttons.forEach((b) => { b.disabled = true; });
+
+        try {
+            await window.FindUMB.api.post('/api/claims/' + claimId + '/' + action);
+            showToast(action === 'reject'
+                ? 'Klaim ditolak.'
+                : 'Klaim disetujui. Silakan atur serah terima di chat.');
+            await window.FindUMB.loadThread(claimId);
+        } catch (err) {
+            showToast(err.message || 'Gagal memproses klaim.');
+        } finally {
+            buttons.forEach((b) => { b.disabled = false; });
+        }
     }
 
     // Helper: Toast

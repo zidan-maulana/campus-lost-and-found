@@ -252,14 +252,18 @@
 
         const path = currentPath();
 
-        if (path === '/') return patchHome();
-        if (path === '/search') return patchSearch();
-        if (path === '/my-reports') return patchMyReports();
-        if (path === '/saved-reports') return patchSavedReports();
-        if (path === '/notifications') return patchNotifications();
-        if (path === '/messages') return patchMessages();
-        if (path === '/report/lost') return patchReportForm('lost');
-        if (path === '/report/found') return patchReportForm('found');
+        // Semua halaman sudah dirender server dari Supabase. Jembatan ini TIDAK
+        // boleh menimpa daftar kartu lagi — dulu inilah penyebab "kedip"
+        // (kartu server → ditimpa ulang oleh fetch API dengan urutan lain).
+        if (path === '/messages') return patchMessagesBindings();
+
+        if (path === '/' || path === '/search' || path === '/my-reports'
+            || path === '/saved-reports' || path === '/notifications') {
+            return;
+        }
+
+        if (path === '/report/lost' || path === '/report/found') return;
+
         if (path === '/profile') return patchProfile();
         if (path === '/settings') return patchSettings();
         if (/^\/report\/\d+$/.test(path)) return patchReportDetail(path.split('/').pop());
@@ -398,6 +402,10 @@
     }
 
     function patchReportDetail(id) {
+        // Halaman detail sekarang dirender penuh oleh server dari Supabase.
+        // Fetch ulang lalu menimpa DOM = sumber "kedip" (mock/isi lama → data asli).
+        return;
+        // eslint-disable-next-line no-unreachable
         api.get('/api/reports/' + id).then(function (res) {
             const r = res.data;
             if (!r) return;
@@ -439,90 +447,102 @@
     }
 
     function patchMessages() {
-        const container = document.querySelector('.conversations-list');
-        const template = container ? container.querySelector('.conversation-card') : null;
-
-        if (container && template && state.conversations.length) {
-            container.innerHTML = state.conversations.map(function (c) {
-                const node = template.cloneNode(true);
-                const status = c.can_send_message ? 'active' : 'completed';
-
-                node.setAttribute('data-filter', status);
-                node.setAttribute('data-name', String(c.counterpart_name || '').toLowerCase());
-                node.setAttribute('data-item', String(c.item_title || '').toLowerCase());
-                node.setAttribute('data-claim-id', c.claim_id);
-                node.classList.toggle('unread', !!c.unread);
-                node.setAttribute('onclick', 'window.FindUMB.openThread(\'' + c.claim_id + '\')');
-
-                const avatar = node.querySelector('.conversation-avatar');
-                if (avatar) avatar.alt = c.counterpart_name || '';
-
-                const name = node.querySelector('.conversation-user-name');
-                if (name) name.textContent = c.counterpart_name || 'Civitas';
-
-                const tag = node.querySelector('.conversation-item-tag');
-                if (tag) tag.textContent = c.item_title || '';
-
-                const time = node.querySelector('.conversation-time');
-                if (time) time.textContent = c.time_display || '';
-
-                const snippet = node.querySelector('.conversation-snippet');
-                if (snippet) snippet.textContent = c.snippet || 'Belum ada pesan.';
-
-                const bubble = node.querySelector('.unread-bubble');
-                if (bubble) bubble.style.display = c.unread ? '' : 'none';
-
-                return node.outerHTML;
-            }).join('');
-
-            if (window.lucide) window.lucide.createIcons();
-        }
-
-        window.sendChatMessage = async function () {
-            const input = document.getElementById('chat-input-field');
-            const claimId = window.FindUMB.activeClaimId;
-
-            if (!input || !claimId) return;
-
-            const text = input.value.trim();
-            if (!text) return;
-
-            input.value = '';
-
-            try {
-                await api.post('/api/claims/' + claimId + '/messages', { message: text });
-                await loadThread(claimId);
-            } catch (e) {
-                input.value = text;
-                toast(e.message, 'error');
-            }
-        };
-
-        // Buka percakapan bila URL memuat ?claim=
-        const params = new URLSearchParams(window.location.search);
-        const initialClaim = params.get('claim');
-        if (initialClaim) {
-            setTimeout(function () { window.FindUMB.openThread(initialClaim); }, 300);
-        }
+        patchMessagesBindings();
     }
 
-    async function loadThread(claimId) {
-        const body = document.getElementById('chat-messages-body');
+    /**
+     * Kartu percakapan sudah dirender server (dari tabel claims).
+     * Di sini kita hanya memasang handler klik ke thread asli — tidak
+     * mengganti markup, supaya tidak ada kedip dan tidak ada data palsu.
+     */
+    function patchMessagesBindings() {
+        // Kartu percakapan sudah ditangani Blade lewat openClaimThread(), dan
+        // sendChatMessage() sudah menulis ke API. Di sini cukup deep-link saja
+        // (tombol klaim mengarah ke /messages?claim=ID).
+        const params = new URLSearchParams(window.location.search);
+        const initialClaim = params.get('claim');
+
+        if (initialClaim) {
+            const tryOpen = function (attempt) {
+                if (typeof window.openClaimThread !== 'function') return;
+
+                const conversation = state.conversations.find(function (c) {
+                    return String(c.claim_id) === String(initialClaim);
+                });
+
+                if (!conversation) {
+                    // Data percakapan belum siap — coba lagi sebentar.
+                    if (attempt < 8) setTimeout(function () { tryOpen(attempt + 1); }, 400);
+                    return;
+                }
+
+                window.openClaimThread(
+                    conversation.claim_id,
+                    conversation.counterpart_name,
+                    conversation.item_title,
+                    conversation.status || 'submitted',
+                    conversation.item_image || null
+                );
+            };
+
+            setTimeout(function () { tryOpen(0); }, 200);
+        }
+
+        // Daftar percakapan ikut ter-update selama halaman ini terbuka.
+        startInboxPolling();
+    }
+
+
+    // ------------------------------------------------- chat: refresh otomatis
+    // Thread chat ikut ter-update tanpa reload halaman (SYSTEM_DESIGN 12.3).
+    // Polling ringan memakai ?after_id=... supaya server hanya mengirim pesan baru.
+    const threadPoll = {
+        claimId: null,
+        lastId: 0,
+        timer: null,
+        busy: false,
+        seconds: 5,
+        listening: false,
+    };
+
+    const CHAT_EMPTY_HTML = '<div class="chat-thread-empty" style="text-align:center;padding:28px 16px;color:#64748b;font-size:13.5px;line-height:1.6;">'
+        + 'Belum ada pesan. Mulai percakapan dengan menyapa pihak terkait.</div>';
+
+    function threadBody() {
+        return document.getElementById('chat-messages-body');
+    }
+
+    function isThreadOpen() {
+        const sheet = document.getElementById('chat-thread-sheet');
+        return !!sheet && sheet.classList.contains('active');
+    }
+
+    function bubbleHtml(m) {
+        const rowClass = m.is_mine ? 'outgoing' : 'incoming';
+        return '<div class="chat-bubble-row ' + rowClass + '">' +
+            '<div class="chat-bubble">' + escapeHtml(m.message) + '</div>' +
+            '<span class="chat-bubble-time">' + escapeHtml(m.time_display || '') + '</span>' +
+            '</div>';
+    }
+
+    function renderBubbles(messages, append) {
+        const body = threadBody();
         if (!body) return;
 
-        const res = await api.get('/api/claims/' + claimId + '/messages');
-        const messages = res.data || [];
+        // Jangan lompat ke bawah kalau pengguna sedang membaca pesan lama.
+        const stick = (body.scrollHeight - body.scrollTop - body.clientHeight) < 140;
 
-        body.innerHTML = messages.map(function (m) {
-            const rowClass = m.is_mine ? 'outgoing' : 'incoming';
-            return '<div class="chat-bubble-row ' + rowClass + '">' +
-                '<div class="chat-bubble">' + escapeHtml(m.message) + '</div>' +
-                '<span class="chat-bubble-time">' + escapeHtml(m.time_display || '') + '</span>' +
-                '</div>';
-        }).join('');
+        if (append) {
+            if (body.querySelector('.chat-thread-empty')) body.innerHTML = '';
+            body.insertAdjacentHTML('beforeend', messages.map(bubbleHtml).join(''));
+        } else {
+            body.innerHTML = messages.length ? messages.map(bubbleHtml).join('') : CHAT_EMPTY_HTML;
+        }
 
-        body.scrollTop = body.scrollHeight;
+        if (stick || !append) body.scrollTop = body.scrollHeight;
+    }
 
+    function applyThreadState(res) {
         const input = document.getElementById('chat-input-field');
         const sendBtn = document.getElementById('btn-send-chat');
 
@@ -531,14 +551,353 @@
             if (res.can_send_message) {
                 el.removeAttribute('disabled');
                 el.style.opacity = '';
+                if (el.tagName === 'INPUT') el.placeholder = 'Tulis pesan...';
             } else {
                 el.setAttribute('disabled', 'disabled');
                 el.style.opacity = '0.55';
                 if (el.tagName === 'INPUT') el.placeholder = 'Percakapan telah ditutup (hanya-baca).';
             }
         });
+    }
 
-        window.FindUMB.claim = res.claim;
+    // Samakan kartu percakapan di daftar (snippet, jam, badge unread).
+    function syncConversationCard(messages) {
+        const last = messages[messages.length - 1];
+        if (!last) return;
+
+        const card = document.querySelector('.conversation-card[data-claim="' + String(last.claim_id) + '"]');
+        if (!card) return;
+
+        const snippet = card.querySelector('.conversation-snippet');
+        const time = card.querySelector('.conversation-time');
+        const badge = card.querySelector('.unread-bubble');
+
+        if (snippet) snippet.textContent = last.message;
+        if (time) time.textContent = last.time_display || '';
+        if (badge) badge.remove();
+        card.classList.remove('unread');
+    }
+
+    function stopThreadTimer() {
+        if (threadPoll.timer) {
+            clearTimeout(threadPoll.timer);
+            threadPoll.timer = null;
+        }
+    }
+
+    function scheduleThreadPoll() {
+        stopThreadTimer();
+        if (!threadPoll.claimId || document.hidden || !isThreadOpen()) return;
+        threadPoll.timer = setTimeout(pollThread, Math.max(2500, threadPoll.seconds * 1000));
+    }
+
+    async function pollThread() {
+        const claimId = threadPoll.claimId;
+        if (!claimId) return;
+
+        if (!isThreadOpen()) { stopThreadPolling(); return; }
+        if (threadPoll.busy) { scheduleThreadPoll(); return; }
+
+        threadPoll.busy = true;
+        try {
+            await loadThread(claimId, threadPoll.lastId ? { afterId: threadPoll.lastId } : {});
+        } catch (e) {
+            // Jaringan putus sesaat — diamkan, coba lagi di tick berikutnya.
+        } finally {
+            threadPoll.busy = false;
+            if (threadPoll.claimId === claimId) scheduleThreadPoll();
+        }
+    }
+
+    function startThreadPolling(claimId) {
+        threadPoll.claimId = String(claimId);
+
+        if (!threadPoll.listening) {
+            threadPoll.listening = true;
+            document.addEventListener('visibilitychange', function () {
+                if (!threadPoll.claimId) return;
+                if (document.hidden) stopThreadTimer();
+                else pollThread();
+            });
+        }
+
+        scheduleThreadPoll();
+    }
+
+    function stopThreadPolling() {
+        threadPoll.claimId = null;
+        threadPoll.lastId = 0;
+        stopThreadTimer();
+    }
+
+    // ------------------------------------------- daftar percakapan (inbox)
+    // Saat thread tertutup, kartu percakapan tetap diperbarui supaya pesan
+    // masuk kelihatan tanpa reload halaman.
+    const inboxPoll = { timer: null, busy: false, seconds: 20 };
+
+    function scheduleInboxPoll() {
+        if (inboxPoll.timer) clearTimeout(inboxPoll.timer);
+        inboxPoll.timer = setTimeout(refreshInbox, inboxPoll.seconds * 1000);
+    }
+
+    function startInboxPolling() {
+        if (inboxPoll.timer) return;
+        scheduleInboxPoll();
+        document.addEventListener('visibilitychange', function () {
+            if (!document.hidden) refreshInbox();
+        });
+    }
+
+    async function refreshInbox() {
+        const container = document.getElementById('conversations-container');
+        if (!container) return;
+
+        if (document.hidden || inboxPoll.busy || isThreadOpen()) {
+            scheduleInboxPoll();
+            return;
+        }
+
+        inboxPoll.busy = true;
+        try {
+            const res = await api.get('/api/conversations');
+
+            (res.data || []).forEach(function (c) {
+                const card = container.querySelector('.conversation-card[data-claim="' + String(c.claim_id) + '"]');
+                if (!card) return;
+
+                const snippet = card.querySelector('.conversation-snippet');
+                const time = card.querySelector('.conversation-time');
+                const bottomRow = card.querySelector('.conversation-bottom-row');
+
+                if (snippet && c.snippet) snippet.textContent = c.snippet;
+                if (time) time.textContent = c.time_display || '';
+
+                let badge = card.querySelector('.unread-bubble');
+                if (c.unread) {
+                    card.classList.add('unread');
+                    if (!badge && bottomRow) {
+                        badge = document.createElement('span');
+                        badge.className = 'unread-bubble';
+                        badge.textContent = '1';
+                        bottomRow.appendChild(badge);
+                    }
+                } else if (badge) {
+                    badge.remove();
+                    card.classList.remove('unread');
+                }
+            });
+        } catch (e) {
+            // Diamkan; coba lagi di putaran berikutnya.
+        } finally {
+            inboxPoll.busy = false;
+            scheduleInboxPoll();
+        }
+    }
+
+    /**
+     * Tampilkan kartu aksi sesuai status klaim dari server:
+     * submitted → keputusan penemu, in_handover → konfirmasi dua arah,
+     * completed → selesai, status terminal lain → semua kartu disembunyikan.
+     */
+    function applyClaimState(claim) {
+        window.FindUMB.claim = claim || null;
+        if (!claim) return;
+
+        const decisionCard = document.getElementById('claim-decision-card');
+        const actions = document.getElementById('claim-decision-actions');
+        const handoverCard = document.getElementById('handover-confirm-card');
+        const pendingSection = document.getElementById('handover-pending-section');
+        const successSection = document.getElementById('handover-success-section');
+        const submitBtn = document.getElementById('btn-submit-handover');
+        const status = claim.status;
+
+        if (decisionCard) decisionCard.style.display = status === 'submitted' ? 'flex' : 'none';
+
+        if (status === 'submitted') {
+            const iAmFinder = !!claim.i_am_finder;
+            const title = document.getElementById('claim-decision-title');
+            const sub = document.getElementById('claim-decision-subtitle');
+            const tag = document.getElementById('claim-decision-tag');
+
+            if (title) title.textContent = iAmFinder ? 'Klaim Menunggu Keputusan Anda' : 'Menunggu Persetujuan Penemu';
+            if (sub) sub.textContent = iAmFinder
+                ? 'Setujui bila ciri barang sudah cocok, lalu atur serah terima.'
+                : 'Penemu barang sedang memeriksa klaim Anda. Chat tetap bisa dipakai.';
+            if (tag) tag.textContent = iAmFinder ? 'Perlu Tindakan' : 'Menunggu';
+            if (actions) actions.style.display = iAmFinder ? 'flex' : 'none';
+
+            // DEC-027 — penemu melihat jawaban verifikasi & foto bukti pengklaim.
+            const proofBox = document.getElementById('claim-proof-detail');
+            const proofText = document.getElementById('claim-proof-answer-text');
+            const proofLink = document.getElementById('claim-proof-photo-link');
+            const answer = claim.proof_answer ? String(claim.proof_answer).trim() : '';
+            const photo = claim.proof_attachment_url || null;
+
+            if (proofBox && proofText && proofLink) {
+                const showProof = iAmFinder && (answer !== '' || photo);
+                proofBox.style.display = showProof ? 'block' : 'none';
+
+                if (showProof) {
+                    proofText.textContent = answer || 'Pengklaim tidak menuliskan jawaban verifikasi.';
+                    if (photo) {
+                        proofLink.href = photo;
+                        proofLink.style.display = 'inline-block';
+                    } else {
+                        proofLink.removeAttribute('href');
+                        proofLink.style.display = 'none';
+                    }
+                }
+            }
+        } else if (actions) {
+            actions.style.display = 'none';
+        }
+
+        if (!handoverCard) return;
+
+        if (status === 'in_handover') {
+            handoverCard.style.display = 'flex';
+            handoverCard.classList.remove('confirmed');
+            if (pendingSection) pendingSection.style.display = 'flex';
+            if (successSection) successSection.style.display = 'none';
+
+            if (submitBtn) {
+                if (claim.i_confirmed) {
+                    submitBtn.disabled = true;
+                    submitBtn.innerHTML = '<span>Menunggu Konfirmasi Pihak Lain</span>';
+                } else {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<span>Konfirmasi Barang Diterima</span>';
+                }
+            }
+
+            const sub = document.querySelector('#handover-pending-section .handover-step-subtitle');
+            if (sub) {
+                sub.textContent = claim.i_confirmed
+                    ? 'Konfirmasi Anda tersimpan — menunggu pihak lain'
+                    : (Number(claim.confirmations_count) > 0 ? '1 dari 2 pihak sudah konfirmasi' : 'Ketuk untuk buka verifikasi');
+            }
+        } else if (status === 'completed') {
+            handoverCard.style.display = 'flex';
+            handoverCard.classList.add('confirmed');
+            if (pendingSection) pendingSection.style.display = 'none';
+            if (successSection) successSection.style.display = 'flex';
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<span>Serah Terima Selesai</span>';
+            }
+        } else {
+            handoverCard.style.display = 'none';
+        }
+
+        if (typeof window.lucide !== 'undefined') {
+            try { window.lucide.createIcons(); } catch (e) { /* abaikan */ }
+        }
+
+        // Sembunyikan bilah kartu kalau tidak ada aksi yang perlu ditampilkan.
+        const tracker = document.getElementById('chat-claim-tracker');
+        if (tracker) {
+            const anyVisible = [decisionCard, handoverCard].some(function (el) {
+                return el && el.style.display !== 'none';
+            });
+            tracker.style.display = anyVisible ? '' : 'none';
+        }
+    }
+
+    /**
+     * Muat isi thread. Tanpa options = muat penuh (sekaligus menyalakan polling);
+     * dengan { afterId } = hanya tambahkan pesan baru di bawah.
+     */
+    async function loadThread(claimId, options) {
+        options = options || {};
+        const body = threadBody();
+        if (!body) return null;
+
+        const afterId = options.afterId || null;
+        let url = '/api/claims/' + claimId + '/messages';
+        if (afterId) url += '?after_id=' + encodeURIComponent(afterId);
+
+        const res = await api.get(url);
+        const messages = res.data || [];
+
+        if (!afterId) threadPoll.lastId = 0;
+
+        if (afterId) {
+            if (messages.length) renderBubbles(messages, true);
+        } else {
+            renderBubbles(messages, false);
+        }
+
+        messages.forEach(function (m) {
+            const id = parseInt(m.id, 10);
+            if (!isNaN(id) && id > threadPoll.lastId) threadPoll.lastId = id;
+        });
+
+        applyThreadState(res);
+        applyClaimState(res.claim);
+
+        if (res.poll_seconds) {
+            threadPoll.seconds = Math.max(2, parseInt(res.poll_seconds, 10) || 5);
+        }
+
+        if (afterId) {
+            syncConversationCard(messages);
+        } else if (isThreadOpen()) {
+            startThreadPolling(claimId);
+        }
+
+        return res;
+    }
+
+    /**
+     * Aksi "Ajukan Klaim" untuk modal detail desktop.
+     * Dipakai tombol di welcome / search / notifications.
+     */
+    async function claimReport(reportId) {
+        const id = String(reportId || '').replace('featured-', '');
+        if (!id) return;
+
+        if (!isAuthed) {
+            window.location.href = '/login?redirect=' + encodeURIComponent('/report/' + id);
+            return;
+        }
+
+        let report = null;
+        try {
+            const res = await api.get('/api/reports/' + id);
+            report = res.data;
+        } catch (e) {
+            toast(e.message || 'Laporan tidak dapat dimuat.', 'error');
+            return;
+        }
+
+        if (!report) return;
+
+        // Pemilik laporan tidak mengklaim barangnya sendiri.
+        if (report.is_mine) {
+            window.location.href = '/report/' + id;
+            return;
+        }
+
+        // Klaim hanya untuk barang temuan (PR-04). Kalau ini laporan HILANG dan
+        // kita yang menemukannya → buat laporan temuan yang terhubung ke sini.
+        if (report.type !== 'found') {
+            window.location.href = '/report/found?ref=' + id;
+            return;
+        }
+
+        if (!report.can_claim) {
+            toast('Klaim belum bisa diajukan: mungkin ada klaim aktif lain atau laporan sudah tidak menerima klaim.', 'error');
+            return;
+        }
+
+        try {
+            const res = await api.post('/api/reports/' + id + '/claims', {});
+            const claimId = res && res.data ? res.data.id : null;
+            toast('Klaim diajukan. Membuka percakapan...');
+            window.location.href = claimId ? '/messages?claim=' + claimId : '/messages';
+        } catch (e) {
+            toast(e.message || 'Klaim gagal diajukan.', 'error');
+        }
     }
 
     async function openThread(claimId) {
@@ -549,8 +908,8 @@
             window.openChatThread(
                 conversation.counterpart_name,
                 conversation.item_title,
-                conversation.can_send_message ? 'in_handover' : 'completed',
-                null
+                conversation.status || 'submitted',
+                conversation.item_image || null
             );
         }
 
@@ -654,8 +1013,12 @@
         claim: null,
         openReport: openReport,
         openThread: openThread,
+        claimReport: claimReport,
         toggleBookmark: toggleBookmark,
         loadThread: loadThread,
+        applyClaimState: applyClaimState,
+        startThreadPolling: startThreadPolling,
+        stopThreadPolling: stopThreadPolling,
         toast: toast,
         refresh: boot,
     };
