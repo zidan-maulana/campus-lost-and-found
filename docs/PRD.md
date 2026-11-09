@@ -111,6 +111,14 @@ Laporan memuat informasi yang relevan, seperti:
 
 Pengguna hanya dapat mengubah atau membatalkan laporan miliknya sendiri. Perubahan dan pembatalan dibatasi ketika terdapat klaim aktif yang sedang diproses.
 
+**Aturan satu barang satu laporan aktif (DEC-027):**
+- Pengguna yang menemukan barang milik orang lain dapat menghubungkan laporan temuannya ke laporan kehilangan yang sudah ada.
+- Ketika laporan temuan yang terhubung dibuat, laporan kehilangan tersebut otomatis ditutup dengan label **"Sudah Ketemu"** dan tidak lagi tampil di katalog publik.
+- Bila laporan temuan tersebut dibatalkan, laporan kehilangan yang terhubung dibuka kembali.
+- Pengguna tidak dapat membuat lebih dari satu laporan temuan aktif untuk barang yang sama.
+- Laporan yang sudah selesai (`resolved`) tidak ditampilkan lagi di katalog publik, tetapi tetap dapat dibuka melalui tautan langsung dan tetap tercatat pada "Laporan Saya".
+- Pemilik laporan kehilangan dapat menutup laporannya sendiri ("Tandai Selesai") ketika barangnya sudah kembali tanpa melalui serah terima di aplikasi. Status selesai bersifat permanen dan tidak dapat dibuka kembali.
+
 ### PR-03 — Pencarian Barang
 
 Pengguna dapat mencari laporan berdasarkan kata kunci dan menyaring hasil berdasarkan:
@@ -133,6 +141,12 @@ Keputusan untuk melanjutkan klaim didasarkan pada kesepakatan antara penemu dan 
 - Pengguna wajib login dengan akun yang memiliki email resmi kampus yang telah diverifikasi dan berstatus aktif.
 - Pengguna bukan pembuat laporan barang temuan terkait.
 - Pengguna tidak sedang memiliki klaim lain yang berstatus aktif (`submitted` atau `in_handover`).
+
+**Verifikasi klaim (DEC-027):**
+- Pengklaim wajib menuliskan alasan klaim minimal 10 karakter.
+- Penemu dapat menambahkan pertanyaan verifikasi pada laporan temuannya. Bila ada, pengklaim wajib menjawabnya sebelum klaim dapat dikirim.
+- Pengklaim dapat melampirkan satu foto bukti (JPEG/PNG/WebP, maksimal 2 MB) sebagai pendukung.
+- Jawaban verifikasi dan foto bukti hanya dapat dilihat oleh penemu dan pengklaim, bukan pengguna lain.
 
 **Aturan pembatasan klaim:**
 - Satu pengguna hanya boleh memiliki satu klaim aktif berjalan pada satu waktu di seluruh sistem.

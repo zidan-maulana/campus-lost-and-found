@@ -14,8 +14,9 @@ Dokumen ini mencatat riwayat dan status implementasi bertahap proyek Campus Lost
 | **Fase 4** | Alur Klaim, Chat Privat & State Machine | **Selesai** | Skema `claims`, `claim_status_histories`, alur 120 jam, pengingat 72 jam, chat privat. |
 | **Fase 5** | Konfirmasi Serah Terima Barang (Handover) | **Selesai** | Verifikasi dua arah, pembatalan handover, resolusi laporan, kunci chat. |
 | **Fase 6** | Moderasi & Pelaporan Penyalahgunaan | **Selesai** | Admin dashboard, suspensi akun berbasis peran (DEC-026), laporan `hidden`. |
-| **Fase 7** | PWA & Optimasi Aksesibilitas | *Belum Dimulai* | Manifest + service worker menyusul berdasarkan `PWA_SPECIFICATION.md`. |
-| **Fase 8** | Pengujian Terpadu & Deployment | *Sebagian* | 44 test otomatis lulus; deployment server belum dilakukan. |
+| **Fase 7** | Integrasi Kontrak Front-End (`/api/v1`) | **Selesai** | 30 endpoint `/api/v1` sesuai `docs/API_CONTRACT.md`, envelope standar, OTP verifikasi email. Detail: `docs/BACKEND_VS_CONTRACT_GAP.md`. |
+| **Fase 8** | PWA & Optimasi Aksesibilitas | *Belum Dimulai* | Manifest + service worker menyusul berdasarkan `PWA_SPECIFICATION.md`. |
+| **Fase 9** | Pengujian Terpadu & Deployment | *Sebagian* | 70 test otomatis lulus; deployment server belum dilakukan. |
 
 ---
 
@@ -54,3 +55,24 @@ Dokumen ini mencatat riwayat dan status implementasi bertahap proyek Campus Lost
   - PWA (Fase 7) belum dikerjakan.
   - Deployment ke server belum dilakukan.
   - DEC-016 (domain email), DEC-019 (retensi pasca-moderasi), DEC-021 (validasi foto), DEC-023 (browser) masih `Needs Clarification`; nilai sementara dikonfigurasi di `.env`.
+
+### Fase 7: Integrasi Kontrak Front-End `/api/v1` (2026-11-08)
+- **Status:** Selesai.
+- **Latar:** Tim front-end (`main`, commit `9e2ad19`) menyerahkan `docs/API_CONTRACT.md` berisi 30 endpoint `/api/v1` dengan envelope `{ success, message, data, meta }`. Backend menyesuaikan diri terhadap kontrak tersebut.
+- **Hasil:**
+  - `routes/api.php` baru: 30 endpoint `/api/v1` (auth, reports, claims, chats, notifications, user, admin).
+  - `app/Support/Api/`: trait `V1Response` (envelope sukses/paginasi/error) dan `ApiPresenter` (bentuk JSON baku, id numerik).
+  - Controller baru di `app/Http/Controllers/Api/V1/` (7 kelas) memakai ulang service bisnis yang sudah ada — aturan klaim/handover/moderasi tidak diduplikasi.
+  - Kolom baru sesuai kontrak: `reports.proof_question`, `storage_location`, `security_post_id`; `claims.proof_answer`, `claim_reason`, `proof_attachment`, `rejection_reason`.
+  - Verifikasi email via **kode OTP 6 digit** (15 menit, 5 percobaan, hash) untuk melayani layar `auth/verify-otp.blade.php`.
+  - Nama route diselaraskan dengan view front-end: `login.post`, `register.post`, `landing`.
+  - Endpoint lama `/api/*` tetap hidup agar `findumb-api.js` tidak rusak.
+- **Validasi:**
+  - `php artisan test` — 70 pengujian / 294 assertions lulus (44 lama + 26 kontrak baru).
+  - Migrasi aditif diuji pada SQLite bersih.
+  - Uji HTTP nyata: registrasi → OTP → buat laporan → klaim → accept → chat → serah terima dua pihak → `resolved` → notifikasi → admin moderasi.
+- **Dokumentasi:** [`docs/BACKEND_VS_CONTRACT_GAP.md`](../docs/BACKEND_VS_CONTRACT_GAP.md) — peta endpoint, deviasi (Sanctum, `security_post_id`, `campus`), dan sisa pekerjaan.
+- **Masalah yang tersisa:**
+  - Migrasi belum dijalankan di Supabase.
+  - `findumb-api.js` masih memakai `/api/*` gaya lama; perlu dipindah ke `/api/v1`.
+  - `MAIL_MAILER=log` — kode OTP baru tertulis di `storage/logs/laravel.log` sampai SMTP dikonfigurasi.

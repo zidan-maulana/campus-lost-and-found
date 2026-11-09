@@ -347,6 +347,39 @@ Gunakan status berikut:
 
 **Dampak:** PRD (PR-04, PR-08), SRS (FR-06, FR-07, FR-12), System Design (Section 7 & Matriks Transisi Section 10), Database Design (`users`, `reports`, `claims`), UI/UX (Modal konfirmasi admin & banner status akun nonaktif).
 
+### DEC-027 — Satu Barang, Satu Laporan Aktif (Penutupan Laporan Hilang & Verifikasi Klaim)
+
+**Status:** Accepted
+
+**Tanggal:** 2026-11-09
+
+**Konteks:** PRD hanya menyebut pengguna "dapat membuat laporan hilang maupun temuan" (PR-02) dan klaim hanya berlaku pada laporan temuan (PR-04). Tidak ada aturan yang mengikat keduanya, sehingga satu barang dapat menghasilkan dua laporan aktif sekaligus: laporan hilang milik pemilik dan laporan temuan milik penemu. Laporan hilang tersebut tidak pernah ditutup karena satu-satunya jalur penutupan laporan di PRD adalah serah terima dua arah (PR-06) yang hanya menyentuh laporan temuan. Akibatnya katalog publik menampilkan barang yang sama dua kali, dan laporan yang sudah selesai (`resolved`) tetap tampil di daftar sehingga menambah kebisingan. Selain itu parameter `reference_report_id` pada pembuatan laporan temuan hanya dipakai untuk notifikasi dan tidak pernah disimpan, sehingga hubungan antar laporan tidak dapat ditelusuri. Verifikasi klaim pun masih lemah: form klaim web mengirim permintaan kosong padahal kolom `reports.proof_question`, `claims.proof_answer`, dan `claims.proof_attachment` sudah tersedia di skema.
+
+**Pilihan yang dipertimbangkan:**
+1. *Mengubah PR-04 agar klaim diajukan langsung pada laporan hilang (penemu mengklaim "saya menemukan ini").*  
+   *Konsekuensi:* menghapus kebutuhan laporan temuan, tetapi membalik seluruh model peran (`isFinder`/`isClaimant`), memaksa migrasi data, dan mengubah banyak aturan terminal klaim. Biaya dan risiko regresi paling tinggi.
+2. *Membiarkan dua laporan, tetapi menutup laporan hilang otomatis saat laporan temuan yang terhubung dibuat, menyembunyikan laporan selesai dari katalog, mencegah duplikat, dan menambahkan verifikasi klaim.*  
+   *Konsekuensi:* PR-02/PR-04 tetap sah, perubahan aditif, dan tidak ada data lama yang perlu dimigrasi.
+3. *Hanya menyembunyikan laporan selesai dari katalog tanpa menutup laporan hilang.*  
+   *Konsekuensi:* masalah utama (satu barang dua laporan aktif) tidak selesai.
+
+**Keputusan:** Opsi 2.
+1. `reports.reference_report_id` (nullable, FK ke `reports.id`) menyimpan hubungan laporan temuan → laporan hilang. Kolom ini sekarang benar-benar diisi saat laporan temuan dibuat dengan `reference_report_id`.
+2. Saat laporan temuan dibuat dari laporan hilang yang masih `open`, laporan hilang tersebut langsung diubah menjadi `resolved` dan pemiliknya dinotifikasi. Label tampilan untuk kondisi ini adalah **"Sudah Ketemu"** (bukan "Selesai"), karena serah terima belum tentu terjadi.
+3. Bila laporan temuan tersebut dibatalkan, laporan hilang yang tertaut dibuka kembali menjadi `open`.
+4. Katalog publik (beranda, pencarian, `/api/reports`) hanya menampilkan laporan berstatus `open` dan `in_handover` (scope `listed`). Laporan `resolved` tetap dapat dibuka melalui tautan detail langsung, dan tetap muncul di "Laporan Saya".
+5. Laporan temuan ganda dari pengguna yang sama untuk judul barang yang sama (case-insensitive) selama masih aktif ditolak di server.
+6. Formulir laporan temuan menyediakan pencarian laporan hilang untuk dihubungkan, dan kolom pertanyaan verifikasi (`proof_question`).
+7. Klaim web wajib menyertakan alasan klaim (minimal 10 karakter); bila penemu memasang `proof_question`, jawabannya wajib diisi; foto bukti (`proof_attachment`) opsional (JPEG/PNG/WebP, maks 2 MB). Jawaban dan foto hanya dapat dilihat oleh penemu dan pengklaim.
+8. Pemilik laporan **hilang** dapat menutup laporannya sendiri ("Tandai Selesai" / `POST /api/reports/{id}/resolve`) ketika barangnya sudah kembali tanpa lewat serah terima di aplikasi. Endpoint ini khusus laporan hilang; laporan temuan tetap hanya ditutup lewat serah terima dua arah. Status `resolved` bersifat permanen (BR-13) sehingga tombol "Buka Kembali" dihapus.
+9. Tombol "Tandai Selesai", "Edit Laporan", dan "Hapus Laporan" pada halaman "Laporan Saya" menulis ke server (dulu hanya mengubah `localStorage` sehingga status tidak pernah berubah setelah halaman dimuat ulang). "Hapus Laporan" memanggil endpoint pembatalan (`cancelled`), bukan menghapus baris.
+
+**Alasan:** Menutup celah spam tanpa merombak PR-04. Satu barang hanya menghasilkan satu laporan aktif di katalog, laporan yang sudah beres hilang dari daftar, dan klaim asal-asalan tersaring oleh pertanyaan verifikasi serta bukti foto — semua memakai kolom yang sudah ada sehingga tidak menambah tabel baru selain satu foreign key.
+
+**Dampak:** PRD (PR-02, PR-04, PR-06), SRS (FR-03, FR-06), Database Design (`reports.reference_report_id`), UI/UX (label status "Sudah Ketemu", modal klaim, panel hubungkan laporan), Chat (kartu keputusan klaim menampilkan bukti pengklaim).
+
+**Catatan:** Lampiran gambar di dalam chat tetap di luar ruang lingkup (PRD 5.2). Foto bukti klaim bukan lampiran chat, melainkan bagian dari data klaim.
+
 ## 5. Template Keputusan Baru
 
 Gunakan format berikut untuk setiap keputusan baru:

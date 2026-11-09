@@ -93,6 +93,7 @@ Menyimpan laporan barang hilang atau ditemukan.
 | `id` | Primary key |
 | `user_id` | Foreign key ke `users.id`, yaitu pembuat laporan |
 | `category_id` | Foreign key ke `item_categories.id` |
+| `reference_report_id` | Foreign key ke `reports.id` — laporan hilang yang menjadi acuan laporan temuan ini (DEC-027) |
 | `type` | Jenis laporan: `'lost'` (barang hilang) atau `'found'` (barang ditemukan) |
 | `title` | Judul laporan |
 | `description` | Deskripsi barang dan informasi terkait |
