@@ -31,7 +31,7 @@ class ReportApiController extends Controller
         };
 
         $reports = Report::query()
-            ->publiclyVisible()
+            ->listed()
             ->ofType($type)
             ->search($request->query('q'))
             ->when($request->query('category'), function ($query, $category) {
@@ -129,6 +129,20 @@ class ReportApiController extends Controller
         return response()->json([
             'message' => 'Laporan dibatalkan.',
             'data' => $cancelled->toUiArray($request->user()),
+        ]);
+    }
+
+    /**
+     * POST /api/reports/{report}/resolve — pemilik menutup laporan karena
+     * barangnya sudah ditemukan (DEC-027). Hanya untuk laporan hilang.
+     */
+    public function resolve(Request $request, Report $report): JsonResponse
+    {
+        $resolved = $this->reports->resolveByOwner($report, $request->user());
+
+        return response()->json([
+            'message' => 'Laporan ditandai sudah ketemu.',
+            'data' => $resolved->toUiArray($request->user()),
         ]);
     }
 

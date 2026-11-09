@@ -25,8 +25,10 @@ class ClaimService
 
     /**
      * Mengajukan klaim baru pada laporan barang temuan.
+     *
+     * @param  array{proof_answer?: string|null, claim_reason?: string|null, proof_attachment?: string|null}  $payload
      */
-    public function submit(User $claimant, Report $report): Claim
+    public function submit(User $claimant, Report $report, array $payload = []): Claim
     {
         if (! $claimant->isActive()) {
             throw new BusinessRuleException('Akun Anda sedang ditangguhkan sehingga tidak dapat mengajukan klaim.');
@@ -48,7 +50,7 @@ class ClaimService
         $this->assertNotBlockedFromReclaiming($claimant, $report);
 
         try {
-            return DB::transaction(function () use ($claimant, $report) {
+            return DB::transaction(function () use ($claimant, $report, $payload) {
                 // Lock laporan agar tidak ada klaim ganda saat bersamaan.
                 $lockedReport = Report::whereKey($report->id)->lockForUpdate()->firstOrFail();
 
@@ -63,6 +65,9 @@ class ClaimService
                     'report_id' => $lockedReport->id,
                     'claimant_id' => $claimant->id,
                     'status' => ClaimStatus::Submitted,
+                    'proof_answer' => $payload['proof_answer'] ?? null,
+                    'claim_reason' => $payload['claim_reason'] ?? null,
+                    'proof_attachment' => $payload['proof_attachment'] ?? null,
                     'submitted_at' => now(),
                 ]);
 
@@ -100,6 +105,7 @@ class ClaimService
 
             $locked->update([
                 'status' => ClaimStatus::Rejected,
+                'rejection_reason' => $reason,
                 'resolved_at' => now(),
             ]);
 

@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\ProfileApiController;
 use App\Http\Controllers\Api\ReportApiController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\EmailVerificationController;
+use App\Http\Controllers\Auth\OtpController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\MyReportsController;
@@ -30,6 +31,14 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+
+// Landing page front-end (resources/views/landing.blade.php milik tim front-end).
+Route::get('/landing', function () {
+    abort_unless(view()->exists('landing'), 404);
+
+    return view('landing');
+})->name('landing');
+
 Route::get('/search', [SearchController::class, 'index'])->name('search');
 
 // Rute statis formulir harus didaftarkan sebelum /report/{report} agar tidak
@@ -49,9 +58,9 @@ Route::get('/report/{report}', [ReportPageController::class, 'show'])->name('rep
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
-    Route::post('/login', [AuthController::class, 'login'])->name('login.store');
+    Route::post('/login', [AuthController::class, 'login'])->name('login.post');
     Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
-    Route::post('/register', [AuthController::class, 'register'])->name('register.store');
+    Route::post('/register', [AuthController::class, 'register'])->name('register.post');
 });
 
 Route::post('/logout', [AuthController::class, 'logout'])
@@ -59,7 +68,18 @@ Route::post('/logout', [AuthController::class, 'logout'])
     ->name('logout');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/email/verify', [EmailVerificationController::class, 'notice'])->name('verification.notice');
+    // Middleware `verified` mengarah ke nama route `verification.notice`,
+    // sehingga layar verifikasi OTP front-end memakai nama tersebut.
+    Route::get('/verify-otp', [OtpController::class, 'notice'])->name('verification.notice');
+    Route::post('/verify-otp', [OtpController::class, 'verify'])
+        ->middleware('throttle:10,1')
+        ->name('verification.otp.post');
+    Route::post('/verify-otp/resend', [OtpController::class, 'resend'])
+        ->middleware('throttle:6,1')
+        ->name('verification.otp.resend');
+
+    // Jalur lama berbasis tautan bertanda tangan (tetap didukung).
+    Route::get('/email/verify', [EmailVerificationController::class, 'notice'])->name('verification.email');
     Route::get('/email/verify/{id}/{hash}', [EmailVerificationController::class, 'verify'])
         ->middleware(['signed', 'throttle:6,1'])
         ->name('verification.verify');
@@ -101,6 +121,7 @@ Route::prefix('api')->name('api.')->group(function () {
         Route::post('/reports', [ReportApiController::class, 'store'])->name('reports.store');
         Route::patch('/reports/{report}', [ReportApiController::class, 'update'])->name('reports.update');
         Route::post('/reports/{report}/cancel', [ReportApiController::class, 'cancel'])->name('reports.cancel');
+        Route::post('/reports/{report}/resolve', [ReportApiController::class, 'resolve'])->name('reports.resolve');
         Route::get('/my-reports', [ReportApiController::class, 'mine'])->name('reports.mine');
 
         // Klaim

@@ -614,6 +614,54 @@
         opacity: 1;
         transform: translateX(-50%) translateY(0);
     }
+
+    /* --- Modal Ajukan Klaim (DEC-027) --- */
+    #modal-claim-report .input-field-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
+        margin-top: 0.75rem;
+    }
+
+    #modal-claim-report .input-label {
+        font-size: 0.78rem;
+        font-weight: 700;
+        color: #334155;
+    }
+
+    #modal-claim-report .input-label-required {
+        color: #ef4444;
+    }
+
+    #modal-claim-report .form-text-input {
+        width: 100%;
+        box-sizing: border-box;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 0.65rem 0.9rem;
+        font-family: inherit;
+        font-size: 0.85rem;
+        color: #0f172a;
+        background: #ffffff;
+        line-height: 1.45;
+    }
+
+    #modal-claim-report .form-text-input:focus {
+        outline: none;
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+    }
+
+    #modal-claim-report .field-error-msg {
+        display: none;
+        font-size: 0.72rem;
+        font-weight: 600;
+        color: #dc2626;
+    }
+
+    #modal-claim-report .field-error-msg.show {
+        display: block;
+    }
 </style>
 @endpush
 
@@ -848,15 +896,62 @@
         </div>
     </div>
 </div>
+<!-- MODAL AJUKAN KLAIM (PR-04 + DEC-027: verifikasi & bukti foto) -->
+<div class="modal-backdrop" id="modal-claim-report" role="dialog" aria-modal="true" aria-hidden="true" style="z-index: 120;">
+    <div class="modal-card" style="max-width: 420px;">
+        <div class="modal-header-row">
+            <h3 class="modal-title">Ajukan Klaim</h3>
+            <button type="button" class="btn-modal-close" onclick="closeClaimModal()" aria-label="Tutup">
+                <i data-lucide="x"></i>
+            </button>
+        </div>
+        <p style="font-size: 0.8rem; color: #64748b; line-height: 1.45; margin: 0;">
+            Jelaskan mengapa barang ini milik Anda. Penemu akan memeriksa bukti ini sebelum menyetujui.
+        </p>
+
+        <div id="claim-proof-question-box" style="display: none; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 12px; padding: 0.7rem 0.85rem; margin-top: 0.85rem;">
+            <span style="display:block; font-size: 0.68rem; font-weight: 700; color: #1d4ed8; text-transform: uppercase; letter-spacing: .04em;">Pertanyaan dari penemu</span>
+            <span id="claim-proof-question-text" style="display:block; font-size: 0.82rem; font-weight: 600; color: #0f172a; margin-top: .2rem;"></span>
+        </div>
+
+        <div class="input-field-group" style="margin-top: 0.85rem;">
+            <label class="input-label" for="claim-proof-answer" id="claim-proof-answer-label">Jawaban Verifikasi</label>
+            <div class="input-box-wrapper">
+                <textarea class="form-text-input" id="claim-proof-answer" rows="2" placeholder="Contoh: isi dompet ada KTM atas nama saya" style="padding-left: 0.9rem; resize: vertical;"></textarea>
+            </div>
+            <span class="field-error-msg" id="error-claim-proof-answer">Jawaban verifikasi minimal 10 karakter.</span>
+        </div>
+
+        <div class="input-field-group">
+            <label class="input-label" for="claim-reason">Alasan Klaim <span class="input-label-required">*</span></label>
+            <div class="input-box-wrapper">
+                <textarea class="form-text-input" id="claim-reason" rows="3" placeholder="Ceritakan ciri khusus barang, kapan dan di mana terakhir Anda pegang." style="padding-left: 0.9rem; resize: vertical;"></textarea>
+            </div>
+            <span class="field-error-msg" id="error-claim-reason">Alasan klaim minimal 10 karakter.</span>
+        </div>
+
+        <div class="input-field-group">
+            <label class="input-label" for="claim-photo">Foto Bukti <span style="color:#94a3b8; font-weight:500;">(opsional)</span></label>
+            <input type="file" id="claim-photo" accept="image/*" class="form-text-input" style="padding: 0.55rem 0.75rem;">
+            <span style="display:block; font-size: 0.7rem; color: #94a3b8; margin-top: 0.25rem;">Contoh: foto nota pembelian, kotak, atau foto barang dari sisi lain. Maks 2 MB.</span>
+            <span class="field-error-msg" id="error-claim-photo">Format foto harus JPG, PNG, atau WebP (maks 2 MB).</span>
+        </div>
+
+        <div class="modal-actions-row" style="margin-top: 1rem;">
+            <button type="button" class="btn-modal-cancel" onclick="closeClaimModal()">Batal</button>
+            <button type="button" class="btn-modal-submit" id="btn-submit-claim" onclick="submitClaimModal()">Kirim Klaim</button>
+        </div>
+    </div>
+</div>
 @endsection
 
 @section('custom_bottom_bar')
 <!-- Fixed Bottom Action Bar (Flat, No Shadows) -->
 <div class="detail-bottom-nav" id="detail-bottom-nav">
-    <a href="{{ route('messages') }}" class="btn-action-primary" id="btn-primary-action">
+    <button type="button" class="btn-action-primary" id="btn-primary-action" onclick="handlePrimaryAction()">
         <i data-lucide="hand"></i>
         <span id="btn-action-label">Saya Menemukan Barang Ini</span>
-    </a>
+    </button>
     <button type="button" class="btn-action-bookmark" id="btn-bookmark-action" onclick="toggleDetailBookmark()" aria-label="Simpan Laporan">
         <i data-lucide="bookmark"></i>
     </button>
@@ -871,84 +966,204 @@
     // Current Report ID passed from Laravel route
     const currentReportId = @json($id ?? '1');
 
+    // Status klaim dari server (PR-04) — dipakai tombol aksi utama.
+    const FINDUMB_IS_GUEST = @json($viewer === null);
+    const FINDUMB_IS_OWNER = @json($isOwner ?? false);
+    const FINDUMB_CAN_CLAIM = @json($canClaim ?? false);
+    const FINDUMB_MY_CLAIM_ID = @json($myClaim?->id);
+    const FINDUMB_REPORT_TYPE = @json($reportData['type'] ?? null);
+    const FINDUMB_VERIFIED = @json($viewer?->hasVerifiedEmail() ?? false);
+
+    /**
+     * Tombol aksi utama (PR-04):
+     *  - tamu           → ke halaman login
+     *  - pemilik        → edit laporan
+     *  - belum verifikasi / sudah punya klaim aktif → jelaskan alasannya
+     *  - barang temuan  → AJUKAN KLAIM lalu masuk ke chat klaim tersebut
+     *  - barang hilang  → arahkan buat laporan temuan
+     */
+    async function handlePrimaryAction() {
+        if (FINDUMB_IS_OWNER) {
+            openDetailEditModal();
+            return;
+        }
+
+        if (FINDUMB_IS_GUEST) {
+            window.location.href = "{{ route('login') }}?redirect=" + encodeURIComponent(window.location.pathname);
+            return;
+        }
+
+        if (!FINDUMB_VERIFIED) {
+            showToast('Verifikasi email kampus Anda terlebih dahulu untuk dapat mengajukan klaim.');
+            return;
+        }
+
+        if (FINDUMB_MY_CLAIM_ID) {
+            window.location.href = "{{ route('messages') }}?claim=" + FINDUMB_MY_CLAIM_ID;
+            return;
+        }
+
+        if (FINDUMB_REPORT_TYPE !== 'found') {
+            // Barang hilang + kita yang menemukan → buat laporan TEMUAN yang
+            // terhubung ke laporan hilang ini (pemiliknya otomatis dinotifikasi).
+            window.location.href = "{{ route('report.found') }}?ref=" + currentReportId;
+            return;
+        }
+
+        if (!FINDUMB_CAN_CLAIM) {
+            showToast('Anda belum bisa mengajukan klaim: mungkin masih ada klaim aktif lain atau laporan ini sudah tidak menerima klaim.');
+            return;
+        }
+
+        openClaimModal();
+    }
+
+    // ------------------------------------------------ modal ajukan klaim
+    // DEC-027: klaim wajib menyertakan alasan; pertanyaan verifikasi dari
+    // penemu (bila ada) wajib dijawab, dan foto bukti boleh dilampirkan.
+    function openClaimModal() {
+        const modal = document.getElementById('modal-claim-report');
+        if (!modal) return;
+
+        const question = (serverReport && serverReport.proof_question) ? String(serverReport.proof_question).trim() : '';
+        const box = document.getElementById('claim-proof-question-box');
+        const text = document.getElementById('claim-proof-question-text');
+        const answerField = document.getElementById('claim-proof-answer');
+        const answerLabel = document.getElementById('claim-proof-answer-label');
+
+        if (box && text) {
+            box.style.display = question ? 'block' : 'none';
+            text.textContent = question;
+        }
+
+        if (answerField) {
+            answerField.value = '';
+            answerField.setAttribute('data-required', question ? '1' : '0');
+        }
+
+        if (answerLabel) {
+            answerLabel.innerHTML = question
+                ? 'Jawaban Verifikasi <span class="input-label-required">*</span>'
+                : 'Jawaban Verifikasi <span style="color:#94a3b8;font-weight:500;">(opsional)</span>';
+        }
+
+        const reason = document.getElementById('claim-reason');
+        if (reason) reason.value = '';
+
+        const photo = document.getElementById('claim-photo');
+        if (photo) photo.value = '';
+
+        document.querySelectorAll('#modal-claim-report .field-error-msg').forEach(function (el) {
+            el.classList.remove('show');
+        });
+
+        const submit = document.getElementById('btn-submit-claim');
+        if (submit) {
+            submit.disabled = false;
+            submit.textContent = 'Kirim Klaim';
+        }
+
+        modal.classList.add('active');
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+
+    function closeClaimModal() {
+        const modal = document.getElementById('modal-claim-report');
+        if (modal) modal.classList.remove('active');
+    }
+
+    async function submitClaimModal() {
+        const reasonEl = document.getElementById('claim-reason');
+        const answerEl = document.getElementById('claim-proof-answer');
+        const photoEl = document.getElementById('claim-photo');
+        const submit = document.getElementById('btn-submit-claim');
+
+        const reason = reasonEl ? reasonEl.value.trim() : '';
+        const answer = answerEl ? answerEl.value.trim() : '';
+        const answerRequired = answerEl && answerEl.getAttribute('data-required') === '1';
+
+        const errReason = document.getElementById('error-claim-reason');
+        const errAnswer = document.getElementById('error-claim-proof-answer');
+        const errPhoto = document.getElementById('error-claim-photo');
+
+        [errReason, errAnswer, errPhoto].forEach(function (el) {
+            if (el) el.classList.remove('show');
+        });
+
+        let invalid = false;
+
+        if (reason.length < 10) {
+            if (errReason) errReason.classList.add('show');
+            invalid = true;
+        }
+
+        if ((answerRequired && answer.length < 10) || (answer !== '' && answer.length < 10)) {
+            if (errAnswer) errAnswer.classList.add('show');
+            invalid = true;
+        }
+
+        if (invalid) return;
+
+        if (photoEl && photoEl.files && photoEl.files[0] && photoEl.files[0].size > 2 * 1024 * 1024) {
+            if (errPhoto) errPhoto.classList.add('show');
+            return;
+        }
+
+        if (submit) {
+            submit.disabled = true;
+            submit.textContent = 'Mengirim...';
+        }
+
+        const form = new FormData();
+        form.append('claim_reason', reason);
+        if (answer) form.append('proof_answer', answer);
+        if (photoEl && photoEl.files && photoEl.files[0]) form.append('proof_attachment', photoEl.files[0]);
+
+        try {
+            const res = await fetch(`{{ url('/api/reports') }}/${currentReportId}/claims`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': window.FindUMB_CSRF || '',
+                    'Accept': 'application/json',
+                },
+                body: form,
+            });
+
+            const payload = await res.json().catch(() => ({}));
+
+            if (!res.ok) {
+                const firstError = payload && payload.errors ? Object.values(payload.errors)[0][0] : null;
+                throw new Error(firstError || payload.message || 'Klaim gagal diajukan.');
+            }
+
+            const claimId = payload?.data?.id;
+            closeClaimModal();
+            showToast('Klaim diajukan. Membuka percakapan...');
+            window.location.href = claimId
+                ? "{{ route('messages') }}?claim=" + claimId
+                : "{{ route('messages') }}";
+        } catch (err) {
+            if (submit) {
+                submit.disabled = false;
+                submit.textContent = 'Kirim Klaim';
+            }
+            showToast(err.message || 'Klaim gagal diajukan.');
+        }
+    }
+
     // Data asli dari server (sumber utama). Mock di bawah hanya fallback
     // untuk halaman statis lama yang tidak lewat controller.
     const serverReport = @json($reportData ?? null);
 
     // Default Seed Reports for User
-    const DEFAULT_USER_REPORTS = [
-        {
-            id: '1',
-            type: 'lost',
-            title: 'Samsung SM-A135F',
-            brand: 'Samsung Galaxy A13',
-            category: 'Elektronik & HP',
-            category_slug: 'elektronik',
-            category_label: 'Elektronik & HP',
-            location_campus: 'Kampus Meruya',
-            location_specific: 'Gedung Tower Lt. 7 R. 702',
-            location_full: 'Kampus Meruya — Gedung Tower Lt. 7 R. 702',
-            date: '2026-06-20',
-            date_display: '20 Jun 2026',
-            time: '14.30 WIB (Siang)',
-            storage: 'Disimpan Sendiri',
-            features: 'Smartphone Samsung warna hitam, terpasang casing transparan dengan stiker logo Informatika di bagian belakang. Layar dalam keadaan terkunci.',
-            image: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=800&auto=format&fit=crop&q=80',
-            status: 'lost',
-            is_mine: true,
-            created_at: '2026-06-20T14:30:00.000Z'
-        },
-        {
-            id: '5',
-            type: 'lost',
-            title: 'Cincin Emas Berlian',
-            brand: 'Perhiasan Emas Kuning',
-            category: 'Jam & Aksesori',
-            category_slug: 'aksesoris',
-            category_label: 'Jam & Aksesori',
-            location_campus: 'Kampus Meruya',
-            location_specific: 'Parkir Barat Kampus Meruya',
-            location_full: 'Kampus Meruya — Parkir Barat Kampus Meruya',
-            date: '2026-01-15',
-            date_display: '15 Jan 2026',
-            time: 'Siang saat menuju kendaraan',
-            storage: 'Disimpan Sendiri',
-            features: 'Cincin emas sepasang model pertunangan/pernikahan dengan ukiran inisial halus di lingkar dalam. Terjatuh di sekitar parkiran.',
-            image: 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=800&auto=format&fit=crop&q=80',
-            status: 'lost',
-            is_mine: true,
-            created_at: '2026-01-15T12:00:00.000Z'
-        }
-    ];
+    // Data laporan langsung dari Supabase (di-render server, bukan mock localStorage).
+    const SERVER_REPORTS = @json(array_filter([$reportData ?? null]) ? array_values(array_filter([$reportData ?? null])) : []);
+    let SERVER_BOOKMARKS = @json($savedIds ?? []);
+    // Nama kategori -> id di Supabase (buat update laporan).
+    const CATEGORY_ID_MAP = @json($categories->mapWithKeys(fn ($c) => [$c->name => $c->id]));
 
     function getUserReports() {
-        try {
-            let list = [];
-            const raw = localStorage.getItem('findumb_custom_reports');
-            if (raw) {
-                const parsed = JSON.parse(raw);
-                if (Array.isArray(parsed) && parsed.length > 0) {
-                    list = parsed;
-                }
-            }
-            if (!list || list.length === 0) {
-                list = [...DEFAULT_USER_REPORTS];
-                localStorage.setItem('findumb_reports_initialized', 'true');
-                localStorage.setItem('findumb_custom_reports', JSON.stringify(list));
-                return list;
-            }
-            return list.filter(r => {
-                const idStr = String(r.id);
-                if (['2', '3', '4', '6', '7', '8'].includes(idStr)) return false;
-                if (r.is_mine === false) return false;
-                if (idStr === '1' || idStr === '5') return true;
-                if (idStr.startsWith('rep_') || r.is_mine === true) return true;
-                if (r.reporter_name && r.reporter_name.includes('Ahmad Fauzi')) return true;
-                return false;
-            });
-        } catch(e) {
-            return [...DEFAULT_USER_REPORTS];
-        }
+        return Array.isArray(SERVER_REPORTS) ? SERVER_REPORTS : [];
     }
 
     function isMyReport(id) {
@@ -957,198 +1172,7 @@
     }
 
     // Built-in Mock Reports Catalog
-    const mockReportsCatalog = {
-        '1': {
-            id: '1',
-            type: 'lost',
-            title: 'Samsung SM-A135F',
-            brand: 'Samsung Galaxy A13',
-            category: 'Elektronik & HP',
-            category_slug: 'elektronik',
-            location_campus: 'Kampus Meruya',
-            location_specific: 'Gedung Tower Lt. 7 R. 702',
-            location_full: 'Kampus Meruya — Gedung Tower Lt. 7 R. 702',
-            date: '2026-06-20',
-            date_display: '20 Jun 2026',
-            time: '14.30 WIB (Siang)',
-            storage: 'Disimpan Sendiri',
-            features: 'Smartphone Samsung warna hitam, terpasang casing transparan dengan stiker logo Informatika di bagian belakang. Layar dalam keadaan terkunci.',
-            image: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=800&auto=format&fit=crop&q=80',
-            reporter_name: 'Mahasiswa Fasilkom',
-            reporter_meta: 'Civitas Terverifikasi • NIM 4152***'
-        },
-        '2': {
-            id: '2',
-            type: 'lost',
-            title: 'Paspor & Berkas Beasiswa',
-            brand: 'Dokumen Resmi Imigrasi',
-            category: 'Buku, Dokumen & ATK',
-            category_slug: 'dokumen',
-            location_campus: 'Kampus Meruya',
-            location_specific: 'Gedung E R. 204',
-            location_full: 'Kampus Meruya — Gedung E R. 204',
-            date: '2026-05-12',
-            date_display: '12 Mei 2026',
-            time: '10.00 - 11.30 WIB',
-            storage: 'Disimpan Sendiri',
-            features: 'Map plastik biru berisi Paspor Republik Indonesia atas nama mahasiswa dan berkas pendaftaran beasiswa luar negeri.',
-            image: 'https://images.unsplash.com/photo-1544717305-2782549b5136?w=800&auto=format&fit=crop&q=80',
-            reporter_name: 'Mahasiswi FEB',
-            reporter_meta: 'Civitas Terverifikasi • NIM 4312***'
-        },
-        '3': {
-            id: '3',
-            type: 'found',
-            title: 'Tasbih & Gelang Manik Merah',
-            brand: 'Aksesoris Ibadah',
-            category: 'Jam & Aksesori',
-            category_slug: 'aksesoris',
-            location_campus: 'Kampus Meruya',
-            location_specific: 'Masjid Manarul \'Amal UMB, Area Saf Laki-laki',
-            location_full: 'Kampus Meruya — Masjid Manarul \'Amal UMB',
-            date: '2026-01-15',
-            date_display: '15 Jan 2026',
-            time: 'Ba\'da Salat Dzuhur',
-            storage: 'Dititipkan di Pengurus DKM Masjid',
-            features: 'Tasbih kayu berbutir merah marun berjumlah 33 butir dan gelang manik elastis. Saat ini diamankan di meja pengurus DKM.',
-            image: 'https://images.unsplash.com/photo-1590402494682-cd3fb53b1f70?w=800&auto=format&fit=crop&q=80',
-            reporter_name: 'Pengurus DKM Manarul \'Amal',
-            reporter_meta: 'Pengurus Masjid Kampus UMB'
-        },
-        '4': {
-            id: '4',
-            type: 'found',
-            title: 'Kunci Motor Honda & Remote',
-            brand: 'Honda Smart Key',
-            category: 'Kunci Kendaraan / Ruangan',
-            category_slug: 'kunci',
-            location_campus: 'Kampus Meruya',
-            location_specific: 'Parkir Barat Kampus Meruya (Dekat Pohon Rindang)',
-            location_full: 'Kampus Meruya — Parkir Barat Kampus Meruya',
-            date: '2026-01-10',
-            date_display: '10 Jan 2026',
-            time: 'Pagi (± 08.15 WIB)',
-            storage: 'Dititipkan di Pos Satpam Parkir',
-            features: 'Kunci motor Honda dengan gantungan tali lanyard hitam bertuliskan One Heart dan remote alarm hitam.',
-            image: 'https://images.unsplash.com/photo-1582139329536-e7284fece509?w=800&auto=format&fit=crop&q=80',
-            reporter_name: 'Petugas Keamanan Parkir',
-            reporter_meta: 'Biro Keamanan & Ketertiban Kampus'
-        },
-        '5': {
-            id: '5',
-            type: 'lost',
-            title: 'Cincin Emas Berlian',
-            brand: 'Perhiasan Emas Kuning',
-            category: 'Jam & Aksesori',
-            category_slug: 'aksesoris',
-            location_campus: 'Kampus Meruya',
-            location_specific: 'Parkir Barat Kampus Meruya',
-            location_full: 'Kampus Meruya — Parkir Barat Kampus Meruya',
-            date: '2026-01-15',
-            date_display: '15 Jan 2026',
-            time: 'Siang saat menuju kendaraan',
-            storage: 'Disimpan Sendiri',
-            features: 'Cincin emas sepasang model pertunangan/pernikahan dengan ukiran inisial halus di lingkar dalam. Terjatuh di sekitar parkiran.',
-            image: 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=800&auto=format&fit=crop&q=80',
-            reporter_name: 'Civitas UMB',
-            reporter_meta: 'Civitas Terverifikasi • UMB Meruya'
-        },
-        '6': {
-            id: '6',
-            type: 'lost',
-            title: 'Tablet Samsung Tab S8',
-            brand: 'Samsung Galaxy Tab S8',
-            category: 'Elektronik & HP',
-            category_slug: 'elektronik',
-            location_campus: 'Kampus Meruya',
-            location_specific: 'Gedung E Lt. 3 Ruang Diskusi',
-            location_full: 'Kampus Meruya — Gedung E Lt. 3 Ruang Diskusi',
-            date: '2026-01-14',
-            date_display: '14 Jan 2026',
-            time: 'Sore (± 16.00 WIB)',
-            storage: 'Disimpan Sendiri',
-            features: 'Tablet warna graphite abu-abu tua dengan book cover magnetic hitam dan S-Pen menempel di punggung tablet.',
-            image: 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=800&auto=format&fit=crop&q=80',
-            reporter_name: 'Mahasiswa Desain (FDSK)',
-            reporter_meta: 'Civitas Terverifikasi • NIM 4232***'
-        },
-        '7': {
-            id: '7',
-            type: 'lost',
-            title: 'Tas Laptop Lenovo ThinkPad',
-            brand: 'ThinkPad Essential Backpack',
-            category: 'Tas & Ransel',
-            category_slug: 'tas',
-            location_campus: 'Kampus Meruya',
-            location_specific: 'Lab Komputer Gedung Tower Lt. 4',
-            location_full: 'Kampus Meruya — Lab Komputer Gedung Tower',
-            date: '2026-01-18',
-            date_display: '18 Jan 2026',
-            time: '13.00 WIB usai praktikum',
-            storage: 'Dititipkan di Lab Komputer Tower',
-            features: 'Ransel laptop hitam bergaris merah khas ThinkPad, di dalamnya ada charger laptop 65W dan buku catatan kuliah.',
-            image: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=800&auto=format&fit=crop&q=80',
-            reporter_name: 'Mahasiswa Teknik Elektro',
-            reporter_meta: 'Civitas Terverifikasi • NIM 4142***'
-        },
-        '8': {
-            id: '8',
-            type: 'lost',
-            title: 'Dompet Kulit & KTM Mahasiswa',
-            brand: 'Dompet Kulit Cokelat',
-            category: 'Dompet & Kartu',
-            category_slug: 'tas',
-            location_campus: 'Kampus Meruya',
-            location_specific: 'Kantin Gedung D Lantai 1',
-            location_full: 'Kampus Meruya — Kantin Gedung D',
-            date: '2026-02-08',
-            date_display: '08 Feb 2026',
-            time: 'Istirahat makan siang',
-            storage: 'Dititipkan di Pengelola Kantin',
-            features: 'Dompet kulit warna cokelat tua berisi KTM UMB, e-KTP, kartu debit bank, dan uang tunai.',
-            image: 'https://images.unsplash.com/photo-1627123424574-724758594e93?w=800&auto=format&fit=crop&q=80',
-            reporter_name: 'Mahasiswa Fikom',
-            reporter_meta: 'Civitas Terverifikasi • NIM 4422***'
-        },
-        '9': {
-            id: '9',
-            type: 'found',
-            title: 'Jaket Almamater UMB',
-            brand: 'Jas Almamater Resmi UMB',
-            category: 'Pakaian & Sepatu',
-            category_slug: 'pakaian',
-            location_campus: 'Kampus Meruya',
-            location_specific: 'Perpustakaan Pusat Lantai 2, Meja Baca Mandiri',
-            location_full: 'Kampus Meruya — Perpustakaan Pusat Lt. 2',
-            date: '2026-01-22',
-            date_display: '22 Jan 2026',
-            time: '17.00 WIB (Sore)',
-            storage: 'Dititipkan di Staf Perpustakaan',
-            features: 'Jaket almamater biru navy ukuran L dengan badge bordir logo Universitas Mercu Buana di dada kiri. Tertinggal di sandaran kursi.',
-            image: 'https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?w=800&auto=format&fit=crop&q=80',
-            reporter_name: 'Staf Perpustakaan UMB',
-            reporter_meta: 'Pengelola Fasilitas Perpustakaan'
-        },
-        '10': {
-            id: '10',
-            type: 'found',
-            title: 'Earphone TWS Anker Soundcore',
-            brand: 'Anker Soundcore R50i',
-            category: 'Elektronik & HP',
-            category_slug: 'elektronik',
-            location_campus: 'Kampus Meruya',
-            location_specific: 'Gazebo Taman Depan Gedung Tower',
-            location_full: 'Kampus Meruya — Gazebo Taman Kampus',
-            date: '2026-02-02',
-            date_display: '02 Feb 2026',
-            time: '15.45 WIB (Sore)',
-            storage: 'Dititipkan di Pos Keamanan Kampus',
-            features: 'Charging case TWS warna hitam matte beserta sepasang earphone di dalamnya. Kondisi baterai masih menyala.',
-            image: 'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=800&auto=format&fit=crop&q=80',
-            reporter_name: 'Civitas UMB',
-            reporter_meta: 'Civitas Terverifikasi • Kampus Meruya'
-        }
-    };
+    // (katalog mock dihapus — semua data dari Supabase)
 
     let activeReportData = null;
 
@@ -1161,21 +1185,9 @@
             return;
         }
 
-        const userReports = getUserReports();
-        const foundCustom = userReports.find(r => String(r.id) === String(currentReportId));
-        if (foundCustom) {
-            activeReportData = {
-                ...foundCustom,
-                reporter_name: 'Ahmad Fauzi (Saya)',
-                reporter_meta: 'Civitas Terverifikasi • Akun Saya',
-                is_mine: true
-            };
-        } else if (mockReportsCatalog[currentReportId]) {
-            activeReportData = mockReportsCatalog[currentReportId];
-        } else {
-            // Fallback to item 5 or 1 if arbitrary string passed
-            activeReportData = mockReportsCatalog['5'] || mockReportsCatalog['1'];
-        }
+        // Tidak ada fallback mock: kalau server nggak punya datanya, jangan tampilkan apa pun.
+        activeReportData = (SERVER_REPORTS || []).find(r => String(r.id) === String(currentReportId)) || null;
+        if (!activeReportData) return;
 
         renderReportDetails(activeReportData);
     }
@@ -1288,13 +1300,8 @@
             if (bottomBookmarkBtn) bottomBookmarkBtn.style.display = 'none';
             if (bottomDeleteBtn) bottomDeleteBtn.style.display = 'flex';
 
-            // Switch action button to Edit Report for author
+            // Pemilik: tombol utama = edit laporan (handlePrimaryAction menanganinya).
             if (primaryBtn) {
-                primaryBtn.href = "javascript:void(0)";
-                primaryBtn.onclick = function(e) {
-                    e.preventDefault();
-                    openDetailEditModal();
-                };
                 primaryBtn.innerHTML = `<i data-lucide="edit-3"></i><span>Edit Laporan</span>`;
             }
         } else {
@@ -1303,10 +1310,8 @@
             if (bottomDeleteBtn) bottomDeleteBtn.style.display = 'none';
 
             if (primaryBtn && actionLabel) {
-                const chatUrl = `{{ route('messages') }}?item=${encodeURIComponent(report.title)}&report_id=${encodeURIComponent(report.id)}`;
-                primaryBtn.href = chatUrl;
-                primaryBtn.onclick = null;
-
+                // Jangan pasang href/onclick palsu: handlePrimaryAction() yang
+                // benar-benar mengajukan klaim ke /api/reports/{id}/claims.
                 if (report.type === 'found') {
                     actionLabel.textContent = 'Saya Pemilik Barang Ini (Klaim)';
                     primaryBtn.innerHTML = `<i data-lucide="shield-check"></i><span>Saya Pemilik Barang Ini (Klaim)</span>`;
@@ -1408,43 +1413,37 @@
     }
 
     function executeDetailSaveEditCommit() {
-        let reports = getUserReports();
-        const index = reports.findIndex(r => String(r.id) === String(currentReportId));
-        if (index === -1) return;
+        const id = currentReportId;
+        if (!id) return;
 
-        const statusVal = document.getElementById('edit-status').value;
-        const newTitle = document.getElementById('edit-title').value.trim();
-        const newCategory = document.getElementById('edit-category').value;
-        const newBrand = document.getElementById('edit-brand').value.trim();
-        const newLocation = document.getElementById('edit-location').value.trim();
-        const newDate = document.getElementById('edit-date').value;
-        const newFeatures = document.getElementById('edit-features').value.trim();
+        const payload = {
+            title: document.getElementById('edit-title').value.trim(),
+            brand: document.getElementById('edit-brand').value.trim() || null,
+            location: document.getElementById('edit-location').value.trim() || null,
+            campus_location: document.getElementById('edit-location').value.trim() || null,
+            incident_date: document.getElementById('edit-date').value || null,
+            description: document.getElementById('edit-features').value.trim() || null,
+        };
 
-        reports[index].title = newTitle;
-        reports[index].category = newCategory;
-        reports[index].category_label = newCategory;
-        reports[index].brand = newBrand;
-        reports[index].location_full = newLocation;
-        reports[index].location_campus = newLocation;
-        reports[index].date = newDate;
-        reports[index].date_display = formatDateIndo(newDate);
-        reports[index].features = newFeatures;
+        const catName = document.getElementById('edit-category').value;
+        if (CATEGORY_ID_MAP[catName]) payload.category_id = CATEGORY_ID_MAP[catName];
 
-        if (statusVal === 'resolved') {
-            reports[index].status = 'resolved';
-        } else {
-            reports[index].type = statusVal;
-            reports[index].status = statusVal;
-        }
-
-        try {
-            localStorage.setItem('findumb_custom_reports', JSON.stringify(reports));
-        } catch(e) {}
-
-        activeReportData = reports[index];
-        closeDetailEditModal();
-        renderReportDetails(activeReportData);
-        showToast('✓ Laporan berhasil diperbarui!');
+        fetch(`{{ url('/api/reports') }}/${id}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': window.FindUMB_CSRF || '',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify(payload),
+        })
+            .then(r => r.ok ? r.json() : Promise.reject(r))
+            .then(() => {
+                closeDetailEditModal();
+                showToast('✓ Laporan berhasil diperbarui!');
+                setTimeout(() => window.location.reload(), 600);
+            })
+            .catch(() => showToast('Gagal memperbarui laporan.'));
     }
 
     function openDetailDeleteModal() {
@@ -1467,17 +1466,25 @@
     }
 
     function executeDetailDelete() {
-        let reports = getUserReports();
-        reports = reports.filter(r => String(r.id) !== String(currentReportId));
-        try {
-            localStorage.setItem('findumb_custom_reports', JSON.stringify(reports));
-        } catch(e) {}
+        const id = currentReportId;
+        if (!id) return;
 
-        closeDetailDeleteModal();
-        showToast('Laporan berhasil dihapus.');
-        setTimeout(() => {
-            window.location.href = "{{ route('my.reports') }}";
-        }, 800);
+        fetch(`{{ url('/api/reports') }}/${id}/cancel`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': window.FindUMB_CSRF || '',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({ reason: 'Dibatalkan oleh pemilik laporan.' }),
+        })
+            .then(r => r.ok ? r.json() : Promise.reject(r))
+            .then(() => {
+                closeDetailDeleteModal();
+                showToast('Laporan dibatalkan.');
+                setTimeout(() => window.location.reload(), 600);
+            })
+            .catch(() => showToast('Gagal membatalkan laporan.'));
     }
 
     function formatDateIndo(dateStr) {
@@ -1543,28 +1550,11 @@
 
     // Stored Bookmarks Management
     function getStoredBookmarks() {
-        try {
-            const raw = localStorage.getItem('findumb_bookmarks');
-            if (raw) {
-                const parsed = JSON.parse(raw);
-                if (Array.isArray(parsed)) return parsed.map(String);
-            }
-        } catch(e) {}
-        const defaultBookmarks = ['2', '3', '7'];
-        try {
-            if (!localStorage.getItem('findumb_bookmarks_init')) {
-                localStorage.setItem('findumb_bookmarks', JSON.stringify(defaultBookmarks));
-                localStorage.setItem('findumb_bookmarks_init', 'true');
-            }
-        } catch(e) {}
-        return defaultBookmarks;
+        return (SERVER_BOOKMARKS || []).map(String);
     }
 
     function setStoredBookmarks(bookmarks) {
-        try {
-            localStorage.setItem('findumb_bookmarks', JSON.stringify(bookmarks));
-            localStorage.setItem('findumb_bookmarks_init', 'true');
-        } catch(e) {}
+        SERVER_BOOKMARKS = (bookmarks || []).map(String);
     }
 
     // Bookmark Toggle Handler

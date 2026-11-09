@@ -7,8 +7,10 @@ use App\Models\Claim;
 use App\Models\Report;
 use App\Services\ClaimService;
 use App\Services\HandoverService;
+use App\Support\FindumbStorage;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class ClaimApiController extends Controller
 {
@@ -38,7 +40,32 @@ class ClaimApiController extends Controller
 
     public function store(Request $request, Report $report): JsonResponse
     {
-        $claim = $this->claims->submit($request->user(), $report);
+        $validated = $request->validate([
+            'proof_answer' => ['nullable', 'string', 'min:10', 'max:1000'],
+            'claim_reason' => ['nullable', 'string', 'min:10', 'max:1000'],
+            'proof_attachment' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
+        ], [
+            'proof_answer.min' => 'Jawaban verifikasi minimal 10 karakter.',
+            'claim_reason.min' => 'Alasan klaim minimal 10 karakter.',
+            'proof_attachment.image' => 'Bukti tambahan harus berupa gambar.',
+            'proof_attachment.mimes' => 'Format bukti tambahan harus JPG, PNG, atau WebP.',
+            'proof_attachment.max' => 'Ukuran bukti tambahan maksimal 2 MB.',
+        ]);
+
+        // Bila penemu memasang pertanyaan verifikasi, jawabannya wajib.
+        if (filled($report->proof_question) && blank($validated['proof_answer'] ?? null)) {
+            throw ValidationException::withMessages([
+                'proof_answer' => 'Jawaban atas pertanyaan verifikasi wajib diisi.',
+            ]);
+        }
+
+        $claim = $this->claims->submit($request->user(), $report, [
+            'proof_answer' => $validated['proof_answer'] ?? null,
+            'claim_reason' => $validated['claim_reason'] ?? null,
+            'proof_attachment' => $request->hasFile('proof_attachment')
+                ? $request->file('proof_attachment')->store('claims', FindumbStorage::disk())
+                : null,
+        ]);
 
         return response()->json([
             'message' => 'Klaim berhasil diajukan. Menunggu respons penemu.',

@@ -17,7 +17,11 @@ class Claim extends Model
         'report_id',
         'claimant_id',
         'status',
+        'proof_answer',
+        'claim_reason',
+        'proof_attachment',
         'cancellation_reason',
+        'rejection_reason',
         'cancelled_by',
         'submitted_at',
         'response_notified_at',
@@ -137,6 +141,8 @@ class Claim extends Model
     /** @return array<string, mixed> */
     public function toUiArray(?User $viewer = null): array
     {
+        $isParticipant = $viewer !== null && $this->isParticipant($viewer);
+
         return [
             'id' => (string) $this->id,
             'report_id' => (string) $this->report_id,
@@ -150,6 +156,12 @@ class Claim extends Model
             'can_send_message' => $this->status->allowsChat(),
             'i_am_claimant' => $this->isClaimant($viewer),
             'i_am_finder' => $this->isFinder($viewer),
+            // Bukti klaim hanya untuk dua pihak yang terlibat (PR-04/DEC-027).
+            'proof_answer' => $isParticipant ? $this->proof_answer : null,
+            'claim_reason' => $isParticipant ? $this->claim_reason : null,
+            'proof_attachment_url' => $isParticipant && $this->proof_attachment
+                ? \App\Support\FindumbStorage::publicUrl($this->proof_attachment)
+                : null,
             'confirmations_count' => $this->confirmations_count ?? $this->confirmations()->count(),
             'i_confirmed' => $viewer ? $this->confirmations()->where('user_id', $viewer->id)->exists() : false,
             'submitted_at' => $this->submitted_at?->toIso8601String(),

@@ -19,7 +19,24 @@ class ReportPageController extends Controller
 
     public function createFound(Request $request): View
     {
-        return $this->form($request, 'found');
+        // "Saya Menemukan Barang Ini" pada laporan HILANG mengarah ke sini dengan
+        // ?ref={id} → formulir temuan diisi otomatis dari laporan hilang tersebut,
+        // dan pemilik laporan hilang dinotifikasi setelah laporan temuan dibuat.
+        $reference = null;
+
+        if ($ref = $request->query('ref')) {
+            $reference = Report::query()
+                ->whereKey($ref)
+                ->where('type', \App\Enums\ReportType::Lost)
+                ->first();
+        }
+
+        return view('report-found', [
+            'viewer' => $request->user(),
+            'reportType' => 'found',
+            'categories' => ItemCategory::cachedActive(),
+            'referenceReport' => $reference,
+        ]);
     }
 
     private function form(Request $request, string $type): View
@@ -49,6 +66,10 @@ class ReportPageController extends Controller
             'id' => (string) $report->id,
             'reportData' => $report->toUiArray($viewer),
             'report' => $report,
+            'categories' => ItemCategory::cachedActive(),
+            'savedIds' => $viewer
+                ? $viewer->savedReports()->pluck('reports.id')->map(fn ($id) => (string) $id)->all()
+                : [],
             'isOwner' => $report->isOwnedBy($viewer),
             'canClaim' => $viewer
                 && $report->canReceiveClaim()
