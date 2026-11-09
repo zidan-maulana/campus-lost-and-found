@@ -29,6 +29,8 @@ class StoreReportRequest extends FormRequest
             'storage_note' => ['nullable', 'string', 'max:150'],
             'incident_date' => ['nullable', 'date', 'before_or_equal:today'],
             'incident_time' => ['nullable', 'string', 'max:60'],
+            // Laporan temuan yang dibuat dari laporan hilang (?ref=ID).
+            'reference_report_id' => ['nullable', 'integer', 'exists:reports,id'],
             // DEC-021 — 1 foto, maks 2 MB, JPEG/PNG/WebP.
             'photo' => [
                 'nullable',

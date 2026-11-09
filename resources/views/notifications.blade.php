@@ -1156,10 +1156,10 @@
 
         <!-- Bottom Action Bar inside Modal -->
         <div class="desktop-detail-footer-bar">
-            <a href="{{ route('messages') }}" class="desktop-detail-btn-primary" id="modal-detail-primary-btn">
+            <button type="button" class="desktop-detail-btn-primary" id="modal-detail-primary-btn" onclick="handleModalPrimaryAction()">
                 <i data-lucide="hand" id="modal-detail-btn-icon"></i>
                 <span id="modal-detail-btn-label">Saya Menemukan Barang Ini</span>
-            </a>
+            </button>
             <button type="button" class="desktop-detail-btn-bookmark" id="modal-detail-footer-bookmark" onclick="handleDetailModalBookmark()" aria-label="Simpan Laporan" title="Simpan Laporan">
                 <i data-lucide="bookmark"></i>
             </button>
@@ -1173,113 +1173,44 @@
 
 @push('scripts')
 <script>
-    // Canonical Seed Notifications strictly reflecting FindUMB Specifications
-    const DEFAULT_NOTIFICATIONS = [
-        {
-            id: 'notif_1',
-            type: 'claim',
-            time_category: 'today',
-            icon: 'shield-alert',
-            tag: 'Klaim Masuk',
-            title: 'Pengajuan Klaim: Earphone TWS Anker Soundcore',
-            body: 'Dinda Kirana (NIM 4152***) mengajukan klaim kepemilikan atas barang temuan Anda.',
-            time_display: '10 mnt yang lalu',
-            target_url: '{{ route('messages') }}',
-            read: false,
-            timestamp: new Date(Date.now() - 10 * 60 * 1000).toISOString()
-        },
-        {
-            id: 'notif_2',
-            type: 'warning',
-            time_category: 'today',
-            icon: 'clock-3',
-            tag: 'Pengingat 72 Jam',
-            title: 'Peringatan Masa Tunggu: Samsung SM-A135F',
-            body: 'Klaim Anda telah 72 jam tanpa respons dari penemu. Sisa 48 jam sebelum kedaluwarsa (DEC-012).',
-            time_display: '45 mnt yang lalu',
-            target_url: '{{ url('/report/1') }}',
-            read: false,
-            timestamp: new Date(Date.now() - 45 * 60 * 1000).toISOString()
-        },
-        {
-            id: 'notif_3',
-            type: 'handover',
-            time_category: 'today',
-            icon: 'key-round',
-            tag: 'Serah Terima',
-            title: 'Jadwal Serah Terima Telah Disepakati',
-            body: 'Pertemuan serah terima Tas Laptop ThinkPad dijadwalkan di Pos Satpam Tower, 20 Jan 14:00 WIB.',
-            time_display: '3 jam yang lalu',
-            target_url: '{{ url('/report/7') }}',
-            read: false,
-            timestamp: new Date(Date.now() - 3 * 3600 * 1000).toISOString()
-        },
-        {
-            id: 'notif_4',
-            type: 'message',
-            time_category: 'week',
-            icon: 'message-square',
-            tag: 'Pesan Baru',
-            title: 'Pesan Baru dari Ahmad Fauzi',
-            body: '"Halo Kak, apakah dompet kulit cokelat tersebut masih tersimpan di pos kantin?"',
-            time_display: 'Kemarin, 16:45',
-            target_url: '{{ route('messages') }}',
-            read: true,
-            timestamp: new Date(Date.now() - 24 * 3600 * 1000).toISOString()
-        },
-        {
-            id: 'notif_5',
-            type: 'system',
-            time_category: 'month',
-            icon: 'check-circle-2',
-            tag: 'Laporan Terbit',
-            title: 'Laporan Berhasil Dipublikasikan',
-            body: 'Laporan kehilangan "Cincin Emas Berlian" telah divalidasi sistem dan tampil di katalog publik.',
-            time_display: '15 Jan 2026',
-            target_url: '{{ url('/report/5') }}',
-            read: true,
-            timestamp: new Date(Date.now() - 3 * 24 * 3600 * 1000).toISOString()
-        },
-        {
-            id: 'notif_6',
-            type: 'handover',
-            time_category: 'earlier',
-            icon: 'shield-check',
-            tag: 'Serah Terima',
-            title: 'Serah Terima Selesai divalidasi',
-            body: 'Proses serah terima Kunci Motor Honda Vario telah sukses divalidasi dengan PIN.',
-            time_display: '10 Jan 2026',
-            target_url: '{{ url('/report/4') }}',
-            read: true,
-            timestamp: new Date(Date.now() - 7 * 24 * 3600 * 1000).toISOString()
-        }
-    ];
+    // Notifikasi asli milik akun yang login (dari tabel notifications).
+    const SERVER_NOTIFICATIONS = @json($notifications->map(fn ($n) => $n->toUiArray())->values());
+    let SERVER_BOOKMARKS = @json($savedIds ?? []);
+    const SERVER_REPORTS = []; // detail laporan diambil dari API saat modal dibuka
+    const IS_AUTHENTICATED = @json(auth()->check());
+    let NOTIFICATION_STATE = SERVER_NOTIFICATIONS.map(n => ({ ...n }));
 
     let currentFilter = 'all'; // 'all' | 'today' | 'week' | 'month' | 'unread'
 
     function getStoredNotifications() {
-        try {
-            const raw = localStorage.getItem('findumb_notifications');
-            if (raw) {
-                const parsed = JSON.parse(raw);
-                if (Array.isArray(parsed) && parsed.length > 0) {
-                    return parsed;
-                }
-            }
-            localStorage.setItem('findumb_notifications', JSON.stringify(DEFAULT_NOTIFICATIONS));
-            return [...DEFAULT_NOTIFICATIONS];
-        } catch (e) {
-            return [...DEFAULT_NOTIFICATIONS];
-        }
+        return NOTIFICATION_STATE;
     }
 
     function saveNotifications(list) {
-        try {
-            localStorage.setItem('findumb_notifications', JSON.stringify(list));
-            updateGlobalHeaderDot(list);
-        } catch (e) {
-            console.error('Failed to save notifications', e);
-        }
+        NOTIFICATION_STATE = list;
+        updateGlobalHeaderDot(list);
+    }
+
+    function syncNotificationRead(notificationId) {
+        // Simpan status baca ke server (id dari server: "notif_12").
+        const numericId = String(notificationId).replace('notif_', '');
+        fetch(`{{ url('/api/notifications') }}/${numericId}/read`, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': (window.FindUMB_CSRF || document.querySelector('meta[name="csrf-token"]')?.content || ''),
+                'Accept': 'application/json',
+            },
+        }).catch(() => {});
+    }
+
+    function syncAllNotificationsRead() {
+        fetch('{{ url('/api/notifications/read-all') }}', {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': (window.FindUMB_CSRF || document.querySelector('meta[name="csrf-token"]')?.content || ''),
+                'Accept': 'application/json',
+            },
+        }).catch(() => {});
     }
 
     function updateGlobalHeaderDot(list) {
@@ -1442,244 +1373,12 @@
     // ----------------------------------------------------
     // Desktop Floating Detail Modal Catalog & Handlers
     // ----------------------------------------------------
-    const mockReportsCatalog = {
-        '1': {
-            id: '1',
-            type: 'lost',
-            title: 'Samsung SM-A135F',
-            brand: 'Samsung Galaxy A13',
-            category: 'Elektronik & HP',
-            category_slug: 'elektronik',
-            location_campus: 'Kampus Meruya',
-            location_specific: 'Gedung Tower Lt. 7 R. 702',
-            location_full: 'Kampus Meruya — Gedung Tower Lt. 7 R. 702',
-            date: '2026-06-20',
-            date_display: '20 Jun 2026',
-            time: '14.30 WIB (Siang)',
-            storage: 'Disimpan Sendiri',
-            features: 'Smartphone Samsung warna hitam, terpasang casing transparan dengan stiker logo Informatika di bagian belakang. Layar dalam keadaan terkunci.',
-            image: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=800&auto=format&fit=crop&q=80',
-            reporter_name: 'Ahmad Fauzi (Saya)',
-            reporter_meta: 'Civitas Terverifikasi • Akun Saya',
-            is_mine: true
-        },
-        '2': {
-            id: '2',
-            type: 'lost',
-            title: 'Paspor & Berkas Beasiswa',
-            brand: 'Dokumen Resmi Imigrasi',
-            category: 'Buku, Dokumen & ATK',
-            category_slug: 'dokumen',
-            location_campus: 'Kampus Meruya',
-            location_specific: 'Gedung E R. 204',
-            location_full: 'Kampus Meruya — Gedung E R. 204',
-            date: '2026-05-12',
-            date_display: '12 Mei 2026',
-            time: '10.00 - 11.30 WIB',
-            storage: 'Disimpan Sendiri',
-            features: 'Map plastik biru berisi Paspor Republik Indonesia atas nama mahasiswa dan berkas pendaftaran beasiswa luar negeri.',
-            image: 'https://images.unsplash.com/photo-1544717305-2782549b5136?w=800&auto=format&fit=crop&q=80',
-            reporter_name: 'Mahasiswi FEB',
-            reporter_meta: 'Civitas Terverifikasi • NIM 4312***'
-        },
-        '3': {
-            id: '3',
-            type: 'found',
-            title: 'Tasbih & Gelang Manik Merah',
-            brand: 'Aksesoris Ibadah',
-            category: 'Jam & Aksesori',
-            category_slug: 'aksesoris',
-            location_campus: 'Kampus Meruya',
-            location_specific: 'Masjid Manarul \'Amal UMB, Area Saf Laki-laki',
-            location_full: 'Kampus Meruya — Masjid Manarul \'Amal UMB',
-            date: '2026-01-15',
-            date_display: '15 Jan 2026',
-            time: 'Ba\'da Salat Dzuhur',
-            storage: 'Dititipkan di Pengurus DKM Masjid',
-            features: 'Tasbih kayu berbutir merah marun berjumlah 33 butir dan gelang manik elastis. Saat ini diamankan di meja pengurus DKM.',
-            image: 'https://images.unsplash.com/photo-1590402494682-cd3fb53b1f70?w=800&auto=format&fit=crop&q=80',
-            reporter_name: 'Pengurus DKM Manarul \'Amal',
-            reporter_meta: 'Pengurus Masjid Kampus UMB'
-        },
-        '4': {
-            id: '4',
-            type: 'found',
-            status: 'resolved',
-            title: 'Kunci Motor Honda & Remote',
-            brand: 'Honda Smart Key',
-            category: 'Kunci Kendaraan / Ruangan',
-            category_slug: 'kunci',
-            location_campus: 'Kampus Meruya',
-            location_specific: 'Parkir Barat Kampus Meruya (Dekat Pohon Rindang)',
-            location_full: 'Kampus Meruya — Parkir Barat Kampus Meruya',
-            date: '2026-01-10',
-            date_display: '10 Jan 2026',
-            time: 'Pagi (± 08.15 WIB)',
-            storage: 'Dititipkan di Pos Satpam Parkir',
-            features: 'Kunci motor Honda dengan gantungan tali lanyard hitam bertuliskan One Heart dan remote alarm hitam.',
-            image: 'https://images.unsplash.com/photo-1582139329536-e7284fece509?w=800&auto=format&fit=crop&q=80',
-            reporter_name: 'Petugas Keamanan Parkir',
-            reporter_meta: 'Biro Keamanan & Ketertiban Kampus'
-        },
-        '5': {
-            id: '5',
-            type: 'lost',
-            title: 'Cincin Emas Berlian',
-            brand: 'Perhiasan Emas Kuning',
-            category: 'Jam & Aksesori',
-            category_slug: 'aksesoris',
-            location_campus: 'Kampus Meruya',
-            location_specific: 'Parkir Barat Kampus Meruya',
-            location_full: 'Kampus Meruya — Parkir Barat Kampus Meruya',
-            date: '2026-01-15',
-            date_display: '15 Jan 2026',
-            time: 'Siang saat menuju kendaraan',
-            storage: 'Disimpan Sendiri',
-            features: 'Cincin emas sepasang model pertunangan/pernikahan dengan ukiran inisial halus di lingkar dalam. Terjatuh di sekitar parkiran.',
-            image: 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=800&auto=format&fit=crop&q=80',
-            reporter_name: 'Ahmad Fauzi (Saya)',
-            reporter_meta: 'Civitas Terverifikasi • Akun Saya',
-            is_mine: true
-        },
-        '6': {
-            id: '6',
-            type: 'lost',
-            title: 'Tablet Samsung Tab S8',
-            brand: 'Samsung Galaxy Tab S8',
-            category: 'Elektronik & HP',
-            category_slug: 'elektronik',
-            location_campus: 'Kampus Meruya',
-            location_specific: 'Gedung E Lt. 3 Ruang Diskusi',
-            location_full: 'Kampus Meruya — Gedung E Lt. 3 Ruang Diskusi',
-            date: '2026-01-14',
-            date_display: '14 Jan 2026',
-            time: 'Sore (± 16.00 WIB)',
-            storage: 'Disimpan Sendiri',
-            features: 'Tablet warna graphite abu-abu tua dengan book cover magnetic hitam dan S-Pen menempel di punggung tablet.',
-            image: 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=800&auto=format&fit=crop&q=80',
-            reporter_name: 'Mahasiswa Desain (FDSK)',
-            reporter_meta: 'Civitas Terverifikasi • NIM 4232***'
-        },
-        '7': {
-            id: '7',
-            type: 'lost',
-            title: 'Tas Laptop Lenovo ThinkPad',
-            brand: 'ThinkPad Essential Backpack',
-            category: 'Tas & Ransel',
-            category_slug: 'tas',
-            location_campus: 'Kampus Meruya',
-            location_specific: 'Lab Komputer Gedung Tower Lt. 4',
-            location_full: 'Kampus Meruya — Lab Komputer Gedung Tower',
-            date: '2026-01-18',
-            date_display: '18 Jan 2026',
-            time: '13.00 WIB usai praktikum',
-            storage: 'Dititipkan di Lab Komputer Tower',
-            features: 'Ransel laptop hitam bergaris merah khas ThinkPad, di dalamnya ada charger laptop 65W dan buku catatan kuliah.',
-            image: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=800&auto=format&fit=crop&q=80',
-            reporter_name: 'Mahasiswa Teknik Elektro',
-            reporter_meta: 'Civitas Terverifikasi • NIM 4142***'
-        },
-        '8': {
-            id: '8',
-            type: 'lost',
-            title: 'Dompet Kulit & KTM Mahasiswa',
-            brand: 'Dompet Kulit Cokelat',
-            category: 'Dompet & Kartu',
-            category_slug: 'tas',
-            location_campus: 'Kampus Meruya',
-            location_specific: 'Kantin Gedung D Lantai 1',
-            location_full: 'Kampus Meruya — Kantin Gedung D',
-            date: '2026-02-08',
-            date_display: '08 Feb 2026',
-            time: 'Istirahat makan siang',
-            storage: 'Dititipkan di Pengelola Kantin',
-            features: 'Dompet kulit warna cokelat tua berisi KTM UMB, e-KTP, kartu debit bank, dan uang tunai.',
-            image: 'https://images.unsplash.com/photo-1627123424574-724758594e93?w=800&auto=format&fit=crop&q=80',
-            reporter_name: 'Mahasiswa Fikom',
-            reporter_meta: 'Civitas Terverifikasi • NIM 4422***'
-        },
-        '9': {
-            id: '9',
-            type: 'found',
-            title: 'Jaket Almamater UMB',
-            brand: 'Jas Almamater Resmi UMB',
-            category: 'Pakaian & Sepatu',
-            category_slug: 'pakaian',
-            location_campus: 'Kampus Meruya',
-            location_specific: 'Perpustakaan Pusat Lantai 2, Meja Baca Mandiri',
-            location_full: 'Kampus Meruya — Perpustakaan Pusat Lt. 2',
-            date: '2026-01-22',
-            date_display: '22 Jan 2026',
-            time: '17.00 WIB (Sore)',
-            storage: 'Dititipkan di Staf Perpustakaan',
-            features: 'Jaket almamater biru navy ukuran L dengan badge bordir logo Universitas Mercu Buana di dada kiri. Tertinggal di sandaran kursi.',
-            image: 'https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?w=800&auto=format&fit=crop&q=80',
-            reporter_name: 'Staf Perpustakaan UMB',
-            reporter_meta: 'Pengelola Fasilitas Perpustakaan'
-        },
-        '10': {
-            id: '10',
-            type: 'found',
-            title: 'Earphone TWS Anker Soundcore',
-            brand: 'Anker Soundcore R50i',
-            category: 'Elektronik & HP',
-            category_slug: 'elektronik',
-            location_campus: 'Kampus Meruya',
-            location_specific: 'Gazebo Taman Depan Gedung Tower',
-            location_full: 'Kampus Meruya — Gazebo Taman Kampus',
-            date: '2026-02-02',
-            date_display: '02 Feb 2026',
-            time: '15.45 WIB (Sore)',
-            storage: 'Dititipkan di Pos Keamanan Kampus',
-            features: 'Charging case TWS warna hitam matte beserta sepasang earphone di dalamnya. Kondisi baterai masih menyala.',
-            image: 'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=800&auto=format&fit=crop&q=80',
-            reporter_name: 'Civitas UMB',
-            reporter_meta: 'Civitas Terverifikasi • Kampus Meruya'
-        },
-        'featured-2': {
-            id: 'featured-2',
-            type: 'lost',
-            title: 'KTM Mahasiswa UMB',
-            brand: 'Kartu Tanda Mahasiswa',
-            category: 'Buku, Dokumen & ATK',
-            category_slug: 'dokumen',
-            location_campus: 'Kampus Meruya',
-            location_specific: 'Perpustakaan Pusat Lt. 1 Meja Diskusi',
-            location_full: 'Kampus Meruya — Perpustakaan',
-            date: '2026-01-16',
-            date_display: '16 Jan 2026',
-            time: '11.00 WIB',
-            storage: 'Disimpan Sendiri',
-            features: 'Kartu Tanda Mahasiswa (KTM) UMB atas nama mahasiswa Fakultas Ilmu Komputer dengan nomor induk 4152***. Terjatuh di sekitar meja baca perpustakaan.',
-            image: 'https://images.unsplash.com/photo-1544717305-2782549b5136?w=800&auto=format&fit=crop&q=80',
-            reporter_name: 'Mahasiswa Fasilkom',
-            reporter_meta: 'Civitas Terverifikasi • NIM 4152***'
-        },
-        'featured-4': {
-            id: 'featured-4',
-            type: 'found',
-            title: 'Smartwatch Apple Watch Series 8',
-            brand: 'Apple Inc.',
-            category: 'Jam & Aksesori',
-            category_slug: 'aksesoris',
-            location_campus: 'Kampus Meruya',
-            location_specific: 'Gedung Tower UMB Lantai Dasar',
-            location_full: 'Kampus Meruya — Tower UMB',
-            date: '2026-01-20',
-            date_display: '20 Jan 2026',
-            time: '14.00 WIB',
-            storage: 'Dititipkan di Pos Keamanan Tower',
-            features: 'Apple Watch Series 8 warna midnight/hitam dengan strap sport band silikon hitam. Kondisi layar menyala dan terkunci passcode.',
-            image: 'https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?w=800&auto=format&fit=crop&q=80',
-            reporter_name: 'Petugas Keamanan Tower',
-            reporter_meta: 'Biro Pengamanan Kampus UMB'
-        }
-    };
+    // (katalog mock dihapus — semua data dari Supabase)
 
     function getReportDataById(id) {
         const idStr = String(id);
         try {
-            const raw = localStorage.getItem('findumb_custom_reports');
+            const raw = JSON.stringify(SERVER_REPORTS || []);
             if (raw) {
                 const list = JSON.parse(raw);
                 if (Array.isArray(list)) {
@@ -1687,7 +1386,7 @@
                     if (found) {
                         return {
                             ...found,
-                            reporter_name: found.reporter_name || (found.is_mine ? 'Ahmad Fauzi (Saya)' : 'Civitas UMB'),
+                            reporter_name: found.reporter_name || (found.is_mine ? @js((auth()->user()?->name ?? 'Civitas UMB').' (Saya)') : 'Civitas UMB'),
                             reporter_meta: found.reporter_meta || 'Civitas Terverifikasi • NIM 4152***'
                         };
                     }
@@ -1695,15 +1394,35 @@
             }
         } catch(e) {}
 
-        if (mockReportsCatalog[idStr]) {
-            return mockReportsCatalog[idStr];
+        // Tidak ada fallback mock: data harus ada di Supabase.
+        return null;
+    }
+
+    // Isi modal detail dari data laporan asli (Supabase).
+// Ambil laporan dari API lalu isi modal; kalau gagal, buka halaman detailnya.
+// Tombol utama di modal detail desktop → klaim sungguhan (PR-04).
+    function handleModalPrimaryAction() {
+        const modal = document.getElementById('modal-desktop-detail');
+        const id = modal ? modal.getAttribute('data-active-id') : null;
+        if (!id) return;
+
+        if (window.FindUMB && typeof window.FindUMB.claimReport === 'function') {
+            window.FindUMB.claimReport(id);
+            return;
         }
 
-        return mockReportsCatalog['1'];
+        // Fallback: buka halaman detail penuh (di sana tombolnya sudah benar).
+        window.location.href = '/report/' + String(id).replace('featured-', '');
     }
 
     function openDesktopDetailModal(id) {
-        const report = getReportDataById(id);
+        fetch(`{{ url('/api/reports') }}/${id}`, { headers: { 'Accept': 'application/json' } })
+            .then(r => r.ok ? r.json() : Promise.reject(r))
+            .then(res => fillDesktopDetailModal(res.data))
+            .catch(() => { window.location.href = `{{ url('/report') }}/${id}`; });
+    }
+
+    function fillDesktopDetailModal(report) {
         if (!report) return;
 
         const modal = document.getElementById('modal-desktop-detail');
@@ -1865,10 +1584,7 @@
         if (!modal) return;
         const id = modal.getAttribute('data-active-id') || '1';
 
-        let bookmarks = [];
-        try {
-            bookmarks = JSON.parse(localStorage.getItem('findumb_bookmarks') || '[]');
-        } catch(e) {}
+        let bookmarks = SERVER_BOOKMARKS.map(String);
 
         const index = bookmarks.indexOf(String(id));
         if (index === -1) {
@@ -1879,19 +1595,19 @@
             showToast('Laporan dihapus dari daftar tersimpan.');
         }
 
-        try {
-            localStorage.setItem('findumb_bookmarks', JSON.stringify(bookmarks));
-        } catch(e) {}
+        SERVER_BOOKMARKS = bookmarks;
+        if (IS_AUTHENTICATED) {
+            fetch(`{{ url('/api/bookmarks') }}/${id}/toggle`, {
+                method: 'POST',
+                headers: { 'X-CSRF-TOKEN': window.FindUMB_CSRF || '', 'Accept': 'application/json' },
+            }).catch(() => {});
+        }
 
         syncDetailModalBookmarkState(id);
     }
 
     function syncDetailModalBookmarkState(id) {
-        let bookmarks = [];
-        try {
-            bookmarks = JSON.parse(localStorage.getItem('findumb_bookmarks') || '[]');
-        } catch(e) {}
-        const isBookmarked = bookmarks.includes(String(id));
+        const isBookmarked = SERVER_BOOKMARKS.map(String).includes(String(id));
 
         const topBtn = document.getElementById('modal-detail-top-bookmark');
         const footerBtn = document.getElementById('modal-detail-footer-bookmark');
@@ -1939,6 +1655,7 @@
         if (item && !item.read) {
             item.read = true;
             saveNotifications(list);
+            syncNotificationRead(item.id);
         }
 
         // Check if URL points to a specific report (e.g. /report/1)
@@ -1967,6 +1684,7 @@
             }
         });
         saveNotifications(list);
+        if (updatedCount > 0) syncAllNotificationsRead();
         renderNotifications();
         showToast(updatedCount > 0 ? 'Semua notifikasi ditandai telah dibaca.' : 'Semua notifikasi sudah dibaca.');
     }

@@ -25,6 +25,7 @@ class NotificationController extends Controller
             'viewer' => $user,
             'notifications' => $notifications,
             'unreadCount' => $notifications->whereNull('read_at')->count(),
+            'savedIds' => $user->savedReports()->pluck('reports.id')->map(fn ($id) => (string) $id)->all(),
         ]);
     }
 }

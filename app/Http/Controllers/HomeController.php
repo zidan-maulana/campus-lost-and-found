@@ -18,7 +18,7 @@ class HomeController extends Controller
         $viewer = $request->user();
 
         $recent = Report::query()
-            ->publiclyVisible()
+            ->listed()
             ->with(['user', 'category'])
             ->withCount('claims')
             ->latest()
@@ -35,7 +35,7 @@ class HomeController extends Controller
                 "sum(case when type = 'lost' then 1 else 0 end) as total_lost,
                  sum(case when type = 'found' then 1 else 0 end) as total_found"
             )
-            ->publiclyVisible()
+            ->listed()
             ->first();
 
         $counts = [
@@ -50,6 +50,9 @@ class HomeController extends Controller
             'recentReports' => $recent,
             'featuredReports' => $featured,
             'categories' => ItemCategory::cachedActive(),
+            'savedIds' => $viewer
+                ? $viewer->savedReports()->pluck('reports.id')->map(fn ($id) => (string) $id)->all()
+                : [],
             'stats' => [
                 'lost' => (int) ($counts['lost'] ?? 0),
                 'found' => (int) ($counts['found'] ?? 0),

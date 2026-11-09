@@ -1033,12 +1033,12 @@
             <div class="hero-content-wrap">
                 <div class="hero-user-details">
                     <div class="hero-name-row">
-                        <h1 class="hero-user-name" id="user-display-name">Ahmad Fauzi</h1>
+                        <h1 class="hero-user-name" id="user-display-name">{{ $profile['name'] }}</h1>
                         <button type="button" class="btn-user-pencil" onclick="openEditProfileModal()" title="Ubah Profil" aria-label="Ubah Profil">
                             <i data-lucide="pencil"></i>
                         </button>
                     </div>
-                    <span class="hero-user-sub" id="user-display-sub">41521010045@student.mercubuana.ac.id</span>
+                    <span class="hero-user-sub" id="user-display-sub">{{ $profile['email'] }}</span>
                 </div>
             </div>
         </section>
@@ -1048,8 +1048,8 @@
             <div class="profile-avatar-wrap">
                 <div class="profile-avatar-wrapper" onclick="triggerAvatarUpload()" title="Klik untuk ganti foto profil">
                     <div class="profile-avatar-box">
-                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=240&auto=format&fit=crop&q=80" alt="Foto Profil" class="profile-avatar-img user-profile-avatar-elem" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                        <span class="profile-avatar-fallback" style="display: none;">A</span>
+                        <img src="{{ $profile['avatar_url'] ?? 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=240&auto=format&fit=crop&q=80' }}" alt="Foto Profil" class="profile-avatar-img user-profile-avatar-elem" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <span class="profile-avatar-fallback" style="display: none;">{{ $profile['initials'] }}</span>
                     </div>
                     <div class="avatar-camera-btn" aria-label="Ganti Foto Profil">
                         <i data-lucide="camera"></i>
@@ -1060,15 +1060,15 @@
             <!-- Stats Row -->
             <div class="profile-stats-row">
                 <div class="stat-item">
-                    <span class="stat-val" id="stat-reports-count">2</span>
+                    <span class="stat-val" id="stat-reports-count">{{ $stats['reports'] }}</span>
                     <span class="stat-lbl">Laporan</span>
                 </div>
                 <div class="stat-item">
-                    <span class="stat-val" id="stat-recovered-count">1</span>
+                    <span class="stat-val" id="stat-recovered-count">{{ $stats['resolved'] }}</span>
                     <span class="stat-lbl">Terselesaikan</span>
                 </div>
                 <div class="stat-item" onclick="window.location.href='{{ route('saved.reports') }}'" style="cursor: pointer;">
-                    <span class="stat-val" id="stat-saved-count">3</span>
+                    <span class="stat-val" id="stat-saved-count">{{ $stats['saved'] }}</span>
                     <span class="stat-lbl">Disimpan</span>
                 </div>
             </div>
@@ -1088,7 +1088,7 @@
                     <span class="profile-item-title">Nama Lengkap</span>
                 </div>
                 <div class="profile-item-right-val">
-                    <span class="profile-val-text" id="user-mobile-info-name">Ahmad Fauzi</span>
+                    <span class="profile-val-text" id="user-mobile-info-name">{{ $profile['name'] }}</span>
                 </div>
             </div>
 
@@ -1099,7 +1099,7 @@
                     <span class="profile-item-title">NIM</span>
                 </div>
                 <div class="profile-item-right-val">
-                    <span class="profile-val-text" id="user-mobile-info-nim">41521010045</span>
+                    <span class="profile-val-text" id="user-mobile-info-nim">{{ $profile['nim'] ?? '—' }}</span>
                 </div>
             </div>
 
@@ -1110,7 +1110,7 @@
                     <span class="profile-item-title">Fakultas</span>
                 </div>
                 <div class="profile-item-right-val">
-                    <span class="profile-val-text" id="user-mobile-info-faculty">-</span>
+                    <span class="profile-val-text" id="user-mobile-info-faculty">{{ $profile['faculty'] ?: '-' }}</span>
                 </div>
             </div>
 
@@ -1121,7 +1121,7 @@
                     <span class="profile-item-title">Program Studi</span>
                 </div>
                 <div class="profile-item-right-val">
-                    <span class="profile-val-text" id="user-mobile-info-prodi">-</span>
+                    <span class="profile-val-text" id="user-mobile-info-prodi">{{ $profile['prodi'] ?: '-' }}</span>
                 </div>
             </div>
 
@@ -1240,7 +1240,7 @@
 
         <!-- Page Title & Greeting with Subtext -->
         <div class="profile-desktop-header">
-            <h1 class="profile-desktop-title" id="profile-greeting-title">Selamat Datang Kembali, Fauzi!</h1>
+            <h1 class="profile-desktop-title" id="profile-greeting-title">Selamat Datang Kembali, {{ \Illuminate\Support\Str::of($profile['name'])->explode(' ')->first() }}!</h1>
             <p class="profile-desktop-sub">Kelola informasi profil civitas, pantau status penanganan laporan, dan cek barang tersimpan Anda.</p>
         </div>
 
@@ -1249,16 +1249,16 @@
             <div class="profile-summary-left">
                 <div class="profile-avatar-wrapper" onclick="triggerAvatarUpload()" title="Klik untuk ganti foto profil">
                     <div class="profile-summary-avatar-box">
-                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=240&auto=format&fit=crop&q=80" alt="Foto Profil" class="profile-summary-avatar-img user-profile-avatar-elem" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                        <span class="profile-summary-avatar-fallback" style="display: none;">A</span>
+                        <img src="{{ $profile['avatar_url'] ?? 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=240&auto=format&fit=crop&q=80' }}" alt="Foto Profil" class="profile-summary-avatar-img user-profile-avatar-elem" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <span class="profile-summary-avatar-fallback" style="display: none;">{{ $profile['initials'] }}</span>
                     </div>
                     <div class="avatar-camera-btn" aria-label="Ganti Foto Profil">
                         <i data-lucide="camera"></i>
                     </div>
                 </div>
                 <div class="profile-summary-details">
-                    <h2 class="profile-summary-name" id="user-desktop-name">Ahmad Fauzi</h2>
-                    <p class="profile-summary-role" id="user-desktop-role">Mahasiswa</p>
+                    <h2 class="profile-summary-name" id="user-desktop-name">{{ $profile['name'] }}</h2>
+                    <p class="profile-summary-role" id="user-desktop-role">{{ $profile['prodi'] ? $profile['role_label'].' — '.$profile['prodi'] : $profile['role_label'] }}</p>
                 </div>
             </div>
             <button type="button" class="btn-header-edit-profile btn-card-edit-profile" id="btn-card-edit-profile" onclick="openEditProfileModal()" title="Ubah Profil">
@@ -1276,25 +1276,25 @@
                 <!-- Field 1: Nama Lengkap -->
                 <div class="info-field-group">
                     <span class="info-field-label">Nama Lengkap</span>
-                    <span class="info-field-value" id="user-info-name">Ahmad Fauzi</span>
+                    <span class="info-field-value" id="user-info-name">{{ $profile['name'] }}</span>
                 </div>
 
                 <!-- Field 2: NIM (Tetap / Permanen) -->
                 <div class="info-field-group">
                     <span class="info-field-label">Nomor Induk Mahasiswa (NIM)</span>
-                    <span class="info-field-value" id="user-info-nim">41521010045</span>
+                    <span class="info-field-value" id="user-info-nim">{{ $profile['nim'] ?? '—' }}</span>
                 </div>
 
                 <!-- Field 3: Fakultas -->
                 <div class="info-field-group">
                     <span class="info-field-label">Fakultas</span>
-                    <span class="info-field-value" id="user-info-faculty">-</span>
+                    <span class="info-field-value" id="user-info-faculty">{{ $profile['faculty'] ?: '-' }}</span>
                 </div>
 
                 <!-- Field 4: Program Studi -->
                 <div class="info-field-group">
                     <span class="info-field-label">Program Studi</span>
-                    <span class="info-field-value" id="user-info-prodi">-</span>
+                    <span class="info-field-value" id="user-info-prodi">{{ $profile['prodi'] ?: '-' }}</span>
                 </div>
             </div>
         </div>
@@ -1316,7 +1316,7 @@
                         <i data-lucide="file-text"></i>
                     </div>
                     <div class="stat-counter-text">
-                        <span class="stat-counter-val" id="stat-desktop-reports">2</span>
+                        <span class="stat-counter-val" id="stat-desktop-reports">{{ $stats['reports'] }}</span>
                         <span class="stat-counter-label">Laporan Dibuat</span>
                     </div>
                 </a>
@@ -1327,7 +1327,7 @@
                         <i data-lucide="check-circle-2"></i>
                     </div>
                     <div class="stat-counter-text">
-                        <span class="stat-counter-val" id="stat-desktop-recovered">1</span>
+                        <span class="stat-counter-val" id="stat-desktop-recovered">{{ $stats['resolved'] }}</span>
                         <span class="stat-counter-label">Terselesaikan</span>
                     </div>
                 </a>
@@ -1338,7 +1338,7 @@
                         <i data-lucide="bookmark"></i>
                     </div>
                     <div class="stat-counter-text">
-                        <span class="stat-counter-val" id="stat-desktop-saved">3</span>
+                        <span class="stat-counter-val" id="stat-desktop-saved">{{ $stats['saved'] }}</span>
                         <span class="stat-counter-label">Barang Disimpan</span>
                     </div>
                 </a>
@@ -1358,7 +1358,7 @@
                         </div>
                     </div>
                     <div class="desktop-act-right">
-                        <span class="desktop-act-pill" id="badge-desktop-my-reports">2 Laporan</span>
+                        <span class="desktop-act-pill" id="badge-desktop-my-reports">{{ $stats['reports'] }} Laporan</span>
                         <i data-lucide="chevron-right" class="desktop-act-chevron"></i>
                     </div>
                 </a>
@@ -1375,7 +1375,7 @@
                         </div>
                     </div>
                     <div class="desktop-act-right">
-                        <span class="desktop-act-pill pill-amber" id="badge-desktop-saved-count">3 Disimpan</span>
+                        <span class="desktop-act-pill pill-amber" id="badge-desktop-saved-count">{{ $stats['saved'] }} Disimpan</span>
                         <i data-lucide="chevron-right" class="desktop-act-chevron"></i>
                     </div>
                 </a>
@@ -1392,7 +1392,7 @@
                         </div>
                     </div>
                     <div class="desktop-act-right">
-                        <span class="desktop-act-pill pill-red">12 Percakapan</span>
+                        <span class="desktop-act-pill pill-red">{{ $stats['conversations'] }} Percakapan</span>
                         <i data-lucide="chevron-right" class="desktop-act-chevron"></i>
                     </div>
                 </a>
@@ -1409,7 +1409,7 @@
                         </div>
                     </div>
                     <div class="desktop-act-right">
-                        <span class="desktop-act-pill pill-red" id="badge-desktop-notif">15+ Baru</span>
+                        <span class="desktop-act-pill pill-red" id="badge-desktop-notif">{{ $stats['unread_notifications'] }} Baru</span>
                         <i data-lucide="chevron-right" class="desktop-act-chevron"></i>
                     </div>
                 </a>
@@ -1438,13 +1438,13 @@
                 <!-- 1. Nama Lengkap (Dapat Diedit) -->
                 <div class="profile-input-group">
                     <label class="profile-input-label" for="edit-profile-name">Nama Lengkap</label>
-                    <input type="text" id="edit-profile-name" class="profile-input" required value="Ahmad Fauzi">
+                    <input type="text" id="edit-profile-name" class="profile-input" required value="{{ $profile['name'] }}">
                 </div>
 
                 <!-- 2. NIM (HANYA BACA / TIDAK DAPAT DIEDIT) -->
                 <div class="profile-input-group">
                     <label class="profile-input-label" for="edit-profile-nim">Nomor Induk Mahasiswa (NIM)</label>
-                    <input type="text" id="edit-profile-nim" class="profile-input profile-input-disabled" value="41521010045" readonly disabled>
+                    <input type="text" id="edit-profile-nim" class="profile-input profile-input-disabled" value="{{ $profile['nim'] ?? '' }}" readonly disabled>
                     <span class="profile-input-hint">
                         <i data-lucide="lock" style="width: 12px; height: 12px;"></i>
                         <span>NIM resmi terdaftar pada pangkalan data UMB dan tidak dapat diubah</span>
@@ -1710,6 +1710,10 @@
 
 @push('scripts')
 <script>
+    // Data akun asli dari server — bukan lagi seed prototipe di localStorage.
+    const FINDUMB_PROFILE = @json($profile);
+    const FINDUMB_STATS = @json($stats);
+
     document.addEventListener('DOMContentLoaded', () => {
         if (typeof lucide !== 'undefined') {
             lucide.createIcons();
@@ -1718,6 +1722,27 @@
         updateProfileStats();
         updateProfileNotifBadge();
     });
+
+    function csrfToken() {
+        return window.FindUMB_CSRF
+            || document.querySelector('meta[name="csrf-token"]')?.content
+            || '';
+    }
+
+    function uploadAvatarToServer(file) {
+        const form = new FormData();
+        form.append('avatar', file);
+        form.append('_method', 'PATCH');
+
+        return fetch('{{ route('api.profile.update') }}', {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': csrfToken(),
+                'Accept': 'application/json',
+            },
+            body: form,
+        }).then(r => r.ok ? r.json() : Promise.reject(r));
+    }
 
     function triggerAvatarUpload() {
         const fileInput = document.getElementById('input-avatar-file');
@@ -1742,44 +1767,26 @@
                     fb.style.display = 'none';
                 });
 
-                let existingProfile = {};
-                try {
-                    const raw = localStorage.getItem('findumb_user_profile');
-                    if (raw) existingProfile = JSON.parse(raw);
-                } catch(err) {}
-
-                const updated = {
-                    ...existingProfile,
-                    avatar: avatarDataUrl
-                };
-
-                try {
-                    localStorage.setItem('findumb_user_profile', JSON.stringify(updated));
-                } catch(err) {}
-
-                showToast('✓ Foto profil berhasil diperbarui!');
+                // Simpan ke server supaya foto ikut akun, bukan cuma browser ini.
+                uploadAvatarToServer(file)
+                    .then(() => showToast('✓ Foto profil berhasil diperbarui!'))
+                    .catch(() => showToast('Foto tampil sementara, gagal disimpan ke server.'));
             };
             reader.readAsDataURL(file);
         }
     }
 
     function getGreetingName(fullName) {
-        if (!fullName) return 'Fauzi';
-        const trimmed = fullName.trim();
-        if (trimmed.toLowerCase().includes('fauzi')) return 'Fauzi';
-        const parts = trimmed.split(/\s+/);
-        return parts[0] || 'Fauzi';
+        if (!fullName) return 'Civitas';
+        const parts = fullName.trim().split(/\s+/);
+        return parts[0] || 'Civitas';
     }
 
     function loadUserProfile() {
         try {
-            const raw = localStorage.getItem('findumb_user_profile');
-            let profile = {};
-            if (raw) {
-                profile = JSON.parse(raw);
-            }
+            const profile = FINDUMB_PROFILE || {};
 
-            const name = profile.name || 'Ahmad Fauzi';
+            const name = profile.name || 'Civitas UMB';
             const faculty = (profile.faculty && profile.faculty.trim() !== '') ? profile.faculty.trim() : '-';
             const prodi = (profile.prodi && profile.prodi.trim() !== '') ? profile.prodi.trim() : '-';
 
@@ -1807,18 +1814,15 @@
 
             const elRole = document.getElementById('user-desktop-role');
             if (elRole) {
-                elRole.textContent = prodi !== '-' ? `Mahasiswa — ${prodi}` : 'Mahasiswa';
+                const roleLabel = profile.role_label || 'Mahasiswa';
+                elRole.textContent = prodi !== '-' ? `${roleLabel} — ${prodi}` : roleLabel;
             }
 
-            if (profile.avatar) {
-                document.querySelectorAll('.user-profile-avatar-elem').forEach(img => {
-                    img.src = profile.avatar;
-                    img.style.display = 'block';
-                });
-                document.querySelectorAll('.profile-avatar-fallback, .profile-summary-avatar-fallback').forEach(fb => {
-                    fb.style.display = 'none';
-                });
-            }
+            const elNim = document.getElementById('user-mobile-info-nim');
+            if (elNim) elNim.textContent = profile.nim || '—';
+
+            const elEmail = document.getElementById('user-display-sub');
+            if (elEmail) elEmail.textContent = profile.email || '';
         } catch(e) {}
     }
 
@@ -1826,18 +1830,13 @@
         const modal = document.getElementById('modal-edit-profile');
         if (!modal) return;
 
-        let profile = {};
-        try {
-            const raw = localStorage.getItem('findumb_user_profile');
-            if (raw) profile = JSON.parse(raw);
-        } catch(e) {}
-
-        const currentName = profile.name || document.getElementById('user-desktop-name')?.textContent || 'Ahmad Fauzi';
+        const profile = FINDUMB_PROFILE || {};
+        const currentName = profile.name || document.getElementById('user-desktop-name')?.textContent || '';
         const currentFaculty = (profile.faculty && profile.faculty !== '-') ? profile.faculty : '';
         const currentProdi = (profile.prodi && profile.prodi !== '-') ? profile.prodi : '';
 
         document.getElementById('edit-profile-name').value = currentName.trim();
-        document.getElementById('edit-profile-nim').value = '41521010045';
+        document.getElementById('edit-profile-nim').value = profile.nim || '';
         document.getElementById('edit-profile-faculty').value = currentFaculty;
         document.getElementById('edit-profile-prodi').value = currentProdi;
 
@@ -1869,51 +1868,59 @@
             return;
         }
 
-        let existingProfile = {};
-        try {
-            const raw = localStorage.getItem('findumb_user_profile');
-            if (raw) existingProfile = JSON.parse(raw);
-        } catch(err) {}
-
-        const profileData = {
-            ...existingProfile,
+        const payload = {
             name: name,
-            nim: '41521010045',
-            faculty: facultyInput ? facultyInput : '-',
-            prodi: prodiInput ? prodiInput : '-'
+            faculty: facultyInput || null,
+            prodi: prodiInput || null,
         };
 
-        try {
-            localStorage.setItem('findumb_user_profile', JSON.stringify(profileData));
-        } catch(err) {}
+        fetch('{{ route('api.profile.update') }}', {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken(),
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify(payload),
+        })
+            .then(r => r.ok ? r.json() : Promise.reject(r))
+            .then(() => {
+                // Sinkronkan state lokal + DOM setelah server konfirmasi.
+                FINDUMB_PROFILE.name = name;
+                FINDUMB_PROFILE.faculty = facultyInput || null;
+                FINDUMB_PROFILE.prodi = prodiInput || null;
 
-        // Update elements in DOM
-        const elGreeting = document.getElementById('profile-greeting-title');
-        if (elGreeting) elGreeting.textContent = `Selamat Datang Kembali, ${getGreetingName(name)}!`;
+                const faculty = facultyInput || '-';
+                const prodi = prodiInput || '-';
 
-        document.getElementById('user-display-name').textContent = name;
-        document.getElementById('user-desktop-name').textContent = name;
-        document.getElementById('user-info-name').textContent = name;
+                const elGreeting = document.getElementById('profile-greeting-title');
+                if (elGreeting) elGreeting.textContent = `Selamat Datang Kembali, ${getGreetingName(name)}!`;
 
-        const elFaculty = document.getElementById('user-info-faculty');
-        if (elFaculty) elFaculty.textContent = profileData.faculty;
-        const elProdi = document.getElementById('user-info-prodi');
-        if (elProdi) elProdi.textContent = profileData.prodi;
+                ['user-display-name', 'user-desktop-name', 'user-info-name', 'user-mobile-info-name'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.textContent = name;
+                });
 
-        const elMobName = document.getElementById('user-mobile-info-name');
-        if (elMobName) elMobName.textContent = name;
-        const elMobFaculty = document.getElementById('user-mobile-info-faculty');
-        if (elMobFaculty) elMobFaculty.textContent = profileData.faculty;
-        const elMobProdi = document.getElementById('user-mobile-info-prodi');
-        if (elMobProdi) elMobProdi.textContent = profileData.prodi;
+                ['user-info-faculty', 'user-mobile-info-faculty'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.textContent = faculty;
+                });
 
-        const elRole = document.getElementById('user-desktop-role');
-        if (elRole) {
-            elRole.textContent = profileData.prodi !== '-' ? `Mahasiswa — ${profileData.prodi}` : 'Mahasiswa';
-        }
+                ['user-info-prodi', 'user-mobile-info-prodi'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.textContent = prodi;
+                });
 
-        closeEditProfileModal();
-        showToast('✓ Profil civitas berhasil diperbarui!');
+                const elRole = document.getElementById('user-desktop-role');
+                if (elRole) {
+                    const roleLabel = FINDUMB_PROFILE.role_label || 'Mahasiswa';
+                    elRole.textContent = prodi !== '-' ? `${roleLabel} — ${prodi}` : roleLabel;
+                }
+
+                closeEditProfileModal();
+                showToast('✓ Profil civitas berhasil diperbarui!');
+            })
+            .catch(() => showToast('Gagal menyimpan profil. Coba lagi.'));
     }
 
     function handleEditProfile() {
@@ -1923,28 +1930,18 @@
     function updateProfileNotifBadge() {
         const pill = document.getElementById('profile-notif-pill');
         const deskNotif = document.getElementById('badge-desktop-notif');
-        try {
-            const raw = localStorage.getItem('findumb_notifications');
-            let unreadCount = 3;
-            if (raw) {
-                const list = JSON.parse(raw);
-                if (Array.isArray(list)) {
-                    unreadCount = list.filter(n => !n.read).length;
-                }
+        const unreadCount = (FINDUMB_STATS || {}).unread_notifications ?? 0;
+
+        if (unreadCount > 0) {
+            if (pill) {
+                pill.textContent = `${unreadCount} Baru`;
+                pill.style.display = 'inline-block';
             }
-            if (unreadCount > 0) {
-                if (pill) {
-                    pill.textContent = `${unreadCount} Baru`;
-                    pill.style.display = 'inline-block';
-                }
-                if (deskNotif) {
-                    deskNotif.textContent = `${unreadCount} Baru`;
-                }
-            } else {
-                if (pill) pill.style.display = 'none';
-                if (deskNotif) deskNotif.textContent = 'Semua Dibaca';
-            }
-        } catch(e) {}
+            if (deskNotif) deskNotif.textContent = `${unreadCount} Baru`;
+        } else {
+            if (pill) pill.style.display = 'none';
+            if (deskNotif) deskNotif.textContent = 'Semua Dibaca';
+        }
     }
 
     function showToast(message) {
@@ -1958,109 +1955,61 @@
         }
     }
 
-    const DEFAULT_USER_REPORTS = [
-        {
-            id: '1',
-            type: 'lost',
-            title: 'Samsung SM-A135F',
-            brand: 'Samsung Galaxy A13',
-            category: 'Elektronik & HP',
-            status: 'lost',
-            is_mine: true
-        },
-        {
-            id: '5',
-            type: 'lost',
-            title: 'Cincin Emas Berlian',
-            brand: 'Perhiasan Emas Kuning',
-            category: 'Jam & Aksesori',
-            status: 'lost',
-            is_mine: true
-        }
-    ];
-
-    function getUserReports() {
-        try {
-            let list = [];
-            const raw = localStorage.getItem('findumb_custom_reports');
-            if (raw) {
-                const parsed = JSON.parse(raw);
-                if (Array.isArray(parsed) && parsed.length > 0) {
-                    list = parsed;
-                }
-            }
-            if (!list || list.length === 0) {
-                list = [...DEFAULT_USER_REPORTS];
-                localStorage.setItem('findumb_reports_initialized', 'true');
-                localStorage.setItem('findumb_custom_reports', JSON.stringify(list));
-                return list;
-            }
-            return list.filter(r => {
-                const idStr = String(r.id);
-                if (['2', '3', '4', '6', '7', '8'].includes(idStr)) return false;
-                if (r.is_mine === false) return false;
-                if (idStr === '1' || idStr === '5') return true;
-                if (idStr.startsWith('rep_') || r.is_mine === true) return true;
-                if (r.reporter_name && r.reporter_name.includes('Ahmad Fauzi')) return true;
-                return false;
-            });
-        } catch(e) {
-            return [...DEFAULT_USER_REPORTS];
-        }
-    }
-
     function updateProfileStats() {
         try {
-            const userReports = getUserReports();
-            const statReports = document.getElementById('stat-reports-count');
-            const statRecovered = document.getElementById('stat-recovered-count');
-            const statSaved = document.getElementById('stat-saved-count');
+            // Angka statistik datang dari server (akun yang sedang login).
+            const stats = FINDUMB_STATS || {};
+            const count = stats.reports ?? 0;
+            const resolved = stats.resolved ?? 0;
+            const savedCount = stats.saved ?? 0;
+            const conversations = stats.conversations ?? 0;
 
-            const deskReports = document.getElementById('stat-desktop-reports');
-            const deskRecovered = document.getElementById('stat-desktop-recovered');
-            const deskSaved = document.getElementById('stat-desktop-saved');
+            ['stat-reports-count', 'stat-desktop-reports'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.textContent = count;
+            });
+            ['stat-recovered-count', 'stat-desktop-recovered'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.textContent = resolved;
+            });
+            ['stat-saved-count', 'stat-desktop-saved'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.textContent = savedCount;
+            });
+
             const deskMyReportsBadge = document.getElementById('badge-desktop-my-reports');
-            const deskSavedBadge = document.getElementById('badge-desktop-saved-count');
-            const mobSavedPill = document.getElementById('mobile-saved-pill');
-
-            const count = userReports.length;
-            const completedCount = userReports.filter(r => r.status === 'resolved' || r.status === 'completed' || r.type === 'found').length;
-            const completedVal = completedCount > 0 ? completedCount : 1;
-
-            let savedCount = 3;
-            try {
-                const rawBookmarks = localStorage.getItem('findumb_bookmarks');
-                if (rawBookmarks) {
-                    const parsed = JSON.parse(rawBookmarks);
-                    if (Array.isArray(parsed)) savedCount = parsed.length;
-                } else {
-                    const rawSaved = localStorage.getItem('findumb_saved_reports_list');
-                    if (rawSaved) {
-                        const parsed = JSON.parse(rawSaved);
-                        if (Array.isArray(parsed)) savedCount = parsed.length;
-                    }
-                }
-            } catch(e) {}
-
-            if (statReports) statReports.textContent = count;
-            if (statRecovered) statRecovered.textContent = completedVal;
-            if (statSaved) statSaved.textContent = savedCount;
-
-            if (deskReports) deskReports.textContent = count;
-            if (deskRecovered) deskRecovered.textContent = completedVal;
-            if (deskSaved) deskSaved.textContent = savedCount;
             if (deskMyReportsBadge) deskMyReportsBadge.textContent = `${count} Laporan`;
+
+            const deskSavedBadge = document.getElementById('badge-desktop-saved-count');
             if (deskSavedBadge) deskSavedBadge.textContent = `${savedCount} Disimpan`;
+
+            const mobSavedPill = document.getElementById('mobile-saved-pill');
             if (mobSavedPill) mobSavedPill.textContent = savedCount;
+
+            document.querySelectorAll('.desktop-act-pill.pill-red').forEach(el => {
+                if (el.textContent.includes('Percakapan')) {
+                    el.textContent = `${conversations} Percakapan`;
+                }
+            });
         } catch(e) {}
     }
 
     function handleSignOut() {
         if (confirm('Apakah Anda ingin keluar dari sesi akun FindUMB?')) {
             showToast('Anda telah keluar.');
-            setTimeout(() => {
-                window.location.href = "{{ route('home') }}";
-            }, 800);
+            // Logout beneran (POST /logout), bukan cuma pindah halaman.
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = "{{ route('logout') }}";
+
+            const token = document.createElement('input');
+            token.type = 'hidden';
+            token.name = '_token';
+            token.value = csrfToken();
+            form.appendChild(token);
+
+            document.body.appendChild(form);
+            form.submit();
         }
     }
 

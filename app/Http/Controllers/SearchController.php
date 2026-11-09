@@ -23,7 +23,7 @@ class SearchController extends Controller
         };
 
         $reports = Report::query()
-            ->publiclyVisible()
+            ->listed()
             ->ofType($type)
             ->search($request->query('q'))
             ->when($request->query('category'), function ($query, $category) {
@@ -42,7 +42,10 @@ class SearchController extends Controller
             })
             ->with(['user', 'category'])
             ->withCount('claims')
-            ->latest()
+            // Urutan HARUS sama dengan sort JS (tanggal kejadian terbaru) supaya
+            // kartu tidak "kedip" ganti urutan setelah halaman selesai dimuat.
+            ->orderByDesc('incident_date')
+            ->orderByDesc('id')
             ->paginate((int) config('findumb.report.per_page', 12))
             ->withQueryString();
 
@@ -50,6 +53,9 @@ class SearchController extends Controller
             'viewer' => $request->user(),
             'reports' => $reports,
             'categories' => ItemCategory::cachedActive(),
+            'savedIds' => $request->user()
+                ? $request->user()->savedReports()->pluck('reports.id')->map(fn ($id) => (string) $id)->all()
+                : [],
             'filters' => [
                 'q' => (string) $request->query('q', ''),
                 'type' => $request->query('type'),

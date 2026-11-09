@@ -36,6 +36,7 @@ class MyReportsController extends Controller
             'viewer' => $user,
             'reports' => $reports,
             'myClaims' => $myClaims,
+            'savedIds' => $user->savedReports()->pluck('reports.id')->map(fn ($id) => (string) $id)->all(),
             'activeClaim' => $user->activeClaim()?->load('report'),
         ]);
     }

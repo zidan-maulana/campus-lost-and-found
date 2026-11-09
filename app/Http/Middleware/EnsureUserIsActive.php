@@ -23,6 +23,15 @@ class EnsureUserIsActive
 
             $message = 'Akun Anda sedang ditangguhkan oleh administrator. Hubungi pengelola platform untuk informasi lebih lanjut.';
 
+            if ($request->is('api/v1/*')) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $message,
+                    'errors' => (object) [],
+                    'code' => 403,
+                ], 403);
+            }
+
             return $request->expectsJson()
                 ? response()->json(['message' => $message], 403)
                 : redirect()->route('login')->withErrors(['email' => $message]);

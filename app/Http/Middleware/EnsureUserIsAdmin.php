@@ -17,7 +17,9 @@ class EnsureUserIsAdmin
         $user = $request->user();
 
         if (! $user || ! $user->isAdmin()) {
-            abort($request->expectsJson() ? 403 : 404);
+            abort($request->expectsJson() ? 403 : 404, $request->expectsJson()
+                ? 'Anda tidak memiliki hak akses untuk tindakan ini.'
+                : '');
         }
 
         return $next($request);

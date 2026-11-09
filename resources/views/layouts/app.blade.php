@@ -2104,25 +2104,33 @@
 
                 <!-- 2. Komunikasi Cepat (Pesan Masuk & Notifikasi dengan Indikator Merah) -->
                 <div class="sidebar-links-group">
-                    <a href="{{ route('messages') }}" class="sidebar-nav-item {{ request()->is('messages*') ? 'active' : '' }}" title="Pesan Masuk Civitas (12 pesan)">
+                    <a href="{{ route('messages') }}" class="sidebar-nav-item {{ request()->is('messages*') ? 'active' : '' }}" title="Pesan Masuk Civitas ({{ $navCounts['messages'] ?? 0 }} percakapan)">
                         <div class="sidebar-item-left">
                             <div class="sidebar-item-icon" style="position: relative;">
                                 <i data-lucide="inbox"></i>
-                                <span class="sidebar-rail-notif-dot"></span>
+                                @if (($navCounts['messages'] ?? 0) > 0)
+                                    <span class="sidebar-rail-notif-dot"></span>
+                                @endif
                             </div>
                             <span class="sidebar-item-label">Pesan Masuk</span>
                         </div>
-                        <span class="sidebar-badge-counter sidebar-badge-notif">12</span>
+                        @if (($navCounts['messages'] ?? 0) > 0)
+                            <span class="sidebar-badge-counter sidebar-badge-notif">{{ $navCounts['messages'] }}</span>
+                        @endif
                     </a>
-                    <a href="{{ route('notifications') }}" class="sidebar-nav-item {{ request()->is('notifications*') ? 'active' : '' }}" title="Notifikasi (15+ pemberitahuan)">
+                    <a href="{{ route('notifications') }}" class="sidebar-nav-item {{ request()->is('notifications*') ? 'active' : '' }}" title="Notifikasi ({{ $navCounts['notifications'] ?? 0 }} belum dibaca)">
                         <div class="sidebar-item-left">
                             <div class="sidebar-item-icon" style="position: relative;">
                                 <i data-lucide="bell"></i>
-                                <span class="sidebar-rail-notif-dot"></span>
+                                @if (($navCounts['notifications'] ?? 0) > 0)
+                                    <span class="sidebar-rail-notif-dot"></span>
+                                @endif
                             </div>
                             <span class="sidebar-item-label">Notifikasi</span>
                         </div>
-                        <span class="sidebar-badge-counter sidebar-badge-notif">15+</span>
+                        @if (($navCounts['notifications'] ?? 0) > 0)
+                            <span class="sidebar-badge-counter sidebar-badge-notif">{{ $navCounts['notifications'] }}</span>
+                        @endif
                     </a>
                 </div>
 
@@ -2221,14 +2229,19 @@
 
                 <!-- 6. Footer User Profile Card -->
                 <div class="sidebar-footer">
-                    <a href="{{ route('profile') }}" class="sidebar-user-card" title="Buka Profil Saya">
+                    <a href="{{ auth()->check() ? route('profile') : route('login') }}" class="sidebar-user-card" title="{{ auth()->check() ? 'Buka Profil Saya' : 'Masuk ke akun' }}">
                         <div class="sidebar-user-left">
                             <div class="sidebar-user-avatar">
                                 <i data-lucide="user"></i>
                             </div>
                             <div class="sidebar-user-info">
-                                <span class="sidebar-user-name">Zidan Maulana</span>
-                                <span class="sidebar-user-role">Civitas Akademika UMB</span>
+                                @auth
+                                    <span class="sidebar-user-name">{{ auth()->user()->name }}</span>
+                                    <span class="sidebar-user-role">{{ auth()->user()->isAdmin() ? 'Administrator Platform' : 'Civitas Akademika UMB' }}</span>
+                                @else
+                                    <span class="sidebar-user-name">Masuk / Daftar</span>
+                                    <span class="sidebar-user-role">Belum masuk</span>
+                                @endauth
                             </div>
                         </div>
                         <i data-lucide="chevrons-up-down" class="sidebar-user-chevrons"></i>
@@ -2776,17 +2789,11 @@
                 });
             }
 
-            // Sync notification dot with stored notifications
+            // Titik notifikasi ikut hitungan server (bukan cache localStorage).
             const headerDot = document.getElementById('header-notif-dot');
             if (headerDot) {
-                try {
-                    const rawNotifs = localStorage.getItem('findumb_notifications');
-                    if (rawNotifs) {
-                        const notifs = JSON.parse(rawNotifs);
-                        const hasUnread = Array.isArray(notifs) && notifs.some(n => !n.read);
-                        headerDot.style.display = hasUnread ? 'block' : 'none';
-                    }
-                } catch(e) {}
+                const unread = {{ (int) ($navCounts['notifications'] ?? 0) }};
+                headerDot.style.display = unread > 0 ? 'block' : 'none';
             }
         });
     </script>
@@ -2800,6 +2807,6 @@
         window.FindUMB_USER_ROLE = @json(auth()->user()?->isAdmin() ? 'Administrator Platform' : 'Civitas Akademika UMB');
         window.FindUMB_CATEGORIES = @json(\App\Models\ItemCategory::cachedSlugMap());
     </script>
-    <script src="{{ asset('js/findumb-api.js') }}"></script>
+    <script src="{{ asset('js/findumb-api.js') }}?v={{ filemtime(public_path('js/findumb-api.js')) }}"></script>
 </body>
 </html>
