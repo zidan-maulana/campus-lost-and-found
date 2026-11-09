@@ -1272,7 +1272,7 @@
                 <div class="desktop-detail-author-avatar">
                     <i data-lucide="user"></i>
                 </div>
-                <span class="desktop-detail-author-name" id="modal-detail-reporter-name">Ahmad Fauzi (Saya)</span>
+                <span class="desktop-detail-author-name" id="modal-detail-reporter-name">{{ auth()->user()?->name ?? 'Civitas UMB' }} (Saya)</span>
                 <span class="reporter-badge-verified" title="Terverifikasi">
                     <i data-lucide="check-circle-2"></i>
                 </span>
@@ -1377,98 +1377,39 @@
 
 @push('scripts')
 <script>
-    // Initial Seed Reports for Ahmad Fauzi (NIM 41521010045)
-    const DEFAULT_USER_REPORTS = [
-        {
-            id: '1',
-            type: 'lost',
-            title: 'Samsung SM-A135F',
-            brand: 'Samsung Galaxy A13',
-            category: 'Elektronik & HP',
-            category_slug: 'elektronik',
-            category_label: 'Elektronik & HP',
-            location_campus: 'Kampus Meruya',
-            location_specific: 'Gedung Tower Lt. 7 R. 702',
-            location_full: 'Kampus Meruya — Gedung Tower Lt. 7 R. 702',
-            date: '2026-06-20',
-            date_display: '20 Jun 2026',
-            time: '14.30 WIB (Siang)',
-            storage: 'Disimpan Sendiri',
-            features: 'Smartphone Samsung warna hitam, terpasang casing transparan dengan stiker logo Informatika di bagian belakang. Layar dalam keadaan terkunci.',
-            image: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=800&auto=format&fit=crop&q=80',
-            status: 'lost',
-            is_mine: true,
-            created_at: '2026-06-20T14:30:00.000Z'
-        },
-        {
-            id: '5',
-            type: 'lost',
-            title: 'Cincin Emas Berlian',
-            brand: 'Perhiasan Emas Kuning',
-            category: 'Jam & Aksesori',
-            category_slug: 'aksesoris',
-            category_label: 'Jam & Aksesori',
-            location_campus: 'Kampus Meruya',
-            location_specific: 'Parkir Barat Kampus Meruya',
-            location_full: 'Kampus Meruya — Parkir Barat Kampus Meruya',
-            date: '2026-01-15',
-            date_display: '15 Jan 2026',
-            time: 'Siang saat menuju kendaraan',
-            storage: 'Disimpan Sendiri',
-            features: 'Cincin emas sepasang model pertunangan/pernikahan dengan ukiran inisial halus di lingkar dalam. Terjatuh di sekitar parkiran.',
-            image: 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=800&auto=format&fit=crop&q=80',
-            status: 'lost',
-            is_mine: true,
-            created_at: '2026-01-15T12:00:00.000Z'
-        }
-    ];
+    // Laporan milik akun yang login — dari server, bukan seed prototipe.
+    const SERVER_REPORTS = @json($reports->map(fn ($r) => $r->toUiArray($viewer))->values());
+    let SERVER_BOOKMARKS = @json($savedIds ?? []);
+    const IS_AUTHENTICATED = @json(auth()->check());
 
     let currentFilter = 'all';
 
     function getUserReports() {
-        try {
-            let list = [];
-            const raw = localStorage.getItem('findumb_custom_reports');
-            if (raw) {
-                const parsed = JSON.parse(raw);
-                if (Array.isArray(parsed) && parsed.length > 0) {
-                    list = parsed;
-                }
-            }
-            if (!list || list.length === 0) {
-                list = [...DEFAULT_USER_REPORTS];
-                localStorage.setItem('findumb_reports_initialized', 'true');
-                localStorage.setItem('findumb_custom_reports', JSON.stringify(list));
-                return list;
-            }
+        return Array.isArray(SERVER_REPORTS) ? SERVER_REPORTS : [];
+    }
 
-            // Strictly filter so only user-created reports (Ahmad Fauzi) appear in Laporan Saya
-            const userOnly = list.filter(r => {
-                const idStr = String(r.id);
-                // Exclude static catalog items from other users
-                if (['2', '3', '4', '6', '7', '8'].includes(idStr)) return false;
-                if (r.is_mine === false) return false;
-                // Ahmad Fauzi's seeded reports
-                if (idStr === '1' || idStr === '5') return true;
-                // User-created reports through report-lost or report-found
-                if (idStr.startsWith('rep_')) return true;
-                if (r.is_mine === true) return true;
-                if (r.reporter_name && r.reporter_name.includes('Ahmad Fauzi')) return true;
-                return false;
-            });
+    /**
+     * DEC-027 — ambil ulang laporan dari server lalu render.
+     * SERVER_REPORTS bersifat `const`, jadi isinya diganti di tempat agar
+     * kartu selalu mencerminkan status asli di database.
+     */
+    async function refreshMyReports() {
+        const res = await window.FindUMB.api.get('/api/my-reports');
+        const fresh = Array.isArray(res.data) ? res.data : [];
 
-            return userOnly.length > 0 ? userOnly : [...DEFAULT_USER_REPORTS];
-        } catch(e) {
-            return [...DEFAULT_USER_REPORTS];
+        SERVER_REPORTS.length = 0;
+        fresh.forEach((r) => SERVER_REPORTS.push(r));
+
+        if (window.FindUMB && window.FindUMB.state) {
+            window.FindUMB.state.myReports = SERVER_REPORTS;
         }
+
+        renderReportsList();
+        return SERVER_REPORTS;
     }
 
     function saveUserReports(reports) {
-        try {
-            localStorage.setItem('findumb_custom_reports', JSON.stringify(reports));
-        } catch(e) {
-            console.error('Error saving reports:', e);
-        }
+        // Laporan disimpan lewat API — tidak ada cache localStorage.
     }
 
     function handleMyReportsBack() {
@@ -1558,7 +1499,7 @@
                                         <i data-lucide="edit-3"></i>
                                         <span>Edit Laporan</span>
                                     </button>
-                                    <button type="button" class="card-option-item" onclick="confirmResolveStatus('${r.id}')">
+                                    <button type="button" class="card-option-item" onclick="confirmResolveStatus('${r.id}')" ${isResolved ? 'style="display:none;"' : ''}>
                                         <i data-lucide="${isResolved ? 'rotate-ccw' : 'check-circle-2'}"></i>
                                         <span>${isResolved ? 'Buka Kembali' : 'Tandai Selesai'}</span>
                                     </button>
@@ -1624,7 +1565,7 @@
 
         // Author
         const authorEl = document.getElementById('modal-detail-reporter-name');
-        if (authorEl) authorEl.textContent = 'Ahmad Fauzi (Saya)';
+        if (authorEl) authorEl.textContent = @js((auth()->user()?->name ?? 'Civitas UMB').' (Saya)');
 
         // Date posted
         const postDateEl = document.getElementById('modal-detail-post-date');
@@ -1739,29 +1680,23 @@
     }
 
     function getStoredBookmarks() {
-        try {
-            const raw = localStorage.getItem('findumb_bookmarks');
-            if (raw) {
-                const parsed = JSON.parse(raw);
-                if (Array.isArray(parsed)) return parsed.map(String);
-            }
-        } catch(e) {}
-        const defaultBookmarks = ['2', '3', '7'];
-        try {
-            if (!localStorage.getItem('findumb_bookmarks_init')) {
-                localStorage.setItem('findumb_bookmarks', JSON.stringify(defaultBookmarks));
-                localStorage.setItem('findumb_bookmarks_init', 'true');
-            }
-        } catch(e) {}
-        return defaultBookmarks;
+        return (SERVER_BOOKMARKS || []).map(String);
     }
 
     function setStoredBookmarks(bookmarks) {
-        try {
-            localStorage.setItem('findumb_bookmarks', JSON.stringify(bookmarks));
-            localStorage.setItem('findumb_bookmarks_init', 'true');
-        } catch(e) {}
+        SERVER_BOOKMARKS = (bookmarks || []).map(String);
     }
+    function syncBookmarkToServer(id) {
+        if (!IS_AUTHENTICATED) return;
+        fetch(`{{ url('/api/bookmarks') }}/${id}/toggle`, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': window.FindUMB_CSRF || '',
+                'Accept': 'application/json',
+            },
+        }).catch(() => {});
+    }
+
 
     function handleDetailModalBookmark() {
         const modal = document.getElementById('modal-desktop-detail');
@@ -1853,7 +1788,9 @@
         }
     });
 
-    // Validasi Tandai Selesai / Buka Kembali (In-App Modal)
+    // Tandai Selesai / Buka Kembali (in-app modal)
+    // DEC-027: "Tandai Selesai" benar-benar menutup laporan di server, dan
+    // status selesai bersifat permanen (BR-13) sehingga tidak bisa dibuka lagi.
     function confirmResolveStatus(id) {
         closeAllCardOptions();
         let reports = getUserReports();
@@ -1863,25 +1800,21 @@
         const current = reports[index].status;
         const isResolved = current === 'resolved' || current === 'completed';
 
+        if (isResolved) {
+            showToast('Laporan yang sudah selesai bersifat permanen dan tidak dapat dibuka kembali.');
+            return;
+        }
+
         document.getElementById('resolve-report-id').value = id;
         const titleEl = document.getElementById('resolve-modal-title');
         const descEl = document.getElementById('resolve-modal-desc');
         const btnEl = document.getElementById('btn-resolve-confirm-action');
 
-        if (!isResolved) {
-            if (titleEl) titleEl.textContent = 'Selesaikan Laporan?';
-            if (descEl) descEl.innerHTML = 'Apakah barang ini sudah berhasil ditemukan atau diserahterimakan kepada pemilik yang sah? Status laporan akan diubah menjadi <strong>Terselesaikan</strong>.';
-            if (btnEl) {
-                btnEl.textContent = 'Ya, Selesaikan';
-                btnEl.className = 'btn-modal-success';
-            }
-        } else {
-            if (titleEl) titleEl.textContent = 'Buka Kembali Laporan?';
-            if (descEl) descEl.innerHTML = 'Status laporan akan diubah kembali menjadi aktif (sedang dicari). Lanjutkan membuka kembali laporan ini?';
-            if (btnEl) {
-                btnEl.textContent = 'Ya, Buka Kembali';
-                btnEl.className = 'btn-modal-submit';
-            }
+        if (titleEl) titleEl.textContent = 'Selesaikan Laporan?';
+        if (descEl) descEl.innerHTML = 'Apakah barang ini sudah berhasil ditemukan? Status laporan akan diubah menjadi <strong>Terselesaikan</strong> dan tidak tampil lagi di daftar laporan publik.';
+        if (btnEl) {
+            btnEl.textContent = 'Ya, Selesaikan';
+            btnEl.className = 'btn-modal-success';
         }
 
         openResolveModal(id);
@@ -1905,25 +1838,31 @@
         }
     }
 
-    function executeResolveReport() {
+    // DEC-027: simpan ke server (dulu hanya menulis localStorage sehingga
+    // status tidak pernah berubah setelah halaman dimuat ulang).
+    async function executeResolveReport() {
         const id = document.getElementById('resolve-report-id').value;
-        let reports = getUserReports();
-        const index = reports.findIndex(r => String(r.id) === String(id));
-        if (index !== -1) {
-            const current = reports[index].status;
-            const isResolved = current === 'resolved' || current === 'completed';
-            if (isResolved) {
-                reports[index].status = 'lost';
-                saveUserReports(reports);
-                closeResolveModal();
-                renderReportsList();
-                showToast('Laporan dibuka kembali.');
-            } else {
-                reports[index].status = 'resolved';
-                saveUserReports(reports);
-                closeResolveModal();
-                renderReportsList();
-                showToast('✓ Laporan berhasil ditandai sebagai Terselesaikan!');
+        if (!id) return;
+
+        const btn = document.getElementById('btn-resolve-confirm-action');
+        if (btn) {
+            btn.disabled = true;
+            btn.textContent = 'Menyimpan...';
+        }
+
+        try {
+            const res = await window.FindUMB.api.post('/api/reports/' + id + '/resolve');
+            closeResolveModal();
+            showToast(res.message || 'Laporan ditandai sudah ketemu.');
+
+            // Ambil ulang dari server supaya kartu mencerminkan status asli.
+            await refreshMyReports();
+        } catch (err) {
+            showToast(err.message || 'Gagal menyelesaikan laporan.');
+        } finally {
+            if (btn) {
+                btn.disabled = false;
+                btn.textContent = 'Ya, Selesaikan';
             }
         }
     }
@@ -2000,11 +1939,10 @@
         executeSaveEditCommit();
     }
 
-    function executeSaveEditCommit() {
+    // DEC-027: simpan perubahan ke server (dulu hanya localStorage).
+    async function executeSaveEditCommit() {
         const id = document.getElementById('edit-report-id').value;
-        let reports = getUserReports();
-        const index = reports.findIndex(r => String(r.id) === String(id));
-        if (index === -1) return;
+        if (!id) return;
 
         const statusVal = document.getElementById('edit-status').value;
         const newTitle = document.getElementById('edit-title').value.trim();
@@ -2014,28 +1952,44 @@
         const newDate = document.getElementById('edit-date').value;
         const newFeatures = document.getElementById('edit-features').value.trim();
 
-        reports[index].title = newTitle;
-        reports[index].category = newCategory;
-        reports[index].category_label = newCategory;
-        reports[index].brand = newBrand;
-        reports[index].location_full = newLocation;
-        reports[index].location_campus = newLocation;
-        reports[index].date = newDate;
-        reports[index].date_display = formatDateIndo(newDate);
-        reports[index].features = newFeatures;
-        reports[index].is_mine = true;
-
-        if (statusVal === 'resolved') {
-            reports[index].status = 'resolved';
-        } else {
-            reports[index].type = statusVal;
-            reports[index].status = statusVal;
+        if (!newTitle) {
+            showToast('Nama barang wajib diisi.');
+            return;
         }
 
-        saveUserReports(reports);
-        closeEditModal();
-        renderReportsList();
-        showToast('✓ Laporan berhasil diperbarui!');
+        // Nama kategori di form dipetakan ke slug yang dipakai API.
+        const slugMap = {
+            'Elektronik & HP': 'elektronik', 'Tas & Ransel': 'tas', 'Dompet & Kartu': 'dompet',
+            'Jam & Aksesori': 'aksesoris', 'Pakaian & Sepatu': 'pakaian', 'Buku, Dokumen & ATK': 'dokumen',
+            'Buku & Alat Tulis': 'buku', 'Kunci Kendaraan / Ruangan': 'kunci', 'Lainnya': 'lain'
+        };
+        const slug = slugMap[newCategory];
+        const categoryId = (slug && window.FindUMB_CATEGORIES) ? window.FindUMB_CATEGORIES[slug] : null;
+
+        const payload = {
+            title: newTitle,
+            brand: newBrand,
+            location: newLocation,
+            incident_date: newDate || null,
+            description: newFeatures,
+        };
+        if (categoryId) payload.category_id = categoryId;
+
+        try {
+            await window.FindUMB.api.patch('/api/reports/' + id, payload);
+
+            // Status selesai punya endpoint sendiri (tidak lewat PATCH).
+            if (statusVal === 'resolved') {
+                await window.FindUMB.api.post('/api/reports/' + id + '/resolve');
+            }
+
+            closeEditModal();
+            showToast('Laporan berhasil diperbarui.');
+
+            await refreshMyReports();
+        } catch (err) {
+            showToast(err.message || 'Gagal memperbarui laporan.');
+        }
     }
 
     // CRUD: Delete Modal & Execution
@@ -2058,14 +2012,34 @@
         }
     }
 
-    function executeDeleteReport() {
+    // DEC-027: hapus = batalkan laporan di server (bukan hanya localStorage).
+    async function executeDeleteReport() {
         const id = document.getElementById('delete-report-id').value;
-        let reports = getUserReports();
-        reports = reports.filter(r => String(r.id) !== String(id));
-        saveUserReports(reports);
-        closeDeleteModal();
-        renderReportsList();
-        showToast('Laporan berhasil dihapus.');
+        if (!id) return;
+
+        const btn = document.querySelector('#modal-delete-report .btn-modal-danger');
+        if (btn) {
+            btn.disabled = true;
+            btn.textContent = 'Menghapus...';
+        }
+
+        try {
+            const res = await window.FindUMB.api.post('/api/reports/' + id + '/cancel', {
+                reason: 'Dibatalkan oleh pembuat laporan.',
+            });
+
+            closeDeleteModal();
+            showToast(res.message || 'Laporan berhasil dibatalkan.');
+
+            await refreshMyReports();
+        } catch (err) {
+            showToast(err.message || 'Gagal menghapus laporan.');
+        } finally {
+            if (btn) {
+                btn.disabled = false;
+                btn.textContent = 'Hapus';
+            }
+        }
     }
 
     function formatDateIndo(dateStr) {
