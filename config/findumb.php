@@ -16,6 +16,14 @@ return [
         explode(',', (string) env('CAMPUS_EMAIL_DOMAINS', 'mercubuana.ac.id'))
     ))),
 
+    // Enum lokasi kampus sesuai docs/API_CONTRACT.md §3 (CampusLocation).
+    'campuses' => [
+        'meruya' => 'Kampus Meruya',
+        'menteng' => 'Kampus Menteng',
+        'pejaten' => 'Kampus Pejaten',
+        'warung_buncit' => 'Kampus Warung Buncit',
+    ],
+
     'claim' => [
         // DEC-024 — total batas waktu tanpa respons penemu.
         'expiry_hours' => (int) env('CLAIM_EXPIRY_HOURS', 120),
