@@ -113,8 +113,14 @@ class ReportSeeder extends Seeder
             ],
         ];
 
+        // Sebar tanggal pembuatan laporan ke belakang agar grafik tren di
+        // dashboard admin punya histori (bukan semua menumpuk di satu hari
+        // karena di-seed dalam hitungan detik).
+        $offsets = [84, 77, 69, 61, 52, 44, 35, 26, 15, 6, 88, 48];
+
+        $i = 0;
         foreach ($reports as $data) {
-            Report::updateOrCreate(
+            $report = Report::updateOrCreate(
                 ['title' => $data['title'], 'type' => $data['type']->value],
                 [
                     'user_id' => $user($data['owner'])->id,
@@ -132,6 +138,15 @@ class ReportSeeder extends Seeder
                     'image_path' => $data['image'],
                 ]
             );
+
+            // created_at tidak ada di $fillable, jadi diisi terpisah.
+            $report->forceFill([
+                'created_at' => now()
+                    ->subDays($offsets[$i % count($offsets)])
+                    ->setTime(8 + ($i % 9), 10 + ($i * 7) % 45),
+            ])->save();
+
+            $i++;
         }
     }
 }

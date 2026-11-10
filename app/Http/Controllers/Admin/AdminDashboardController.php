@@ -278,9 +278,9 @@ class AdminDashboardController extends Controller
 
         // --------------------------------------------------------- seri waktu chart
         $trend = [
-            '7d' => $this->trendSeries(7, 1, 'd M'),
-            '30d' => $this->trendSeries(30, 3, 'd M'),
-            '90d' => $this->trendSeries(90, 8, 'd M'),
+            '7d' => $this->trendSeries(7, 7),
+            '30d' => $this->trendSeries(30, 8),
+            '90d' => $this->trendSeries(90, 10),
         ];
 
         // Rata-rata hari dari laporan dibuat sampai klaim selesai.
@@ -314,34 +314,37 @@ class AdminDashboardController extends Controller
     }
 
     /**
-     * Deret jumlah laporan temuan & hilang per rentang hari, dikelompokkan
-     * menjadi beberapa titik agar chart tetap terbaca.
+     * Deret jumlah laporan temuan & hilang per HARI untuk rentang tertentu.
+     *
+     * Tiap titik mewakili satu tanggal yang sebenarnya (bukan blok beberapa
+     * hari), supaya laporan tanggal 7 November selalu muncul di titik
+     * "07 Nov" pada semua rentang — 7d, 30d, maupun 90d.
      *
      * @return array<string, mixed>
      */
-    private function trendSeries(int $days, int $bucketDays, string $labelFormat): array
+    private function trendSeries(int $days, int $tickLimit): array
     {
         $start = now()->subDays($days - 1)->startOfDay();
+        $end = now()->endOfDay();
 
         $rows = Report::query()
             ->where('created_at', '>=', $start)
+            ->where('created_at', '<=', $end)
             ->get(['type', 'created_at']);
 
-        $buckets = (int) ceil($days / $bucketDays);
         $labels = [];
         $temuan = [];
         $hilang = [];
 
-        for ($i = 0; $i < $buckets; $i++) {
-            $from = $start->copy()->addDays($i * $bucketDays);
-            $to = $from->copy()->addDays($bucketDays);
+        for ($i = 0; $i < $days; $i++) {
+            $day = $start->copy()->addDays($i);
 
-            $labels[] = $from->translatedFormat($labelFormat);
+            $labels[] = $day->translatedFormat('d M');
 
-            $inBucket = $rows->filter(fn ($r) => $r->created_at->gte($from) && $r->created_at->lt($to));
+            $inDay = $rows->filter(fn ($r) => $r->created_at->isSameDay($day));
 
-            $temuan[] = $inBucket->filter(fn ($r) => $r->type->value === 'found')->count();
-            $hilang[] = $inBucket->filter(fn ($r) => $r->type->value === 'lost')->count();
+            $temuan[] = $inDay->filter(fn ($r) => $r->type->value === 'found')->count();
+            $hilang[] = $inDay->filter(fn ($r) => $r->type->value === 'lost')->count();
         }
 
         $totals = array_map(fn ($t, $h) => $t + $h, $temuan, $hilang);
@@ -365,6 +368,7 @@ class AdminDashboardController extends Controller
         $resolvedInRange = Report::query()
             ->where('status', 'resolved')
             ->where('created_at', '>=', $start)
+            ->where('created_at', '<=', $end)
             ->count();
 
         return [
@@ -376,6 +380,8 @@ class AdminDashboardController extends Controller
             'high' => $totals ? (string) max($totals) : '0',
             'low' => $totals ? (string) min($totals) : '0',
             'rate' => $total > 0 ? round($resolvedInRange / $total * 100, 1).'%' : '0%',
+            // Jumlah label maksimum di sumbu X agar tidak bertumpuk saat 90 hari.
+            'tickLimit' => $tickLimit,
             // Titik yang diberi penanda pada chart: puncak dan titik terendah.
             'keyPoints' => $totals ? array_values(array_unique([
                 (int) array_search(max($totals), $totals, true),

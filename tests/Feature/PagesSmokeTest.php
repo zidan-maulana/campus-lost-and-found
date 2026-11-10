@@ -253,4 +253,62 @@ class PagesSmokeTest extends TestCase
             $this->assertStringNotContainsString($fake, $html, "Angka contoh '{$fake}' masih muncul di dashboard.");
         }
     }
+
+    /**
+     * Grafik tren memakai satu titik per tanggal, bukan blok beberapa hari.
+     *
+     * Dulu 30d memakai blok 3 hari sehingga label pertamanya 05 Nov dan
+     * 90d memakai blok 8 hari sehingga label pertamanya 01 Nov — laporan
+     * tanggal 7 Nov muncul di titik yang berbeda-beda tergantung rentang.
+     */
+    public function test_grafik_tren_memakai_titik_harian_yang_unik(): void
+    {
+        $admin = User::factory()->create([
+            'role' => UserRole::Admin,
+            'email_verified_at' => now(),
+        ]);
+
+        // Satu laporan di hari yang sama, 3 hari lalu.
+        Report::factory()->found()->create(['created_at' => now()->subDays(3)]);
+
+        $html = $this->actingAs($admin)->get('/admin')->assertOk()->getContent();
+
+        preg_match('/const CHART_CONFIG = (\{.*?\});/s', $html, $m);
+        $this->assertNotEmpty($m, 'CHART_CONFIG tidak ditemukan di halaman.');
+
+        $config = json_decode($m[1], true);
+
+        foreach (['7d' => 7, '30d' => 30, '90d' => 90] as $range => $expectedDays) {
+            $series = $config[$range];
+
+            $this->assertCount($expectedDays, $series['labels'], "Rentang {$range} harus punya {$expectedDays} titik harian.");
+            $this->assertCount($expectedDays, $series['temuan'], "Deret temuan {$range} tidak sepanjang labelnya.");
+            $this->assertCount($expectedDays, $series['hilang'], "Deret hilang {$range} tidak sepanjang labelnya.");
+
+            // Tidak boleh ada label tanggal yang dobel.
+            $this->assertSame(
+                count($series['labels']),
+                count(array_unique($series['labels'])),
+                "Rentang {$range} punya label tanggal duplikat."
+            );
+
+            // Titik terakhir selalu hari ini.
+            $this->assertSame(now()->translatedFormat('d M'), end($series['labels']), "Titik terakhir {$range} bukan hari ini.");
+
+            // keyPoints harus menunjuk indeks yang ada.
+            foreach ($series['keyPoints'] as $point) {
+                $this->assertLessThan($expectedDays, $point, "keyPoints {$range} menunjuk di luar jangkauan.");
+            }
+        }
+
+        // Laporan 3 hari lalu harus muncul di titik yang sama pada semua rentang.
+        foreach (['7d', '30d', '90d'] as $range) {
+            $label = now()->subDays(3)->translatedFormat('d M');
+            $index = array_search($label, $config[$range]['labels'], true);
+
+            $this->assertNotFalse($index, "Label {$label} tidak ada di rentang {$range}.");
+            $this->assertSame(1, $config[$range]['temuan'][$index] + $config[$range]['hilang'][$index],
+                "Laporan 3 hari lalu tidak muncul di titik {$label} pada rentang {$range}.");
+        }
+    }
 }

@@ -2372,6 +2372,16 @@
         }
     }
 
+    // Langkah tick sumbu Y menyesuaikan data. Dengan stepSize tetap 10,
+    // data maksimal 2 akan menempel di garis bawah dan terlihat datar.
+    function chartStepSize(rangeData) {
+        const peak = Math.max(0, ...(rangeData.temuan || []), ...(rangeData.hilang || []));
+        if (peak <= 5) return 1;
+        if (peak <= 20) return 5;
+        if (peak <= 50) return 10;
+        return Math.ceil(peak / 8);
+    }
+
     function renderAdminTrendChart() {
         const canvas = document.getElementById('adminTrendChart');
         if (!canvas) return;
@@ -2405,6 +2415,9 @@
             adminTrendChartInstance.data.datasets[0].data = rangeData.temuan;
             adminTrendChartInstance.data.datasets[0].pointRadius = pointRadii;
             adminTrendChartInstance.data.datasets[1].data = rangeData.hilang;
+            // 90 titik harian perlu label yang lebih sedikit agar tidak bertumpuk.
+            adminTrendChartInstance.options.scales.x.ticks.maxTicksLimit = rangeData.tickLimit || 7;
+            adminTrendChartInstance.options.scales.y.ticks.stepSize = chartStepSize(rangeData);
             adminTrendChartInstance.update();
             return;
         }
@@ -2497,7 +2510,7 @@ Tingkat Temu: ${rate}%`;
                             color: '#9ca3af',
                             maxRotation: 0,
                             autoSkip: true,
-                            maxTicksLimit: 7
+                            maxTicksLimit: rangeData.tickLimit || 7
                         }
                     },
                     y: {
@@ -2509,7 +2522,8 @@ Tingkat Temu: ${rate}%`;
                         ticks: {
                             font: { size: 10, family: 'ui-monospace, monospace' },
                             color: '#9ca3af',
-                            stepSize: 10
+                            precision: 0,
+                            stepSize: chartStepSize(rangeData)
                         }
                     }
                 }
