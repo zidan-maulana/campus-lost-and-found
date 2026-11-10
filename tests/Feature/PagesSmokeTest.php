@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Enums\UserRole;
+use App\Models\AbuseReport;
 use App\Models\Claim;
 use App\Models\ItemCategory;
 use App\Models\Report;
@@ -99,5 +100,36 @@ class PagesSmokeTest extends TestCase
         ] as $key) {
             $this->assertArrayHasKey($key, $row, "Kunci '{$key}' hilang dari respons API.");
         }
+    }
+
+    /**
+     * Dashboard admin harus membaca database, bukan data contoh di view.
+     */
+    public function test_dashboard_admin_memakai_data_database(): void
+    {
+        $admin = User::factory()->create([
+            'role' => UserRole::Admin,
+            'email_verified_at' => now(),
+        ]);
+
+        $report = Report::factory()->found()->create(['title' => 'Jaket Hoodie Uji Coba']);
+        AbuseReport::create([
+            'reporter_id' => $report->user_id,
+            'target_type' => 'report',
+            'target_id' => $report->id,
+            'reason' => 'fake_report',
+            'details' => 'Laporan uji coba dashboard.',
+            'status' => 'pending',
+        ]);
+
+        $response = $this->actingAs($admin)->get('/admin')->assertOk();
+
+        $response->assertSee('Jaket Hoodie Uji Coba', false);
+        $response->assertSee('Laporan uji coba dashboard.', false);
+
+        // Tanda-tanda data contoh lama tidak boleh muncul lagi.
+        $response->assertDontSee('findumb_admin_reports', false);
+        $response->assertDontSee('DEFAULT_REPORTS_CATALOG', false);
+        $response->assertDontSee('iPhone 15 Pro Max Deep Blue', false);
     }
 }

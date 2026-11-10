@@ -33,7 +33,7 @@
                 <i data-lucide="alert-triangle" class="w-3.5 h-3.5 text-amber-700"></i>
             </div>
             <div class="min-w-0 leading-tight">
-                <span class="font-bold text-[#78350f] aduan-count-text">Terdapat 3 aduan civitas membutuhkan tindakan segera:</span>
+                <span class="font-bold text-[#78350f] aduan-count-text">Terdapat {{ $stats['abuse_pending'] }} aduan civitas membutuhkan tindakan segera:</span>
                 <span class="text-[#92400e] ml-1">Laporan dugaan penipuan barang dan konten tidak pantas menunggu verifikasi admin.</span>
             </div>
         </div>
@@ -51,12 +51,12 @@
             <span class="text-sm font-medium text-[#475467]">Total Laporan Aktif</span>
             <div class="mt-3.5">
                 <div class="flex items-center gap-2">
-                    <span class="text-[22px] font-semibold tracking-tight text-[#101828]" id="stat-active-reports">28</span>
+                    <span class="text-[22px] font-semibold tracking-tight text-[#101828]" id="stat-active-reports">{{ $stats['reports_open'] }}</span>
                     <span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-[5px] text-[11px] font-semibold bg-[#ecfdf3] text-[#027a48]">
                         <i data-lucide="arrow-up-right" class="w-3 h-3"></i> 14%
                     </span>
                 </div>
-                <p class="text-xs text-[#667085] mt-1.5">19 Temuan, 9 Hilang</p>
+                <p class="text-xs text-[#667085] mt-1.5">{{ $stats['reports_found'] }} Temuan, {{ $stats['reports_lost'] }} Hilang</p>
             </div>
         </div>
 
@@ -65,7 +65,7 @@
             <span class="text-sm font-medium text-[#475467]">Barang Selesai Serah Terima</span>
             <div class="mt-3.5">
                 <div class="flex items-center gap-2">
-                    <span class="text-[22px] font-semibold tracking-tight text-[#101828]" id="stat-resolved-reports">95</span>
+                    <span class="text-[22px] font-semibold tracking-tight text-[#101828]" id="stat-resolved-reports">{{ $stats['reports_resolved'] }}</span>
                     <span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-[5px] text-[11px] font-semibold bg-[#ecfdf3] text-[#027a48]">
                         <i data-lucide="arrow-up-right" class="w-3 h-3"></i> 78.3%
                     </span>
@@ -79,7 +79,7 @@
             <span class="text-sm font-medium text-[#475467]">Aduan Menunggu Review</span>
             <div class="mt-3.5">
                 <div class="flex items-center gap-2">
-                    <span class="text-[22px] font-semibold tracking-tight text-[#101828]" id="stat-pending-abuse">3</span>
+                    <span class="text-[22px] font-semibold tracking-tight text-[#101828]" id="stat-pending-abuse">{{ $stats['abuse_pending'] }}</span>
                     <span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-[5px] text-[11px] font-semibold bg-[#fef0c7] text-[#b54708]">
                         <i data-lucide="arrow-up-right" class="w-3 h-3"></i> 2 Urgent
                     </span>
@@ -93,7 +93,7 @@
             <span class="text-sm font-medium text-[#475467]">Akun Ditangguhkan</span>
             <div class="mt-3.5">
                 <div class="flex items-center gap-2">
-                    <span class="text-[22px] font-semibold tracking-tight text-[#101828]" id="stat-suspended-users">1</span>
+                    <span class="text-[22px] font-semibold tracking-tight text-[#101828]" id="stat-suspended-users">{{ $stats['suspended'] }}</span>
                     <span class="inline-flex items-center px-1.5 py-0.5 rounded-[5px] text-[11px] font-semibold bg-[#fee4e2] text-[#d92d20]">
                         Sanksi Etik
                     </span>
@@ -177,7 +177,7 @@
             </div>
 
             <!-- Hidden compatibility anchor for JS script updates -->
-            <span id="stat-sub-rate" class="hidden">78.3%</span>
+            <span id="stat-sub-rate" class="hidden">{{ $stats['reports_open'] + $stats['reports_resolved'] > 0 ? round($stats['reports_resolved'] / ($stats['reports_open'] + $stats['reports_resolved']) * 100, 1) : 0 }}%</span>
         </div>
 
         <!-- Right Box (4 Cols): Status Laporan + Kategori Terpopuler (Khusus Kampus Meruya) -->
@@ -1138,161 +1138,34 @@
        ADMIN DASHBOARD ENGINE & DATA STORE
        =========================================================================== */
 
-    const DEFAULT_ABUSE_REPORTS = [
-        {
-            id: 'ABUSE-2026-001',
-            reporter_name: 'Muhammad Farhan',
-            reporter_nim: '41521010088',
-            target_type: 'report',
-            target_id: 'rep_fake_iphone',
-            target_title: 'iPhone 15 Pro Max Deep Blue',
-            reason_code: 'fake_report',
-            reason_label: 'Laporan Palsu / Spam',
-            severity: 'high',
-            description: 'Foto diambil dari Google Images dan tidak ada barang aslinya.',
-            date: '04 Nov 2026, 14:20 WIB',
-            status: 'pending'
-        },
-        {
-            id: 'ABUSE-2026-002',
-            reporter_name: 'Siti Nurhaliza',
-            reporter_nim: '41521010012',
-            target_type: 'chat',
-            target_id: 'chat_anker_conv',
-            target_title: 'Percakapan Klaim Earphone TWS Anker',
-            reason_code: 'inappropriate_chat',
-            reason_label: 'Pelecehan / Kata Kasar',
-            severity: 'medium',
-            description: 'Pengklaim menggunakan kata-kata kasar dan mengancam saat penemu menanyakan detail nomor seri casing.',
-            date: '04 Nov 2026, 09:15 WIB',
-            status: 'pending'
-        },
-        {
-            id: 'ABUSE-2026-003',
-            reporter_name: 'Dwi Prasetyo',
-            reporter_nim: '41521010034',
-            target_type: 'user',
-            target_id: '41521010099',
-            target_title: 'Akun Civitas: Bagus Triyanto (41521010099)',
-            reason_code: 'fraud_claim',
-            reason_label: 'Klaim Fiktif Berulang',
-            severity: 'high',
-            description: 'Mengajukan klaim serah terima pada 5 laporan barang temuan berbeda dalam rentang waktu 2 jam.',
-            date: '03 Nov 2026, 19:40 WIB',
-            status: 'pending'
-        }
-    ];
+    /* ===========================================================================
+       DATA DASHBOARD — dikirim server dari database (AdminDashboardController).
+       Tidak ada lagi data contoh / localStorage.
+       =========================================================================== */
 
-    const DEFAULT_ADMIN_USERS = [
-        { id: 'u_fauzi', name: 'Ahmad Fauzi', nim: '41521010045', faculty: 'Fakultas Ilmu Komputer', prodi: 'S1 Teknik Informatika', email: '41521010045@student.mercubuana.ac.id', role: 'user', status: 'active' },
-        { id: 'u_admin_biro', name: 'Biro Kemahasiswaan & Admin UMB', nim: 'NIK-UMB-8821', faculty: 'Biro Kemahasiswaan', prodi: 'Staf Administrasi', email: 'admin.lostfound@mercubuana.ac.id', role: 'admin', status: 'active' },
-        { id: 'u_admin_zidan', name: 'Zidan Maulana (Admin Pengembang)', nim: 'NIK-DEV-001', faculty: 'Pengembang Platform', prodi: 'IT Campus Center', email: 'zidan.personal@gmail.com', role: 'admin', status: 'active' },
-        { id: 'u_bagus', name: 'Bagus Triyanto', nim: '41521010099', faculty: 'Fakultas Teknik', prodi: 'S1 Teknik Sipil', email: '41521010099@student.mercubuana.ac.id', role: 'user', status: 'suspended' },
-        { id: 'u_siti', name: 'Siti Nurhaliza', nim: '41521010012', faculty: 'Fakultas Desain & Seni Kreatif', prodi: 'S1 Desain Komunikasi Visual', email: '41521010012@student.mercubuana.ac.id', role: 'user', status: 'active' }
-    ];
+    const ADMIN_DATA = @json($adminData);
 
-    const DEFAULT_AUDIT_LOGS = [
-        { id: 'AUD-901', timestamp: '04 Nov 2026, 15:10 WIB', admin_name: 'Biro Kemahasiswaan', admin_email: 'admin.lostfound@mercubuana.ac.id', action_type: 'suspend_user', action_label: 'Penangguhan Akun', target: 'Bagus Triyanto (41521010099)', reason: 'Terbukti melakukan klaim serah terima fiktif secara massal.', impact: 'Akun status suspended (DEC-026).' },
-        { id: 'AUD-902', timestamp: '03 Nov 2026, 11:25 WIB', admin_name: 'Zidan Maulana', admin_email: 'zidan.personal@gmail.com', action_type: 'hide_report', action_label: 'Sembunyikan Laporan', target: 'Laporan #rep_spam_99', reason: 'Laporan mengandung tautan mencurigakan.', impact: 'Postingan disembunyikan.' },
-        { id: 'AUD-903', timestamp: '02 Nov 2026, 09:00 WIB', admin_name: 'Biro Kemahasiswaan', admin_email: 'admin.lostfound@mercubuana.ac.id', action_type: 'warn_user', action_label: 'Peringatan Formal', target: 'Rian Pratama (41521010022)', reason: 'Bahasa chat tidak sopan pada negosiasi lokasi serah terima.', impact: 'Peringatan dikirim.' }
-    ];
+    // Salinan di memori supaya UI langsung berubah setelah aksi admin,
+    // tanpa menulis apa pun ke localStorage. Sumber kebenaran tetap server.
+    let ADMIN_ABUSE = [...ADMIN_DATA.abuseReports];
+    let ADMIN_USERS = [...ADMIN_DATA.users];
+    let ADMIN_AUDIT = [...ADMIN_DATA.auditLogs];
+    let ADMIN_CATEGORIES = [...ADMIN_DATA.categories];
+    let ADMIN_REPORTS = [...ADMIN_DATA.reports];
 
-    const DEFAULT_CATEGORIES = [
-        { id: 'cat_electronics', name: 'Elektronik & Gadget', icon: 'smartphone', count: 51, desc: 'Smartphone, laptop, earphone, charger, kalkulator ilmiah' },
-        { id: 'cat_docs', name: 'Dokumen & KTM', icon: 'id-card', count: 34, desc: 'KTM, SIM, KTP, STNK, buku catatan kuliah' },
-        { id: 'cat_bags', name: 'Tas & Dompet', icon: 'briefcase', count: 22, desc: 'Ransel laptop, tote bag, dompet kulit, pouch kosmetik' },
-        { id: 'cat_accessories', name: 'Aksesoris & Pakaian', icon: 'watch', count: 18, desc: 'Jam tangan, jaket hoodie, kacamata minus/silinder, topi' }
-    ];
+    function getAdminAbuseReports() { return ADMIN_ABUSE; }
+    function saveAdminAbuseReports(data) { ADMIN_ABUSE = data; }
 
-    function getAdminAbuseReports() {
-        try {
-            const raw = localStorage.getItem('findumb_admin_abuse_reports');
-            if (raw) return JSON.parse(raw);
-        } catch(e) {}
-        saveAdminAbuseReports(DEFAULT_ABUSE_REPORTS);
-        return DEFAULT_ABUSE_REPORTS;
-    }
+    function getAdminUsers() { return ADMIN_USERS; }
+    function saveAdminUsers(data) { ADMIN_USERS = data; }
 
-    function saveAdminAbuseReports(data) {
-        try { localStorage.setItem('findumb_admin_abuse_reports', JSON.stringify(data)); } catch(e) {}
-    }
+    function getAdminAuditLogs() { return ADMIN_AUDIT; }
+    function saveAdminAuditLogs(data) { ADMIN_AUDIT = data; }
 
-    function getAdminUsers() {
-        try {
-            const raw = localStorage.getItem('findumb_admin_users');
-            if (raw) return JSON.parse(raw);
-        } catch(e) {}
-        saveAdminUsers(DEFAULT_ADMIN_USERS);
-        return DEFAULT_ADMIN_USERS;
-    }
+    function getAdminCategories() { return ADMIN_CATEGORIES; }
 
-    function saveAdminUsers(data) {
-        try { localStorage.setItem('findumb_admin_users', JSON.stringify(data)); } catch(e) {}
-    }
-
-    function getAdminAuditLogs() {
-        try {
-            const raw = localStorage.getItem('findumb_admin_audit_logs');
-            if (raw) return JSON.parse(raw);
-        } catch(e) {}
-        saveAdminAuditLogs(DEFAULT_AUDIT_LOGS);
-        return DEFAULT_AUDIT_LOGS;
-    }
-
-    function saveAdminAuditLogs(data) {
-        try { localStorage.setItem('findumb_admin_audit_logs', JSON.stringify(data)); } catch(e) {}
-    }
-
-    const DEFAULT_REPORTS_CATALOG = [
-        // 19 Barang Temuan (12 Open, 7 In Handover)
-        { id: '1', title: 'Earphone TWS Anker Soundcore R50i', type: 'found', reporter: 'Siti Nurhaliza (41521010012)', location: 'Kampus Meruya • Perpustakaan Lt. 2', date: '18 Okt 2026', status: 'in_handover' },
-        { id: '2', title: 'Tas Laptop Lenovo ThinkPad Hitam', type: 'found', reporter: 'Pos Satpam Tower', location: 'Kampus Meruya • Pos Satpam Lt. 1', date: '19 Jan 2026', status: 'open' },
-        { id: '3', title: 'Jaket Hoodie Hitam Uniqlo Airism', type: 'found', reporter: 'Petugas Lab Komputer', location: 'Kampus Meruya • Lab Fasilkom Lt. 3', date: '12 Jan 2026', status: 'open' },
-        { id: '4', title: 'KTM & Dompet Kulit Cokelat UMB', type: 'found', reporter: 'Dwi Prasetyo (41521010034)', location: 'Kampus Meruya • Kantin Blok D', date: '22 Okt 2026', status: 'open' },
-        { id: '5', title: 'Flashdisk SanDisk Ultra Flair 64GB', type: 'found', reporter: 'Staf Lab Jaringan', location: 'Kampus Meruya • Lab Fasilkom Lt. 2', date: '25 Okt 2026', status: 'open' },
-        { id: '6', title: 'Tumbler Corkcicle Classic 475ml Forest Green', type: 'found', reporter: 'Petugas Kebersihan Kampus', location: 'Kampus Meruya • Gazebo Rektorat', date: '26 Okt 2026', status: 'in_handover' },
-        { id: '7', title: 'Kacamata Minus Titanium Frame Hitam', type: 'found', reporter: 'Rina Anggraini (41621010015)', location: 'Kampus Meruya • Gedung B Ruang B-201', date: '27 Okt 2026', status: 'open' },
-        { id: '8', title: 'Helm KYT TT Course Motif Putih', type: 'found', reporter: 'Petugas Parkir Motor', location: 'Kampus Meruya • Parkir Barat Lt. 1', date: '28 Okt 2026', status: 'in_handover' },
-        { id: '9', title: 'Charger MacBook Pro 67W USB-C', type: 'found', reporter: 'Biro Perlengkapan UMB', location: 'Kampus Meruya • Gedung Tower Lt. 3', date: '29 Okt 2026', status: 'open' },
-        { id: '10', title: 'Kunci Motor Honda Vario 160 Hitam', type: 'found', reporter: 'Petugas Keamanan Parkir', location: 'Kampus Meruya • Parkir Gedung B', date: '30 Okt 2026', status: 'open' },
-        { id: '11', title: 'Payung Lipat Otomatis Navy Blue', type: 'found', reporter: 'Resepsionis Gedung Tower', location: 'Kampus Meruya • Lobi Utama Tower', date: '31 Okt 2026', status: 'open' },
-        { id: '12', title: 'Dompet Kartu Cardholder E-Money Mandiri', type: 'found', reporter: 'Bayu Wicaksono (41121010055)', location: 'Kampus Meruya • Halte Bus UMB', date: '01 Nov 2026', status: 'in_handover' },
-        { id: '13', title: 'Mouse Wireless Logitech Silent M331', type: 'found', reporter: 'Staf TU Fakultas Teknik', location: 'Kampus Meruya • Ruang Sidang FT Lt. 2', date: '01 Nov 2026', status: 'open' },
-        { id: '14', title: 'Buku Catatan Kalkulus II & Binder B5', type: 'found', reporter: 'Perpustakaan UMB', location: 'Kampus Meruya • Perpustakaan Lt. 1', date: '02 Nov 2026', status: 'open' },
-        { id: '15', title: 'Kalkulator Ilmiah Casio FX-991EX', type: 'found', reporter: 'Lab Teknik Sipil', location: 'Kampus Meruya • Gedung E Lt. 2', date: '02 Nov 2026', status: 'in_handover' },
-        { id: '16', title: 'Jam Tangan Alexandre Christie Rantai Wanita', type: 'found', reporter: 'Cleaning Service Tower', location: 'Kampus Meruya • Toilet Tower Lt. 4', date: '03 Nov 2026', status: 'in_handover' },
-        { id: '17', title: 'Powerbank Anker 20.000mAh Dual Port Hitam', type: 'found', reporter: 'Staf BEM Fasilkom', location: 'Kampus Meruya • Ruang BEM Gedung C', date: '03 Nov 2026', status: 'open' },
-        { id: '18', title: 'STNK Motor Honda Beat B 3921 KRF', type: 'found', reporter: 'Pos Satpam Pintu 2', location: 'Kampus Meruya • Pos Pintu Gerbang', date: '04 Nov 2026', status: 'in_handover' },
-        { id: '19', title: 'Pouch Kosmetik & Kunci Loker FDSK', type: 'found', reporter: 'Nadia Putri (41821010008)', location: 'Kampus Meruya • Koridor Gedung D Lt. 1', date: '04 Nov 2026', status: 'open' },
-
-        // 9 Barang Hilang Aktif (6 Open, 3 In Handover)
-        { id: '20', title: 'Samsung Galaxy A13 (SM-A135F) Biru Muda', type: 'lost', reporter: 'Ahmad Fauzi (41521010045)', location: 'Kampus Meruya • Tower Lt. 7', date: '20 Jun 2026', status: 'open' },
-        { id: '21', title: 'Kunci Motor Yamaha Aerox 155 Remote', type: 'lost', reporter: 'Muhammad Farhan (41521010088)', location: 'Kampus Meruya • Parkir Barat', date: '19 Jan 2026', status: 'open' },
-        { id: '22', title: 'Apple AirPods Pro Gen 2 & Case Putih', type: 'lost', reporter: 'Kevin Sanjaya (41521010067)', location: 'Kampus Meruya • Lapangan Futsal', date: '24 Okt 2026', status: 'in_handover' },
-        { id: '23', title: 'Jam Tangan Casio G-Shock GA-2100 All Black', type: 'lost', reporter: 'Rizky Ramadhan (41621010090)', location: 'Kampus Meruya • Masjid Manarul Ilmi', date: '27 Okt 2026', status: 'open' },
-        { id: '24', title: 'iPad Air 5 64GB Space Grey + Apple Pencil 2', type: 'lost', reporter: 'Clarissa Amanda (41921010014)', location: 'Kampus Meruya • Food Court Atrium', date: '28 Okt 2026', status: 'in_handover' },
-        { id: '25', title: 'Harddisk Eksternal WD Elements 1TB Hitam', type: 'lost', reporter: 'Ilham Hidayat (41521010052)', location: 'Kampus Meruya • Co-Working Space Lt. 2', date: '30 Okt 2026', status: 'open' },
-        { id: '26', title: 'Kacamata RayBan Aviator Frame Silver', type: 'lost', reporter: 'Dimas Aditya (41221010031)', location: 'Kampus Menteng • Ruang M-301', date: '01 Nov 2026', status: 'open' },
-        { id: '27', title: 'Dompet Lipat Braun Buffel Kulit Hitam', type: 'lost', reporter: 'Fajar Nugraha (41121010048)', location: 'Kampus Meruya • Kantin Karyawan', date: '02 Nov 2026', status: 'in_handover' },
-        { id: '28', title: 'Jaket Parka Erigo Krem Size L', type: 'lost', reporter: 'Anisa Maharani (41821010029)', location: 'Kampus Meruya • Plaza Rektorat', date: '03 Nov 2026', status: 'open' },
-
-        // Non-Aktif (1 Resolved, 1 Hidden)
-        { id: '29', title: 'Cincin Emas Berlian Solitaire', type: 'lost', reporter: 'Ahmad Fauzi (41521010045)', location: 'Kampus Meruya • Parkir Barat', date: '15 Jan 2026', status: 'resolved' },
-        { id: 'rep_fake_iphone', title: 'iPhone 15 Pro Max Deep Blue', type: 'lost', reporter: 'Akun Palsu (41521010000)', location: 'Kampus Menteng', date: '04 Nov 2026', status: 'hidden' }
-    ];
-
-    function getAllReportsCatalog() {
-        try {
-            const raw = localStorage.getItem('findumb_admin_reports');
-            if (raw) return JSON.parse(raw);
-        } catch(e) {}
-        saveAdminReportsCatalog(DEFAULT_REPORTS_CATALOG);
-        return DEFAULT_REPORTS_CATALOG;
-    }
-
-    function saveAdminReportsCatalog(data) {
-        try { localStorage.setItem('findumb_admin_reports', JSON.stringify(data)); } catch(e) {}
-    }
+    function getAllReportsCatalog() { return ADMIN_REPORTS; }
+    function saveAdminReportsCatalog(data) { ADMIN_REPORTS = data; }
 
     /* ===========================================================================
        TAB SWITCHING
@@ -2041,7 +1914,7 @@
         const container = document.getElementById('categories-grid-container');
         if (!container) return;
 
-        container.innerHTML = DEFAULT_CATEGORIES.map(cat => `
+        container.innerHTML = getAdminCategories().map(cat => `
             <div class="p-3.5 rounded-xl border border-[#eaecf0] bg-white flex flex-col justify-between">
                 <div>
                     <div class="font-medium text-[#111827] text-xs">${escapeHtml(cat.name)}</div>
