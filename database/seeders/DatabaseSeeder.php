@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
             ClaimSeeder::class,
             NotificationSeeder::class,
             SavedReportSeeder::class,
+            AbuseReportSeeder::class,
         ]);
     }
 }

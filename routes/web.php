@@ -167,6 +167,7 @@ Route::prefix('api')->name('api.')->group(function () {
 
 Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
+    Route::post('/users', [AdminDashboardController::class, 'storeAdmin'])->name('users.store');
     Route::get('/reports/{report}', [AdminDashboardController::class, 'showReport'])->name('report');
     Route::post('/reports/{report}/hide', [AdminDashboardController::class, 'hideReport'])->name('report.hide');
     Route::post('/reports/{report}/unhide', [AdminDashboardController::class, 'unhideReport'])->name('report.unhide');

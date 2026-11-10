@@ -1006,11 +1006,17 @@
             </div>
 
             <div class="space-y-1">
-                <label for="admin-new-role" class="font-semibold text-[#111827]">Hak Akses</label>
-                <select id="admin-new-role" class="w-full p-2 bg-white border border-[#eaecf0] rounded-lg text-[#111827]">
-                    <option value="admin">Administrator Moderasi</option>
-                    <option value="superadmin">Super Administrator</option>
-                </select>
+                <label class="font-semibold text-[#111827]">Hak Akses</label>
+                <div class="w-full p-2 bg-[#f9fafb] border border-[#eaecf0] rounded-lg text-[#475467]">
+                    Administrator Moderasi
+                </div>
+                <span class="text-[10px] text-[#6b7280] block">Sistem hanya memiliki dua peran: civitas dan administrator.</span>
+            </div>
+
+            <div class="space-y-1">
+                <label for="admin-new-password" class="font-semibold text-[#111827]">Kata Sandi Awal <span class="text-rose-500">*</span></label>
+                <input type="password" id="admin-new-password" required minlength="8" autocomplete="new-password" placeholder="Minimal 8 karakter" class="w-full p-2 bg-white border border-[#eaecf0] rounded-lg text-[#111827] focus:outline-none focus:border-[#1572b8]">
+                <span class="text-[10px] text-[#6b7280] block">Akun langsung aktif & terverifikasi. Minta petugas mengganti kata sandi setelah login.</span>
             </div>
 
             <div class="pt-3 border-t border-[#eaecf0] flex items-center justify-end gap-2">
@@ -1166,6 +1172,55 @@
 
     function getAllReportsCatalog() { return ADMIN_REPORTS; }
     function saveAdminReportsCatalog(data) { ADMIN_REPORTS = data; }
+
+    /* ===========================================================================
+       JEMBATAN KE SERVER
+       Semua tindakan moderasi dikirim ke controller lalu halaman dimuat ulang,
+       sehingga tampilan selalu mencerminkan isi database (bukan state browser).
+       =========================================================================== */
+
+    const ADMIN_CSRF = '{{ csrf_token() }}';
+    const ADMIN_ACTIVE_TAB = @json($activeTab ?? 'overview');
+
+    async function adminApi(url, method, body) {
+        const response = await fetch(url, {
+            method: method || 'POST',
+            credentials: 'same-origin',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': ADMIN_CSRF,
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: body ? JSON.stringify(body) : undefined
+        });
+
+        let payload = null;
+        try { payload = await response.json(); } catch (e) { /* respons tanpa JSON */ }
+
+        if (!response.ok || (payload && payload.success === false)) {
+            let message = (payload && payload.message) || `Permintaan gagal (HTTP ${response.status}).`;
+            if (payload && payload.errors) {
+                const first = Object.values(payload.errors)[0];
+                if (Array.isArray(first) && first.length) message = first[0];
+            }
+            throw new Error(message);
+        }
+
+        return payload;
+    }
+
+    // Setelah aksi berhasil: tampilkan toast, ingat tab aktif, lalu muat ulang
+    // supaya angka, tabel, dan log audit diambil lagi dari server.
+    function adminCommitDone(message, tabId) {
+        showAdminToast(message);
+        try { sessionStorage.setItem('findumb_admin_tab', tabId || 'overview'); } catch (e) {}
+        setTimeout(() => window.location.reload(), 750);
+    }
+
+    function adminFail(error) {
+        showAdminToast(error && error.message ? error.message : 'Tindakan gagal diproses.');
+    }
 
     /* ===========================================================================
        TAB SWITCHING
@@ -1503,32 +1558,45 @@
         currentSelectedReportId = null;
     }
 
-    function updateReportStatusDirect(newStatus) {
+    async function updateReportStatusDirect(newStatus) {
         if (!currentSelectedReportId) return;
-        const reports = getAllReportsCatalog();
-        const item = reports.find(r => String(r.id) === String(currentSelectedReportId));
-        if (item) {
-            item.status = newStatus;
-            saveAdminReportsCatalog(reports);
-            showAdminToast(`Status laporan #${item.id} berhasil diubah ke ${newStatus.toUpperCase()}.`);
+
+        const reason = newStatus === 'hidden'
+            ? 'Laporan disembunyikan melalui panel moderasi admin.'
+            : 'Laporan ditampilkan kembali melalui panel moderasi admin.';
+
+        try {
+            await adminApi(`/api/v1/admin/reports/${currentSelectedReportId}/status`, 'PATCH', {
+                status: newStatus,
+                reason: reason
+            });
             closeReportDetailModal();
-            renderReportsManagementTable();
-            refreshDashboardMetrics();
+            adminCommitDone(`Status laporan #${currentSelectedReportId} diubah ke ${newStatus.toUpperCase()}.`, 'reports');
+        } catch (error) {
+            adminFail(error);
         }
     }
 
-    function toggleHideActiveReport() {
+    async function toggleHideActiveReport() {
         if (!currentSelectedReportId) return;
-        const reports = getAllReportsCatalog();
-        const item = reports.find(r => String(r.id) === String(currentSelectedReportId));
-        if (item) {
-            const nextStatus = item.status === 'hidden' ? 'open' : 'hidden';
-            item.status = nextStatus;
-            saveAdminReportsCatalog(reports);
-            showAdminToast(nextStatus === 'hidden' ? 'Laporan disembunyikan dari publik.' : 'Laporan dipulihkan kembali ke publik.');
+
+        const item = getAllReportsCatalog().find(r => String(r.id) === String(currentSelectedReportId));
+        const nextStatus = item && item.status === 'hidden' ? 'open' : 'hidden';
+
+        try {
+            await adminApi(`/api/v1/admin/reports/${currentSelectedReportId}/status`, 'PATCH', {
+                status: nextStatus,
+                reason: nextStatus === 'hidden'
+                    ? 'Laporan disembunyikan melalui panel moderasi admin.'
+                    : 'Laporan dipulihkan ke katalog publik.'
+            });
             closeReportDetailModal();
-            renderReportsManagementTable();
-            refreshDashboardMetrics();
+            adminCommitDone(
+                nextStatus === 'hidden' ? 'Laporan disembunyikan dari publik.' : 'Laporan dipulihkan kembali ke publik.',
+                'reports'
+            );
+        } catch (error) {
+            adminFail(error);
         }
     }
 
@@ -1969,138 +2037,106 @@
         document.getElementById('modal-moderation-action').classList.add('hidden');
     }
 
-    function executeModerationCommit(e) {
+    async function executeModerationCommit(e) {
         e.preventDefault();
         const actionType = document.getElementById('mod-action-type').value;
         const targetType = document.getElementById('mod-target-type').value;
         const targetId = document.getElementById('mod-target-id').value;
-        const targetSummary = document.getElementById('mod-target-summary').textContent;
         const reason = document.getElementById('mod-reason-input').value.trim();
 
         if (!reason) { alert('Alasan tindakan wajib diisi.'); return; }
 
-        const now = new Date().toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' }) + ' WIB';
-        const adminName = document.getElementById('admin-user-display-name')?.textContent || 'Biro Kemahasiswaan';
-        const adminEmail = document.getElementById('admin-user-display-email')?.textContent || 'admin.lostfound@mercubuana.ac.id';
+        try {
+            if (actionType === 'hide_report') {
+                await adminApi(`/api/v1/admin/reports/${targetId}/status`, 'PATCH', {
+                    status: 'hidden',
+                    reason: reason
+                });
+            } else if (actionType === 'suspend_user') {
+                const user = getAdminUsers().find(u => String(u.id) === String(targetId) || String(u.nim) === String(targetId));
+                const userId = user ? user.id : targetId;
 
-        if (actionType === 'hide_report') {
-            let abuseReports = getAdminAbuseReports();
-            abuseReports.forEach(a => { if (a.target_id === targetId) a.status = 'resolved'; });
-            saveAdminAbuseReports(abuseReports);
-
-            let reports = getAllReportsCatalog();
-            const rep = reports.find(r => String(r.id) === String(targetId));
-            if (rep) {
-                rep.status = 'hidden';
-                saveAdminReportsCatalog(reports);
-            }
-        } else if (actionType === 'suspend_user') {
-            let users = getAdminUsers();
-            users.forEach(u => { if (u.id === targetId || u.nim === targetId) u.status = 'suspended'; });
-            saveAdminUsers(users);
-
-            let abuseReports = getAdminAbuseReports();
-            abuseReports.forEach(a => { if (a.reporter_nim === targetId || a.target_id === targetId) a.status = 'resolved'; });
-            saveAdminAbuseReports(abuseReports);
-
-            // DEC-026: Sembunyikan seluruh laporan aktif milik pengguna yang ditangguhkan
-            let reports = getAllReportsCatalog();
-            reports.forEach(r => {
-                if (r.reporter && r.reporter.includes(targetId)) {
-                    r.status = 'hidden';
+                await adminApi(`/api/v1/admin/users/${userId}/status`, 'PATCH', {
+                    status: 'suspended',
+                    reason: reason
+                });
+            } else if (actionType === 'warn_user') {
+                const user = getAdminUsers().find(u => String(u.id) === String(targetId) || String(u.nim) === String(targetId));
+                const userId = user ? user.id : targetId;
+                const response = await fetch(`/admin/users/${userId}/warn`, {
+                    method: 'POST',
+                    credentials: 'same-origin',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': ADMIN_CSRF,
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: JSON.stringify({ reason: reason })
+                });
+                if (!response.ok) {
+                    throw new Error('Peringatan gagal dikirim.');
                 }
-            });
-            saveAdminReportsCatalog(reports);
+            } else {
+                throw new Error('Jenis tindakan belum didukung.');
+            }
+
+            closeModerationActionModal();
+            adminCommitDone('Tindakan moderasi tersimpan di server.', targetType === 'user' ? 'users' : 'moderation');
+        } catch (error) {
+            adminFail(error);
         }
-
-        const newLog = {
-            id: `AUD-${Date.now().toString().slice(-4)}`,
-            timestamp: now,
-            admin_name: adminName,
-            admin_email: adminEmail,
-            action_type: actionType,
-            action_label: actionType === 'hide_report' ? 'Sembunyikan Laporan' : (actionType === 'suspend_user' ? 'Penangguhan Akun' : 'Peringatan Formal'),
-            target: targetSummary,
-            reason: reason,
-            impact: actionType === 'suspend_user' ? 'Klaim dibatalkan, hak klaim diblokir (DEC-026).' : 'Konten disembunyikan dari publik.'
-        };
-
-        const logs = getAdminAuditLogs();
-        logs.unshift(newLog);
-        saveAdminAuditLogs(logs);
-
-        closeModerationActionModal();
-        showAdminToast('Tindakan moderasi berhasil dieksekusi.');
-        refreshDashboardMetrics();
-        renderOverviewDashboard();
-        renderAbuseReportsTable();
-        renderReportsManagementTable();
-        renderUsersTable();
-        renderAuditTable();
     }
 
-    function dismissAbuseReportDirect(abuseId) {
+    async function dismissAbuseReportDirect(abuseId) {
         if (!confirm('Abaikan aduan ini?')) return;
-        let abuseReports = getAdminAbuseReports();
-        const item = abuseReports.find(a => a.id === abuseId);
-        if (item) {
-            item.status = 'dismissed';
-            saveAdminAbuseReports(abuseReports);
 
-            const now = new Date().toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' }) + ' WIB';
-            const adminName = document.getElementById('admin-user-display-name')?.textContent || 'Biro Kemahasiswaan';
-            const adminEmail = document.getElementById('admin-user-display-email')?.textContent || 'admin.lostfound@mercubuana.ac.id';
-            const logs = getAdminAuditLogs();
-            logs.unshift({
-                id: `AUD-${Date.now().toString().slice(-4)}`,
-                timestamp: now,
-                admin_name: adminName,
-                admin_email: adminEmail,
-                action_type: 'dismiss_abuse',
-                action_label: 'Abaikan Aduan',
-                target: `${item.id}: ${item.target_title}`,
-                reason: 'Aduan ditinjau dan dinyatakan tidak memenuhi unsur pelanggaran.',
-                impact: 'Aduan ditutup tanpa sanksi (FR-11).'
+        const item = getAdminAbuseReports().find(a => a.id === abuseId);
+        if (!item) return;
+
+        const abuseId_ = item.raw_id || String(abuseId).replace(/\D/g, '');
+
+        try {
+            const response = await fetch(`/admin/abuse-reports/${abuseId_}/resolve`, {
+                method: 'POST',
+                credentials: 'same-origin',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': ADMIN_CSRF,
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: JSON.stringify({
+                    decision: 'dismissed',
+                    reason: 'Aduan ditinjau dan dinyatakan tidak memenuhi unsur pelanggaran.'
+                })
             });
-            saveAdminAuditLogs(logs);
 
-            showAdminToast('Aduan telah diabaikan.');
-            refreshDashboardMetrics();
-            renderOverviewDashboard();
-            renderAbuseReportsTable();
-            renderAuditTable();
+            if (!response.ok) {
+                throw new Error('Aduan gagal ditutup.');
+            }
+
+            adminCommitDone('Aduan telah diabaikan.', 'moderation');
+        } catch (error) {
+            adminFail(error);
         }
     }
 
-    function reactivateUserDirect(userId, userName) {
+    async function reactivateUserDirect(userId, userName) {
         if (!confirm(`Aktifkan kembali akun ${userName}?`)) return;
-        let users = getAdminUsers();
-        const user = users.find(u => String(u.id) === String(userId) || String(u.nim) === String(userId));
-        if (user) {
-            user.status = 'active';
-            saveAdminUsers(users);
 
-            const now = new Date().toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' }) + ' WIB';
-            const adminName = document.getElementById('admin-user-display-name')?.textContent || 'Biro Kemahasiswaan';
-            const adminEmail = document.getElementById('admin-user-display-email')?.textContent || 'admin.lostfound@mercubuana.ac.id';
-            const logs = getAdminAuditLogs();
-            logs.unshift({
-                id: `AUD-${Date.now().toString().slice(-4)}`,
-                timestamp: now,
-                admin_name: adminName,
-                admin_email: adminEmail,
-                action_type: 'reactivate_user',
-                action_label: 'Reaktivasi Akun',
-                target: `${userName} (${user.nim || userId})`,
-                reason: 'Akun dipulihkan setelah peninjauan etika selesai.',
-                impact: 'Status akun aktif kembali (DEC-026).'
+        const user = getAdminUsers().find(u => String(u.id) === String(userId) || String(u.nim) === String(userId));
+        const targetId = user ? user.id : userId;
+
+        try {
+            await adminApi(`/api/v1/admin/users/${targetId}/status`, 'PATCH', {
+                status: 'active',
+                reason: 'Akun dipulihkan setelah peninjauan etika selesai.'
             });
-            saveAdminAuditLogs(logs);
 
-            showAdminToast(`Akun ${userName} berhasil diaktifkan kembali.`);
-            refreshDashboardMetrics();
-            renderUsersTable();
-            renderAuditTable();
+            adminCommitDone(`Akun ${userName} berhasil diaktifkan kembali.`, 'users');
+        } catch (error) {
+            adminFail(error);
         }
     }
 
@@ -2142,53 +2178,55 @@
         document.getElementById('modal-create-admin').classList.add('hidden');
     }
 
-    function handleCreateAdminSubmit(e) {
+    async function handleCreateAdminSubmit(e) {
         e.preventDefault();
         const name = document.getElementById('admin-new-name').value.trim();
         const email = document.getElementById('admin-new-email').value.trim();
-        const unit = document.getElementById('admin-new-unit').value.trim() || 'Staf Operasional Admin';
-        const role = document.getElementById('admin-new-role').value;
+        const unit = document.getElementById('admin-new-unit').value.trim();
+        const password = document.getElementById('admin-new-password').value;
 
         if (!name || !email) return;
 
-        const users = getAdminUsers();
-        users.push({
-            id: `adm_${Date.now()}`,
-            name: name,
-            nim: `ADMIN-${Math.floor(1000 + Math.random() * 9000)}`,
-            faculty: unit,
-            prodi: role === 'superadmin' ? 'Super Administrator' : 'Administrator Moderasi',
-            email: email,
-            role: 'admin',
-            status: 'active'
-        });
-        saveAdminUsers(users);
+        if (!password || password.length < 8) {
+            showAdminToast('Kata sandi minimal 8 karakter.');
+            return;
+        }
 
-        const now = new Date().toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' }) + ' WIB';
-        const adminName = document.getElementById('admin-user-display-name')?.textContent || 'Biro Kemahasiswaan';
-        const adminEmail = document.getElementById('admin-user-display-email')?.textContent || 'admin.lostfound@mercubuana.ac.id';
-        const logs = getAdminAuditLogs();
-        logs.unshift({
-            id: `AUD-${Date.now().toString().slice(-4)}`,
-            timestamp: now,
-            admin_name: adminName,
-            admin_email: adminEmail,
-            action_type: 'create_admin',
-            action_label: 'Penambahan Admin',
-            target: `${name} (${email})`,
-            reason: `Pemberian hak akses ${role === 'superadmin' ? 'Super Administrator' : 'Administrator Moderasi'} untuk unit ${unit}.`,
-            impact: 'Akun administrator baru aktif di sistem.'
-        });
-        saveAdminAuditLogs(logs);
+        try {
+            const response = await fetch('{{ route('admin.users.store') }}', {
+                method: 'POST',
+                credentials: 'same-origin',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': ADMIN_CSRF,
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: JSON.stringify({ name: name, email: email, unit: unit, password: password })
+            });
 
-        const formEl = document.getElementById('form-create-admin');
-        if (formEl) formEl.reset();
+            let payload = null;
+            try { payload = await response.json(); } catch (err) { /* redirect */ }
 
-        closeCreateAdminModal();
-        showAdminToast(`Akun admin ${name} berhasil didaftarkan!`);
-        refreshDashboardMetrics();
-        renderUsersTable();
-        renderAuditTable();
+            if (!response.ok) {
+                let message = 'Akun admin gagal dibuat.';
+                if (payload && payload.errors) {
+                    const first = Object.values(payload.errors)[0];
+                    if (Array.isArray(first) && first.length) message = first[0];
+                } else if (payload && payload.message) {
+                    message = payload.message;
+                }
+                throw new Error(message);
+            }
+
+            const formEl = document.getElementById('form-create-admin');
+            if (formEl) formEl.reset();
+
+            closeCreateAdminModal();
+            adminCommitDone(`Akun admin ${name} berhasil dibuat.`, 'users');
+        } catch (error) {
+            adminFail(error);
+        }
     }
 
     function openAdminSettingsModal() {
@@ -2538,9 +2576,20 @@ Tingkat Temu: ${rate}%`;
     }
 
     document.addEventListener('DOMContentLoaded', () => {
+        const validTabs = ['overview', 'reports', 'moderation', 'users', 'audit', 'categories'];
         const hash = window.location.hash.replace('#', '');
-        if (hash && ['overview', 'reports', 'moderation', 'users', 'audit', 'categories'].includes(hash)) {
+
+        // Setelah aksi moderasi halaman dimuat ulang; buka lagi tab yang tadi aktif.
+        let savedTab = null;
+        try { savedTab = sessionStorage.getItem('findumb_admin_tab'); } catch (e) {}
+        try { sessionStorage.removeItem('findumb_admin_tab'); } catch (e) {}
+
+        if (hash && validTabs.includes(hash)) {
             switchAdminTab(hash);
+        } else if (savedTab && validTabs.includes(savedTab)) {
+            switchAdminTab(savedTab);
+        } else if (ADMIN_ACTIVE_TAB && validTabs.includes(ADMIN_ACTIVE_TAB)) {
+            switchAdminTab(ADMIN_ACTIVE_TAB);
         } else {
             switchAdminTab('overview');
         }

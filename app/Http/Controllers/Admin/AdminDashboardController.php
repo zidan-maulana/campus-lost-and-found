@@ -99,6 +99,7 @@ class AdminDashboardController extends Controller
         return [
             'abuseReports' => $abuseReports->map(fn (AbuseReport $a) => [
                 'id' => 'ABUSE-'.str_pad((string) $a->id, 4, '0', STR_PAD_LEFT),
+                'raw_id' => (int) $a->id,
                 'reporter_name' => $a->reporter?->name ?? 'Civitas UMB',
                 'reporter_nim' => $a->reporter?->nim ?? '-',
                 'target_type' => (string) $a->target_type,
@@ -202,6 +203,39 @@ class AdminDashboardController extends Controller
         }
 
         return ucfirst($type).' #'.$abuse->target_id;
+    }
+
+    /**
+     * Tambah akun administrator baru dari dashboard.
+     *
+     * Akun langsung aktif & terverifikasi karena dibuat oleh administrator
+     * yang sudah login (tidak lewat alur OTP email kampus).
+     */
+    public function storeAdmin(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'max:255', 'unique:users,email'],
+            'unit' => ['nullable', 'string', 'max:255'],
+            'password' => ['required', 'string', 'min:8', 'max:255'],
+        ], [
+            'email.unique' => 'Email tersebut sudah terdaftar.',
+            'password.min' => 'Kata sandi minimal 8 karakter.',
+        ]);
+
+        $admin = User::create([
+            'name' => $validated['name'],
+            'email' => strtolower($validated['email']),
+            'password' => \Illuminate\Support\Facades\Hash::make($validated['password']),
+            'role' => \App\Enums\UserRole::Admin,
+            'status' => \App\Enums\UserStatus::Active,
+            'preferences' => $validated['unit'] ? ['unit' => $validated['unit']] : null,
+        ]);
+
+        // email_verified_at tidak masuk $fillable, jadi diisi terpisah.
+        $admin->forceFill(['email_verified_at' => now()])->save();
+
+        return back()->with('status', 'Akun administrator baru berhasil dibuat.');
     }
 
     public function hideReport(Request $request, Report $report): RedirectResponse

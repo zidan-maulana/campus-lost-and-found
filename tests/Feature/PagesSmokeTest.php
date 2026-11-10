@@ -132,4 +132,93 @@ class PagesSmokeTest extends TestCase
         $response->assertDontSee('DEFAULT_REPORTS_CATALOG', false);
         $response->assertDontSee('iPhone 15 Pro Max Deep Blue', false);
     }
+
+    /**
+     * Halaman detail laporan admin harus bisa dibuka (dulu view-nya tidak ada).
+     */
+    public function test_halaman_detail_laporan_admin_dapat_dirender(): void
+    {
+        $admin = User::factory()->create([
+            'role' => UserRole::Admin,
+            'email_verified_at' => now(),
+        ]);
+
+        $report = Report::factory()->found()->create(['title' => 'Dompet Kulit Cokelat']);
+
+        $this->actingAs($admin)
+            ->get('/admin/reports/'.$report->id)
+            ->assertOk()
+            ->assertSee('Dompet Kulit Cokelat', false)
+            ->assertSee('Detail Barang', false)
+            ->assertSee('Tindakan Moderasi', false);
+    }
+
+    /**
+     * Aksi moderasi dari dashboard harus tersimpan di server, bukan hanya di
+     * state browser: status laporan, status akun, dan log audit.
+     */
+    public function test_aksi_moderasi_dashboard_tersimpan_ke_server(): void
+    {
+        $admin = User::factory()->create([
+            'role' => UserRole::Admin,
+            'email_verified_at' => now(),
+        ]);
+        $pelapor = User::factory()->create(['status' => 'active']);
+        $report = Report::factory()->found()->ownedBy($pelapor)->create();
+
+        // Sembunyikan laporan lewat endpoint yang dipanggil dashboard.
+        $this->actingAs($admin)
+            ->patchJson('/api/v1/admin/reports/'.$report->id.'/status', [
+                'status' => 'hidden',
+                'reason' => 'Laporan memuat foto dari internet.',
+            ])
+            ->assertOk();
+
+        $this->assertSame('hidden', $report->refresh()->status->value);
+        $this->assertDatabaseHas('moderation_actions', [
+            'action_type' => 'hide_report',
+            'admin_id' => $admin->id,
+        ]);
+
+        // Tangguhkan akun pelapor.
+        $this->actingAs($admin)
+            ->patchJson('/api/v1/admin/users/'.$pelapor->id.'/status', [
+                'status' => 'suspended',
+                'reason' => 'Klaim fiktif berulang.',
+            ])
+            ->assertOk();
+
+        $this->assertSame('suspended', $pelapor->refresh()->status->value);
+        $this->assertDatabaseHas('moderation_actions', [
+            'action_type' => 'suspend_user',
+            'target_user_id' => $pelapor->id,
+        ]);
+    }
+
+    /**
+     * Administrator baru yang dibuat dari dashboard langsung bisa dipakai login.
+     */
+    public function test_admin_baru_dari_dashboard_langsung_aktif_dan_terverifikasi(): void
+    {
+        $admin = User::factory()->create([
+            'role' => UserRole::Admin,
+            'email_verified_at' => now(),
+        ]);
+
+        $this->actingAs($admin)
+            ->post('/admin/users', [
+                'name' => 'Petugas Biro',
+                'email' => 'petugas.biro@mercubuana.ac.id',
+                'unit' => 'Biro Kemahasiswaan',
+                'password' => 'rahasia123',
+            ])
+            ->assertRedirect();
+
+        $baru = User::where('email', 'petugas.biro@mercubuana.ac.id')->first();
+
+        $this->assertNotNull($baru);
+        $this->assertSame('admin', $baru->role->value);
+        $this->assertSame('active', $baru->status->value);
+        $this->assertNotNull($baru->email_verified_at);
+    }
 }
