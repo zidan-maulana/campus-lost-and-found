@@ -221,4 +221,36 @@ class PagesSmokeTest extends TestCase
         $this->assertSame('active', $baru->status->value);
         $this->assertNotNull($baru->email_verified_at);
     }
+
+    /**
+     * Angka di tab Overview harus berasal dari database, bukan angka contoh
+     * yang ditulis langsung di view (mis. "+94", "78.3%", "30 Total").
+     */
+    public function test_angka_overview_admin_dihitung_dari_database(): void
+    {
+        $admin = User::factory()->create([
+            'role' => UserRole::Admin,
+            'email_verified_at' => now(),
+        ]);
+
+        Report::factory()->found()->count(3)->create(['status' => 'open']);
+        Report::factory()->lost()->count(2)->create(['status' => 'open']);
+        Report::factory()->found()->count(1)->create(['status' => 'resolved']);
+
+        $response = $this->actingAs($admin)->get('/admin')->assertOk();
+
+        $html = $response->getContent();
+
+        // 6 laporan total, 5 open, 1 resolved.
+        $this->assertMatchesRegularExpression('/id="stat-active-reports">5</', $html);
+        $this->assertMatchesRegularExpression('/id="stat-resolved-reports">1</', $html);
+        $this->assertMatchesRegularExpression('/>6 Total</', $html);
+        $this->assertMatchesRegularExpression('/id="pill-count-all">6</', $html);
+        $this->assertMatchesRegularExpression('/id="reports-kpi-total">6</', $html);
+
+        // Sisa angka karangan tidak boleh muncul lagi.
+        foreach (['+ 94', '78.3%', '30 Total', '2 Urgent', '2.4 Hari', '3.1%', '123 Laporan', '348 Laporan'] as $fake) {
+            $this->assertStringNotContainsString($fake, $html, "Angka contoh '{$fake}' masih muncul di dashboard.");
+        }
+    }
 }

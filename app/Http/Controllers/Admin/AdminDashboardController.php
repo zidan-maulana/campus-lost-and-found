@@ -39,15 +39,20 @@ class AdminDashboardController extends Controller
             'viewer' => $request->user(),
             'abuseReports' => $abuseReports,
             'adminData' => $this->dashboardPayload($abuseReports),
+            'overview' => $this->overviewPayload(),
             'stats' => [
                 'users' => User::count(),
                 'suspended' => User::where('status', 'suspended')->count(),
+                'reports_total' => Report::count(),
                 'reports_open' => Report::where('status', 'open')->count(),
                 'reports_hidden' => Report::where('status', 'hidden')->count(),
                 'claims_active' => Claim::whereIn('status', ['submitted', 'in_handover'])->count(),
                 'abuse_pending' => $abuseReports->count(),
-                'reports_found' => Report::where('type', 'found')->where('status', 'open')->count(),
-                'reports_lost' => Report::where('type', 'lost')->where('status', 'open')->count(),
+                'reports_found' => Report::where('type', 'found')->count(),
+                'reports_lost' => Report::where('type', 'lost')->count(),
+                'reports_found_open' => Report::where('type', 'found')->where('status', 'open')->count(),
+                'reports_found_handover' => Report::where('type', 'found')->where('status', 'in_handover')->count(),
+                'reports_lost_open' => Report::where('type', 'lost')->where('status', 'open')->count(),
                 'reports_resolved' => Report::where('status', 'resolved')->count(),
             ],
             'recentActions' => ModerationAction::query()
@@ -236,6 +241,147 @@ class AdminDashboardController extends Controller
         $admin->forceFill(['email_verified_at' => now()])->save();
 
         return back()->with('status', 'Akun administrator baru berhasil dibuat.');
+    }
+
+    /**
+     * Angka & deret waktu untuk tab Overview — semuanya dihitung dari database.
+     *
+     * @return array<string, mixed>
+     */
+    private function overviewPayload(): array
+    {
+        $totalReports = Report::count();
+        $resolved = Report::where('status', 'resolved')->count();
+
+        // ---------------------------------------------------------- funnel status
+        $funnel = [
+            'open' => Report::where('status', 'open')->count(),
+            'in_handover' => Report::where('status', 'in_handover')->count(),
+            'resolved' => $resolved,
+            'hidden' => Report::where('status', 'hidden')->count(),
+            'cancelled' => Report::where('status', 'cancelled')->count(),
+        ];
+        $funnelTotal = max(array_sum($funnel), 1);
+        $pct = fn (int $n) => round($n / $funnelTotal * 100, 1);
+
+        // ------------------------------------------------------- kategori teratas
+        $topCategories = \App\Models\ItemCategory::query()
+            ->withCount('reports')
+            ->orderByDesc('reports_count')
+            ->limit(4)
+            ->get()
+            ->map(fn ($c) => [
+                'name' => $c->name,
+                'count' => (int) $c->reports_count,
+                'pct' => $totalReports > 0 ? round($c->reports_count / $totalReports * 100, 1) : 0,
+            ])->values()->all();
+
+        // --------------------------------------------------------- seri waktu chart
+        $trend = [
+            '7d' => $this->trendSeries(7, 1, 'd M'),
+            '30d' => $this->trendSeries(30, 3, 'd M'),
+            '90d' => $this->trendSeries(90, 8, 'd M'),
+        ];
+
+        // Rata-rata hari dari laporan dibuat sampai klaim selesai.
+        $avgDays = Claim::query()
+            ->whereNotNull('resolved_at')
+            ->get(['created_at', 'resolved_at'])
+            ->avg(fn (Claim $c) => $c->created_at->diffInHours($c->resolved_at) / 24);
+
+        // Rasio aduan terhadap total laporan.
+        $abuseTotal = AbuseReport::count();
+
+        return [
+            'funnel' => [
+                'total' => $totalReports,
+                'open' => $funnel['open'],
+                'in_handover' => $funnel['in_handover'],
+                'resolved' => $funnel['resolved'],
+                'hidden' => $funnel['hidden'],
+                'pct_open' => $pct($funnel['open']),
+                'pct_handover' => $pct($funnel['in_handover']),
+                'pct_resolved' => $pct($funnel['resolved']),
+            ],
+            'top_categories' => $topCategories,
+            'trend' => $trend,
+            'kpi' => [
+                'avg_days' => $avgDays ? round($avgDays, 1) : null,
+                'return_rate' => $totalReports > 0 ? round($resolved / $totalReports * 100, 1) : 0,
+                'complaint_ratio' => $totalReports > 0 ? round($abuseTotal / $totalReports * 100, 1) : 0,
+            ],
+        ];
+    }
+
+    /**
+     * Deret jumlah laporan temuan & hilang per rentang hari, dikelompokkan
+     * menjadi beberapa titik agar chart tetap terbaca.
+     *
+     * @return array<string, mixed>
+     */
+    private function trendSeries(int $days, int $bucketDays, string $labelFormat): array
+    {
+        $start = now()->subDays($days - 1)->startOfDay();
+
+        $rows = Report::query()
+            ->where('created_at', '>=', $start)
+            ->get(['type', 'created_at']);
+
+        $buckets = (int) ceil($days / $bucketDays);
+        $labels = [];
+        $temuan = [];
+        $hilang = [];
+
+        for ($i = 0; $i < $buckets; $i++) {
+            $from = $start->copy()->addDays($i * $bucketDays);
+            $to = $from->copy()->addDays($bucketDays);
+
+            $labels[] = $from->translatedFormat($labelFormat);
+
+            $inBucket = $rows->filter(fn ($r) => $r->created_at->gte($from) && $r->created_at->lt($to));
+
+            $temuan[] = $inBucket->filter(fn ($r) => $r->type->value === 'found')->count();
+            $hilang[] = $inBucket->filter(fn ($r) => $r->type->value === 'lost')->count();
+        }
+
+        $totals = array_map(fn ($t, $h) => $t + $h, $temuan, $hilang);
+        $total = array_sum($totals);
+
+        // Bandingkan dengan periode sebelumnya yang sama panjangnya.
+        $prevStart = $start->copy()->subDays($days);
+        $prevTotal = Report::query()
+            ->where('created_at', '>=', $prevStart)
+            ->where('created_at', '<', $start)
+            ->count();
+
+        $trendText = 'belum ada pembanding';
+        if ($prevTotal > 0) {
+            $delta = round(($total - $prevTotal) / $prevTotal * 100, 1);
+            $trendText = ($delta >= 0 ? '+' : '').$delta.'% vs '.$days.' hari sebelumnya';
+        } elseif ($total > 0) {
+            $trendText = $total.' laporan baru';
+        }
+
+        $resolvedInRange = Report::query()
+            ->where('status', 'resolved')
+            ->where('created_at', '>=', $start)
+            ->count();
+
+        return [
+            'labels' => $labels,
+            'temuan' => $temuan,
+            'hilang' => $hilang,
+            'headline' => $total.' Laporan',
+            'trendText' => $trendText,
+            'high' => $totals ? (string) max($totals) : '0',
+            'low' => $totals ? (string) min($totals) : '0',
+            'rate' => $total > 0 ? round($resolvedInRange / $total * 100, 1).'%' : '0%',
+            // Titik yang diberi penanda pada chart: puncak dan titik terendah.
+            'keyPoints' => $totals ? array_values(array_unique([
+                (int) array_search(max($totals), $totals, true),
+                (int) array_search(min($totals), $totals, true),
+            ])) : [],
+        ];
     }
 
     public function hideReport(Request $request, Report $report): RedirectResponse

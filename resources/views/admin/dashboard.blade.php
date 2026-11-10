@@ -53,10 +53,10 @@
                 <div class="flex items-center gap-2">
                     <span class="text-[22px] font-semibold tracking-tight text-[#101828]" id="stat-active-reports">{{ $stats['reports_open'] }}</span>
                     <span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-[5px] text-[11px] font-semibold bg-[#ecfdf3] text-[#027a48]">
-                        <i data-lucide="arrow-up-right" class="w-3 h-3"></i> 14%
+                        <i data-lucide="arrow-up-right" class="w-3 h-3"></i> {{ $overview['funnel']['pct_open'] }}% Open
                     </span>
                 </div>
-                <p class="text-xs text-[#667085] mt-1.5">{{ $stats['reports_found'] }} Temuan, {{ $stats['reports_lost'] }} Hilang</p>
+                <p class="text-xs text-[#667085] mt-1.5">{{ $stats['reports_found_open'] }} Temuan, {{ $stats['reports_lost_open'] }} Hilang</p>
             </div>
         </div>
 
@@ -67,10 +67,10 @@
                 <div class="flex items-center gap-2">
                     <span class="text-[22px] font-semibold tracking-tight text-[#101828]" id="stat-resolved-reports">{{ $stats['reports_resolved'] }}</span>
                     <span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-[5px] text-[11px] font-semibold bg-[#ecfdf3] text-[#027a48]">
-                        <i data-lucide="arrow-up-right" class="w-3 h-3"></i> 78.3%
+                        <i data-lucide="arrow-up-right" class="w-3 h-3"></i> {{ $overview['kpi']['return_rate'] }}%
                     </span>
                 </div>
-                <p class="text-xs text-[#667085] mt-1.5">Tingkat temu berhasil diklaim</p>
+                <p class="text-xs text-[#667085] mt-1.5">Tingkat temu berhasil diklaim ({{ $overview['kpi']['return_rate'] }}%)</p>
             </div>
         </div>
 
@@ -81,7 +81,7 @@
                 <div class="flex items-center gap-2">
                     <span class="text-[22px] font-semibold tracking-tight text-[#101828]" id="stat-pending-abuse">{{ $stats['abuse_pending'] }}</span>
                     <span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-[5px] text-[11px] font-semibold bg-[#fef0c7] text-[#b54708]">
-                        <i data-lucide="arrow-up-right" class="w-3 h-3"></i> 2 Urgent
+                        <i data-lucide="arrow-up-right" class="w-3 h-3"></i> {{ $stats['abuse_pending'] }} Menunggu
                     </span>
                 </div>
                 <p class="text-xs text-[#667085] mt-1.5">Perlu moderasi &amp; verifikasi admin</p>
@@ -127,10 +127,10 @@
                 <!-- Prominent Metric Highlight & Legend Bar -->
                 <div class="flex flex-wrap items-center justify-between gap-3 pt-3.5 pb-1">
                     <div class="flex items-baseline gap-2.5">
-                        <span class="text-xl font-semibold tracking-tight text-[#101828]" id="chart-headline-val">123 Laporan</span>
+                        <span class="text-xl font-semibold tracking-tight text-[#101828]" id="chart-headline-val">{{ $overview['trend']['30d']['headline'] }}</span>
                         <span class="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-[5px] text-[11px] font-semibold bg-[#ecfdf3] text-[#027a48]">
                             <i data-lucide="arrow-up-right" class="w-3 h-3"></i>
-                            <span id="chart-trend-val">14.2% 30 hari</span>
+                            <span id="chart-trend-val">{{ $overview['trend']['30d']['trendText'] }}</span>
                         </span>
                     </div>
                     <!-- Legend Buttons -->
@@ -156,23 +156,23 @@
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-3.5 border-t border-[#f3f4f6] mt-2">
                 <div>
                     <div class="text-xs font-medium text-[#475467]">Rata-rata Temu</div>
-                    <div class="text-base font-bold text-[#101828] mt-0.5">2.4 Hari</div>
+                    <div class="text-base font-bold text-[#101828] mt-0.5">{{ $overview['kpi']['avg_days'] !== null ? $overview['kpi']['avg_days'].' Hari' : '—' }}</div>
                     <div class="text-xs text-[#667085] mt-0.5">ke serah terima</div>
                 </div>
                 <div>
                     <div class="text-xs font-medium text-[#475467]">Tingkat Pengembalian</div>
-                    <div class="text-base font-bold text-[#101828] mt-0.5" id="chart-stat-rate">78.3%</div>
+                    <div class="text-base font-bold text-[#101828] mt-0.5" id="chart-stat-rate">{{ $overview['kpi']['return_rate'] }}%</div>
                     <div class="text-xs text-[#667085] mt-0.5">barang kembali ke pemilik</div>
                 </div>
                 <div>
                     <div class="text-xs font-medium text-[#475467]">Puncak Mingguan</div>
-                    <div class="text-base font-bold text-[#101828] mt-0.5" id="chart-stat-high">42 Kasus</div>
-                    <div class="text-xs text-[#667085] mt-0.5">terendah: <span id="chart-stat-low">8</span></div>
+                    <div class="text-base font-bold text-[#101828] mt-0.5" id="chart-stat-high">{{ $overview['trend']['30d']['high'] }} Kasus</div>
+                    <div class="text-xs text-[#667085] mt-0.5">terendah: <span id="chart-stat-low">{{ $overview['trend']['30d']['low'] }}</span></div>
                 </div>
                 <div>
                     <div class="text-xs font-medium text-[#475467]">Rasio Aduan</div>
-                    <div class="text-base font-bold text-[#101828] mt-0.5">3.1%</div>
-                    <div class="text-xs text-emerald-600 font-medium mt-0.5">terkendali &lt; 5%</div>
+                    <div class="text-base font-bold text-[#101828] mt-0.5">{{ $overview['kpi']['complaint_ratio'] }}%</div>
+                    <div class="text-xs {{ $overview['kpi']['complaint_ratio'] < 5 ? 'text-emerald-600' : 'text-amber-600' }} font-medium mt-0.5">{{ $overview['kpi']['complaint_ratio'] < 5 ? 'terkendali < 5%' : 'di atas ambang 5%' }}</div>
                 </div>
             </div>
 
@@ -190,14 +190,14 @@
                         <h4 class="font-bold text-xs text-[#111827]">Status Laporan Kampus</h4>
                         <div class="text-[10px] text-[#6b7280]">Katalog operasional Kampus Meruya</div>
                     </div>
-                    <span class="text-[10px] font-semibold text-[#1572b8] bg-blue-50 px-2 py-0.5 rounded-full">30 Total</span>
+                    <span class="text-[10px] font-semibold text-[#1572b8] bg-blue-50 px-2 py-0.5 rounded-full">{{ $overview['funnel']['total'] }} Total</span>
                 </div>
 
                 <!-- Clean Color Segmented Bar -->
                 <div class="w-full h-2 rounded-full bg-[#f3f4f6] overflow-hidden flex my-3">
-                    <div class="bg-[#1572b8] h-full" style="width: 58%" title="Open (18)"></div>
-                    <div class="bg-amber-400 h-full" style="width: 27%" title="In Handover (10)"></div>
-                    <div class="bg-emerald-500 h-full" style="width: 15%" title="Resolved (95)"></div>
+                    <div class="bg-[#1572b8] h-full" style="width: {{ $overview['funnel']['pct_open'] }}%" title="Open ({{ $overview['funnel']['open'] }})"></div>
+                    <div class="bg-amber-400 h-full" style="width: {{ $overview['funnel']['pct_handover'] }}%" title="In Handover ({{ $overview['funnel']['in_handover'] }})"></div>
+                    <div class="bg-emerald-500 h-full" style="width: {{ $overview['funnel']['pct_resolved'] }}%" title="Resolved ({{ $overview['funnel']['resolved'] }})"></div>
                 </div>
 
                 <div class="space-y-1 text-xs">
@@ -207,7 +207,7 @@
                             <span class="group-hover:text-[#111827]">Open (Aktif Terbuka)</span>
                         </span>
                         <div class="flex items-center gap-1.5">
-                            <span class="font-bold text-[#111827]">18</span>
+                            <span class="font-bold text-[#111827]">{{ $overview['funnel']['open'] }}</span>
                             <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-gray-300 group-hover:text-gray-500 transition-colors"></i>
                         </div>
                     </div>
@@ -217,7 +217,7 @@
                             <span class="group-hover:text-[#111827]">In Handover (Pos Satpam)</span>
                         </span>
                         <div class="flex items-center gap-1.5">
-                            <span class="font-bold text-[#111827]">10</span>
+                            <span class="font-bold text-[#111827]">{{ $overview['funnel']['in_handover'] }}</span>
                             <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-gray-300 group-hover:text-gray-500 transition-colors"></i>
                         </div>
                     </div>
@@ -227,7 +227,7 @@
                             <span class="group-hover:text-[#111827]">Resolved (Selesai Klaim)</span>
                         </span>
                         <div class="flex items-center gap-1.5">
-                            <span class="font-bold text-[#111827]">95</span>
+                            <span class="font-bold text-[#111827]">{{ $overview['funnel']['resolved'] }}</span>
                             <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-gray-300 group-hover:text-gray-500 transition-colors"></i>
                         </div>
                     </div>
@@ -237,7 +237,7 @@
                             <span class="group-hover:text-[#111827]">Hidden (Dimoderasi)</span>
                         </span>
                         <div class="flex items-center gap-1.5">
-                            <span class="font-bold text-[#111827]">1</span>
+                            <span class="font-bold text-[#111827]">{{ $overview['funnel']['hidden'] }}</span>
                             <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-gray-300 group-hover:text-gray-500 transition-colors"></i>
                         </div>
                     </div>
@@ -258,49 +258,26 @@
 
                 <!-- 4 Real Categories from System Catalog -->
                 <div class="space-y-2 mt-3 text-xs">
-                    <div>
-                        <div class="flex items-center justify-between text-[11px] mb-1">
-                            <span class="font-medium text-[#374151]">Elektronik &amp; Gadget</span>
-                            <span class="font-bold text-[#111827]">51 Laporan</span>
-                        </div>
-                        <div class="w-full h-1.5 rounded-full bg-[#f3f4f6] overflow-hidden">
-                            <div class="bg-[#1572b8] h-full rounded-full" style="width: 41%"></div>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="flex items-center justify-between text-[11px] mb-1">
-                            <span class="font-medium text-[#374151]">Dokumen &amp; KTM</span>
-                            <span class="font-bold text-[#111827]">34 Laporan</span>
-                        </div>
-                        <div class="w-full h-1.5 rounded-full bg-[#f3f4f6] overflow-hidden">
-                            <div class="bg-blue-400 h-full rounded-full" style="width: 27%"></div>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="flex items-center justify-between text-[11px] mb-1">
-                            <span class="font-medium text-[#374151]">Tas &amp; Dompet</span>
-                            <span class="font-bold text-[#111827]">22 Laporan</span>
-                        </div>
-                        <div class="w-full h-1.5 rounded-full bg-[#f3f4f6] overflow-hidden">
-                            <div class="bg-amber-400 h-full rounded-full" style="width: 18%"></div>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="flex items-center justify-between text-[11px] mb-1">
-                            <span class="font-medium text-[#374151]">Aksesoris &amp; Pakaian</span>
-                            <span class="font-bold text-[#111827]">18 Laporan</span>
-                        </div>
-                        <div class="w-full h-1.5 rounded-full bg-[#f3f4f6] overflow-hidden">
-                            <div class="bg-slate-400 h-full rounded-full" style="width: 14%"></div>
-                        </div>
-                    </div>
-                </div>
+@forelse ($overview['top_categories'] as $idx => $cat)
+    <div>
+        <div class="flex items-center justify-between text-[11px] mb-1">
+            <span class="font-medium text-[#374151]">{{ $cat['name'] }}</span>
+            <span class="font-bold text-[#111827]">{{ $cat['count'] }} Laporan</span>
+        </div>
+        <div class="w-full h-1.5 rounded-full bg-[#f3f4f6] overflow-hidden">
+            <div class="{{ ['bg-[#1572b8]', 'bg-blue-400', 'bg-amber-400', 'bg-slate-400'][$idx] ?? 'bg-slate-400' }} h-full rounded-full" style="width: {{ max($cat['pct'], 2) }}%"></div>
+        </div>
+    </div>
+@empty
+    <p class="text-xs text-[#98a2b3] py-2">Belum ada kategori yang memiliki laporan.</p>
+@endforelse
+</div>
 
                 <!-- Quick shortcut to handover items -->
                 <div class="mt-3.5 pt-3 border-t border-[#f3f4f6]">
                     <button type="button" onclick="switchAdminTab('reports'); setReportsQuickFilter('in_handover');" class="w-full flex items-center justify-center gap-2 py-1.5 rounded-lg bg-blue-50 hover:bg-blue-100 text-[#1572b8] font-semibold text-xs transition-colors cursor-pointer border border-blue-200">
                         <i data-lucide="package-check" class="w-3.5 h-3.5"></i>
-                        <span>10 Barang di Pos Satpam Tower</span>
+                        <span>{{ $overview['funnel']['in_handover'] }} Barang di Pos Satpam Tower</span>
                     </button>
                 </div>
             </div>
@@ -385,9 +362,9 @@
                 <span class="text-sm font-medium text-[#475467]">Total Terdaftar</span>
                 <div class="mt-3.5">
                     <div class="flex items-center gap-2">
-                        <span class="text-[22px] font-semibold tracking-tight text-[#101828]" id="reports-kpi-total">30</span>
+                        <span class="text-[22px] font-semibold tracking-tight text-[#101828]" id="reports-kpi-total">{{ $stats['reports_total'] }}</span>
                         <span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-[5px] text-[11px] font-semibold bg-[#ecfdf3] text-[#027a48]">
-                            <i data-lucide="arrow-up-right" class="w-3 h-3"></i> 20%
+                            <i data-lucide="arrow-up-right" class="w-3 h-3"></i> {{ $stats['reports_total'] }} total
                         </span>
                     </div>
                     <p class="text-xs text-[#667085] mt-1.5">Akumulasi laporan civitas UMB</p>
@@ -399,12 +376,12 @@
                 <span class="text-sm font-medium text-[#475467]">Barang Temuan</span>
                 <div class="mt-3.5">
                     <div class="flex items-center gap-2">
-                        <span class="text-[22px] font-semibold tracking-tight text-[#101828]" id="reports-kpi-found">19</span>
+                        <span class="text-[22px] font-semibold tracking-tight text-[#101828]" id="reports-kpi-found">{{ $stats['reports_found'] }}</span>
                         <span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-[5px] text-[11px] font-semibold bg-[#ecfdf3] text-[#027a48]">
-                            <i data-lucide="arrow-up-right" class="w-3 h-3"></i> 63%
+                            <i data-lucide="arrow-up-right" class="w-3 h-3"></i> {{ $stats['reports_total'] > 0 ? round($stats['reports_found'] / $stats['reports_total'] * 100) : 0 }}%
                         </span>
                     </div>
-                    <p class="text-xs text-[#667085] mt-1.5">12 Open, 7 Di Pos Satpam</p>
+                    <p class="text-xs text-[#667085] mt-1.5">{{ $stats['reports_found_open'] }} Open, {{ $stats['reports_found_handover'] }} Di Pos Satpam</p>
                 </div>
             </div>
 
@@ -413,12 +390,12 @@
                 <span class="text-sm font-medium text-[#475467]">Laporan Kehilangan</span>
                 <div class="mt-3.5">
                     <div class="flex items-center gap-2">
-                        <span class="text-[22px] font-semibold tracking-tight text-[#101828]" id="reports-kpi-lost">9</span>
+                        <span class="text-[22px] font-semibold tracking-tight text-[#101828]" id="reports-kpi-lost">{{ $stats['reports_lost'] }}</span>
                         <span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-[5px] text-[11px] font-semibold bg-[#ecfdf3] text-[#027a48]">
-                            <i data-lucide="arrow-up-right" class="w-3 h-3"></i> 12%
+                            <i data-lucide="arrow-up-right" class="w-3 h-3"></i> {{ $stats['reports_total'] > 0 ? round($stats['reports_lost'] / $stats['reports_total'] * 100) : 0 }}%
                         </span>
                     </div>
-                    <p class="text-xs text-[#667085] mt-1.5">6 Terbuka, 3 Teridentifikasi</p>
+                    <p class="text-xs text-[#667085] mt-1.5">{{ $stats['reports_lost'] }} laporan hilang aktif</p>
                 </div>
             </div>
 
@@ -427,9 +404,9 @@
                 <span class="text-sm font-medium text-[#475467]">Selesai Dikembalikan</span>
                 <div class="mt-3.5">
                     <div class="flex items-center gap-2">
-                        <span class="text-[22px] font-semibold tracking-tight text-[#101828]" id="reports-kpi-resolved">1</span>
+                        <span class="text-[22px] font-semibold tracking-tight text-[#101828]" id="reports-kpi-resolved">{{ $stats['reports_resolved'] }}</span>
                         <span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-[5px] text-[11px] font-semibold bg-[#ecfdf3] text-[#027a48]">
-                            <i data-lucide="arrow-up-right" class="w-3 h-3"></i> 78%
+                            <i data-lucide="arrow-up-right" class="w-3 h-3"></i> {{ $overview['kpi']['return_rate'] }}%
                         </span>
                     </div>
                     <p class="text-xs text-[#667085] mt-1.5">Tingkat temu berhasil diklaim</p>
@@ -442,23 +419,23 @@
             <div class="flex flex-wrap items-center justify-between gap-2.5 pb-3 border-b border-[#f3f4f6]">
                 <div class="flex flex-wrap items-center gap-1.5 text-xs">
                     <button type="button" onclick="setReportsQuickFilter('all')" id="rep-pill-all" class="rep-quick-pill px-3 py-1 rounded-lg bg-[#1572b8] text-white font-semibold transition-all cursor-pointer shadow-2xs">
-                        Semua Laporan (<span id="pill-count-all">28</span>)
+                        Semua Laporan (<span id="pill-count-all">{{ $stats['reports_total'] }}</span>)
                     </button>
                     <button type="button" onclick="setReportsQuickFilter('found')" id="rep-pill-found" class="rep-quick-pill px-3 py-1 rounded-lg bg-[#f3f4f6] text-[#4b5563] font-medium hover:bg-[#eaecf0] transition-all cursor-pointer">
-                        Barang Temuan (<span id="pill-count-found">19</span>)
+                        Barang Temuan (<span id="pill-count-found">{{ $stats['reports_found'] }}</span>)
                     </button>
                     <button type="button" onclick="setReportsQuickFilter('lost')" id="rep-pill-lost" class="rep-quick-pill px-3 py-1 rounded-lg bg-[#f3f4f6] text-[#4b5563] font-medium hover:bg-[#eaecf0] transition-all cursor-pointer">
-                        Barang Hilang (<span id="pill-count-lost">9</span>)
+                        Barang Hilang (<span id="pill-count-lost">{{ $stats['reports_lost'] }}</span>)
                     </button>
                     <button type="button" onclick="setReportsQuickFilter('in_handover')" id="rep-pill-in_handover" class="rep-quick-pill px-3 py-1 rounded-lg bg-[#f3f4f6] text-[#4b5563] font-medium hover:bg-[#eaecf0] transition-all cursor-pointer">
-                        Siap Serah Terima (<span id="pill-count-handover">10</span>)
+                        Siap Serah Terima (<span id="pill-count-handover">{{ $overview['funnel']['in_handover'] }}</span>)
                     </button>
                     <button type="button" onclick="setReportsQuickFilter('resolved')" id="rep-pill-resolved" class="rep-quick-pill px-3 py-1 rounded-lg bg-[#f3f4f6] text-[#4b5563] font-medium hover:bg-[#eaecf0] transition-all cursor-pointer">
-                        Selesai (<span id="pill-count-resolved">95</span>)
+                        Selesai (<span id="pill-count-resolved">{{ $stats['reports_resolved'] }}</span>)
                     </button>
                 </div>
                 <div class="text-xs text-[#6b7280]">
-                    Menampilkan <strong class="text-[#111827]" id="reports-displayed-count">28</strong> laporan
+                    Menampilkan <strong class="text-[#111827]" id="reports-displayed-count">{{ $stats['reports_total'] }}</strong> laporan
                 </div>
             </div>
 
@@ -703,16 +680,16 @@
             <div class="flex flex-wrap items-center justify-between gap-2.5 pb-3 border-b border-[#f3f4f6]">
                 <div class="flex flex-wrap items-center gap-1.5 text-xs">
                     <button type="button" onclick="setUsersQuickFilter('all')" id="user-pill-all" class="user-quick-pill px-3 py-1 rounded-lg bg-[#1572b8] text-white font-semibold transition-all cursor-pointer shadow-2xs">
-                        Semua Pengguna (<span id="user-pill-count-all">5</span>)
+                        Semua Pengguna (<span id="user-pill-count-all">{{ $stats['users'] }}</span>)
                     </button>
                     <button type="button" onclick="setUsersQuickFilter('admin')" id="user-pill-admin" class="user-quick-pill px-3 py-1 rounded-lg bg-[#f3f4f6] text-[#4b5563] font-medium hover:bg-[#eaecf0] transition-all cursor-pointer">
-                        Administrator (<span id="user-pill-count-admin">2</span>)
+                        Administrator (<span id="user-pill-count-admin">{{ $adminData['users'] ? collect($adminData['users'])->where('role', 'admin')->count() : 0 }}</span>)
                     </button>
                     <button type="button" onclick="setUsersQuickFilter('user')" id="user-pill-user" class="user-quick-pill px-3 py-1 rounded-lg bg-[#f3f4f6] text-[#4b5563] font-medium hover:bg-[#eaecf0] transition-all cursor-pointer">
-                        Civitas Mahasiswa (<span id="user-pill-count-user">3</span>)
+                        Civitas Mahasiswa (<span id="user-pill-count-user">{{ collect($adminData['users'])->where('role', 'user')->count() }}</span>)
                     </button>
                     <button type="button" onclick="setUsersQuickFilter('suspended')" id="user-pill-suspended" class="user-quick-pill px-3 py-1 rounded-lg bg-[#f3f4f6] text-[#4b5563] font-medium hover:bg-[#eaecf0] transition-all cursor-pointer">
-                        Ditangguhkan (<span id="user-pill-count-suspended">1</span>)
+                        Ditangguhkan (<span id="user-pill-count-suspended">{{ $stats['suspended'] }}</span>)
                     </button>
                 </div>
                 <div class="text-xs text-[#6b7280]">
@@ -1274,14 +1251,14 @@
         const resolvedReports = reports.filter(r => r.status === 'resolved');
 
         document.getElementById('stat-active-reports').textContent = activeReports.length;
-        document.getElementById('stat-resolved-reports').textContent = resolvedReports.length + 94;
+        document.getElementById('stat-resolved-reports').textContent = resolvedReports.length;
         document.getElementById('stat-pending-abuse').textContent = pendingAbuse.length;
         document.getElementById('stat-suspended-users').textContent = suspendedUsers.length;
 
         const sidebarBadge = document.getElementById('sidebar-abuse-badge');
         if (sidebarBadge) sidebarBadge.textContent = pendingAbuse.length;
         const reportsCount = document.getElementById('sidebar-reports-count');
-        if (reportsCount) reportsCount.textContent = activeReports.length;
+        if (reportsCount) reportsCount.textContent = reports.length;
         const notifDot = document.getElementById('header-notif-indicator');
         if (notifDot) notifDot.style.display = pendingAbuse.length > 0 ? 'block' : 'none';
     }
@@ -2316,41 +2293,7 @@
        REAL INTERACTIVE TREND CHART (CHART.JS SPLINE + CROSSHAIR & HOVER TOOLTIP)
        =========================================================================== */
 
-    const CHART_CONFIG = {
-        '7d': {
-            labels: ['Sen, 28 Okt', 'Sel, 29 Okt', 'Rab, 30 Okt', 'Kam, 31 Okt', 'Jum, 01 Nov', 'Sab, 02 Nov', 'Min, 03 Nov'],
-            headline: '28 Laporan',
-            trendText: '+16.5% vs minggu lalu',
-            high: '8',
-            low: '2',
-            rate: '82.1%',
-            temuan: [3, 4, 7, 5, 8, 6, 5],
-            hilang: [1, 2, 2, 1, 3, 2, 1],
-            keyPoints: [0, 4]
-        },
-        '30d': {
-            labels: ['01 Okt', '04 Okt', '07 Okt', '10 Okt', '13 Okt', '16 Okt', '19 Okt', '22 Okt', '25 Okt', '28 Okt', '31 Okt', '03 Nov'],
-            headline: '123 Laporan',
-            trendText: '+14.2% 30 hari',
-            high: '42',
-            low: '8',
-            rate: '78.3%',
-            temuan: [12, 18, 15, 24, 28, 14, 22, 29, 35, 42, 38, 32],
-            hilang: [4, 5, 3, 6, 7, 4, 5, 6, 8, 9, 7, 5],
-            keyPoints: [0, 5, 9] // Start (12), Dip on 16 Okt (14), Peak on 28 Okt (42) matching Reference!
-        },
-        '90d': {
-            labels: ['Agt M1', 'Agt M2', 'Agt M3', 'Agt M4', 'Sep M1', 'Sep M2', 'Sep M3', 'Sep M4', 'Okt M1', 'Okt M2', 'Okt M3', 'Okt M4'],
-            headline: '348 Laporan',
-            trendText: '+23.8% kuartal ini',
-            high: '54',
-            low: '14',
-            rate: '76.4%',
-            temuan: [18, 22, 25, 20, 28, 34, 30, 39, 44, 48, 54, 46],
-            hilang: [6, 8, 7, 6, 9, 10, 8, 11, 12, 14, 15, 11],
-            keyPoints: [0, 3, 10]
-        }
-    };
+    const CHART_CONFIG = @json($overview['trend']);
 
     let adminTrendChartInstance = null;
     let currentChartRange = '30d';
