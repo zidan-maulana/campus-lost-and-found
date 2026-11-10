@@ -1360,7 +1360,7 @@
 
             <!-- Action Buttons Group (Login) -->
             <div class="nav-actions">
-                <a href="{{ (auth()->check() || session('authenticated')) ? route('home') : route('login') }}" class="nav-login-btn">
+                <a href="{{ (auth()->check()) ? route('home') : route('login') }}" class="nav-login-btn">
                     Masuk
                 </a>
             </div>
@@ -1392,7 +1392,7 @@
                     </svg>
                     <span>Unduh Aplikasi</span>
                 </button>
-                <a href="{{ (auth()->check() || session('authenticated')) ? route('home') : route('login') }}" class="hero-outline-btn">
+                <a href="{{ (auth()->check()) ? route('home') : route('login') }}" class="hero-outline-btn">
                     <span>Buka Aplikasi</span>
                 </a>
             </div>
@@ -1425,7 +1425,7 @@
                             </p>
                         </div>
                         <div class="features-cta-wrap">
-                            <a href="{{ (auth()->check() || session('authenticated')) ? route('home') : route('login') }}" class="features-cta-btn">
+                            <a href="{{ (auth()->check()) ? route('home') : route('login') }}" class="features-cta-btn">
                                 Buka Aplikasi
                             </a>
                         </div>
@@ -1833,7 +1833,7 @@
                         <ul class="footer-col-list">
                             <li><a href="#features" class="footer-nav-link">Fitur Utama</a></li>
                             <li><a href="{{ route('search') }}" class="footer-nav-link">Cari Barang</a></li>
-                            <li><a href="{{ (auth()->check() || session('authenticated')) ? route('home') : route('login') }}" class="footer-nav-link">Lapor Barang</a></li>
+                            <li><a href="{{ (auth()->check()) ? route('home') : route('login') }}" class="footer-nav-link">Lapor Barang</a></li>
                             <li><a href="javascript:void(0)" onclick="handlePWAInstall()" class="footer-nav-link">Aplikasi PWA</a></li>
                         </ul>
                     </div>
@@ -1901,7 +1901,7 @@
             </div>
 
             <div style="display: flex; gap: 0.75rem;">
-                <a href="{{ (auth()->check() || session('authenticated')) ? route('home') : route('login') }}" class="nav-btn-app" style="flex: 1; justify-content: center; padding: 0.75rem;">
+                <a href="{{ (auth()->check()) ? route('home') : route('login') }}" class="nav-btn-app" style="flex: 1; justify-content: center; padding: 0.75rem;">
                     Buka Versi Web Sekarang
                 </a>
             </div>
