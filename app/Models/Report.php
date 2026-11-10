@@ -29,8 +29,6 @@ class Report extends Model
         'location',
         'brand',
         'storage_note',
-        'storage_location',
-        'security_post_id',
         'incident_date',
         'incident_time',
         'image_path',

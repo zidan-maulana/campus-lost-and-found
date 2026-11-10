@@ -40,9 +40,35 @@ class ApiV1ContractTest extends TestCase
             'incident_date' => now()->subDay()->toDateString(),
             'description' => 'Tas ransel hitam berisi laptop dan buku catatan kuliah semester lima.',
             'proof_question' => 'Apa isi kantong depan tas?',
-            'storage_location' => 'security_post',
-            'security_post_id' => 1,
+            'storage_note' => 'Dititipkan di pos keamanan gedung tower.',
         ], $overrides);
+    }
+
+    /**
+     * DEC-028: konsep pos satpam dihapus. Kontrak tidak lagi meminta
+     * `storage_location` / `security_post_id`, dan response tidak
+     * mengeksposnya.
+     */
+    public function test_field_pos_satpam_sudah_dihapus_dari_kontrak(): void
+    {
+        $user = $this->verifiedUser();
+        $category = ItemCategory::factory()->create();
+
+        $payload = $this->foundReportPayload($category);
+        unset($payload['storage_note']);
+
+        $response = $this->actingAs($user)
+            ->postJson('/api/v1/reports', $payload)
+            ->assertCreated();
+
+        $data = $response->json('data');
+
+        $this->assertArrayNotHasKey('storage_location', $data);
+        $this->assertArrayNotHasKey('security_post_id', $data);
+
+        // Kolomnya juga sudah tidak ada di skema.
+        $this->assertFalse(\Illuminate\Support\Facades\Schema::hasColumn('reports', 'storage_location'));
+        $this->assertFalse(\Illuminate\Support\Facades\Schema::hasColumn('reports', 'security_post_id'));
     }
 
     // ---------------------------------------------------------------- auth
@@ -167,7 +193,7 @@ class ApiV1ContractTest extends TestCase
             ->assertJsonPath('success', true)
             ->assertJsonPath('data.status', 'open')
             ->assertJsonPath('data.campus', 'meruya')
-            ->assertJsonPath('data.storage_location', 'security_post')
+            ->assertJsonPath('data.storage_note', 'Dititipkan di pos keamanan gedung tower.')
             ->assertJsonPath('data.proof_question', 'Apa isi kantong depan tas?');
 
         $this->assertDatabaseHas('reports', [

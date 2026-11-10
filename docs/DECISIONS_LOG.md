@@ -244,6 +244,39 @@ Gunakan status berikut:
 
 **Alasan:** Memberikan kepastian batas waktu bagi pengklaim tanpa mengorbankan haknya untuk mencari barang temuan miliknya.
 
+### DEC-028 — Konsep "Pos Satpam" Dihapus dari Sistem
+
+**Status:** Accepted
+
+**Tanggal:** 2026-11-10
+
+**Konteks:** `docs/API_CONTRACT.md` §5.3 (ditulis tim front-end) mencantumkan field `storage_location` dengan nilai `self` / `security_post` dan `security_post_id` sebagai entitas pos satpam. Setelah ditelusuri, konsep ini **tidak ada di dokumen acuan mana pun**: `PRD.md` (termasuk PR-05 dan PR-06), `SRS.md`, `DATABASE_DESIGN.md`, `SYSTEM_DESIGN.md`, `UI_UX_SPECIFICATION.md`, dan `DEVELOPMENT_PLAN.md` tidak menyebut pos satpam, penitipan, atau `security_post` sama sekali. `BACKEND_VS_CONTRACT_GAP.md` §3.2 sudah mencatat ini sebagai celah yang menunggu keputusan.
+
+Akibatnya muncul tiga masalah:
+1. Antarmuka menampilkan label **"In Handover (Pos Satpam)"** dan **"X Barang di Pos Satpam Tower"**, padahal `in_handover` berarti "klaim disetujui, menunggu konfirmasi serah terima dua arah" — bukan penanda lokasi fisik barang. Barang bisa masih berada di tangan penemu.
+2. Halaman landing menjanjikan fitur yang tidak ada: "Validasi Pos Satpam", "setiap penitipan tercatat di sistem dengan bukti tanda terima resmi", dan "barang diarsipkan 30–90 hari".
+3. `reports.storage_location` dan `reports.security_post_id` ada di skema tetapi tidak pernah terisi satu baris pun (0 baris), dan tidak ada tabel master `security_posts`.
+
+**Pilihan yang dipertimbangkan:**
+1. *Menghapus konsep pos satpam dan mengikuti PRD.*
+   *Konsekuensi:* label dashboard dan narasi landing dikoreksi, dua kolom kosong dihapus, tidak ada fitur yang hilang karena fitur itu memang belum pernah ada. Kontrak front-end perlu direvisi.
+2. *Merestui pos satpam sebagai fitur baru.*
+   *Konsekuensi:* perlu PRD PR-07 dan revisi SRS, tabel master `security_posts`, status laporan baru untuk barang yang benar-benar sudah dititipkan, peran/otoritas petugas pos, serta alur konfirmasi penitipan. Ini penambahan lingkup, bukan penyelesaian implementasi.
+
+**Keputusan:** Opsi 1.
+1. `reports.storage_location` dan `reports.security_post_id` **dihapus** dari skema (migrasi `2026_11_10_000016_drop_security_post_columns_from_reports`).
+2. Lokasi penyimpanan barang temuan cukup dicatat pada `reports.storage_note` sebagai **teks bebas** (mis. "Dititipkan di Pos Keamanan", "Dititipkan di Pengurus Musala"). Tidak ada validasi terhadap entitas pos.
+3. `POST /api/v1/reports` tidak lagi menerima/mewajibkan `storage_location` dan `security_post_id`; yang diterima adalah `storage_note` (opsional, maks 150 karakter). `ApiPresenter` juga tidak lagi mengirim kedua kunci tersebut.
+4. Label antarmuka dikoreksi: `in_handover` ditampilkan sebagai **"Menunggu Serah Terima"**, bukan "(Pos Satpam)".
+5. Narasi landing page yang menjanjikan pencatatan/arsip otomatis di pos satpam diperbaiki agar sesuai perilaku sistem. Saran fisik (serah terima di area ramai atau difasilitasi pos keamanan kampus) tetap dipertahankan karena itu imbauan keamanan fisik, bukan fitur sistem.
+6. Sesuai PR-05, waktu dan lokasi serah terima **dinegosiasikan lewat chat** antar pihak, bukan ditentukan sistem.
+
+**Alasan:** Dokumen acuan adalah sumber kebenaran. Menambah entitas yang tidak pernah disetujui berisiko membuat lingkup melebar tanpa dasar, sementara menghapusnya tidak menghilangkan fungsionalitas apa pun — penitipan fisik memang di luar sistem sejak awal.
+
+**Dampak:** `docs/API_CONTRACT.md` §5.3 (field `storage_location` dan `security_post_id` dibatalkan), Database Design (`reports`), `docs/BACKEND_VS_CONTRACT_GAP.md` §3.2 dan §6, dashboard admin (label status), halaman landing (narasi fitur), serta seeder dan test yang memakai kedua kolom tersebut.
+
+**Catatan:** Bila kelak pos satpam ingin dijadikan fitur resmi, keputusan ini harus digantikan lewat DEC baru beserta revisi PRD/SRS, bukan ditambahkan diam-diam lewat kontrak API.
+
 ## 4. Keputusan yang Masih Menunggu Klarifikasi
 
 ### DEC-016 — Domain Email Kampus

@@ -56,8 +56,6 @@ class ReportService
                 'location' => $data['location'] ?? null,
                 'brand' => $data['brand'] ?? null,
                 'storage_note' => $data['storage_note'] ?? null,
-                'storage_location' => $data['storage_location'] ?? null,
-                'security_post_id' => $data['security_post_id'] ?? null,
                 'incident_date' => $data['incident_date'] ?? null,
                 'incident_time' => $data['incident_time'] ?? null,
                 'image_path' => $photo ? $this->storePhoto($photo) : null,

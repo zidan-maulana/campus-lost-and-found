@@ -214,7 +214,7 @@
                     <div onclick="switchAdminTab('reports'); setReportsQuickFilter('in_handover');" class="flex items-center justify-between p-1.5 -mx-1.5 rounded-lg hover:bg-[#f9fafb] cursor-pointer transition-colors group">
                         <span class="flex items-center gap-2 text-[#4b5563]">
                             <span class="w-2 h-2 rounded-full bg-amber-400"></span>
-                            <span class="group-hover:text-[#111827]">In Handover (Pos Satpam)</span>
+                            <span class="group-hover:text-[#111827]">Menunggu Serah Terima</span>
                         </span>
                         <div class="flex items-center gap-1.5">
                             <span class="font-bold text-[#111827]">{{ $overview['funnel']['in_handover'] }}</span>
@@ -277,7 +277,7 @@
                 <div class="mt-3.5 pt-3 border-t border-[#f3f4f6]">
                     <button type="button" onclick="switchAdminTab('reports'); setReportsQuickFilter('in_handover');" class="w-full flex items-center justify-center gap-2 py-1.5 rounded-lg bg-blue-50 hover:bg-blue-100 text-[#1572b8] font-semibold text-xs transition-colors cursor-pointer border border-blue-200">
                         <i data-lucide="package-check" class="w-3.5 h-3.5"></i>
-                        <span>{{ $overview['funnel']['in_handover'] }} Barang di Pos Satpam Tower</span>
+                        <span>{{ $overview['funnel']['in_handover'] }} Barang Menunggu Serah Terima</span>
                     </button>
                 </div>
             </div>
@@ -341,7 +341,7 @@
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <div>
                 <h1 class="text-xl sm:text-2xl font-bold tracking-tight text-[#111827]">Kelola Laporan</h1>
-                <p class="text-xs text-[#6b7280] mt-0.5">Inventarisasi barang temuan, laporan kehilangan, dan serah terima pos satpam.</p>
+                <p class="text-xs text-[#6b7280] mt-0.5">Inventarisasi barang temuan, laporan kehilangan, dan proses serah terima antar civitas.</p>
             </div>
             <div class="flex items-center gap-2 shrink-0">
                 <button type="button" onclick="exportAdminReportsCSV()" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border border-[#eaecf0] bg-white text-[#374151] hover:bg-[#f9fafb] hover:text-[#111827] transition-all">
@@ -381,7 +381,7 @@
                             <i data-lucide="arrow-up-right" class="w-3 h-3"></i> {{ $stats['reports_total'] > 0 ? round($stats['reports_found'] / $stats['reports_total'] * 100) : 0 }}%
                         </span>
                     </div>
-                    <p class="text-xs text-[#667085] mt-1.5">{{ $stats['reports_found_open'] }} Open, {{ $stats['reports_found_handover'] }} Di Pos Satpam</p>
+                    <p class="text-xs text-[#667085] mt-1.5">{{ $stats['reports_found_open'] }} Open, {{ $stats['reports_found_handover'] }} Menunggu Serah Terima</p>
                 </div>
             </div>
 
@@ -979,7 +979,7 @@
 
             <div class="space-y-1">
                 <label for="admin-new-unit" class="font-semibold text-[#111827]">Unit Kerja</label>
-                <input type="text" id="admin-new-unit" placeholder="Pos Satpam Tower Meruya / Biro Kemahasiswaan" class="w-full p-2 bg-white border border-[#eaecf0] rounded-lg text-[#111827] focus:outline-none focus:border-[#1572b8]">
+                <input type="text" id="admin-new-unit" placeholder="Biro Kemahasiswaan / Unit Kerja" class="w-full p-2 bg-white border border-[#eaecf0] rounded-lg text-[#111827] focus:outline-none focus:border-[#1572b8]">
             </div>
 
             <div class="space-y-1">
@@ -1078,7 +1078,7 @@
                 <div class="flex items-start gap-2 pt-2 border-t border-[#eaecf0]">
                     <i data-lucide="shield-alert" class="w-4 h-4 text-amber-600 shrink-0 mt-0.5"></i>
                     <div>
-                        <div class="font-semibold text-[#111827]">Ciri Khusus (Verifikasi Satpam):</div>
+                        <div class="font-semibold text-[#111827]">Ciri Khusus Barang:</div>
                         <div class="text-[#4b5563]" id="modal-rep-features">Terdapat stiker logo kucing di bagian case samping, nomor seri terverifikasi.</div>
                     </div>
                 </div>
@@ -1500,7 +1500,7 @@
         document.getElementById('modal-rep-date').textContent = item.date;
         document.getElementById('modal-rep-location').textContent = item.location;
         document.getElementById('modal-rep-reporter').textContent = item.reporter;
-        document.getElementById('modal-rep-features').textContent = item.features || 'Ciri khusus telah diverifikasi oleh petugas pos satpam.';
+        document.getElementById('modal-rep-features').textContent = item.features || 'Ciri khusus barang belum diisi pelapor.';
 
         const typeBadge = document.getElementById('modal-rep-badge-type');
         if (typeBadge) {

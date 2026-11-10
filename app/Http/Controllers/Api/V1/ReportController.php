@@ -122,8 +122,8 @@ class ReportController extends Controller
             'incident_time' => ['sometimes', 'nullable', 'string', 'max:60'],
             'brand' => ['sometimes', 'nullable', 'string', 'max:120'],
             'proof_question' => ['required_if:type,found', 'nullable', 'string', 'max:255'],
-            'storage_location' => ['required_if:type,found', 'nullable', Rule::in(['self', 'security_post'])],
-            'security_post_id' => ['required_if:storage_location,security_post', 'nullable', 'integer', 'min:1'],
+            // PRD tidak mengenal entitas pos satpam; lokasi penitipan cukup
+            // dicatat sebagai catatan bebas dan dinegosiasikan lewat chat (PR-05).
             'storage_note' => ['sometimes', 'nullable', 'string', 'max:150'],
         ], [
             'type.required' => 'Jenis laporan wajib dipilih.',
@@ -144,8 +144,6 @@ class ReportController extends Controller
             'image.mimes' => 'Format foto harus JPG, PNG, atau WebP.',
             'image.max' => 'Ukuran foto maksimal 2 MB.',
             'proof_question.required_if' => 'Pertanyaan rahasia wajib diisi untuk laporan barang temuan.',
-            'storage_location.required_if' => 'Lokasi penyimpanan barang wajib dipilih.',
-            'security_post_id.required_if' => 'Pos satpam tempat penitipan wajib dipilih.',
         ]);
 
         $report = $this->reports->create(

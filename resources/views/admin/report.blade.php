@@ -121,14 +121,11 @@
                         <dt class="text-[#667085] mb-0.5">Lokasi Spesifik</dt>
                         <dd class="font-medium text-[#101828]">{{ $report->location ?: '—' }}</dd>
                     </div>
-                    @if ($report->storage_location || $report->storage_note)
+                    @if ($report->storage_note)
                         <div class="sm:col-span-2">
                             <dt class="text-[#667085] mb-0.5">Titik Penyimpanan</dt>
                             <dd class="font-medium text-[#101828]">
-                                {{ $report->storage_location ?: '—' }}
-                                @if ($report->storage_note)
-                                    <span class="text-[#667085]">&middot; {{ $report->storage_note }}</span>
-                                @endif
+                                {{ $report->storage_note }}
                             </dd>
                         </div>
                     @endif

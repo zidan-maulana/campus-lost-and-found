@@ -59,8 +59,7 @@ class ApiPresenter
             'location' => $report->location,
             'incident_date' => $report->incident_date?->format('Y-m-d'),
             'incident_time' => $report->incident_time,
-            'storage_location' => $report->storage_location,
-            'security_post_id' => $report->security_post_id !== null ? (int) $report->security_post_id : null,
+            'storage_note' => $report->storage_note,
             'image_url' => $report->imageUrl(),
             'reporter' => $report->user ? [
                 'id' => (int) $report->user->id,

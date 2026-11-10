@@ -44,7 +44,7 @@ Legenda: **✅** sesuai kontrak · **⚠️** sesuai dengan deviasi terdokumenta
 | :--- | :--- | :--- |
 | `GET /reports` | ✅ filter `type`, `category_id`, `campus`, `month`, `year`, `status`, `q`, `page`, `per_page`; default `status=open` | `Api\V1\ReportController@index` |
 | `GET /reports/{id}` | ✅ termasuk aturan *blind information* | `Api\V1\ReportController@show` |
-| `POST /reports` | ✅ `multipart/form-data`, `image`, `proof_question`, `storage_location`, `security_post_id` | `Api\V1\ReportController@store` |
+| `POST /reports` | ✅ `multipart/form-data`, `image`, `proof_question`, `storage_note` | `Api\V1\ReportController@store` |
 | `POST /reports/{id}/cancel` | ✅ | `Api\V1\ReportController@cancel` |
 
 ### Klaim & serah terima (`/api/v1/claims`)
@@ -97,12 +97,16 @@ proyek ini, sehingga:
 Jika kelak butuh mobile client / token stateless, langkahnya: `composer require laravel/sanctum`,
 tambahkan trait `HasApiTokens` pada `User`, lalu kembalikan `$user->createToken('web')->plainTextToken`.
 
-### 3.2 `security_post_id`
+### 3.2 `security_post_id` — SELESAI (DEC-028)
 
 Kontrak menyebut pos satpam sebagai entitas, tetapi belum ada tabel `security_posts`.
-Saat ini nilainya disimpan sebagai `reports.security_post_id` (integer, tanpa foreign key)
-dan divalidasi `min:1`. Perlu keputusan lanjutan: buat tabel master pos satpam, atau ubah
-menjadi teks bebas.
+Konsep ini juga tidak ditemukan di PRD, SRS, DATABASE_DESIGN, SYSTEM_DESIGN,
+UI_UX_SPECIFICATION, maupun DEVELOPMENT_PLAN.
+
+**Keputusan (DEC-028, 2026-11-10):** konsep pos satpam dihapus. `reports.storage_location`
+dan `reports.security_post_id` di-drop lewat migrasi `2026_11_10_000016`, lokasi penyimpanan
+dicatat pada `reports.storage_note` sebagai teks bebas, dan label dashboard `in_handover`
+dikoreksi menjadi "Menunggu Serah Terima".
 
 ### 3.3 `campus` vs `campus_location`
 
@@ -175,7 +179,7 @@ Keduanya aditif (nullable) sehingga aman dijalankan pada data yang sudah ada.
 - Menjalankan `php artisan migrate` pada database Supabase (menunggu persetujuan).
 - Memindahkan `public/js/findumb-api.js` dari `/api/*` ke `/api/v1` + envelope baru.
 - Menghapus endpoint `/api/*` lama setelah migrasi front-end selesai.
-- Tabel master `security_posts` (§3.2).
+- ~~Tabel master `security_posts` (§3.2).~~ **Dibatalkan oleh DEC-028** — konsep pos satpam dihapus.
 - Sanctum token bila dibutuhkan klien non-browser (§3.1).
 - Konfigurasi SMTP nyata: `MAIL_MAILER=log` masih dipakai, sehingga kode OTP hanya
   tertulis di `storage/logs/laravel.log`.
