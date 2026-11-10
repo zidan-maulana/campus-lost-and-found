@@ -3,12 +3,12 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-    <meta name="description" content="Find UMB — Layanan pelaporan dan pencarian barang hilang atau temuan civitas kampus Universitas Mercu Buana.">
+    <meta name="description" content="UMBFind — Layanan pelaporan dan pencarian barang hilang atau temuan civitas kampus Universitas Mercu Buana.">
     <meta name="theme-color" content="#1e40af">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
 
-    <title>@yield('title', 'Find UMB — Campus Lost & Found Universitas Mercu Buana')</title>
+    <title>@yield('title', 'UMBFind — Campus Lost & Found Universitas Mercu Buana')</title>
 
     <!-- Google Fonts: Inter, Nunito, Quicksand, & Poppins -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -720,7 +720,7 @@
                 top: 0;
                 background: #ffffff;
                 border-right: 1px solid #f1f5f9;
-                padding: 1.25rem 0.95rem;
+                padding: 0 0.95rem 1.25rem 0.95rem;
                 z-index: 60;
                 box-sizing: border-box;
                 transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
@@ -740,17 +740,23 @@
             .sidebar-top-container {
                 display: flex;
                 flex-direction: column;
-                gap: 1rem;
+                gap: 0.85rem;
                 width: 100%;
             }
 
-            /* 1. Header Row */
+            /* 1. Header Row (Fixed in when sidebar is scrolled) */
             .sidebar-header-row {
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
-                padding: 0 0.25rem;
+                padding: 1.25rem 0.25rem 0.65rem 0.25rem;
                 min-height: 40px;
+                position: sticky;
+                top: 0;
+                background: #ffffff;
+                z-index: 30;
+                flex-shrink: 0;
+                width: 100%;
             }
 
             .sidebar-brand-wrap {
@@ -925,7 +931,7 @@
                 align-items: center;
                 justify-content: space-between;
                 gap: 0.75rem;
-                padding: 0.6rem 0.75rem;
+                padding: 0.6rem 0.9rem;
                 border-radius: 10px;
                 color: #475569;
                 font-family: var(--font-main);
@@ -968,7 +974,8 @@
             .sidebar-nav-item.active .sidebar-badge-counter.sidebar-badge-notif {
                 background-color: #ffffff !important;
                 color: #0c559c !important;
-                font-weight: 700 !important;
+                font-weight: 800 !important;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08) !important;
             }
 
             .sidebar-item-left {
@@ -1005,17 +1012,19 @@
                 display: inline-flex;
                 align-items: center;
                 justify-content: center;
-                font-size: 0.7rem;
+                font-size: 0.725rem;
                 font-weight: 700;
                 color: #64748b;
-                min-width: 20px;
-                height: 18px;
-                padding: 1.5px 0.42rem 0 0.42rem;
+                min-width: 22px;
+                height: 20px;
+                padding: 0 6px;
                 border-radius: 9999px;
                 background: #f1f5f9;
                 line-height: 1;
                 box-sizing: border-box;
                 text-align: center;
+                flex-shrink: 0;
+                margin-left: auto;
             }
 
             /* Indikator Merah untuk Pesan Masuk & Notifikasi saat tidak dipilih */
@@ -1086,7 +1095,7 @@
                 align-items: center;
                 justify-content: center;
                 flex-shrink: 0;
-                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+                box-shadow: none !important;
             }
 
             .sidebar-card-plus-circle svg,
@@ -1135,14 +1144,14 @@
                 font-weight: 700;
                 cursor: pointer;
                 transition: var(--transition);
-                box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+                box-shadow: none !important;
                 width: 100%;
             }
 
             .sidebar-card-action-btn:hover {
                 background: #f8fafc !important;
                 transform: translateY(-1px);
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.16);
+                box-shadow: none !important;
             }
 
             .sidebar-card-action-btn svg, .sidebar-card-action-btn .lucide {
@@ -1166,13 +1175,13 @@
                 justify-content: center;
                 cursor: pointer;
                 transition: var(--transition);
-                box-shadow: 0 4px 12px rgba(12, 85, 156, 0.28) !important;
+                box-shadow: none !important;
                 margin: 0.35rem auto;
             }
 
             .sidebar-rail-sparkle-btn:hover {
                 transform: scale(1.06);
-                box-shadow: 0 6px 16px rgba(12, 85, 156, 0.35) !important;
+                box-shadow: none !important;
             }
 
             .sidebar-rail-sparkle-btn svg, .sidebar-rail-sparkle-btn .lucide {
@@ -1315,13 +1324,13 @@
                 display: none !important;
             }
 
-            /* Collapsed State (Mini-rail 64px persis seperti di referensi) */
+            /* Collapsed State (Mini-rail 64px width) */
             .app-layout-wrapper.sidebar-collapsed .desktop-sidebar,
             .desktop-sidebar-pre-collapsed .app-layout-wrapper .desktop-sidebar {
                 width: 64px !important;
                 min-width: 64px !important;
                 max-width: 64px !important;
-                padding: 1.15rem 0.4rem !important;
+                padding: 0 0.4rem 1.15rem 0.4rem !important;
                 align-items: center;
             }
 
@@ -1349,7 +1358,8 @@
             .app-layout-wrapper.sidebar-collapsed .sidebar-header-row,
             .desktop-sidebar-pre-collapsed .app-layout-wrapper .sidebar-header-row {
                 justify-content: center;
-                padding: 0;
+                padding: 1.15rem 0 0.5rem 0 !important;
+                width: 100%;
             }
 
             /* Transition animation pada logo HANYA berlaku ketika sidebar tertutup (collapsed) */
@@ -2084,7 +2094,7 @@
                                     <div class="sidebar-logo-face sidebar-logo-face-logo">
                                         <picture>
                                             <source srcset="{{ asset('images/logo.webp') }}" type="image/webp">
-                                            <img src="{{ asset('images/logo.png') }}" alt="Logo Find UMB" class="sidebar-logo-img" width="32" height="32" loading="eager">
+                                            <img src="{{ asset('images/logo.png') }}" alt="Logo UMBFind" class="sidebar-logo-img" width="32" height="32" loading="eager">
                                         </picture>
                                     </div>
                                     <div class="sidebar-logo-face sidebar-logo-face-icon">
@@ -2093,8 +2103,8 @@
                                 </div>
                             </div>
                         </button>
-                        <a href="{{ url('/') }}" class="sidebar-brand-title-link" title="Beranda Find UMB">
-                            <span class="sidebar-brand-name">Find<span>UMB</span></span>
+                        <a href="{{ url('/') }}" class="sidebar-brand-title-link" title="Beranda UMBFind">
+                            <span class="sidebar-brand-name"><span>UMB</span>Find</span>
                         </a>
                     </div>
                     <button type="button" class="sidebar-collapse-btn" onclick="toggleDesktopSidebar()" title="Ciutkan Sidebar" aria-label="Ciutkan Sidebar">
@@ -2174,7 +2184,7 @@
 
                 <div class="sidebar-divider"></div>
 
-                <!-- 4. Navigasi Tambahan (Buku Panduan, Pengaturan, Pusat Bantuan) -->
+                <!-- 4. Navigasi Tambahan (Buku Panduan, Pengaturan, Pusat Bantuan, Panel Admin) -->
                 <div class="sidebar-secondary-group">
                     <button type="button" class="sidebar-nav-item" onclick="openGuideModal()" title="Buku Panduan &amp; Informasi">
                         <div class="sidebar-item-left">
@@ -2200,6 +2210,14 @@
                             <span class="sidebar-item-label">Pusat Bantuan</span>
                         </div>
                     </button>
+                    <a href="{{ route('admin.dashboard') }}" class="sidebar-nav-item {{ request()->is('admin*') ? 'active' : '' }}" title="Dashboard Administrator UMBFind">
+                        <div class="sidebar-item-left">
+                            <div class="sidebar-item-icon">
+                                <i data-lucide="shield-check"></i>
+                            </div>
+                            <span class="sidebar-item-label">Panel Admin</span>
+                        </div>
+                    </a>
                 </div>
             </div>
 
@@ -2259,9 +2277,9 @@
                     <a href="{{ url('/') }}" class="brand-logo-area" id="brand-logo">
                         <picture>
                             <source srcset="{{ asset('images/logo.webp') }}" type="image/webp">
-                            <img src="{{ asset('images/logo.png') }}" alt="Logo Find UMB" class="brand-logo-img" width="38" height="38" loading="eager">
+                            <img src="{{ asset('images/logo.png') }}" alt="Logo UMBFind" class="brand-logo-img" width="38" height="38" loading="eager">
                         </picture>
-                        <div class="brand-name">Find<span>UMB</span></div>
+                        <div class="brand-name"><span>UMB</span>Find</div>
                     </a>
 
                     <!-- Desktop Top Search Bar (Menggantikan Navigasi di Header pada Desktop) -->
@@ -2281,8 +2299,8 @@
                                 <i data-lucide="search"></i>
                             </span>
                             <input type="text" name="q" id="header-search-input" class="header-search-input" placeholder="Cari barang hilang atau temuan di kampus..." autocomplete="off">
-                            <button type="button" class="search-calendar-btn header-search-calendar-btn" aria-label="Filter Bulan" title="Filter Bulan" onclick="window.location.href='{{ url('/search?open_month=1') }}';">
-                                <i data-lucide="calendar"></i>
+                            <button type="button" class="search-calendar-btn header-search-calendar-btn" aria-label="Filter Pencarian Barang" title="Filter Pencarian" onclick="window.location.href='{{ url('/search') }}';">
+                                <i data-lucide="sliders-horizontal"></i>
                             </button>
                         </form>
                     @endif
@@ -2432,12 +2450,15 @@
 
                     <!-- 4. Pesan (Chat / Pesan Masuk Civitas - Relevan) -->
                     <a href="{{ route('messages') }}" class="nav-btn-item {{ request()->is('messages*') ? 'active' : '' }}" id="nav-inbox">
-                        <svg viewBox="0 0 24 24">
-                            <path d="M8.5 19H8C4 19 2 18 2 13V8C2 4 4 2 8 2H16C20 2 22 4 22 8V13C22 17 20 19 16 19H15.5C15.19 19 14.89 19.15 14.7 19.4L13.2 21.4C12.54 22.28 11.46 22.28 10.8 21.4L9.3 19.4C9.11 19.15 8.81 19 8.5 19Z" stroke-linecap="round" stroke-linejoin="round"/>
-                            <circle cx="7.5" cy="10.5" r="0.8" fill="currentColor"/>
-                            <circle cx="12" cy="10.5" r="0.8" fill="currentColor"/>
-                            <circle cx="16.5" cy="10.5" r="0.8" fill="currentColor"/>
-                        </svg>
+                        <div style="position: relative; display: inline-flex; align-items: center; justify-content: center;">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M8.5 19H8C4 19 2 18 2 13V8C2 4 4 2 8 2H16C20 2 22 4 22 8V13C22 17 20 19 16 19H15.5C15.19 19 14.89 19.15 14.7 19.4L13.2 21.4C12.54 22.28 11.46 22.28 10.8 21.4L9.3 19.4C9.11 19.15 8.81 19 8.5 19Z" stroke-linecap="round" stroke-linejoin="round"/>
+                                <circle cx="7.5" cy="10.5" r="0.8" fill="currentColor"/>
+                                <circle cx="12" cy="10.5" r="0.8" fill="currentColor"/>
+                                <circle cx="16.5" cy="10.5" r="0.8" fill="currentColor"/>
+                            </svg>
+                            <span class="badge-notification-dot" id="bottom-nav-messages-dot" style="top: -2px; right: -2px;"></span>
+                        </div>
                         <span>Pesan</span>
                     </a>
 
@@ -2508,7 +2529,7 @@
                         </div>
                         <ul class="guide-list">
                             <li>Kontak pribadi civitas UMB <strong>tidak dipublikasikan terbuka</strong> demi menjaga privasi dan mencegah spam/penipuan.</li>
-                            <li>Komunikasi awal antar civitas dilakukan secara aman melalui fitur <strong>Pesan / Chat</strong> resmi FindUMB.</li>
+                            <li>Komunikasi awal antar civitas dilakukan secara aman melalui fitur <strong>Pesan / Chat</strong> resmi UMBFind.</li>
                             <li>Pemilik yang sah <strong>wajib membuktikan ciri khusus</strong> rahasia barang sebelum proses serah terima.</li>
                             <li>Lakukan serah terima di area kampus yang ramai atau melalui <strong>Pos Penitipan Resmi</strong> UMB.</li>
                         </ul>

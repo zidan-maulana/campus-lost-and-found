@@ -33,7 +33,10 @@ class OtpController extends Controller
             $this->sendCode($user);
         }
 
-        return view(view()->exists('auth.verify-otp') ? 'auth.verify-otp' : 'auth.verify-email');
+        return view(view()->exists('auth.verify-otp') ? 'auth.verify-otp' : 'auth.verify-email', [
+            // Layar OTP front-end menampilkan alamat tujuan kode.
+            'pending_email' => $user->email,
+        ]);
     }
 
     public function verify(Request $request): RedirectResponse

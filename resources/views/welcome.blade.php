@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Find UMB — Layanan Pelaporan & Pencarian Barang Kampus')
+@section('title', 'UMBFind — Layanan Pelaporan & Pencarian Barang Kampus')
 
 @push('styles')
 <style>
@@ -12,7 +12,7 @@
         gap: 1.25rem;
     }
 
-    /* Hero Banner Card - Uniform Proportional Scaling (Identik dengan Gambar 2) */
+    /* Hero Banner Card - Uniform Proportional Scaling */
     .hero-banner {
         container-type: inline-size;
         container-name: hero;
@@ -75,7 +75,7 @@
         display: block;
     }
 
-    /* Button Laporkan Barang - Pill Shape persis seperti Gambar 2 */
+    /* Hero Action Button */
     .btn-report-pill {
         display: inline-flex;
         align-items: center;
@@ -86,7 +86,7 @@
         font-weight: 700;
         font-size: clamp(0.74rem, 2.8cqw, 0.825rem);
         padding: clamp(0.44rem, 1.6cqw, 0.54rem) clamp(0.95rem, 3.4cqw, 1.2rem);
-        border-radius: 9999px; /* Smooth Pill Shape persis referensi */
+        border-radius: 9999px;
         text-decoration: none;
         border: none;
         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
@@ -101,7 +101,7 @@
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
     }
 
-    /* FindUMB Campus Mascot Graphic - Posisi pas seimbang antara teks dan tepi kanan */
+    /* UMBFind Campus Mascot Graphic - Posisi pas seimbang antara teks dan tepi kanan */
     .hero-mascot-wrap {
         position: absolute;
         right: clamp(-12px, -1.8cqw, -2px);
@@ -188,11 +188,10 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        width: 36px;
-        height: 36px;
-        background: #f0f7ff;
-        border: 1px solid rgba(21, 114, 184, 0.16);
-        border-radius: 10px;
+        width: 32px;
+        height: 32px;
+        background: transparent;
+        border: none;
         color: var(--primary);
         flex-shrink: 0;
         transition: var(--transition);
@@ -201,8 +200,8 @@
     }
 
     .search-calendar-btn svg, .search-calendar-btn .lucide {
-        width: 17px;
-        height: 17px;
+        width: 19px;
+        height: 19px;
         stroke-width: 2.1;
         color: var(--primary);
         stroke: var(--primary);
@@ -210,8 +209,8 @@
     }
 
     .search-box-wrap:hover .search-calendar-btn {
-        background: #e0f0fe;
-        border-color: rgba(21, 114, 184, 0.28);
+        background: transparent;
+        border-color: transparent;
         color: var(--primary-dark, #0d5a94);
     }
 
@@ -219,6 +218,7 @@
     .search-box-wrap:hover .search-calendar-btn .lucide {
         color: var(--primary-dark, #0d5a94);
         stroke: var(--primary-dark, #0d5a94);
+        transform: scale(1.08);
     }
 
     /* Section Headings */
@@ -320,7 +320,7 @@
         line-height: 1.25;
     }
 
-    /* Subtitle Meta persis referensi: "Lost · Kabul" / "Hilang · Lokasi" */
+    /* Report Meta Tag & Location */
     .featured-meta {
         display: flex;
         align-items: center;
@@ -333,7 +333,7 @@
     }
 
     .meta-status-lost {
-        color: #f43f5e; /* Soft red / coral persis seperti teks "Lost" pada referensi */
+        color: #f43f5e;
         font-weight: 600;
         flex-shrink: 0;
     }
@@ -528,7 +528,7 @@
         color: #16a34a;
     }
 
-    /* Card Action Icons (Share & Bookmark) - Persis posisi bawah kanan referensi */
+    /* Card Action Icons (Share & Bookmark) */
     .card-actions-row {
         display: flex;
         align-items: center;
@@ -1090,7 +1090,7 @@
             box-sizing: border-box;
         }
 
-        /* Decorative Circle Shapes (FindUMB Color Palette - Komposisi Harmonis & Mengisi Ruang) */
+        /* Decorative Circle Shapes (UMBFind Color Palette - Komposisi Harmonis & Mengisi Ruang) */
         .hero-bg-circle-canvas {
             position: absolute;
             inset: 0;
@@ -1229,7 +1229,7 @@
         /* Mascot Box - Posisi diatur agar cakar menggenggam search bar secara pas & presisi */
         .hero-mascot-peeking-box {
             width: clamp(330px, 27vw, 385px);
-            margin-bottom: -39.1px; /* <-- UBAH NILAI INI UNTUK MENGATUR POSISI VERTIKAL MASKOT (semakin negatif semakin turun) */
+            margin-bottom: -39.1px; /* Align mascot baseline directly on search bar */
             position: relative;
             z-index: 6;
             pointer-events: none;
@@ -1349,7 +1349,7 @@
             width: 100%;
         }
 
-        /* Sembunyikan item yatim ke-10 pada desktop agar membentuk grid 3x3 simetris */
+        /* Maintain 3x3 symmetric grid on desktop */
         .reports-vertical-container .report-card:nth-child(n+10) {
             display: none !important;
         }
@@ -1807,9 +1807,9 @@
     $hasReports = isset($recentReports) && $recentReports->isNotEmpty();
 @endphp
 <div class="home-container {{ !$hasReports ? 'is-empty-state' : '' }}" id="home-container">
-    <!-- Desktop New Layout Hero Showcase (Persis Referensi Mockup) -->
+    <!-- Desktop Hero Showcase -->
     <section class="hero-desktop-showcase" id="hero-desktop-showcase">
-        <!-- Decorative Circle Shapes (FindUMB Color Palette - Komposisi Harmonis & Mengisi Ruang) -->
+        <!-- Decorative Circle Shapes (UMBFind Color Palette - Komposisi Harmonis & Mengisi Ruang) -->
         <div class="hero-bg-circle-canvas" aria-hidden="true">
             <div class="hero-bg-circle circle-bottom-left"></div>
             <div class="hero-bg-circle circle-top-left"></div>
@@ -1838,8 +1838,8 @@
                 <!-- Mascot on Right (paws resting on search bar) -->
                 <div class="hero-mascot-peeking-box" aria-hidden="true">
                     <picture>
-                        <source srcset="{{ asset('images/mascot-peeking-3.webp') }}" type="image/webp">
-                        <img src="{{ asset('images/mascot-peeking-3.png') }}" alt="Maskot FindUMB" class="hero-mascot-v2-img">
+                        <source srcset="{{ asset('images/mascot-peeking.webp') }}" type="image/webp">
+                        <img src="{{ asset('images/mascot-peeking.png') }}" alt="Maskot UMBFind" class="hero-mascot-v2-img" width="385" height="385" loading="eager">
                     </picture>
                 </div>
             </div>
@@ -1880,12 +1880,12 @@
             </button>
         </div>
 
-        <!-- FindUMB Campus Mascot Graphic -->
+        <!-- UMBFind Campus Mascot Graphic -->
         <div class="hero-mascot-wrap" aria-hidden="true">
             <div class="hero-mascot-glow"></div>
             <picture>
                 <source srcset="{{ asset('images/mascot.webp') }}" type="image/webp">
-                <img src="{{ asset('images/mascot.png') }}" alt="Maskot FindUMB" class="hero-mascot-img" width="160" height="160" loading="eager">
+                <img src="{{ asset('images/mascot.png') }}" alt="Maskot UMBFind" class="hero-mascot-img" width="160" height="160" loading="eager">
             </picture>
         </div>
     </section>
@@ -1896,9 +1896,6 @@
             <i data-lucide="search"></i>
         </span>
         <span class="search-input" style="color: var(--text-muted); display: flex; align-items: center; user-select: none;">Cari barang hilang atau temuan...</span>
-        <span class="search-calendar-btn" id="btn-filter" aria-label="Filter Berdasarkan Bulan" title="Filter Bulan" onclick="event.preventDefault(); window.location.href='{{ url('/search?open_month=1') }}';">
-            <i data-lucide="calendar"></i>
-        </span>
     </a>
 
     @if($hasReports)
@@ -2127,7 +2124,7 @@
                 <span class="desktop-detail-post-date" id="modal-detail-post-date">12 Mei 2026</span>
             </div>
 
-            <!-- Structured Properties List (Persis Image 1) -->
+            <!-- Structured Properties List -->
             <div class="desktop-detail-props-table">
                 <!-- Status Laporan -->
                 <div class="desktop-detail-prop-row">
@@ -2320,8 +2317,8 @@
     function handleShare(title) {
         if (navigator.share) {
             navigator.share({
-                title: title + ' — Find UMB',
-                text: 'Periksa laporan ' + title + ' di Find UMB (Campus Lost & Found Universitas Mercu Buana).',
+                title: title + ' — UMBFind',
+                text: 'Periksa laporan ' + title + ' di UMBFind (Campus Lost & Found Universitas Mercu Buana).',
                 url: window.location.href,
             }).catch(() => {});
         } else {
@@ -2816,8 +2813,8 @@
 
         if (navigator.share) {
             navigator.share({
-                title: title + ' — Find UMB',
-                text: 'Periksa laporan ' + title + ' di Find UMB (Campus Lost & Found).',
+                title: title + ' — UMBFind',
+                text: 'Periksa laporan ' + title + ' di UMBFind (Campus Lost & Found).',
                 url: reportUrl,
             }).catch(() => {});
         } else {

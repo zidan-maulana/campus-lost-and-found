@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Detail Laporan Barang — Find UMB')
+@section('title', 'Detail Laporan Barang — UMBFind')
 @section('app_shell_class', 'bg-white')
 
 @section('header')
@@ -113,7 +113,7 @@
         margin: 0;
     }
 
-    /* Author / Reporter Row (seperti referensi: Avatar Jack Smith · Yesterday) */
+    /* Author / Reporter Information */
     .detail-author-row {
         display: flex;
         align-items: center;
@@ -190,11 +190,11 @@
         flex-shrink: 0;
     }
 
-    /* 3. Clean Structured Properties List (Persis seperti referensi Image 1) */
+    /* 3. Item Properties Table */
     .detail-properties-table {
         display: flex;
         flex-direction: column;
-        padding: 0 4px 0 8px; /* Digeser sedikit ke kanan agar sejajar dengan konten di atas */
+        padding: 0 4px 0 8px;
     }
 
     .detail-prop-row {
@@ -266,13 +266,13 @@
         margin: 0.25rem 0;
     }
 
-    /* 4. Description Section (Persis seperti referensi Image 1) */
+    /* 4. Description Section */
     .detail-description-section {
         display: flex;
         flex-direction: column;
         gap: 0.35rem;
         margin-top: 0.35rem;
-        padding: 0 4px 0 8px; /* Digeser sedikit ke kanan sejajar dengan properti & konten di atas */
+        padding: 0 4px 0 8px;
     }
 
     .detail-section-heading {
@@ -313,7 +313,7 @@
 
     .btn-action-primary {
         flex: 1;
-        background: #0f5791; /* FindUMB Blue */
+        background: #0f5791; /* UMBFind Blue */
         color: #ffffff;
         border: none;
         height: 48px;
@@ -699,7 +699,7 @@
         <!-- Heading Title -->
         <h1 class="detail-heading-title" id="detail-title">{{ $reportData['title'] ?? 'Detail Laporan' }}</h1>
 
-        <!-- Author / Subheader Row (seperti referensi: Avatar Jack Smith · Yesterday) -->
+        <!-- Author / Reporter Row -->
         <div class="detail-author-row">
             <div class="detail-author-avatar">
                 <i data-lucide="user"></i>
@@ -714,7 +714,7 @@
             </div>
         </div>
 
-        <!-- 3. Clean Structured Properties List (Persis seperti referensi Image 1) -->
+        <!-- 3. Structured Properties Table -->
         <div class="detail-properties-table">
             <!-- Status Laporan -->
             <div class="detail-prop-row">
@@ -1196,7 +1196,7 @@
         if (!report) return;
 
         // Title & Document Title
-        document.title = `${report.title} — Detail Laporan FindUMB`;
+        document.title = `${report.title} — Detail Laporan UMBFind`;
         const titleEl = document.getElementById('detail-title');
         if (titleEl) titleEl.textContent = report.title;
 
@@ -1535,8 +1535,8 @@
         const title = activeReportData ? activeReportData.title : 'Laporan Barang Temuan/Hilang';
         if (navigator.share) {
             navigator.share({
-                title: `${title} — Find UMB`,
-                text: `Lihat detail laporan ${title} di Find UMB (Campus Lost & Found).`,
+                title: `${title} — UMBFind`,
+                text: `Lihat detail laporan ${title} di UMBFind (Campus Lost & Found).`,
                 url: window.location.href
             }).catch(() => {});
         } else {

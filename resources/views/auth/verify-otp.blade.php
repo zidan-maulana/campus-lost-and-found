@@ -1,158 +1,466 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Verifikasi Email — FindUMB</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>Verifikasi OTP — UMBFind</title>
+    <meta name="description" content="Verifikasi kode OTP email resmi kampus Universitas Mercu Buana.">
+    <meta name="theme-color" content="#0c487b">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/webp" href="{{ asset('images/logo.webp') }}">
+    <link rel="apple-touch-icon" href="{{ asset('images/logo.png') }}">
+
+    <!-- Google Fonts: Inter & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS (via local Vite or CDN build) -->
+    @if(file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @else
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script>
+            tailwind.config = {
+                theme: {
+                    extend: {
+                        colors: {
+                            navy: { 900: '#0b192c', 800: '#0c487b', 700: '#0c559c' },
+                            brand: { blue: '#1572b8', sky: '#2aa5e0', soft: '#e0f2fe' }
+                        },
+                        fontFamily: {
+                            sans: ['Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif],
+                            heading: ['Plus Jakarta Sans', 'Inter', sans-serif]
+                        }
+                    }
+                }
+            }
+        </script>
+    @endif
+
     <style>
-        :root {
-            --primary: #1572b8; --primary-gradient: linear-gradient(135deg, #0e5090 0%, #1572b8 60%, #29a0dc 100%);
-            --bg-page: #f1f5f9; --text-main: #0f172a; --text-secondary: #475569; --text-muted: #94a3b8;
-            --border-subtle: #e2e8f0; --radius-md: 14px; --radius-xl: 24px;
-            --shadow-elevated: 0 4px 14px rgba(15, 23, 42, 0.12);
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
-        * { box-sizing: border-box; }
+
         body {
-            margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center;
-            padding: 24px; background: var(--bg-page); color: var(--text-main);
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(180deg, #1572b8 0%, #38bdf8 45%, #e0f2fe 75%, #ffffff 100%);
+            background-attachment: fixed;
+            color: #1e293b;
+            padding: 1.5rem 1rem;
+            position: relative;
+            overflow-x: hidden;
         }
-        .card {
-            width: 100%; max-width: 440px; background: #fff; border-radius: var(--radius-xl);
-            padding: 28px 24px; box-shadow: var(--shadow-elevated); border: 1px solid var(--border-subtle);
+
+        /* Subtle Soft Cloud Overlay */
+        body::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: 
+                radial-gradient(circle at 15% 25%, rgba(255, 255, 255, 0.4) 0%, transparent 45%),
+                radial-gradient(circle at 85% 70%, rgba(255, 255, 255, 0.45) 0%, transparent 50%),
+                radial-gradient(circle at 50% 10%, rgba(255, 255, 255, 0.25) 0%, transparent 60%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Main Compact Card */
+        .otp-card {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            max-width: 380px;
+            background: #ffffff;
+            border-radius: 28px;
+            padding: 1.85rem 1.65rem 1.75rem 1.65rem;
+            box-shadow: 0 16px 40px -8px rgba(12, 72, 123, 0.16), 0 0 0 1px rgba(226, 232, 240, 0.85);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             text-align: center;
         }
-        .icon-wrap {
-            width: 64px; height: 64px; margin: 0 auto 16px; border-radius: 20px;
-            background: #f0f7fd; display: flex; align-items: center; justify-content: center; font-size: 28px;
+
+        /* Header Navigation */
+        .otp-header {
+            position: relative;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 0.65rem;
+            min-height: 36px;
         }
-        h1 { margin: 0 0 8px; font-size: 19px; font-weight: 800; }
-        p { margin: 0 0 18px; font-size: 13.5px; color: var(--text-secondary); line-height: 1.6; }
-        .email { font-weight: 700; color: var(--text-main); }
-        .otp-input {
-            width: 100%; padding: 16px 12px; margin-bottom: 6px; text-align: center;
-            font-family: 'SFMono-Regular', ui-monospace, Menlo, Consolas, monospace;
-            font-size: 28px; font-weight: 700; letter-spacing: 10px; text-indent: 10px;
-            color: var(--text-main); background: #f8fafc;
-            border: 2px solid var(--border-subtle); border-radius: var(--radius-md);
-            outline: none; transition: border-color .15s ease, background .15s ease;
+
+        .otp-back-btn {
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 9999px;
+            border: 1px solid #e2e8f0;
+            background: #ffffff;
+            color: #64748b;
+            text-decoration: none;
+            transition: all 0.15s ease;
         }
-        .otp-input:focus { border-color: var(--primary); background: #fff; }
-        .otp-input.is-error { border-color: #dc2626; background: #fef2f2; }
-        .btn {
-            display: inline-block; width: 100%; padding: 13px; border: none; cursor: pointer; font-family: inherit;
-            background: var(--primary-gradient); color: #fff; font-size: 14px; font-weight: 700;
-            border-radius: var(--radius-md); margin-bottom: 10px;
+
+        .otp-back-btn:hover {
+            background: #f8fafc;
+            color: #0c487b;
+            border-color: #cbd5e1;
         }
-        .btn:disabled { opacity: .6; cursor: not-allowed; }
-        .btn-ghost {
-            display: inline-block; width: 100%; padding: 12px; font-family: inherit; font-size: 13.5px; font-weight: 700;
-            color: var(--primary); background: #f0f7fd; border: none; border-radius: var(--radius-md);
-            text-decoration: none; text-align: center; cursor: pointer;
+
+        .otp-back-btn svg {
+            width: 16px;
+            height: 16px;
         }
-        .alert { padding: 11px 13px; border-radius: 12px; font-size: 12.5px; margin-bottom: 16px; text-align: left; }
-        .alert-ok { background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; }
-        .alert-err { background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; }
-        .meta { font-size: 12px; color: var(--text-muted); margin-top: 14px; }
-        .divider { border: 0; border-top: 1px solid var(--border-subtle); margin: 18px 0 14px; }
+
+        /* Titles */
+        .otp-title {
+            font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #0b192c;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.35rem;
+        }
+
+        .otp-subtitle {
+            font-size: 0.825rem;
+            color: #64748b;
+            line-height: 1.45;
+            margin-bottom: 0.5rem;
+        }
+
+        .otp-email-badge {
+            display: inline-block;
+            font-weight: 600;
+            color: #0c559c;
+            background: #e0f2fe;
+            padding: 0.2rem 0.65rem;
+            border-radius: 6px;
+            word-break: break-all;
+            margin-bottom: 1.35rem;
+            font-size: 0.8rem;
+        }
+
+        /* 6 Digits Container */
+        .otp-inputs-grid {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.45rem;
+            width: 100%;
+            margin-bottom: 1.35rem;
+        }
+
+        .otp-digit {
+            flex: 1;
+            min-width: 0;
+            height: 48px;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 12px;
+            text-align: center;
+            font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #0b192c;
+            background: #ffffff;
+            transition: all 0.18s ease;
+            outline: none;
+        }
+
+        .otp-digit:focus {
+            border-color: #1572b8;
+            box-shadow: 0 0 0 3px rgba(21, 114, 184, 0.15);
+            background: #f8fafc;
+        }
+
+        .otp-digit.filled {
+            border-color: #0c559c;
+            background: #f0f7fd;
+        }
+
+        /* Submit Button */
+        .otp-submit-btn {
+            width: 100%;
+            height: 42px;
+            border-radius: 9999px;
+            border: none;
+            background: linear-gradient(135deg, #1572b8 0%, #2aa5e0 100%);
+            color: #ffffff;
+            font-size: 0.885rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(21, 114, 184, 0.28);
+            transition: all 0.18s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.15rem;
+        }
+
+        .otp-submit-btn:hover {
+            filter: brightness(1.06);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(21, 114, 184, 0.35);
+        }
+
+        /* Resend Section */
+        .otp-resend-wrap {
+            font-size: 0.8rem;
+            color: #64748b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.35rem;
+        }
+
+        .otp-resend-btn {
+            color: #1572b8;
+            font-weight: 600;
+            text-decoration: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            font-size: 0.8rem;
+        }
+
+        .otp-resend-btn:disabled {
+            color: #94a3b8;
+            cursor: not-allowed;
+            text-decoration: none;
+        }
+
+        .otp-resend-btn:not(:disabled):hover {
+            text-decoration: underline;
+        }
+
+        /* Alerts */
+        .otp-alert-error {
+            width: 100%;
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #dc2626;
+            padding: 0.65rem 0.85rem;
+            border-radius: 10px;
+            font-size: 0.775rem;
+            margin-bottom: 1rem;
+            text-align: left;
+        }
+
+        .otp-alert-success {
+            width: 100%;
+            background: #ecfdf5;
+            border: 1px solid #a7f3d0;
+            color: #059669;
+            padding: 0.65rem 0.85rem;
+            border-radius: 10px;
+            font-size: 0.775rem;
+            margin-bottom: 1rem;
+            text-align: left;
+        }
+
+        @media (max-width: 480px) {
+            .otp-card {
+                max-width: 325px;
+                padding: 1.65rem 1.25rem;
+                border-radius: 24px;
+            }
+
+            .otp-inputs-grid {
+                gap: 0.35rem;
+            }
+
+            .otp-digit {
+                height: 44px;
+                font-size: 1.2rem;
+                border-radius: 10px;
+            }
+        }
     </style>
 </head>
 <body>
-<div class="card">
-    <div class="icon-wrap">✉️</div>
-    <h1>Verifikasi Email Kampus</h1>
-    <p>
-        Kode verifikasi 6 digit sudah dikirim ke
-        <span class="email">{{ auth()->user()->email }}</span>.
-        Masukkan kodenya di bawah ini untuk mengaktifkan fitur inti FindUMB.
-    </p>
 
-    @if (session('status'))
-        <div class="alert alert-ok">{{ session('status') }}</div>
-    @endif
+    <div class="otp-card">
+        <!-- Header: Back Button & Centered Title -->
+        <div class="otp-header">
+            <a href="{{ route('register') }}" class="otp-back-btn" title="Kembali ke Pendaftaran" aria-label="Kembali ke Pendaftaran">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+            </a>
+            <h1 class="otp-title">Verifikasi Kode OTP</h1>
+        </div>
+        <p class="otp-subtitle">
+            Masukkan 6 digit kode yang dikirim ke:
+        </p>
+        <span class="otp-email-badge">
+            {{ session('pending_email', $pending_email ?? 'email kampus Anda') }}
+        </span>
 
-    @if ($errors->any())
-        <div class="alert alert-err">{{ $errors->first() }}</div>
-    @endif
+        <!-- Validation / Session Feedback -->
+        @if ($errors->any())
+            <div class="otp-alert-error" role="alert">
+                <ul class="list-disc list-inside space-y-0.5 m-0 p-0">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
 
-    <form method="POST" action="{{ route('verification.otp.post') }}" id="otp-form" autocomplete="off">
-        @csrf
-        <input
-            type="text"
-            name="otp"
-            id="otp-input"
-            class="otp-input @error('otp') is-error @enderror"
-            inputmode="numeric"
-            pattern="[0-9]*"
-            maxlength="6"
-            placeholder="••••••"
-            autocomplete="one-time-code"
-            aria-label="Kode OTP 6 digit"
-            value="{{ old('otp') }}"
-            autofocus
-            required
-        >
-        <button type="submit" class="btn" id="otp-submit">Verifikasi Kode</button>
-    </form>
+        @if (session('success'))
+            <div class="otp-alert-success" role="status">
+                {{ session('success') }}
+            </div>
+        @endif
 
-    <form method="POST" action="{{ route('verification.otp.resend') }}">
-        @csrf
-        <button type="submit" class="btn-ghost">Kirim Ulang Kode OTP</button>
-    </form>
+        <!-- Form Verifikasi OTP -->
+        <form id="form-otp" method="POST" action="{{ route('verification.otp.post') }}" style="width: 100%;">
+            @csrf
+            <input type="hidden" name="otp" id="full-otp-input" value="">
 
-    <hr class="divider">
+            <!-- 6 Digit Input Boxes -->
+            <div class="otp-inputs-grid" id="otp-grid">
+                <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]*" class="otp-digit" data-index="0" autocomplete="one-time-code" required autofocus>
+                <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]*" class="otp-digit" data-index="1">
+                <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]*" class="otp-digit" data-index="2">
+                <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]*" class="otp-digit" data-index="3">
+                <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]*" class="otp-digit" data-index="4">
+                <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]*" class="otp-digit" data-index="5">
+            </div>
 
-    <a href="{{ route('home') }}" class="btn-ghost" style="background:#fff;color:var(--text-secondary);">Lihat Katalog Laporan</a>
+            <!-- Tombol Verifikasi -->
+            <button type="submit" class="otp-submit-btn" id="btn-submit-otp">
+                Verifikasi Akun
+            </button>
+        </form>
 
-    <form method="POST" action="{{ route('logout') }}" style="margin-top:10px;">
-        @csrf
-        <button type="submit" style="background:none;border:none;color:#94a3b8;font-size:12px;cursor:pointer;font-family:inherit;">
-            Keluar dari akun ini
-        </button>
-    </form>
+        <!-- Kirim Ulang Kode -->
+        <div class="otp-resend-wrap">
+            <span>Tidak menerima kode?</span>
+            <form method="POST" action="{{ route('verification.otp.resend') }}" style="display: inline;">
+                @csrf
+                <button type="submit" class="otp-resend-btn" id="btn-resend-otp" disabled>
+                    Kirim Ulang (<span id="otp-timer">00:59</span>)
+                </button>
+            </form>
+        </div>
+    </div>
 
-    <p class="meta">Kode berlaku terbatas. Periksa juga folder spam jika belum menerima email.</p>
-</div>
+    <!-- JavaScript: OTP Interactivity (Auto-tab, Backspace, Paste) -->
+    <script>
+        const digits = Array.from(document.querySelectorAll('.otp-digit'));
+        const fullOtpInput = document.getElementById('full-otp-input');
+        const formOtp = document.getElementById('form-otp');
 
-<script>
-    (function () {
-        var input = document.getElementById('otp-input');
-        var form = document.getElementById('otp-form');
-        var submit = document.getElementById('otp-submit');
+        function updateFullOtp() {
+            const val = digits.map(d => d.value.trim()).join('');
+            fullOtpInput.value = val;
+            return val;
+        }
 
-        // Hanya angka, maksimal 6.
-        input.addEventListener('input', function () {
-            var digits = this.value.replace(/\D+/g, '').slice(0, 6);
-            if (this.value !== digits) this.value = digits;
-            submit.disabled = digits.length !== 6;
-            if (digits.length === 6) this.classList.remove('is-error');
-        });
+        digits.forEach((digit, idx) => {
+            // Auto advance on typing
+            digit.addEventListener('input', (e) => {
+                const val = e.target.value.replace(/[^0-9]/g, '');
+                e.target.value = val ? val[0] : '';
 
-        // Tempel kode dari email ("123 456" / "123-456") tetap kebaca.
-        input.addEventListener('paste', function (e) {
-            var text = (e.clipboardData || window.clipboardData).getData('text') || '';
-            var digits = text.replace(/\D+/g, '').slice(0, 6);
-            if (digits) {
+                if (e.target.value) {
+                    e.target.classList.add('filled');
+                    if (idx < digits.length - 1) {
+                        digits[idx + 1].focus();
+                    }
+                } else {
+                    e.target.classList.remove('filled');
+                }
+
+                const currentOtp = updateFullOtp();
+                if (currentOtp.length === 6) {
+                    document.getElementById('btn-submit-otp').focus();
+                }
+            });
+
+            // Handle backspace
+            digit.addEventListener('keydown', (e) => {
+                if (e.key === 'Backspace') {
+                    if (!digit.value && idx > 0) {
+                        digits[idx - 1].focus();
+                        digits[idx - 1].value = '';
+                        digits[idx - 1].classList.remove('filled');
+                    } else {
+                        digit.value = '';
+                        digit.classList.remove('filled');
+                    }
+                    updateFullOtp();
+                }
+            });
+
+            // Handle paste 6-digit
+            digit.addEventListener('paste', (e) => {
                 e.preventDefault();
-                this.value = digits;
-                submit.disabled = digits.length !== 6;
-                if (digits.length === 6) form.requestSubmit();
+                const pasteData = (e.clipboardData || window.clipboardData).getData('text').trim().replace(/[^0-9]/g, '');
+                if (pasteData.length > 0) {
+                    for (let i = 0; i < digits.length; i++) {
+                        if (i < pasteData.length) {
+                            digits[i].value = pasteData[i];
+                            digits[i].classList.add('filled');
+                        }
+                    }
+                    const nextIndex = Math.min(pasteData.length, digits.length - 1);
+                    digits[nextIndex].focus();
+                    const fullVal = updateFullOtp();
+                    if (fullVal.length === 6) {
+                        document.getElementById('btn-submit-otp').focus();
+                    }
+                }
+            });
+        });
+
+        // Form submit check
+        formOtp.addEventListener('submit', (e) => {
+            const val = updateFullOtp();
+            if (val.length < 6) {
+                e.preventDefault();
+                alert('Silakan lengkapi 6 digit kode OTP terlebih dahulu.');
+                const firstEmpty = digits.find(d => !d.value);
+                if (firstEmpty) firstEmpty.focus();
             }
         });
 
-        // Auto-submit begitu 6 digit terisi.
-        input.addEventListener('keyup', function () {
-            if (this.value.length === 6 && !submit.dataset.sent) {
-                submit.dataset.sent = '1';
-                form.requestSubmit();
-            }
-        });
+        // 60-Second Countdown Timer for Resend
+        let timeLeft = 59;
+        const timerDisplay = document.getElementById('otp-timer');
+        const resendBtn = document.getElementById('btn-resend-otp');
 
-        submit.disabled = input.value.replace(/\D+/g, '').length !== 6;
-        input.focus();
-    })();
-</script>
+        const countdownInterval = setInterval(() => {
+            timeLeft--;
+            if (timeLeft <= 0) {
+                clearInterval(countdownInterval);
+                resendBtn.disabled = false;
+                resendBtn.textContent = 'Kirim Ulang Sekarang';
+            } else {
+                const sec = timeLeft < 10 ? '0' + timeLeft : timeLeft;
+                timerDisplay.textContent = `00:${sec}`;
+            }
+        }, 1000);
+    </script>
 </body>
 </html>
+

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Pencarian Laporan — Find UMB')
+@section('title', 'Pencarian Laporan — UMBFind')
 
 @push('styles')
 <style>
@@ -1683,7 +1683,7 @@
         <div class="empty-mascot-box">
             <picture>
                 <source srcset="{{ asset('images/mascot.webp') }}" type="image/webp">
-                <img src="{{ asset('images/mascot.png') }}" alt="Maskot FindUMB" class="empty-mascot-img" width="105" height="105" loading="lazy">
+                <img src="{{ asset('images/mascot.png') }}" alt="Maskot UMBFind" class="empty-mascot-img" width="105" height="105" loading="lazy">
             </picture>
         </div>
         <h3 class="empty-title">Tidak Ada Laporan yang Cocok</h3>
@@ -1839,7 +1839,7 @@
                 <span class="desktop-detail-post-date" id="modal-detail-post-date">12 Mei 2026</span>
             </div>
 
-            <!-- Structured Properties List (Persis Image 1) -->
+            <!-- Structured Properties List -->
             <div class="desktop-detail-props-table">
                 <!-- Status Laporan -->
                 <div class="desktop-detail-prop-row">
@@ -2155,8 +2155,8 @@
 
         if (navigator.share) {
             navigator.share({
-                title: title + ' — Find UMB',
-                text: 'Periksa laporan ' + title + ' di Find UMB (Campus Lost & Found).',
+                title: title + ' — UMBFind',
+                text: 'Periksa laporan ' + title + ' di UMBFind (Campus Lost & Found).',
                 url: reportUrl,
             }).catch(() => {});
         } else {
@@ -2839,8 +2839,8 @@
     function handleShare(title) {
         if (navigator.share) {
             navigator.share({
-                title: title + ' — Find UMB',
-                text: 'Periksa laporan ' + title + ' di Find UMB (Campus Lost & Found).',
+                title: title + ' — UMBFind',
+                text: 'Periksa laporan ' + title + ' di UMBFind (Campus Lost & Found).',
                 url: window.location.href,
             }).catch(() => {});
         } else {

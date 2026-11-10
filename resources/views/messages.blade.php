@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Pesan & Klaim — Find UMB')
+@section('title', 'Pesan & Klaim — UMBFind')
 
 @push('styles')
 <style>
@@ -1385,7 +1385,7 @@
         <div class="empty-mascot-box">
             <picture>
                 <source srcset="{{ asset('images/mascot.webp') }}" type="image/webp">
-                <img src="{{ asset('images/mascot.png') }}" alt="Maskot FindUMB" class="empty-mascot-img" width="105" height="105" loading="lazy">
+                <img src="{{ asset('images/mascot.png') }}" alt="Maskot UMBFind" class="empty-mascot-img" width="105" height="105" loading="lazy">
             </picture>
         </div>
         <h3 class="empty-title">Tidak Ada Percakapan yang Cocok</h3>
@@ -1641,6 +1641,18 @@
         });
 
         updateCounts();
+        applyStoredUnreadStateToCards();
+
+        // Listen for storage changes across tabs or window updates
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'findumb_unread_conversations') {
+                applyStoredUnreadStateToCards();
+            }
+        });
+
+        window.addEventListener('findumb:messages-updated', () => {
+            applyStoredUnreadStateToCards();
+        });
 
         // Check if navigated from Report Detail with claim intent
         const urlParams = new URLSearchParams(window.location.search);
@@ -1908,7 +1920,29 @@
     }
 
     // 6. Open & Close Chat Thread Modal
-    function openChatThread(name, item, status, avatarUrl) {
+    function openChatThread(name, item, status, avatarUrl, convId) {
+        if (convId) {
+            let unreadList = getStoredUnreadConversations();
+            if (unreadList.includes(convId)) {
+                unreadList = unreadList.filter(id => id !== convId);
+                try {
+                    localStorage.setItem('findumb_unread_conversations', JSON.stringify(unreadList));
+                } catch(e) {}
+
+                const card = document.getElementById('conv-card-' + convId) || document.querySelector(`[data-conv-id="${convId}"]`);
+                if (card) {
+                    card.classList.remove('unread');
+                    const bubble = card.querySelector('.unread-bubble');
+                    if (bubble) bubble.style.display = 'none';
+                }
+
+                if (typeof window.syncMessagesBadges === 'function') {
+                    window.syncMessagesBadges(unreadList);
+                }
+                window.dispatchEvent(new CustomEvent('findumb:messages-updated', { detail: { unreadList } }));
+            }
+        }
+
         document.getElementById('chat-thread-name').textContent = name;
         document.getElementById('chat-thread-item').textContent = item || '';
 

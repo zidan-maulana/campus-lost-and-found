@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Notifikasi — Find UMB')
+@section('title', 'Notifikasi — UMBFind')
 @section('app_shell_class', 'bg-white')
 
 @section('header')
@@ -1007,7 +1007,7 @@
         <div class="empty-mascot-box">
             <picture>
                 <source srcset="{{ asset('images/mascot.webp') }}" type="image/webp">
-                <img src="{{ asset('images/mascot.png') }}" alt="Maskot FindUMB" class="empty-mascot-img" width="100" height="100" loading="lazy">
+                <img src="{{ asset('images/mascot.png') }}" alt="Maskot UMBFind" class="empty-mascot-img" width="100" height="100" loading="lazy">
             </picture>
         </div>
         <h3 class="empty-title" id="empty-title-text">Belum Ada Notifikasi</h3>
@@ -1214,6 +1214,10 @@
     }
 
     function updateGlobalHeaderDot(list) {
+        if (typeof window.syncNotificationBadges === 'function') {
+            window.syncNotificationBadges(list);
+            return;
+        }
         const dot = document.getElementById('header-notif-dot');
         if (dot) {
             const hasUnread = list.some(n => !n.read);
@@ -1626,8 +1630,8 @@
 
         if (navigator.share) {
             navigator.share({
-                title: title + ' — Find UMB',
-                text: 'Periksa laporan ' + title + ' di Find UMB (Campus Lost & Found).',
+                title: title + ' — UMBFind',
+                text: 'Periksa laporan ' + title + ' di UMBFind (Campus Lost & Found).',
                 url: reportUrl,
             }).catch(() => {});
         } else {

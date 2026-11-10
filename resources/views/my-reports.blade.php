@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Laporan Saya — Find UMB')
+@section('title', 'Laporan Saya — UMBFind')
 
 @section('header')
 <header class="my-reports-header">
@@ -1734,8 +1734,8 @@
 
         if (navigator.share) {
             navigator.share({
-                title: title + ' — Find UMB',
-                text: 'Periksa laporan saya "' + title + '" di Find UMB.',
+                title: title + ' — UMBFind',
+                text: 'Periksa laporan saya "' + title + '" di UMBFind.',
                 url: reportUrl,
             }).catch(() => {});
         } else {

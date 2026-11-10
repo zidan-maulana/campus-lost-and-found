@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Lapor Barang Hilang — Find UMB')
+@section('title', 'Lapor Barang Hilang — UMBFind')
 
 @section('header')
 <!-- Custom Header: Back Arrow & Judul Halaman sejajar di sebelah kiri -->
@@ -112,7 +112,7 @@
     }
 
     .stepper-bar-segment.active {
-        background: #0f5791; /* FindUMB Blue */
+        background: #0f5791; /* UMBFind Blue */
     }
 
     /* Form Card Container */
@@ -560,7 +560,7 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        background: #0f5791; /* FindUMB Blue */
+        background: #0f5791; /* UMBFind Blue */
         border: none;
         border-radius: 14px;
         padding: 0.8rem 1rem;
@@ -903,7 +903,7 @@
                 </div>
                 <div class="privacy-notice-text">
                     <h4>Privasi &amp; Keamanan Terjaga</h4>
-                    <p>Kontak pribadi dirahasiakan. Penemu barang akan menghubungi Anda secara aman via <strong>Chat FindUMB</strong>.</p>
+                    <p>Kontak pribadi dirahasiakan. Penemu barang akan menghubungi Anda secara aman via <strong>Chat UMBFind</strong>.</p>
                 </div>
             </div>
 
@@ -931,7 +931,7 @@
                 </div>
                 <div class="review-row">
                     <span class="review-label">Kanal Verifikasi:</span>
-                    <span class="review-value" style="color: #0f5791; font-weight: 700;">Chat Internal FindUMB</span>
+                    <span class="review-value" style="color: #0f5791; font-weight: 700;">Chat Internal UMBFind</span>
                 </div>
             </div>
 
@@ -952,7 +952,7 @@
             <i data-lucide="check"></i>
         </div>
         <h3 class="success-title">Laporan Diterbitkan!</h3>
-        <p class="success-desc">Laporan barang hilang Anda telah berhasil dipublikasikan di FindUMB. Civitas yang menemukan barang akan menghubungi Anda melalui menu Pesan.</p>
+        <p class="success-desc">Laporan barang hilang Anda telah berhasil dipublikasikan di UMBFind. Civitas yang menemukan barang akan menghubungi Anda melalui menu Pesan.</p>
         <div class="success-actions">
             <a href="{{ route('home') }}" class="btn-success-primary">Kembali ke Beranda</a>
             <a href="{{ route('search') }}" class="btn-success-secondary">Lihat di Daftar Pencarian</a>

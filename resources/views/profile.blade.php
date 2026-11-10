@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Profil — Find UMB')
+@section('title', 'Profil — UMBFind')
 
 @section('header')
 <div style="display: none;" aria-hidden="true"></div>
@@ -1209,14 +1209,23 @@
                 <i data-lucide="chevron-right" class="item-chevron"></i>
             </div>
 
-            <!-- 9. Tentang FindUMB -->
+            <!-- 9. Tentang UMBFind -->
             <div class="profile-menu-item" onclick="openAboutModal()" style="cursor: pointer;">
                 <div class="profile-item-left">
                     <i data-lucide="info" class="profile-item-icon"></i>
-                    <span class="profile-item-title">Tentang FindUMB</span>
+                    <span class="profile-item-title">Tentang UMBFind</span>
                 </div>
                 <i data-lucide="chevron-right" class="item-chevron"></i>
             </div>
+
+            <!-- Akses Dashboard Administrator (Petugas & Pengelola) -->
+            <a href="{{ route('admin.dashboard') }}" class="profile-menu-item" style="background: #f8fafc; border-left: 3px solid #1572b8;">
+                <div class="profile-item-left">
+                    <i data-lucide="shield" class="profile-item-icon" style="color: #1572b8;"></i>
+                    <span class="profile-item-title" style="font-weight: 600; color: #0f172a;">Dashboard Administrator</span>
+                </div>
+                <i data-lucide="chevron-right" class="item-chevron"></i>
+            </a>
 
             <!-- 10. TOMBOL KELUAR (SIGN OUT) -->
             <div class="btn-signout-wrap">
@@ -1233,7 +1242,7 @@
 
 <!-- ===========================================================================
      2. DESKTOP LAYOUT (min-width: 1024px)
-     Lebar Konsisten (max-width: 1380px) Sesuai Referensi Gambar 2
+     Standardized Container (max-width: 1380px)
      =========================================================================== -->
 <div class="profile-desktop-layout">
     <div class="profile-desktop-container">
@@ -1299,12 +1308,12 @@
             </div>
         </div>
 
-        <!-- CARD 3: Aktivitas Saya (Bagian yang Disisakan, Menggantikan Card 3 Gambar 2) -->
+        <!-- CARD 3: Aktivitas Saya -->
         <div class="profile-desktop-card profile-activity-card">
             <div class="card-section-header">
                 <div>
                     <h2 class="card-section-title">Aktivitas Saya</h2>
-                    <p class="card-section-sub">Ringkasan status pelaporan dan interaksi Anda di FindUMB</p>
+                    <p class="card-section-sub">Ringkasan status pelaporan dan interaksi Anda di UMBFind</p>
                 </div>
             </div>
 
@@ -1413,6 +1422,23 @@
                         <i data-lucide="chevron-right" class="desktop-act-chevron"></i>
                     </div>
                 </a>
+
+                <!-- 5. Dashboard Administrator (Petugas & Pengelola) -->
+                <a href="{{ route('admin.dashboard') }}" class="desktop-activity-row" style="background: #f8fafc; border-left: 3px solid #1572b8;">
+                    <div class="desktop-act-left">
+                        <div class="desktop-act-icon-box" style="background: #e0f2fe; color: #0284c7;">
+                            <i data-lucide="shield"></i>
+                        </div>
+                        <div class="desktop-act-info">
+                            <span class="desktop-act-title">Dashboard Administrator</span>
+                            <span class="desktop-act-desc">Panel moderasi laporan, verifikasi aduan civitas, dan kelola tata kelola akun kampus</span>
+                        </div>
+                    </div>
+                    <div class="desktop-act-right">
+                        <span class="desktop-act-pill" style="background: #e0f2fe; color: #0369a1; font-weight: 600;">Panel Petugas</span>
+                        <i data-lucide="chevron-right" class="desktop-act-chevron"></i>
+                    </div>
+                </a>
             </div>
         </div>
 
@@ -1502,7 +1528,7 @@
     <div class="modal-sheet guide-modal-sheet" onclick="event.stopPropagation()">
         <div class="modal-pill-drag"></div>
         <h3 class="modal-title">Kebijakan Privasi</h3>
-        <p class="modal-desc">Kebijakan perlindungan data dan privasi civitas akademika Universitas Mercu Buana pada platform FindUMB.</p>
+        <p class="modal-desc">Kebijakan perlindungan data dan privasi civitas akademika Universitas Mercu Buana pada platform UMBFind.</p>
         
         <div class="guide-modal-body">
             <div class="guide-card">
@@ -1527,7 +1553,7 @@
                     <h4 class="guide-card-title">Keamanan Komunikasi Internal</h4>
                 </div>
                 <ul class="guide-list">
-                    <li>Seluruh koordinasi awal serah terima dilakukan melalui fitur <strong>Pesan / Chat</strong> resmi yang terisolasi di dalam FindUMB.</li>
+                    <li>Seluruh koordinasi awal serah terima dilakukan melalui fitur <strong>Pesan / Chat</strong> resmi yang terisolasi di dalam UMBFind.</li>
                     <li>Sistem tidak meminta dan melarang civitas membagikan informasi sensitif perbankan (PIN, kode OTP, atau transfer uang).</li>
                 </ul>
             </div>
@@ -1607,7 +1633,7 @@
                 </div>
                 <ul class="guide-list">
                     <li>Barang bernilai tinggi (laptop, dompet, perhiasan, KTP, KTM, &amp; dokumen negara) sangat disarankan segera dititipkan ke <strong>Pos Satpam Gerbang Barat / Gedung Tower</strong>.</li>
-                    <li>FindUMB berfungsi sebagai sarana publikasi informasi civitas dan tidak bertanggung jawab atas kelalaian fisik di luar sistem.</li>
+                    <li>UMBFind berfungsi sebagai sarana publikasi informasi civitas dan tidak bertanggung jawab atas kelalaian fisik di luar sistem.</li>
                 </ul>
             </div>
 
@@ -1629,11 +1655,11 @@
     </div>
 </div>
 
-<!-- Modal 3: Tentang FindUMB -->
+<!-- Modal 3: Tentang UMBFind -->
 <div class="modal-overlay" id="about-modal" onclick="closeAboutModal(event)">
     <div class="modal-sheet guide-modal-sheet" onclick="event.stopPropagation()">
         <div class="modal-pill-drag"></div>
-        <h3 class="modal-title">Tentang FindUMB</h3>
+        <h3 class="modal-title">Tentang UMBFind</h3>
         <p class="modal-desc">Platform digital Lost &amp; Found terpadu civitas akademika Universitas Mercu Buana.</p>
         
         <div class="guide-modal-body">
@@ -1645,7 +1671,7 @@
                     <h4 class="guide-card-title">Platform Lost &amp; Found Kampus</h4>
                 </div>
                 <ul class="guide-list">
-                    <li><strong>FindUMB</strong> dirancang untuk mewujudkan ekosistem kampus yang saling peduli, jujur, dan aman dalam mengembalikan barang hilang civitas.</li>
+                    <li><strong>UMBFind</strong> dirancang untuk mewujudkan ekosistem kampus yang saling peduli, jujur, dan aman dalam mengembalikan barang hilang civitas.</li>
                     <li>Dilengkapi fitur pelaporan cepat, pencarian kategori cerdas, sistem verifikasi chat internal, dan integrasi pos penitipan resmi.</li>
                     <li>Versi Rilis: <strong>v1.0.0 (Responsive Web &amp; Mobile-Optimized)</strong>.</li>
                 </ul>
@@ -1995,7 +2021,7 @@
     }
 
     function handleSignOut() {
-        if (confirm('Apakah Anda ingin keluar dari sesi akun FindUMB?')) {
+        if (confirm('Apakah Anda ingin keluar dari sesi akun UMBFind?')) {
             showToast('Anda telah keluar.');
             // Logout beneran (POST /logout), bukan cuma pindah halaman.
             const form = document.createElement('form');
