@@ -1804,7 +1804,7 @@
 
 @section('content')
 @php
-    $hasReports = isset($reports) ? (count($reports) > 0) : !request()->has('empty');
+    $hasReports = isset($recentReports) && $recentReports->isNotEmpty();
 @endphp
 <div class="home-container {{ !$hasReports ? 'is-empty-state' : '' }}" id="home-container">
     <!-- Desktop Hero Showcase -->
@@ -1907,80 +1907,22 @@
         </div>
 
         <div class="featured-track" id="featured-track">
-            <!-- Featured Item 1: Dompet Kulit & KTM Mahasiswa -->
-            <a href="{{ url('/report/8') }}" class="featured-card" data-id="8">
-                <div class="featured-thumb-box">
-                    <img src="https://images.unsplash.com/photo-1627123424574-724758594e93?w=360&auto=format&fit=crop&q=80" alt="Dompet Kulit & KTM" class="featured-thumb-img" loading="lazy">
-                </div>
-                <div class="featured-body">
-                    <h3 class="featured-item-title">Dompet Kulit &amp; KTM</h3>
-                    <div class="featured-meta">
-                        <span class="meta-status-lost">Hilang</span>
-                        <span class="meta-dot">·</span>
-                        <span class="meta-location">Kantin Gedung D</span>
+            @foreach ($featuredReports as $f)
+                @php $fLost = $f->type->value === 'lost'; @endphp
+                <a href="{{ route('report.detail', $f) }}" class="featured-card" data-id="{{ $f->id }}">
+                    <div class="featured-thumb-box">
+                        <img src="{{ $f->imageUrl() }}" alt="{{ $f->title }}" class="featured-thumb-img" loading="lazy">
                     </div>
-                </div>
-            </a>
-
-            <!-- Featured Item 2: iPad Air 5 & Apple Pencil -->
-            <a href="{{ url('/report/6') }}" class="featured-card" data-id="6">
-                <div class="featured-thumb-box">
-                    <img src="https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=360&auto=format&fit=crop&q=80" alt="iPad Air & Apple Pencil" class="featured-thumb-img" loading="lazy">
-                </div>
-                <div class="featured-body">
-                    <h3 class="featured-item-title">iPad Air 5 &amp; Pencil</h3>
-                    <div class="featured-meta">
-                        <span class="meta-status-lost">Hilang</span>
-                        <span class="meta-dot">·</span>
-                        <span class="meta-location">Gedung E Lt. 3</span>
+                    <div class="featured-body">
+                        <h3 class="featured-item-title">{{ $f->title }}</h3>
+                        <div class="featured-meta">
+                            <span class="{{ $fLost ? 'meta-status-lost' : 'meta-status-found' }}">{{ $fLost ? 'Hilang' : 'Ditemukan' }}</span>
+                            <span class="meta-dot">·</span>
+                            <span class="meta-location">{{ $f->location ?: $f->campus_location }}</span>
+                        </div>
                     </div>
-                </div>
-            </a>
-
-            <!-- Featured Item 3: iPhone 13 Midnight -->
-            <a href="{{ url('/report/1') }}" class="featured-card" data-id="1">
-                <div class="featured-thumb-box">
-                    <img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=360&auto=format&fit=crop&q=80" alt="iPhone 13 Midnight" class="featured-thumb-img" loading="lazy">
-                </div>
-                <div class="featured-body">
-                    <h3 class="featured-item-title">iPhone 13 Midnight</h3>
-                    <div class="featured-meta">
-                        <span class="meta-status-lost">Hilang</span>
-                        <span class="meta-dot">·</span>
-                        <span class="meta-location">Tower Lt. 7</span>
-                    </div>
-                </div>
-            </a>
-
-            <!-- Featured Item 4: Earphone TWS Anker Soundcore -->
-            <a href="{{ url('/report/4') }}" class="featured-card" data-id="4">
-                <div class="featured-thumb-box">
-                    <img src="https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=360&auto=format&fit=crop&q=80" alt="Earphone TWS Anker" class="featured-thumb-img" loading="lazy">
-                </div>
-                <div class="featured-body">
-                    <h3 class="featured-item-title">Earphone TWS Anker</h3>
-                    <div class="featured-meta">
-                        <span class="meta-status-found">Ditemukan</span>
-                        <span class="meta-dot">·</span>
-                        <span class="meta-location">Parkir Barat</span>
-                    </div>
-                </div>
-            </a>
-
-            <!-- Featured Item 5: Smartwatch Apple Watch (Ditemukan) -->
-            <a href="{{ url('/report/10') }}" class="featured-card" data-id="10">
-                <div class="featured-thumb-box">
-                    <img src="https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?w=360&auto=format&fit=crop&q=80" alt="Apple Watch Series 8" class="featured-thumb-img" loading="lazy">
-                </div>
-                <div class="featured-body">
-                    <h3 class="featured-item-title">Apple Watch Series 8</h3>
-                    <div class="featured-meta">
-                        <span class="meta-status-found">Ditemukan</span>
-                        <span class="meta-dot">·</span>
-                        <span class="meta-location">Tower UMB</span>
-                    </div>
-                </div>
-            </a>
+                </a>
+            @endforeach
         </div>
 
         <!-- Carousel Pagination Dots -->
@@ -2000,245 +1942,33 @@
         </div>
 
         <div class="reports-vertical-container" id="reports-container">
-            <!-- 1. iPhone 13 Hitam (Hilang) -->
-            <article class="report-card" data-id="1" data-title="iPhone 13 Hitam (Case Bening)">
-                <img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=160&auto=format&fit=crop&q=80" alt="iPhone 13 Hitam" class="report-thumb" loading="lazy">
-                <div class="report-info">
-                    <h3 class="report-title">iPhone 13 Hitam (Case Bening)</h3>
-                    <div class="report-location">
-                        <i data-lucide="map-pin"></i>
-                        <span>Gedung Tower Lt. 7</span>
+            @forelse ($recentReports as $r)
+                @php $rLost = $r->type->value === 'lost'; @endphp
+                <article class="report-card" data-id="{{ $r->id }}" data-title="{{ $r->title }}">
+                    <img src="{{ $r->imageUrl() }}" alt="{{ $r->title }}" class="report-thumb" loading="lazy">
+                    <div class="report-info">
+                        <h3 class="report-title">{{ $r->title }}</h3>
+                        <div class="report-location">
+                            <i data-lucide="map-pin"></i>
+                            <span>{{ $r->location ?: $r->campus_location }}</span>
+                        </div>
+                        <span class="report-date">{{ \App\Support\Format::dateShort($r->incident_date) }}</span>
                     </div>
-                    <span class="report-date">20 Jun 2026</span>
-                </div>
-                <div class="report-aside">
-                    <span class="badge-status badge-lost">Hilang</span>
-                    <div class="card-actions-row">
-                        <button type="button" class="btn-action-icon" aria-label="Bagikan" onclick="handleShare('iPhone 13 Hitam')">
-                            <i data-lucide="share-2"></i>
-                        </button>
-                        <button type="button" class="btn-action-icon" aria-label="Simpan" onclick="toggleBookmark(this)">
-                            <i data-lucide="bookmark"></i>
-                        </button>
+                    <div class="report-aside">
+                        <span class="badge-status {{ $rLost ? 'badge-lost' : 'badge-found' }}">{{ $rLost ? 'Hilang' : 'Temuan' }}</span>
+                        <div class="card-actions-row">
+                            <button type="button" class="btn-action-icon" aria-label="Bagikan" onclick="handleShare(@js($r->title))">
+                                <i data-lucide="share-2"></i>
+                            </button>
+                            <button type="button" class="btn-action-icon {{ in_array((string) $r->id, $savedIds ?? [], true) ? 'bookmarked' : '' }}" aria-label="Simpan" onclick="toggleBookmark(this)">
+                                <i data-lucide="bookmark"></i>
+                            </button>
+                        </div>
                     </div>
-                </div>
-            </article>
-
-            <!-- 2. Map Berkas Beasiswa & KTM (Hilang) -->
-            <article class="report-card" data-id="2" data-title="Map Berkas Beasiswa & KTM">
-                <img src="https://images.unsplash.com/photo-1544717305-2782549b5136?w=160&auto=format&fit=crop&q=80" alt="Map Berkas Beasiswa" class="report-thumb" loading="lazy">
-                <div class="report-info">
-                    <h3 class="report-title">Map Berkas Beasiswa &amp; KTM</h3>
-                    <div class="report-location">
-                        <i data-lucide="map-pin"></i>
-                        <span>Gedung E R. 204</span>
-                    </div>
-                    <span class="report-date">12 Mei 2026</span>
-                </div>
-                <div class="report-aside">
-                    <span class="badge-status badge-lost">Hilang</span>
-                    <div class="card-actions-row">
-                        <button type="button" class="btn-action-icon" aria-label="Bagikan" onclick="handleShare('Map Berkas Beasiswa')">
-                            <i data-lucide="share-2"></i>
-                        </button>
-                        <button type="button" class="btn-action-icon" aria-label="Simpan" onclick="toggleBookmark(this)">
-                            <i data-lucide="bookmark"></i>
-                        </button>
-                    </div>
-                </div>
-            </article>
-
-            <!-- 3. KTM Mahasiswa & Kartu Flazz UMB (Ditemukan) -->
-            <article class="report-card" data-id="3" data-title="KTM Mahasiswa & Kartu Flazz UMB">
-                <img src="https://images.unsplash.com/photo-1627123424574-724758594e93?w=160&auto=format&fit=crop&q=80" alt="KTM & Kartu Flazz" class="report-thumb" loading="lazy">
-                <div class="report-info">
-                    <h3 class="report-title">KTM Mahasiswa &amp; Kartu Flazz</h3>
-                    <div class="report-location">
-                        <i data-lucide="map-pin"></i>
-                        <span>Masjid Manarul 'Amal UMB</span>
-                    </div>
-                    <span class="report-date">15 Jan 2026</span>
-                </div>
-                <div class="report-aside">
-                    <span class="badge-status badge-found">Temuan</span>
-                    <div class="card-actions-row">
-                        <button type="button" class="btn-action-icon" aria-label="Bagikan" onclick="handleShare('KTM Mahasiswa & Flazz')">
-                            <i data-lucide="share-2"></i>
-                        </button>
-                        <button type="button" class="btn-action-icon" aria-label="Simpan" onclick="toggleBookmark(this)">
-                            <i data-lucide="bookmark"></i>
-                        </button>
-                    </div>
-                </div>
-            </article>
-
-            <!-- 4. Jaket Almamater Biru UMB (Ditemukan) -->
-            <article class="report-card" data-id="4" data-title="Jaket Almamater Biru UMB (Size L)">
-                <img src="https://images.unsplash.com/photo-1551028719-00167b16eac5?w=160&auto=format&fit=crop&q=80" alt="Jaket Almamater UMB" class="report-thumb" loading="lazy">
-                <div class="report-info">
-                    <h3 class="report-title">Jaket Almamater UMB (Size L)</h3>
-                    <div class="report-location">
-                        <i data-lucide="map-pin"></i>
-                        <span>Perpustakaan Pusat Lt. 2</span>
-                    </div>
-                    <span class="report-date">10 Jan 2026</span>
-                </div>
-                <div class="report-aside">
-                    <span class="badge-status badge-found">Temuan</span>
-                    <div class="card-actions-row">
-                        <button type="button" class="btn-action-icon" aria-label="Bagikan" onclick="handleShare('Jaket Almamater UMB')">
-                            <i data-lucide="share-2"></i>
-                        </button>
-                        <button type="button" class="btn-action-icon" aria-label="Simpan" onclick="toggleBookmark(this)">
-                            <i data-lucide="bookmark"></i>
-                        </button>
-                    </div>
-                </div>
-            </article>
-
-            <!-- 5. Earphone TWS Anker Soundcore (Hilang) -->
-            <article class="report-card" data-id="5" data-title="Earphone TWS Anker Soundcore">
-                <img src="https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=160&auto=format&fit=crop&q=80" alt="Earphone TWS Anker" class="report-thumb" loading="lazy">
-                <div class="report-info">
-                    <h3 class="report-title">Earphone TWS Anker Soundcore</h3>
-                    <div class="report-location">
-                        <i data-lucide="map-pin"></i>
-                        <span>Parkir Barat Kampus Meruya</span>
-                    </div>
-                    <span class="report-date">15 Jan 2026</span>
-                </div>
-                <div class="report-aside">
-                    <span class="badge-status badge-lost">Hilang</span>
-                    <div class="card-actions-row">
-                        <button type="button" class="btn-action-icon" aria-label="Bagikan" onclick="handleShare('Earphone TWS Anker')">
-                            <i data-lucide="share-2"></i>
-                        </button>
-                        <button type="button" class="btn-action-icon" aria-label="Simpan" onclick="toggleBookmark(this)">
-                            <i data-lucide="bookmark"></i>
-                        </button>
-                    </div>
-                </div>
-            </article>
-
-            <!-- 6. iPad Air 5 Space Grey (Hilang) -->
-            <article class="report-card" data-id="6" data-title="iPad Air 5 Space Grey & Pen">
-                <img src="https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=160&auto=format&fit=crop&q=80" alt="iPad Air 5" class="report-thumb" loading="lazy">
-                <div class="report-info">
-                    <h3 class="report-title">iPad Air 5 Space Grey &amp; Pen</h3>
-                    <div class="report-location">
-                        <i data-lucide="map-pin"></i>
-                        <span>Gedung E Lt. 3 Ruang 302</span>
-                    </div>
-                    <span class="report-date">14 Jan 2026</span>
-                </div>
-                <div class="report-aside">
-                    <span class="badge-status badge-lost">Hilang</span>
-                    <div class="card-actions-row">
-                        <button type="button" class="btn-action-icon" aria-label="Bagikan" onclick="handleShare('iPad Air 5')">
-                            <i data-lucide="share-2"></i>
-                        </button>
-                        <button type="button" class="btn-action-icon" aria-label="Simpan" onclick="toggleBookmark(this)">
-                            <i data-lucide="bookmark"></i>
-                        </button>
-                    </div>
-                </div>
-            </article>
-
-            <!-- 7. Tas Ransel Laptop Lenovo ThinkPad (Hilang) -->
-            <article class="report-card" data-id="7" data-title="Tas Ransel Laptop Lenovo ThinkPad">
-                <img src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=160&auto=format&fit=crop&q=80" alt="Tas Laptop" class="report-thumb" loading="lazy">
-                <div class="report-info">
-                    <h3 class="report-title">Tas Ransel Laptop Lenovo ThinkPad</h3>
-                    <div class="report-location">
-                        <i data-lucide="map-pin"></i>
-                        <span>Lab Komputer Gedung Tower</span>
-                    </div>
-                    <span class="report-date">18 Jan 2026</span>
-                </div>
-                <div class="report-aside">
-                    <span class="badge-status badge-lost">Hilang</span>
-                    <div class="card-actions-row">
-                        <button type="button" class="btn-action-icon" aria-label="Bagikan" onclick="handleShare('Tas Laptop Lenovo')">
-                            <i data-lucide="share-2"></i>
-                        </button>
-                        <button type="button" class="btn-action-icon" aria-label="Simpan" onclick="toggleBookmark(this)">
-                            <i data-lucide="bookmark"></i>
-                        </button>
-                    </div>
-                </div>
-            </article>
-
-            <!-- 8. Dompet Kulit & KTM Mahasiswa (Hilang) -->
-            <article class="report-card" data-id="8" data-title="Dompet Kulit & KTM Mahasiswa">
-                <img src="https://images.unsplash.com/photo-1627123424574-724758594e93?w=160&auto=format&fit=crop&q=80" alt="Dompet Kulit" class="report-thumb" loading="lazy">
-                <div class="report-info">
-                    <h3 class="report-title">Dompet Kulit &amp; KTM Mahasiswa</h3>
-                    <div class="report-location">
-                        <i data-lucide="map-pin"></i>
-                        <span>Kantin Gedung D</span>
-                    </div>
-                    <span class="report-date">08 Feb 2026</span>
-                </div>
-                <div class="report-aside">
-                    <span class="badge-status badge-lost">Hilang</span>
-                    <div class="card-actions-row">
-                        <button type="button" class="btn-action-icon" aria-label="Bagikan" onclick="handleShare('Dompet Kulit & KTM')">
-                            <i data-lucide="share-2"></i>
-                        </button>
-                        <button type="button" class="btn-action-icon" aria-label="Simpan" onclick="toggleBookmark(this)">
-                            <i data-lucide="bookmark"></i>
-                        </button>
-                    </div>
-                </div>
-            </article>
-
-            <!-- 9. Laptop Asus Vivobook 14" (Ditemukan) -->
-            <article class="report-card" data-id="9" data-title="Laptop Asus Vivobook 14 Silver">
-                <img src="https://images.unsplash.com/photo-1584438784894-089d6a62b8fa?w=160&auto=format&fit=crop&q=80" alt="Laptop Asus Vivobook" class="report-thumb" loading="lazy">
-                <div class="report-info">
-                    <h3 class="report-title">Laptop Asus Vivobook 14"</h3>
-                    <div class="report-location">
-                        <i data-lucide="map-pin"></i>
-                        <span>Lab Jaringan Gedung B Lt. 3</span>
-                    </div>
-                    <span class="report-date">22 Jan 2026</span>
-                </div>
-                <div class="report-aside">
-                    <span class="badge-status badge-found">Temuan</span>
-                    <div class="card-actions-row">
-                        <button type="button" class="btn-action-icon" aria-label="Bagikan" onclick="handleShare('Laptop Asus Vivobook')">
-                            <i data-lucide="share-2"></i>
-                        </button>
-                        <button type="button" class="btn-action-icon" aria-label="Simpan" onclick="toggleBookmark(this)">
-                            <i data-lucide="bookmark"></i>
-                        </button>
-                    </div>
-                </div>
-            </article>
-
-            <!-- 10. Smartwatch Apple Watch Series 8 (Ditemukan) -->
-            <article class="report-card" data-id="10" data-title="Apple Watch Series 8">
-                <img src="https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?w=160&auto=format&fit=crop&q=80" alt="Apple Watch Series 8" class="report-thumb" loading="lazy">
-                <div class="report-info">
-                    <h3 class="report-title">Smartwatch Apple Watch Series 8</h3>
-                    <div class="report-location">
-                        <i data-lucide="map-pin"></i>
-                        <span>Lobby Gedung Tower</span>
-                    </div>
-                    <span class="report-date">02 Feb 2026</span>
-                </div>
-                <div class="report-aside">
-                    <span class="badge-status badge-found">Temuan</span>
-                    <div class="card-actions-row">
-                        <button type="button" class="btn-action-icon" aria-label="Bagikan" onclick="handleShare('Apple Watch Series 8')">
-                            <i data-lucide="share-2"></i>
-                        </button>
-                        <button type="button" class="btn-action-icon" aria-label="Simpan" onclick="toggleBookmark(this)">
-                            <i data-lucide="bookmark"></i>
-                        </button>
-                    </div>
-                </div>
-            </article>
+                </article>
+            @empty
+                <p class="empty-desc" style="padding:24px 0;text-align:center;">Belum ada laporan yang dipublikasikan.</p>
+            @endforelse
         </div>
 
         <!-- Tombol Lihat Semua Laporan di bagian bawah -->
@@ -2471,10 +2201,10 @@
 
         <!-- Bottom Action Bar inside Modal -->
         <div class="desktop-detail-footer-bar">
-            <a href="{{ route('messages') }}" class="desktop-detail-btn-primary" id="modal-detail-primary-btn">
+            <button type="button" class="desktop-detail-btn-primary" id="modal-detail-primary-btn" onclick="handleModalPrimaryAction()">
                 <i data-lucide="hand" id="modal-detail-btn-icon"></i>
                 <span id="modal-detail-btn-label">Saya Menemukan Barang Ini</span>
-            </a>
+            </button>
             <button type="button" class="desktop-detail-btn-bookmark" id="modal-detail-footer-bookmark" onclick="handleDetailModalBookmark()" aria-label="Simpan Laporan" title="Simpan Laporan">
                 <i data-lucide="bookmark"></i>
             </button>
@@ -2494,79 +2224,13 @@
 @push('scripts')
 <script>
     // Default Seed Reports for User
-    const DEFAULT_USER_REPORTS = [
-        {
-            id: '1',
-            type: 'lost',
-            title: 'iPhone 13 Hitam (Case Bening)',
-            brand: 'Apple iPhone 13',
-            category: 'Elektronik & HP',
-            category_slug: 'elektronik',
-            category_label: 'Elektronik & HP',
-            location_campus: 'Kampus Meruya',
-            location_specific: 'Gedung Tower Lt. 7 R. 702',
-            location_full: 'Kampus Meruya — Gedung Tower Lt. 7 R. 702',
-            date: '2026-06-20',
-            date_display: '20 Jun 2026',
-            time: '14.30 WIB (Siang)',
-            storage: 'Disimpan Sendiri',
-            features: 'Smartphone iPhone 13 warna hitam midnight, terpasang casing transparan dengan stiker logo Informatika di bagian belakang. Layar dalam keadaan terkunci.',
-            image: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=800&auto=format&fit=crop&q=80',
-            status: 'lost',
-            is_mine: true,
-            created_at: '2026-06-20T14:30:00.000Z'
-        },
-        {
-            id: '5',
-            type: 'lost',
-            title: 'Earphone TWS Anker Soundcore',
-            brand: 'Anker Soundcore Life P2',
-            category: 'Elektronik & HP',
-            category_slug: 'elektronik',
-            category_label: 'Elektronik & HP',
-            location_campus: 'Kampus Meruya',
-            location_specific: 'Parkir Barat Kampus Meruya',
-            location_full: 'Kampus Meruya — Parkir Barat Kampus Meruya',
-            date: '2026-01-15',
-            date_display: '15 Jan 2026',
-            time: 'Siang saat menuju kendaraan',
-            storage: 'Disimpan Sendiri',
-            features: 'Charging case hitam doff berisi sepasang earphone TWS nirkabel Anker Soundcore. Tertinggal di dekat tiang P3 parkir barat.',
-            image: 'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=800&auto=format&fit=crop&q=80',
-            status: 'lost',
-            is_mine: true,
-            created_at: '2026-01-15T12:00:00.000Z'
-        }
-    ];
+    // Data laporan langsung dari Supabase (di-render server, bukan mock localStorage).
+    const SERVER_REPORTS = @json($recentReports->map(fn ($r) => $r->toUiArray($viewer))->values());
+    let SERVER_BOOKMARKS = @json($savedIds ?? []);
+    const IS_AUTHENTICATED = @json(auth()->check());
 
     function getUserReports() {
-        try {
-            let list = [];
-            const raw = localStorage.getItem('findumb_custom_reports');
-            if (raw) {
-                const parsed = JSON.parse(raw);
-                if (Array.isArray(parsed) && parsed.length > 0) {
-                    list = parsed;
-                }
-            }
-            if (!list || list.length === 0) {
-                list = [...DEFAULT_USER_REPORTS];
-                localStorage.setItem('findumb_reports_initialized', 'true');
-                localStorage.setItem('findumb_custom_reports', JSON.stringify(list));
-                return list;
-            }
-            return list.filter(r => {
-                const idStr = String(r.id);
-                if (['2', '3', '4', '6', '7', '8'].includes(idStr)) return false;
-                if (r.is_mine === false) return false;
-                if (idStr === '1' || idStr === '5') return true;
-                if (idStr.startsWith('rep_') || r.is_mine === true) return true;
-                if (r.reporter_name && r.reporter_name.includes('Ahmad Fauzi')) return true;
-                return false;
-            });
-        } catch(e) {
-            return [...DEFAULT_USER_REPORTS];
-        }
+        return Array.isArray(SERVER_REPORTS) ? SERVER_REPORTS : [];
     }
 
     function isMyReport(id) {
@@ -2586,29 +2250,24 @@
 
     // Stored Bookmarks Management
     function getStoredBookmarks() {
-        try {
-            const raw = localStorage.getItem('findumb_bookmarks');
-            if (raw) {
-                const parsed = JSON.parse(raw);
-                if (Array.isArray(parsed)) return parsed.map(String);
-            }
-        } catch(e) {}
-        const defaultBookmarks = ['2', '3', '7'];
-        try {
-            if (!localStorage.getItem('findumb_bookmarks_init')) {
-                localStorage.setItem('findumb_bookmarks', JSON.stringify(defaultBookmarks));
-                localStorage.setItem('findumb_bookmarks_init', 'true');
-            }
-        } catch(e) {}
-        return defaultBookmarks;
+        return (SERVER_BOOKMARKS || []).map(String);
     }
 
     function setStoredBookmarks(bookmarks) {
-        try {
-            localStorage.setItem('findumb_bookmarks', JSON.stringify(bookmarks));
-            localStorage.setItem('findumb_bookmarks_init', 'true');
-        } catch(e) {}
+        SERVER_BOOKMARKS = (bookmarks || []).map(String);
     }
+    // Simpan/hapus bookmark ke server (Supabase), bukan cuma di browser.
+    function syncBookmarkToServer(id) {
+        if (!IS_AUTHENTICATED) return;
+        fetch(`{{ url('/api/bookmarks') }}/${id}/toggle`, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': window.FindUMB_CSRF || document.querySelector('meta[name="csrf-token"]')?.content || '',
+                'Accept': 'application/json',
+            },
+        }).catch(() => {});
+    }
+
 
     // Toggle Bookmark button (Feed cards & detail modal)
     function toggleBookmark(btnOrId) {
@@ -2638,6 +2297,7 @@
         }
 
         setStoredBookmarks(bookmarks);
+        syncBookmarkToServer(id);
         syncCardBookmarks();
         syncDetailModalBookmarkState(id);
     }
@@ -2790,43 +2450,37 @@
     }
 
     function executeHomeSaveEditCommit() {
-        const id = document.getElementById('edit-report-id').value;
-        let reports = getUserReports();
-        const index = reports.findIndex(r => String(r.id) === String(id));
-        if (index === -1) return;
+        const id = document.getElementById('edit-report-id')?.value;
+        if (!id) return;
 
-        const statusVal = document.getElementById('edit-status').value;
-        const newTitle = document.getElementById('edit-title').value.trim();
-        const newCategory = document.getElementById('edit-category').value;
-        const newBrand = document.getElementById('edit-brand').value.trim();
-        const newLocation = document.getElementById('edit-location').value.trim();
-        const newDate = document.getElementById('edit-date').value;
-        const newFeatures = document.getElementById('edit-features').value.trim();
+        const payload = {
+            title: document.getElementById('edit-title').value.trim(),
+            brand: document.getElementById('edit-brand').value.trim() || null,
+            location: document.getElementById('edit-location').value.trim() || null,
+            campus_location: document.getElementById('edit-location').value.trim() || null,
+            incident_date: document.getElementById('edit-date').value || null,
+            description: document.getElementById('edit-features').value.trim() || null,
+        };
 
-        reports[index].title = newTitle;
-        reports[index].category = newCategory;
-        reports[index].category_label = newCategory;
-        reports[index].brand = newBrand;
-        reports[index].location_full = newLocation;
-        reports[index].location_campus = newLocation;
-        reports[index].date = newDate;
-        reports[index].date_display = formatDateIndo(newDate);
-        reports[index].features = newFeatures;
+        const catName = document.getElementById('edit-category').value;
+        if (CATEGORY_ID_MAP[catName]) payload.category_id = CATEGORY_ID_MAP[catName];
 
-        if (statusVal === 'resolved') {
-            reports[index].status = 'resolved';
-        } else {
-            reports[index].type = statusVal;
-            reports[index].status = statusVal;
-        }
-
-        try {
-            localStorage.setItem('findumb_custom_reports', JSON.stringify(reports));
-        } catch(e) {}
-
-        closeHomeEditModal();
-        renderCustomReports();
-        showToast('✓ Laporan berhasil diperbarui!');
+        fetch(`{{ url('/api/reports') }}/${id}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': window.FindUMB_CSRF || '',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify(payload),
+        })
+            .then(r => r.ok ? r.json() : Promise.reject(r))
+            .then(() => {
+                closeHomeEditModal();
+                showToast('✓ Laporan berhasil diperbarui!');
+                setTimeout(() => window.location.reload(), 600);
+            })
+            .catch(() => showToast('Gagal memperbarui laporan.'));
     }
 
     function confirmDeleteHomeReport(id) {
@@ -2850,22 +2504,25 @@
     }
 
     function executeHomeDelete() {
-        const idInput = document.getElementById('delete-report-id');
-        const id = idInput ? idInput.value : null;
+        const id = document.getElementById('delete-report-id')?.value;
         if (!id) return;
 
-        let reports = getUserReports();
-        reports = reports.filter(r => String(r.id) !== String(id));
-        try {
-            localStorage.setItem('findumb_custom_reports', JSON.stringify(reports));
-        } catch(e) {}
-
-        // Remove card from DOM
-        const card = document.querySelector(`.report-card[data-id="${id}"]`);
-        if (card) card.remove();
-
-        closeHomeDeleteModal();
-        showToast('Laporan berhasil dihapus.');
+        fetch(`{{ url('/api/reports') }}/${id}/cancel`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': window.FindUMB_CSRF || '',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({ reason: 'Dibatalkan oleh pemilik laporan.' }),
+        })
+            .then(r => r.ok ? r.json() : Promise.reject(r))
+            .then(() => {
+                closeHomeDeleteModal();
+                showToast('Laporan dibatalkan.');
+                setTimeout(() => window.location.reload(), 600);
+            })
+            .catch(() => showToast('Gagal membatalkan laporan.'));
     }
 
     function formatDateIndo(dateStr) {
@@ -2885,134 +2542,9 @@
 
     // Render user-created reports from localStorage & sync owner options
     function renderCustomReports() {
-        const userReports = getUserReports();
-        const container = document.getElementById('reports-container');
-        if (!container) return;
-
-        // 1. Sync existing static cards with owner logic
-        document.querySelectorAll('#reports-container .report-card').forEach(card => {
-            const id = card.getAttribute('data-id');
-            const userItem = userReports.find(r => String(r.id) === String(id));
-
-            // Remove deleted author reports from feed
-            if ((id === '1' || id === '5') && !userItem) {
-                card.remove();
-                return;
-            }
-
-            if (userItem) {
-                // Update title & status if modified
-                const titleEl = card.querySelector('.report-title');
-                if (titleEl) titleEl.textContent = userItem.title;
-                const locEl = card.querySelector('.report-location span');
-                if (locEl) locEl.textContent = userItem.location_full || userItem.location_campus;
-                const dateEl = card.querySelector('.report-date');
-                if (dateEl) dateEl.textContent = userItem.date_display || userItem.date;
-
-                const badge = card.querySelector('.badge-status');
-                if (badge) {
-                    if (userItem.status === 'resolved' || userItem.status === 'completed') {
-                        badge.className = 'badge-status badge-resolved';
-                        badge.textContent = 'Selesai';
-                    } else if (userItem.type === 'found') {
-                        badge.className = 'badge-status badge-found';
-                        badge.textContent = 'Temuan';
-                    } else {
-                        badge.className = 'badge-status badge-lost';
-                        badge.textContent = 'Hilang';
-                    }
-                }
-
-                // Ganti tombol bookmark dengan tombol option (titik 3)
-                const actionsRow = card.querySelector('.card-actions-row');
-                if (actionsRow && !actionsRow.querySelector('.card-options-wrap')) {
-                    const bookmarkBtn = actionsRow.querySelector('button[aria-label="Simpan"]');
-                    if (bookmarkBtn) bookmarkBtn.remove();
-
-                    const optionsWrap = document.createElement('div');
-                    optionsWrap.className = 'card-options-wrap';
-                    optionsWrap.innerHTML = `
-                        <button type="button" class="btn-action-icon btn-card-options" aria-label="Opsi Laporan" onclick="toggleCardOptions(event, '${id}')">
-                            <i data-lucide="more-vertical"></i>
-                        </button>
-                        <div class="card-options-menu" id="options-menu-${id}">
-                            <button type="button" class="card-option-item" onclick="openHomeEditModal('${id}')">
-                                <i data-lucide="edit-3"></i>
-                                <span>Edit Laporan</span>
-                            </button>
-                            <button type="button" class="card-option-item danger" onclick="confirmDeleteHomeReport('${id}')">
-                                <i data-lucide="trash-2"></i>
-                                <span>Hapus Laporan</span>
-                            </button>
-                        </div>
-                    `;
-                    actionsRow.appendChild(optionsWrap);
-                }
-            }
-        });
-
-        // 2. Render newly added custom reports (e.g. rep_...) that are not in the static DOM
-        const newReports = userReports.filter(r => !document.querySelector(`.report-card[data-id="${r.id}"]`));
-        const reportsToRender = [...newReports].reverse();
-
-        reportsToRender.forEach(report => {
-            let badgeClass = 'badge-lost';
-            let badgeLabel = 'Hilang';
-            if (report.status === 'resolved' || report.status === 'completed') {
-                badgeClass = 'badge-resolved';
-                badgeLabel = 'Selesai';
-            } else if (report.type === 'found') {
-                badgeClass = 'badge-found';
-                badgeLabel = 'Temuan';
-            }
-            
-            const card = document.createElement('article');
-            card.className = 'report-card';
-            card.setAttribute('data-id', report.id);
-            card.setAttribute('data-title', report.title);
-            card.innerHTML = `
-                <img src="${report.image || 'https://images.unsplash.com/photo-1584438784894-089d6a62b8fa?w=160&auto=format&fit=crop&q=80'}" alt="${escapeHtml(report.title)}" class="report-thumb" loading="lazy">
-                <div class="report-info">
-                    <h3 class="report-title">${escapeHtml(report.title)}</h3>
-                    <div class="report-location">
-                        <i data-lucide="map-pin"></i>
-                        <span>${escapeHtml(report.location_full || report.location_campus || 'Kampus Meruya')}</span>
-                    </div>
-                    <span class="report-date">${report.date_display || report.date || 'Baru Saja'}</span>
-                </div>
-                <div class="report-aside">
-                    <span class="badge-status ${badgeClass}">${badgeLabel}</span>
-                    <div class="card-actions-row">
-                        <button type="button" class="btn-action-icon" aria-label="Bagikan" onclick="handleShare('${escapeJs(report.title)}')">
-                            <i data-lucide="share-2"></i>
-                        </button>
-                        <!-- Titik 3 menggantikan bookmark -->
-                        <div class="card-options-wrap">
-                            <button type="button" class="btn-action-icon btn-card-options" aria-label="Opsi Laporan" onclick="toggleCardOptions(event, '${report.id}')">
-                                <i data-lucide="more-vertical"></i>
-                            </button>
-                            <div class="card-options-menu" id="options-menu-${report.id}">
-                                <button type="button" class="card-option-item" onclick="openHomeEditModal('${report.id}')">
-                                    <i data-lucide="edit-3"></i>
-                                    <span>Edit Laporan</span>
-                                </button>
-                                <button type="button" class="card-option-item danger" onclick="confirmDeleteHomeReport('${report.id}')">
-                                    <i data-lucide="trash-2"></i>
-                                    <span>Hapus Laporan</span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-            container.prepend(card);
-        });
-
-        syncCardBookmarks();
-
-        if (typeof lucide !== 'undefined') {
-            lucide.createIcons();
-        }
+        // Server sudah me-render semua kartu dari Supabase. Dulu fungsi ini
+        // menempel ulang kartu dari localStorage → itulah "kedip" mock → data asli.
+        return;
     }
 
     // ----------------------------------------------------
@@ -3087,261 +2619,26 @@
     // ----------------------------------------------------
     // Desktop Floating Detail Modal Catalog & Handlers
     // ----------------------------------------------------
-    const mockReportsCatalog = {
-        '1': {
-            id: '1',
-            type: 'lost',
-            title: 'iPhone 13 Hitam (Case Bening)',
-            brand: 'Apple iPhone 13',
-            category: 'Elektronik & HP',
-            category_slug: 'elektronik',
-            location_campus: 'Kampus Meruya',
-            location_specific: 'Gedung Tower Lt. 7 R. 702',
-            location_full: 'Kampus Meruya — Gedung Tower Lt. 7 R. 702',
-            date: '2026-06-20',
-            date_display: '20 Jun 2026',
-            time: '14.30 WIB (Siang)',
-            storage: 'Disimpan Sendiri',
-            features: 'Smartphone iPhone 13 warna hitam midnight, terpasang casing transparan dengan stiker logo Informatika di bagian belakang. Layar dalam keadaan terkunci.',
-            image: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=800&auto=format&fit=crop&q=80',
-            reporter_name: 'Mahasiswa Fasilkom',
-            reporter_meta: 'Civitas Terverifikasi • NIM 4152***'
-        },
-        '2': {
-            id: '2',
-            type: 'lost',
-            title: 'Paspor & Berkas Beasiswa',
-            brand: 'Dokumen Resmi Imigrasi',
-            category: 'Buku, Dokumen & ATK',
-            category_slug: 'dokumen',
-            location_campus: 'Kampus Meruya',
-            location_specific: 'Gedung E R. 204',
-            location_full: 'Kampus Meruya — Gedung E R. 204',
-            date: '2026-05-12',
-            date_display: '12 Mei 2026',
-            time: '10.00 - 11.30 WIB',
-            storage: 'Disimpan Sendiri',
-            features: 'Map plastik biru berisi Paspor Republik Indonesia atas nama mahasiswa dan berkas pendaftaran beasiswa luar negeri.',
-            image: 'https://images.unsplash.com/photo-1544717305-2782549b5136?w=800&auto=format&fit=crop&q=80',
-            reporter_name: 'Mahasiswi FEB',
-            reporter_meta: 'Civitas Terverifikasi • NIM 4312***'
-        },
-        '3': {
-            id: '3',
-            type: 'found',
-            title: 'Tasbih & Gelang Manik Merah',
-            brand: 'Aksesoris Ibadah',
-            category: 'Jam & Aksesori',
-            category_slug: 'aksesoris',
-            location_campus: 'Kampus Meruya',
-            location_specific: 'Masjid Manarul \'Amal UMB, Area Saf Laki-laki',
-            location_full: 'Kampus Meruya — Masjid Manarul \'Amal UMB',
-            date: '2026-01-15',
-            date_display: '15 Jan 2026',
-            time: 'Ba\'da Salat Dzuhur',
-            storage: 'Dititipkan di Pengurus DKM Masjid',
-            features: 'Tasbih kayu berbutir merah marun berjumlah 33 butir dan gelang manik elastis. Saat ini diamankan di meja pengurus DKM.',
-            image: 'https://images.unsplash.com/photo-1590402494682-cd3fb53b1f70?w=800&auto=format&fit=crop&q=80',
-            reporter_name: 'Pengurus DKM Manarul \'Amal',
-            reporter_meta: 'Pengurus Masjid Kampus UMB'
-        },
-        '4': {
-            id: '4',
-            type: 'found',
-            title: 'Kunci Motor Honda & Remote',
-            brand: 'Honda Smart Key',
-            category: 'Kunci Kendaraan / Ruangan',
-            category_slug: 'kunci',
-            location_campus: 'Kampus Meruya',
-            location_specific: 'Parkir Barat Kampus Meruya (Dekat Pohon Rindang)',
-            location_full: 'Kampus Meruya — Parkir Barat Kampus Meruya',
-            date: '2026-01-10',
-            date_display: '10 Jan 2026',
-            time: 'Pagi (± 08.15 WIB)',
-            storage: 'Dititipkan di Pos Satpam Parkir',
-            features: 'Kunci motor Honda dengan gantungan tali lanyard hitam bertuliskan One Heart dan remote alarm hitam.',
-            image: 'https://images.unsplash.com/photo-1582139329536-e7284fece509?w=800&auto=format&fit=crop&q=80',
-            reporter_name: 'Petugas Keamanan Parkir',
-            reporter_meta: 'Biro Keamanan & Ketertiban Kampus'
-        },
-        '5': {
-            id: '5',
-            type: 'lost',
-            title: 'Earphone TWS Anker Soundcore',
-            brand: 'Anker Soundcore Life P2',
-            category: 'Elektronik & HP',
-            category_slug: 'elektronik',
-            location_campus: 'Kampus Meruya',
-            location_specific: 'Parkir Barat Kampus Meruya',
-            location_full: 'Kampus Meruya — Parkir Barat Kampus Meruya',
-            date: '2026-01-15',
-            date_display: '15 Jan 2026',
-            time: 'Siang saat menuju kendaraan',
-            storage: 'Disimpan Sendiri',
-            features: 'Charging case hitam doff berisi sepasang earphone TWS nirkabel Anker Soundcore. Tertinggal di dekat tiang P3 parkir barat.',
-            image: 'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=800&auto=format&fit=crop&q=80',
-            reporter_name: 'Civitas UMB',
-            reporter_meta: 'Civitas Terverifikasi • UMB Meruya'
-        },
-        '6': {
-            id: '6',
-            type: 'lost',
-            title: 'Tablet Samsung Tab S8',
-            brand: 'Samsung Galaxy Tab S8',
-            category: 'Elektronik & HP',
-            category_slug: 'elektronik',
-            location_campus: 'Kampus Meruya',
-            location_specific: 'Gedung E Lt. 3 Ruang Diskusi',
-            location_full: 'Kampus Meruya — Gedung E Lt. 3 Ruang Diskusi',
-            date: '2026-01-14',
-            date_display: '14 Jan 2026',
-            time: 'Sore (± 16.00 WIB)',
-            storage: 'Disimpan Sendiri',
-            features: 'Tablet warna graphite abu-abu tua dengan book cover magnetic hitam dan S-Pen menempel di punggung tablet.',
-            image: 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=800&auto=format&fit=crop&q=80',
-            reporter_name: 'Mahasiswa Desain (FDSK)',
-            reporter_meta: 'Civitas Terverifikasi • NIM 4232***'
-        },
-        '7': {
-            id: '7',
-            type: 'lost',
-            title: 'Tas Laptop Lenovo ThinkPad',
-            brand: 'ThinkPad Essential Backpack',
-            category: 'Tas & Ransel',
-            category_slug: 'tas',
-            location_campus: 'Kampus Meruya',
-            location_specific: 'Lab Komputer Gedung Tower Lt. 4',
-            location_full: 'Kampus Meruya — Lab Komputer Gedung Tower',
-            date: '2026-01-18',
-            date_display: '18 Jan 2026',
-            time: '13.00 WIB usai praktikum',
-            storage: 'Dititipkan di Lab Komputer Tower',
-            features: 'Ransel laptop hitam bergaris merah khas ThinkPad, di dalamnya ada charger laptop 65W dan buku catatan kuliah.',
-            image: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=800&auto=format&fit=crop&q=80',
-            reporter_name: 'Mahasiswa Teknik Elektro',
-            reporter_meta: 'Civitas Terverifikasi • NIM 4142***'
-        },
-        '8': {
-            id: '8',
-            type: 'lost',
-            title: 'Dompet Kulit & KTM Mahasiswa',
-            brand: 'Dompet Kulit Cokelat',
-            category: 'Dompet & Kartu',
-            category_slug: 'tas',
-            location_campus: 'Kampus Meruya',
-            location_specific: 'Kantin Gedung D Lantai 1',
-            location_full: 'Kampus Meruya — Kantin Gedung D',
-            date: '2026-02-08',
-            date_display: '08 Feb 2026',
-            time: 'Istirahat makan siang',
-            storage: 'Dititipkan di Pengelola Kantin',
-            features: 'Dompet kulit warna cokelat tua berisi KTM UMB, e-KTP, kartu debit bank, dan uang tunai.',
-            image: 'https://images.unsplash.com/photo-1627123424574-724758594e93?w=800&auto=format&fit=crop&q=80',
-            reporter_name: 'Mahasiswa Fikom',
-            reporter_meta: 'Civitas Terverifikasi • NIM 4422***'
-        },
-        '9': {
-            id: '9',
-            type: 'found',
-            title: 'Jaket Almamater UMB',
-            brand: 'Jas Almamater Resmi UMB',
-            category: 'Pakaian & Sepatu',
-            category_slug: 'pakaian',
-            location_campus: 'Kampus Meruya',
-            location_specific: 'Perpustakaan Pusat Lantai 2, Meja Baca Mandiri',
-            location_full: 'Kampus Meruya — Perpustakaan Pusat Lt. 2',
-            date: '2026-01-22',
-            date_display: '22 Jan 2026',
-            time: '17.00 WIB (Sore)',
-            storage: 'Dititipkan di Staf Perpustakaan',
-            features: 'Jaket almamater biru navy ukuran L dengan badge bordir logo Universitas Mercu Buana di dada kiri. Tertinggal di sandaran kursi.',
-            image: 'https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?w=800&auto=format&fit=crop&q=80',
-            reporter_name: 'Staf Perpustakaan UMB',
-            reporter_meta: 'Pengelola Fasilitas Perpustakaan'
-        },
-        '10': {
-            id: '10',
-            type: 'found',
-            title: 'Earphone TWS Anker Soundcore',
-            brand: 'Anker Soundcore R50i',
-            category: 'Elektronik & HP',
-            category_slug: 'elektronik',
-            location_campus: 'Kampus Meruya',
-            location_specific: 'Gazebo Taman Depan Gedung Tower',
-            location_full: 'Kampus Meruya — Gazebo Taman Kampus',
-            date: '2026-02-02',
-            date_display: '02 Feb 2026',
-            time: '15.45 WIB (Sore)',
-            storage: 'Dititipkan di Pos Keamanan Kampus',
-            features: 'Charging case TWS warna hitam matte beserta sepasang earphone di dalamnya. Kondisi baterai masih menyala.',
-            image: 'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=800&auto=format&fit=crop&q=80',
-            reporter_name: 'Civitas UMB',
-            reporter_meta: 'Civitas Terverifikasi • Kampus Meruya'
-        },
-        'featured-2': {
-            id: 'featured-2',
-            type: 'lost',
-            title: 'KTM Mahasiswa UMB',
-            brand: 'Kartu Tanda Mahasiswa',
-            category: 'Buku, Dokumen & ATK',
-            category_slug: 'dokumen',
-            location_campus: 'Kampus Meruya',
-            location_specific: 'Perpustakaan Pusat Lt. 1 Meja Diskusi',
-            location_full: 'Kampus Meruya — Perpustakaan',
-            date: '2026-01-16',
-            date_display: '16 Jan 2026',
-            time: '11.00 WIB',
-            storage: 'Disimpan Sendiri',
-            features: 'Kartu Tanda Mahasiswa (KTM) UMB atas nama mahasiswa Fakultas Ilmu Komputer dengan nomor induk 4152***. Terjatuh di sekitar meja baca perpustakaan.',
-            image: 'https://images.unsplash.com/photo-1544717305-2782549b5136?w=800&auto=format&fit=crop&q=80',
-            reporter_name: 'Mahasiswa Fasilkom',
-            reporter_meta: 'Civitas Terverifikasi • NIM 4152***'
-        },
-        'featured-4': {
-            id: 'featured-4',
-            type: 'found',
-            title: 'Smartwatch Apple Watch Series 8',
-            brand: 'Apple Inc.',
-            category: 'Jam & Aksesori',
-            category_slug: 'aksesoris',
-            location_campus: 'Kampus Meruya',
-            location_specific: 'Gedung Tower UMB Lantai Dasar',
-            location_full: 'Kampus Meruya — Tower UMB',
-            date: '2026-01-20',
-            date_display: '20 Jan 2026',
-            time: '14.00 WIB',
-            storage: 'Dititipkan di Pos Keamanan Tower',
-            features: 'Apple Watch Series 8 warna midnight/hitam dengan strap sport band silikon hitam. Kondisi layar menyala dan terkunci passcode.',
-            image: 'https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?w=800&auto=format&fit=crop&q=80',
-            reporter_name: 'Petugas Keamanan Tower',
-            reporter_meta: 'Biro Pengamanan Kampus UMB'
-        }
-    };
+    // (katalog mock dihapus — semua data dari Supabase)
 
     function getReportDataById(id) {
         const idStr = String(id);
-        try {
-            const raw = localStorage.getItem('findumb_custom_reports');
-            if (raw) {
-                const list = JSON.parse(raw);
-                if (Array.isArray(list)) {
-                    const found = list.find(r => String(r.id) === idStr);
-                    if (found) {
-                        return {
-                            ...found,
-                            reporter_name: found.reporter_name || (found.is_mine ? 'Ahmad Fauzi (Saya)' : 'Civitas UMB'),
-                            reporter_meta: found.reporter_meta || 'Civitas Terverifikasi • NIM 4152***'
-                        };
-                    }
-                }
-            }
-        } catch(e) {}
+        return (SERVER_REPORTS || []).find(r => String(r.id) === idStr) || null;
+    }
 
-        if (mockReportsCatalog[idStr]) {
-            return mockReportsCatalog[idStr];
+// Tombol utama di modal detail desktop → klaim sungguhan (PR-04).
+    function handleModalPrimaryAction() {
+        const modal = document.getElementById('modal-desktop-detail');
+        const id = modal ? modal.getAttribute('data-active-id') : null;
+        if (!id) return;
+
+        if (window.FindUMB && typeof window.FindUMB.claimReport === 'function') {
+            window.FindUMB.claimReport(id);
+            return;
         }
 
-        return mockReportsCatalog['1'];
+        // Fallback: buka halaman detail penuh (di sana tombolnya sudah benar).
+        window.location.href = '/report/' + String(id).replace('featured-', '');
     }
 
     function openDesktopDetailModal(id) {

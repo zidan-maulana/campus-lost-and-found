@@ -227,8 +227,13 @@ Mengikuti standar error bawaan Laravel Form Request (`HTTP 422 Unprocessable Ent
   | `description` | String | Ya | Min: 20, Max: 1000 karakter. |
   | `image` | File | Tidak | Opsional, max 2048 KB (2MB), mimes: `jpg,jpeg,png,webp`. |
   | `proof_question` | String | Kondisional | **Wajib jika `type = 'found'`**. Pertanyaan rahasia untuk memverifikasi pemilik sah. |
-  | `storage_location`| String | Kondisional | Jika `found`: `'self'` (Disimpan sendiri) atau `'security_post'` (Dititipkan satpam). |
-  | `security_post_id`| Integer | Kondisional | Wajib jika `storage_location = 'security_post'`. |
+  | `storage_note` | String | Tidak | Catatan tempat penyimpanan barang temuan, teks bebas (mis. "Dititipkan di pos keamanan"). Max: 150 karakter. |
+
+  > **Revisi DEC-028 (2026-11-10):** field `storage_location` (`'self'` / `'security_post'`) dan
+  > `security_post_id` **dibatalkan**. Konsep pos satpam tidak ada di PRD, SRS, maupun DATABASE_DESIGN,
+  > dan tidak ada tabel master `security_posts`. Lokasi penyimpanan dicatat sebagai `storage_note`
+  > (teks bebas), sedangkan waktu dan lokasi serah terima dinegosiasikan lewat chat sesuai PR-05.
+  > Lihat `docs/DECISIONS_LOG.md` DEC-028.
 
 * **Response (201 Created):** Objek laporan yang baru dibuat.
 

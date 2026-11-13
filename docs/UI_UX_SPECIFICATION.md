@@ -359,6 +359,8 @@ Untuk menjaga konsistensi, antarmuka menggunakan pemetaan status berikut:
 | `'cancelled'` | **Dibatalkan** | Merah Muted | Laporan telah dibatalkan oleh pembuatnya. |
 | `'hidden'` | **Disembunyikan** | Merah Gelap | Laporan disembunyikan oleh administrator karena pelanggaran moderasi. |
 
+**Catatan DEC-027:** laporan berstatus `resolved` tidak ditampilkan lagi di katalog publik (beranda dan pencarian) agar satu barang tidak muncul dua kali; laporan tetap dapat dibuka lewat tautan detail langsung dan tetap tercatat di "Laporan Saya". Untuk laporan **hilang** yang ditutup karena barangnya ditemukan, label yang dipakai adalah **"Sudah Ketemu"**, bukan "Selesai".
+
 #### Status Pengajuan Klaim (`claims.status`)
 | Kode Database | Label Tampilan UI | Warna / Indikator | Keterangan untuk Pengguna |
 |---|---|---|---|

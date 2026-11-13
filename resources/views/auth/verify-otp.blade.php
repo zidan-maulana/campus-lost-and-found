@@ -311,7 +311,7 @@
             Masukkan 6 digit kode yang dikirim ke:
         </p>
         <span class="otp-email-badge">
-            {{ session('pending_email', 'mahasiswa@student.mercubuana.ac.id') }}
+            {{ session('pending_email', $pending_email ?? 'email kampus Anda') }}
         </span>
 
         <!-- Validation / Session Feedback -->

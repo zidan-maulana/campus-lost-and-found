@@ -800,104 +800,10 @@
 
 @push('scripts')
 <script>
-    const mockReportsCatalog = {
-        '1': {
-            id: '1',
-            type: 'lost',
-            title: 'Samsung SM-A135F',
-            brand: 'Samsung Galaxy A13',
-            category: 'Elektronik & HP',
-            location: 'Kampus Meruya — Gedung Tower Lt. 7 R. 702',
-            date: '20 Jun 2026',
-            storage: 'Disimpan Sendiri',
-            desc: 'Smartphone Samsung warna hitam, terpasang case transparan bening agak menguning, layar retak halus di sudut kanan atas. Masih dalam keadaan terkunci.',
-            image: 'https://images.unsplash.com/photo-1584438784894-089d6a62b8fa?w=800&auto=format&fit=crop&q=80'
-        },
-        '2': {
-            id: '2',
-            type: 'found',
-            title: 'Earphone TWS Anker Soundcore',
-            brand: 'Anker Soundcore Life P2i',
-            category: 'Elektronik & HP',
-            location: 'Kampus Meruya — Perpustakaan Lt. 2 R. Audio Visual',
-            date: '18 Okt 2026',
-            storage: 'Dititipkan di Pos Satpam Gedung Tower',
-            desc: 'Earphone bluetooth warna hitam doff dalam charging case, stiker hologram Soundcore masih utuh.',
-            image: 'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=800&auto=format&fit=crop&q=80'
-        },
-        '3': {
-            id: '3',
-            type: 'found',
-            title: 'Tas Laptop Lenovo ThinkPad',
-            brand: 'Lenovo ThinkPad Backpack 15.6"',
-            category: 'Tas & Dompet',
-            location: 'Kampus Meruya — Pos Satpam Gedung Tower Lt. 1',
-            date: '19 Jan 2026',
-            storage: 'Disimpan Petugas Keamanan',
-            desc: 'Tas ransel laptop warna hitam dengan logo ThinkPad merah di pojok kanan bawah. Berisi buku catatan dan charger.',
-            image: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=800&auto=format&fit=crop&q=80'
-        },
-        '4': {
-            id: '4',
-            type: 'lost',
-            title: 'Kunci Motor Honda Vario',
-            brand: 'Honda Genuine Key',
-            category: 'Kunci & Kendaraan',
-            location: 'Kampus Meruya — Parkir Barat Blok B',
-            date: '19 Jan 2026',
-            storage: 'Disimpan Sendiri',
-            desc: 'Gantungan kunci akrilik logo UMB dengan tali warna biru gelap, ada anak kunci cadangan kecil.',
-            image: 'https://images.unsplash.com/photo-1582139329536-e7284fece509?w=800&auto=format&fit=crop&q=80'
-        },
-        '5': {
-            id: '5',
-            type: 'lost',
-            title: 'Cincin Emas Berlian',
-            brand: 'Perhiasan Emas Kuning',
-            category: 'Jam & Aksesori',
-            location: 'Kampus Meruya — Toilet Wanita Lantai 2',
-            date: '15 Jan 2026',
-            storage: 'Disimpan Sendiri',
-            desc: 'Cincin bermata berlian kecil di tengah, ukuran lingkar jari kecil (ring size 12).',
-            image: 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=800&auto=format&fit=crop&q=80'
-        },
-        '6': {
-            id: '6',
-            type: 'found',
-            title: 'Jaket Hoodie Hitam Uniqlo',
-            brand: 'Uniqlo Size XL',
-            category: 'Pakaian & Tekstil',
-            location: 'Kampus Meruya — Lab Komputer Fasilkom Lt. 3',
-            date: '12 Jan 2026',
-            storage: 'Dititipkan ke Petugas Lab',
-            desc: 'Jaket zipper polos hitam pekat bahan fleece tebal, ukuran XL, tertinggal di kursi baris ketiga.',
-            image: 'https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=800&auto=format&fit=crop&q=80'
-        },
-        '7': {
-            id: '7',
-            type: 'found',
-            title: 'KTM & Dompet Kulit Cokelat',
-            brand: 'Dompet Kulit Merk Cardinal',
-            category: 'Dokumen & KTM',
-            location: 'Kampus Meruya — Kantin Blok D',
-            date: '22 Okt 2026',
-            storage: 'Disimpan Penemu (Siti Nurhaliza)',
-            desc: 'Dompet lipat kulit warna cokelat tua berisi kartu tanda mahasiswa UMB Fakultas Teknik dan kartu tap parkir.',
-            image: 'https://images.unsplash.com/photo-1627123424574-724758594e93?w=800&auto=format&fit=crop&q=80'
-        },
-        '8': {
-            id: '8',
-            type: 'lost',
-            title: 'Tumbler Corkcicle Putih 16oz',
-            brand: 'Corkcicle Canteen',
-            category: 'Perlengkapan Pribadi',
-            location: 'Kampus Meruya — Gazebo Rektorat',
-            date: '18 Jan 2026',
-            storage: 'Disimpan Sendiri',
-            desc: 'Warna matte white dengan sedikit lecet di bagian bawah botol, tutup model twist cap original.',
-            image: 'https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=800&auto=format&fit=crop&q=80'
-        }
-    };
+    // Laporan tersimpan langsung dari Supabase.
+    const SERVER_REPORTS = @json($reports->map(fn ($r) => $r->toUiArray($viewer))->values());
+    let SERVER_BOOKMARKS = SERVER_REPORTS.map(r => String(r.id));
+    // (katalog mock dihapus — semua data dari Supabase)
 
     let currentFilter = 'all';
     let activeSavedModalItem = null;
@@ -911,28 +817,11 @@
     });
 
     function getBookmarks() {
-        try {
-            const raw = localStorage.getItem('findumb_bookmarks');
-            if (raw) {
-                const parsed = JSON.parse(raw);
-                if (Array.isArray(parsed)) return parsed.map(String);
-            }
-        } catch(e) {}
-        const defaultBookmarks = ['2', '3', '7'];
-        try {
-            if (!localStorage.getItem('findumb_bookmarks_init')) {
-                localStorage.setItem('findumb_bookmarks', JSON.stringify(defaultBookmarks));
-                localStorage.setItem('findumb_bookmarks_init', 'true');
-            }
-        } catch(e) {}
-        return defaultBookmarks;
+        return (SERVER_BOOKMARKS || []).map(String);
     }
 
     function saveBookmarks(bookmarks) {
-        try {
-            localStorage.setItem('findumb_bookmarks', JSON.stringify(bookmarks));
-            localStorage.setItem('findumb_bookmarks_init', 'true');
-        } catch(e) {}
+        SERVER_BOOKMARKS = (bookmarks || []).map(String);
     }
 
     function initSavedReports() {
@@ -940,46 +829,23 @@
     }
 
     function getUserReports() {
-        try {
-            const raw = localStorage.getItem('findumb_custom_reports');
-            if (raw) {
-                const parsed = JSON.parse(raw);
-                if (Array.isArray(parsed)) return parsed;
-            }
-        } catch(e) {}
-        return [];
+        return Array.isArray(SERVER_REPORTS) ? SERVER_REPORTS : [];
     }
 
     function getSavedList() {
-        const bookmarks = getBookmarks();
-        const userReports = getUserReports();
-        const list = [];
-
-        bookmarks.forEach(id => {
-            const idStr = String(id).replace('saved_', '');
-            const custom = userReports.find(r => String(r.id) === idStr);
-            if (custom) {
-                list.push({
-                    id: custom.id,
-                    type: custom.type || 'lost',
-                    title: custom.title,
-                    brand: custom.brand || '-',
-                    category: custom.category_label || custom.category || 'Lainnya',
-                    location: custom.location_full || custom.location_campus || 'Kampus Meruya',
-                    date: custom.date_display || custom.date || 'Baru Saja',
-                    storage: custom.storage || (custom.type === 'found' ? 'Disimpan Penemu' : 'Disimpan Sendiri'),
-                    desc: custom.features || custom.desc || 'Tidak ada catatan tambahan.',
-                    image: custom.image || 'https://images.unsplash.com/photo-1584438784894-089d6a62b8fa?w=800'
-                });
-                return;
-            }
-
-            if (mockReportsCatalog[idStr]) {
-                list.push(mockReportsCatalog[idStr]);
-            }
-        });
-
-        return list;
+        // $reports dari controller SUDAH hanya laporan yang disimpan user ini.
+        return (SERVER_REPORTS || []).map(r => ({
+            id: r.id,
+            type: r.type || 'lost',
+            title: r.title,
+            brand: r.brand || '-',
+            category: r.category_label || r.category || 'Lainnya',
+            location: r.location_full || r.location_campus || 'Kampus Meruya',
+            date: r.date_display || r.date || 'Baru Saja',
+            storage: r.storage || (r.type === 'found' ? 'Disimpan Penemu' : 'Disimpan Sendiri'),
+            desc: r.features || 'Tidak ada catatan tambahan.',
+            image: r.image
+        }));
     }
 
     function setSavedFilter(type, btn) {

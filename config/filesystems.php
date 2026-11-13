@@ -47,6 +47,23 @@ return [
             'report' => false,
         ],
 
+        // Supabase Storage (S3-compatible). Dipakai untuk foto laporan & avatar.
+        // Endpoint S3: https://<project-ref>.supabase.co/storage/v1/s3
+        'supabase' => [
+            'driver' => 's3',
+            'key' => env('SUPABASE_S3_ACCESS_KEY'),
+            'secret' => env('SUPABASE_S3_SECRET_KEY'),
+            'region' => env('SUPABASE_S3_REGION', 'auto'),
+            'bucket' => env('SUPABASE_BUCKET', 'findumb-media'),
+            // URL publik harus memuat nama bucket agar objek dapat dibuka.
+            'url' => rtrim(env('SUPABASE_URL', 'https://placeholder.supabase.co'), '/')
+                .'/storage/v1/object/public/'.env('SUPABASE_BUCKET', 'findumb-media'),
+            'endpoint' => rtrim(env('SUPABASE_URL', 'https://placeholder.supabase.co'), '/').'/storage/v1/s3',
+            'use_path_style_endpoint' => true,
+            'throw' => true,
+            'report' => false,
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),

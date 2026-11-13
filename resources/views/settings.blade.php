@@ -867,6 +867,8 @@
 
 @push('scripts')
 <script>
+    // Preferensi dari akun (kolom preferences di Supabase), bukan localStorage.
+    const SERVER_PREFERENCES = @json($preferences ?? []);
     document.addEventListener('DOMContentLoaded', () => {
         if (typeof lucide !== 'undefined') {
             lucide.createIcons();
@@ -894,44 +896,40 @@
     }
 
     function loadSavedSettings() {
-        try {
-            const raw = localStorage.getItem('findumb_app_settings');
-            if (raw) {
-                const settings = JSON.parse(raw);
-                if (settings.language && document.getElementById('app-language-select')) {
-                    document.getElementById('app-language-select').value = settings.language;
-                }
-                if (settings.push !== undefined && document.getElementById('toggle-notif-push')) {
-                    document.getElementById('toggle-notif-push').checked = settings.push;
-                }
-                if (settings.claim !== undefined && document.getElementById('toggle-notif-claim')) {
-                    document.getElementById('toggle-notif-claim').checked = settings.claim;
-                }
-                if (settings.status !== undefined && document.getElementById('toggle-notif-status')) {
-                    document.getElementById('toggle-notif-status').checked = settings.status;
-                }
-                if (settings.chat !== undefined && document.getElementById('toggle-notif-chat')) {
-                    document.getElementById('toggle-notif-chat').checked = settings.chat;
-                }
-            }
-        } catch(e) {}
+        const settings = SERVER_PREFERENCES || {};
+        if (settings.language && document.getElementById('app-language-select')) {
+            document.getElementById('app-language-select').value = settings.language;
+        }
+        [['push','toggle-notif-push'],['claim','toggle-notif-claim'],['status','toggle-notif-status'],['chat','toggle-notif-chat']]
+            .forEach(([key, id]) => {
+                const el = document.getElementById(id);
+                if (el && settings[key] !== undefined) el.checked = !!settings[key];
+            });
     }
 
     function saveSettings() {
-        const settings = {
-            language: document.getElementById('app-language-select')?.value || 'id',
-            push: document.getElementById('toggle-notif-push')?.checked ?? true,
-            claim: document.getElementById('toggle-notif-claim')?.checked ?? true,
-            status: document.getElementById('toggle-notif-status')?.checked ?? true,
-            chat: document.getElementById('toggle-notif-chat')?.checked ?? true,
-            savedAt: new Date().toISOString()
+        const payload = {
+            preferences: {
+                language: document.getElementById('app-language-select')?.value || 'id',
+                push: document.getElementById('toggle-notif-push')?.checked ?? true,
+                claim: document.getElementById('toggle-notif-claim')?.checked ?? true,
+                status: document.getElementById('toggle-notif-status')?.checked ?? true,
+                chat: document.getElementById('toggle-notif-chat')?.checked ?? true,
+            },
         };
 
-        try {
-            localStorage.setItem('findumb_app_settings', JSON.stringify(settings));
-        } catch(e) {}
-
-        showToast('✓ Pengaturan berhasil disimpan!');
+        fetch('{{ route('api.settings.update') }}', {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': window.FindUMB_CSRF || '',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify(payload),
+        })
+            .then(r => r.ok ? r.json() : Promise.reject(r))
+            .then(() => showToast('✓ Pengaturan berhasil disimpan!'))
+            .catch(() => showToast('Gagal menyimpan pengaturan.'));
     }
 
     function handleLanguageChange(val) {

@@ -602,7 +602,7 @@
                     <input type="checkbox" name="remember" class="auth-remember-input" {{ old('remember') ? 'checked' : '' }}>
                     <span>Ingat saya</span>
                 </label>
-                <a href="javascript:void(0)" onclick="alert('Silakan hubungi admin IT UMB atau pos satpam untuk pemulihan akun civitas.')" class="auth-forgot-link">
+                <a href="javascript:void(0)" onclick="alert('Silakan hubungi administrator platform UMBFind untuk pemulihan akun civitas.')" class="auth-forgot-link">
                     Lupa kata sandi?
                 </a>
             </div>

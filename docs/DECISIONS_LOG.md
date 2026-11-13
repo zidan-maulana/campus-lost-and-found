@@ -244,6 +244,39 @@ Gunakan status berikut:
 
 **Alasan:** Memberikan kepastian batas waktu bagi pengklaim tanpa mengorbankan haknya untuk mencari barang temuan miliknya.
 
+### DEC-028 — Konsep "Pos Satpam" Dihapus dari Sistem
+
+**Status:** Accepted
+
+**Tanggal:** 2026-11-10
+
+**Konteks:** `docs/API_CONTRACT.md` §5.3 (ditulis tim front-end) mencantumkan field `storage_location` dengan nilai `self` / `security_post` dan `security_post_id` sebagai entitas pos satpam. Setelah ditelusuri, konsep ini **tidak ada di dokumen acuan mana pun**: `PRD.md` (termasuk PR-05 dan PR-06), `SRS.md`, `DATABASE_DESIGN.md`, `SYSTEM_DESIGN.md`, `UI_UX_SPECIFICATION.md`, dan `DEVELOPMENT_PLAN.md` tidak menyebut pos satpam, penitipan, atau `security_post` sama sekali. `BACKEND_VS_CONTRACT_GAP.md` §3.2 sudah mencatat ini sebagai celah yang menunggu keputusan.
+
+Akibatnya muncul tiga masalah:
+1. Antarmuka menampilkan label **"In Handover (Pos Satpam)"** dan **"X Barang di Pos Satpam Tower"**, padahal `in_handover` berarti "klaim disetujui, menunggu konfirmasi serah terima dua arah" — bukan penanda lokasi fisik barang. Barang bisa masih berada di tangan penemu.
+2. Halaman landing menjanjikan fitur yang tidak ada: "Validasi Pos Satpam", "setiap penitipan tercatat di sistem dengan bukti tanda terima resmi", dan "barang diarsipkan 30–90 hari".
+3. `reports.storage_location` dan `reports.security_post_id` ada di skema tetapi tidak pernah terisi satu baris pun (0 baris), dan tidak ada tabel master `security_posts`.
+
+**Pilihan yang dipertimbangkan:**
+1. *Menghapus konsep pos satpam dan mengikuti PRD.*
+   *Konsekuensi:* label dashboard dan narasi landing dikoreksi, dua kolom kosong dihapus, tidak ada fitur yang hilang karena fitur itu memang belum pernah ada. Kontrak front-end perlu direvisi.
+2. *Merestui pos satpam sebagai fitur baru.*
+   *Konsekuensi:* perlu PRD PR-07 dan revisi SRS, tabel master `security_posts`, status laporan baru untuk barang yang benar-benar sudah dititipkan, peran/otoritas petugas pos, serta alur konfirmasi penitipan. Ini penambahan lingkup, bukan penyelesaian implementasi.
+
+**Keputusan:** Opsi 1.
+1. `reports.storage_location` dan `reports.security_post_id` **dihapus** dari skema (migrasi `2026_11_10_000016_drop_security_post_columns_from_reports`).
+2. Lokasi penyimpanan barang temuan cukup dicatat pada `reports.storage_note` sebagai **teks bebas** (mis. "Dititipkan di Pos Keamanan", "Dititipkan di Pengurus Musala"). Tidak ada validasi terhadap entitas pos.
+3. `POST /api/v1/reports` tidak lagi menerima/mewajibkan `storage_location` dan `security_post_id`; yang diterima adalah `storage_note` (opsional, maks 150 karakter). `ApiPresenter` juga tidak lagi mengirim kedua kunci tersebut.
+4. Label antarmuka dikoreksi: `in_handover` ditampilkan sebagai **"Menunggu Serah Terima"**, bukan "(Pos Satpam)".
+5. Narasi landing page yang menjanjikan pencatatan/arsip otomatis di pos satpam diperbaiki agar sesuai perilaku sistem. Saran fisik (serah terima di area ramai atau difasilitasi pos keamanan kampus) tetap dipertahankan karena itu imbauan keamanan fisik, bukan fitur sistem.
+6. Sesuai PR-05, waktu dan lokasi serah terima **dinegosiasikan lewat chat** antar pihak, bukan ditentukan sistem.
+
+**Alasan:** Dokumen acuan adalah sumber kebenaran. Menambah entitas yang tidak pernah disetujui berisiko membuat lingkup melebar tanpa dasar, sementara menghapusnya tidak menghilangkan fungsionalitas apa pun — penitipan fisik memang di luar sistem sejak awal.
+
+**Dampak:** `docs/API_CONTRACT.md` §5.3 (field `storage_location` dan `security_post_id` dibatalkan), Database Design (`reports`), `docs/BACKEND_VS_CONTRACT_GAP.md` §3.2 dan §6, dashboard admin (label status), halaman landing (narasi fitur), serta seeder dan test yang memakai kedua kolom tersebut.
+
+**Catatan:** Bila kelak pos satpam ingin dijadikan fitur resmi, keputusan ini harus digantikan lewat DEC baru beserta revisi PRD/SRS, bukan ditambahkan diam-diam lewat kontrak API.
+
 ## 4. Keputusan yang Masih Menunggu Klarifikasi
 
 ### DEC-016 — Domain Email Kampus
@@ -346,6 +379,39 @@ Gunakan status berikut:
 **Alasan:** Menjaga integritas data transaksi, melindungi hak pengguna lain yang tidak bersalah dari dampak penonaktifan pihak lain, mencegah status transaksi menggantung (*deadlock*), dan mencegah timbulnya data anomali (*ghost transactions*) jika akun dipulihkan di kemudian hari.
 
 **Dampak:** PRD (PR-04, PR-08), SRS (FR-06, FR-07, FR-12), System Design (Section 7 & Matriks Transisi Section 10), Database Design (`users`, `reports`, `claims`), UI/UX (Modal konfirmasi admin & banner status akun nonaktif).
+
+### DEC-027 — Satu Barang, Satu Laporan Aktif (Penutupan Laporan Hilang & Verifikasi Klaim)
+
+**Status:** Accepted
+
+**Tanggal:** 2026-11-09
+
+**Konteks:** PRD hanya menyebut pengguna "dapat membuat laporan hilang maupun temuan" (PR-02) dan klaim hanya berlaku pada laporan temuan (PR-04). Tidak ada aturan yang mengikat keduanya, sehingga satu barang dapat menghasilkan dua laporan aktif sekaligus: laporan hilang milik pemilik dan laporan temuan milik penemu. Laporan hilang tersebut tidak pernah ditutup karena satu-satunya jalur penutupan laporan di PRD adalah serah terima dua arah (PR-06) yang hanya menyentuh laporan temuan. Akibatnya katalog publik menampilkan barang yang sama dua kali, dan laporan yang sudah selesai (`resolved`) tetap tampil di daftar sehingga menambah kebisingan. Selain itu parameter `reference_report_id` pada pembuatan laporan temuan hanya dipakai untuk notifikasi dan tidak pernah disimpan, sehingga hubungan antar laporan tidak dapat ditelusuri. Verifikasi klaim pun masih lemah: form klaim web mengirim permintaan kosong padahal kolom `reports.proof_question`, `claims.proof_answer`, dan `claims.proof_attachment` sudah tersedia di skema.
+
+**Pilihan yang dipertimbangkan:**
+1. *Mengubah PR-04 agar klaim diajukan langsung pada laporan hilang (penemu mengklaim "saya menemukan ini").*  
+   *Konsekuensi:* menghapus kebutuhan laporan temuan, tetapi membalik seluruh model peran (`isFinder`/`isClaimant`), memaksa migrasi data, dan mengubah banyak aturan terminal klaim. Biaya dan risiko regresi paling tinggi.
+2. *Membiarkan dua laporan, tetapi menutup laporan hilang otomatis saat laporan temuan yang terhubung dibuat, menyembunyikan laporan selesai dari katalog, mencegah duplikat, dan menambahkan verifikasi klaim.*  
+   *Konsekuensi:* PR-02/PR-04 tetap sah, perubahan aditif, dan tidak ada data lama yang perlu dimigrasi.
+3. *Hanya menyembunyikan laporan selesai dari katalog tanpa menutup laporan hilang.*  
+   *Konsekuensi:* masalah utama (satu barang dua laporan aktif) tidak selesai.
+
+**Keputusan:** Opsi 2.
+1. `reports.reference_report_id` (nullable, FK ke `reports.id`) menyimpan hubungan laporan temuan → laporan hilang. Kolom ini sekarang benar-benar diisi saat laporan temuan dibuat dengan `reference_report_id`.
+2. Saat laporan temuan dibuat dari laporan hilang yang masih `open`, laporan hilang tersebut langsung diubah menjadi `resolved` dan pemiliknya dinotifikasi. Label tampilan untuk kondisi ini adalah **"Sudah Ketemu"** (bukan "Selesai"), karena serah terima belum tentu terjadi.
+3. Bila laporan temuan tersebut dibatalkan, laporan hilang yang tertaut dibuka kembali menjadi `open`.
+4. Katalog publik (beranda, pencarian, `/api/reports`) hanya menampilkan laporan berstatus `open` dan `in_handover` (scope `listed`). Laporan `resolved` tetap dapat dibuka melalui tautan detail langsung, dan tetap muncul di "Laporan Saya".
+5. Laporan temuan ganda dari pengguna yang sama untuk judul barang yang sama (case-insensitive) selama masih aktif ditolak di server.
+6. Formulir laporan temuan menyediakan pencarian laporan hilang untuk dihubungkan, dan kolom pertanyaan verifikasi (`proof_question`).
+7. Klaim web wajib menyertakan alasan klaim (minimal 10 karakter); bila penemu memasang `proof_question`, jawabannya wajib diisi; foto bukti (`proof_attachment`) opsional (JPEG/PNG/WebP, maks 2 MB). Jawaban dan foto hanya dapat dilihat oleh penemu dan pengklaim.
+8. Pemilik laporan **hilang** dapat menutup laporannya sendiri ("Tandai Selesai" / `POST /api/reports/{id}/resolve`) ketika barangnya sudah kembali tanpa lewat serah terima di aplikasi. Endpoint ini khusus laporan hilang; laporan temuan tetap hanya ditutup lewat serah terima dua arah. Status `resolved` bersifat permanen (BR-13) sehingga tombol "Buka Kembali" dihapus.
+9. Tombol "Tandai Selesai", "Edit Laporan", dan "Hapus Laporan" pada halaman "Laporan Saya" menulis ke server (dulu hanya mengubah `localStorage` sehingga status tidak pernah berubah setelah halaman dimuat ulang). "Hapus Laporan" memanggil endpoint pembatalan (`cancelled`), bukan menghapus baris.
+
+**Alasan:** Menutup celah spam tanpa merombak PR-04. Satu barang hanya menghasilkan satu laporan aktif di katalog, laporan yang sudah beres hilang dari daftar, dan klaim asal-asalan tersaring oleh pertanyaan verifikasi serta bukti foto — semua memakai kolom yang sudah ada sehingga tidak menambah tabel baru selain satu foreign key.
+
+**Dampak:** PRD (PR-02, PR-04, PR-06), SRS (FR-03, FR-06), Database Design (`reports.reference_report_id`), UI/UX (label status "Sudah Ketemu", modal klaim, panel hubungkan laporan), Chat (kartu keputusan klaim menampilkan bukti pengklaim).
+
+**Catatan:** Lampiran gambar di dalam chat tetap di luar ruang lingkup (PRD 5.2). Foto bukti klaim bukan lampiran chat, melainkan bagian dari data klaim.
 
 ## 5. Template Keputusan Baru
 

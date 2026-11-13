@@ -33,7 +33,7 @@
                 <i data-lucide="alert-triangle" class="w-3.5 h-3.5 text-amber-700"></i>
             </div>
             <div class="min-w-0 leading-tight">
-                <span class="font-bold text-[#78350f] aduan-count-text">Terdapat 3 aduan civitas membutuhkan tindakan segera:</span>
+                <span class="font-bold text-[#78350f] aduan-count-text">Terdapat {{ $stats['abuse_pending'] }} aduan civitas membutuhkan tindakan segera:</span>
                 <span class="text-[#92400e] ml-1">Laporan dugaan penipuan barang dan konten tidak pantas menunggu verifikasi admin.</span>
             </div>
         </div>
@@ -51,12 +51,12 @@
             <span class="text-sm font-medium text-[#475467]">Total Laporan Aktif</span>
             <div class="mt-3.5">
                 <div class="flex items-center gap-2">
-                    <span class="text-[22px] font-semibold tracking-tight text-[#101828]" id="stat-active-reports">28</span>
+                    <span class="text-[22px] font-semibold tracking-tight text-[#101828]" id="stat-active-reports">{{ $stats['reports_open'] }}</span>
                     <span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-[5px] text-[11px] font-semibold bg-[#ecfdf3] text-[#027a48]">
-                        <i data-lucide="arrow-up-right" class="w-3 h-3"></i> 14%
+                        <i data-lucide="arrow-up-right" class="w-3 h-3"></i> {{ $overview['funnel']['pct_open'] }}% Open
                     </span>
                 </div>
-                <p class="text-xs text-[#667085] mt-1.5">19 Temuan, 9 Hilang</p>
+                <p class="text-xs text-[#667085] mt-1.5">{{ $stats['reports_found_open'] }} Temuan, {{ $stats['reports_lost_open'] }} Hilang</p>
             </div>
         </div>
 
@@ -65,12 +65,12 @@
             <span class="text-sm font-medium text-[#475467]">Barang Selesai Serah Terima</span>
             <div class="mt-3.5">
                 <div class="flex items-center gap-2">
-                    <span class="text-[22px] font-semibold tracking-tight text-[#101828]" id="stat-resolved-reports">95</span>
+                    <span class="text-[22px] font-semibold tracking-tight text-[#101828]" id="stat-resolved-reports">{{ $stats['reports_resolved'] }}</span>
                     <span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-[5px] text-[11px] font-semibold bg-[#ecfdf3] text-[#027a48]">
-                        <i data-lucide="arrow-up-right" class="w-3 h-3"></i> 78.3%
+                        <i data-lucide="arrow-up-right" class="w-3 h-3"></i> {{ $overview['kpi']['return_rate'] }}%
                     </span>
                 </div>
-                <p class="text-xs text-[#667085] mt-1.5">Tingkat temu berhasil diklaim</p>
+                <p class="text-xs text-[#667085] mt-1.5">Tingkat temu berhasil diklaim ({{ $overview['kpi']['return_rate'] }}%)</p>
             </div>
         </div>
 
@@ -79,9 +79,9 @@
             <span class="text-sm font-medium text-[#475467]">Aduan Menunggu Review</span>
             <div class="mt-3.5">
                 <div class="flex items-center gap-2">
-                    <span class="text-[22px] font-semibold tracking-tight text-[#101828]" id="stat-pending-abuse">3</span>
+                    <span class="text-[22px] font-semibold tracking-tight text-[#101828]" id="stat-pending-abuse">{{ $stats['abuse_pending'] }}</span>
                     <span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-[5px] text-[11px] font-semibold bg-[#fef0c7] text-[#b54708]">
-                        <i data-lucide="arrow-up-right" class="w-3 h-3"></i> 2 Urgent
+                        <i data-lucide="arrow-up-right" class="w-3 h-3"></i> {{ $stats['abuse_pending'] }} Menunggu
                     </span>
                 </div>
                 <p class="text-xs text-[#667085] mt-1.5">Perlu moderasi &amp; verifikasi admin</p>
@@ -93,7 +93,7 @@
             <span class="text-sm font-medium text-[#475467]">Akun Ditangguhkan</span>
             <div class="mt-3.5">
                 <div class="flex items-center gap-2">
-                    <span class="text-[22px] font-semibold tracking-tight text-[#101828]" id="stat-suspended-users">1</span>
+                    <span class="text-[22px] font-semibold tracking-tight text-[#101828]" id="stat-suspended-users">{{ $stats['suspended'] }}</span>
                     <span class="inline-flex items-center px-1.5 py-0.5 rounded-[5px] text-[11px] font-semibold bg-[#fee4e2] text-[#d92d20]">
                         Sanksi Etik
                     </span>
@@ -127,10 +127,10 @@
                 <!-- Prominent Metric Highlight & Legend Bar -->
                 <div class="flex flex-wrap items-center justify-between gap-3 pt-3.5 pb-1">
                     <div class="flex items-baseline gap-2.5">
-                        <span class="text-xl font-semibold tracking-tight text-[#101828]" id="chart-headline-val">123 Laporan</span>
+                        <span class="text-xl font-semibold tracking-tight text-[#101828]" id="chart-headline-val">{{ $overview['trend']['30d']['headline'] }}</span>
                         <span class="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-[5px] text-[11px] font-semibold bg-[#ecfdf3] text-[#027a48]">
                             <i data-lucide="arrow-up-right" class="w-3 h-3"></i>
-                            <span id="chart-trend-val">14.2% 30 hari</span>
+                            <span id="chart-trend-val">{{ $overview['trend']['30d']['trendText'] }}</span>
                         </span>
                     </div>
                     <!-- Legend Buttons -->
@@ -156,28 +156,28 @@
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-3.5 border-t border-[#f3f4f6] mt-2">
                 <div>
                     <div class="text-xs font-medium text-[#475467]">Rata-rata Temu</div>
-                    <div class="text-base font-bold text-[#101828] mt-0.5">2.4 Hari</div>
+                    <div class="text-base font-bold text-[#101828] mt-0.5">{{ $overview['kpi']['avg_days'] !== null ? $overview['kpi']['avg_days'].' Hari' : '—' }}</div>
                     <div class="text-xs text-[#667085] mt-0.5">ke serah terima</div>
                 </div>
                 <div>
                     <div class="text-xs font-medium text-[#475467]">Tingkat Pengembalian</div>
-                    <div class="text-base font-bold text-[#101828] mt-0.5" id="chart-stat-rate">78.3%</div>
+                    <div class="text-base font-bold text-[#101828] mt-0.5" id="chart-stat-rate">{{ $overview['kpi']['return_rate'] }}%</div>
                     <div class="text-xs text-[#667085] mt-0.5">barang kembali ke pemilik</div>
                 </div>
                 <div>
                     <div class="text-xs font-medium text-[#475467]">Puncak Mingguan</div>
-                    <div class="text-base font-bold text-[#101828] mt-0.5" id="chart-stat-high">42 Kasus</div>
-                    <div class="text-xs text-[#667085] mt-0.5">terendah: <span id="chart-stat-low">8</span></div>
+                    <div class="text-base font-bold text-[#101828] mt-0.5" id="chart-stat-high">{{ $overview['trend']['30d']['high'] }} Kasus</div>
+                    <div class="text-xs text-[#667085] mt-0.5">terendah: <span id="chart-stat-low">{{ $overview['trend']['30d']['low'] }}</span></div>
                 </div>
                 <div>
                     <div class="text-xs font-medium text-[#475467]">Rasio Aduan</div>
-                    <div class="text-base font-bold text-[#101828] mt-0.5">3.1%</div>
-                    <div class="text-xs text-emerald-600 font-medium mt-0.5">terkendali &lt; 5%</div>
+                    <div class="text-base font-bold text-[#101828] mt-0.5">{{ $overview['kpi']['complaint_ratio'] }}%</div>
+                    <div class="text-xs {{ $overview['kpi']['complaint_ratio'] < 5 ? 'text-emerald-600' : 'text-amber-600' }} font-medium mt-0.5">{{ $overview['kpi']['complaint_ratio'] < 5 ? 'terkendali < 5%' : 'di atas ambang 5%' }}</div>
                 </div>
             </div>
 
             <!-- Hidden compatibility anchor for JS script updates -->
-            <span id="stat-sub-rate" class="hidden">78.3%</span>
+            <span id="stat-sub-rate" class="hidden">{{ $stats['reports_open'] + $stats['reports_resolved'] > 0 ? round($stats['reports_resolved'] / ($stats['reports_open'] + $stats['reports_resolved']) * 100, 1) : 0 }}%</span>
         </div>
 
         <!-- Right Box (4 Cols): Status Laporan + Kategori Terpopuler (Khusus Kampus Meruya) -->
@@ -190,14 +190,14 @@
                         <h4 class="font-bold text-xs text-[#111827]">Status Laporan Kampus</h4>
                         <div class="text-[10px] text-[#6b7280]">Katalog operasional Kampus Meruya</div>
                     </div>
-                    <span class="text-[10px] font-semibold text-[#1572b8] bg-blue-50 px-2 py-0.5 rounded-full">30 Total</span>
+                    <span class="text-[10px] font-semibold text-[#1572b8] bg-blue-50 px-2 py-0.5 rounded-full">{{ $overview['funnel']['total'] }} Total</span>
                 </div>
 
                 <!-- Clean Color Segmented Bar -->
                 <div class="w-full h-2 rounded-full bg-[#f3f4f6] overflow-hidden flex my-3">
-                    <div class="bg-[#1572b8] h-full" style="width: 58%" title="Open (18)"></div>
-                    <div class="bg-amber-400 h-full" style="width: 27%" title="In Handover (10)"></div>
-                    <div class="bg-emerald-500 h-full" style="width: 15%" title="Resolved (95)"></div>
+                    <div class="bg-[#1572b8] h-full" style="width: {{ $overview['funnel']['pct_open'] }}%" title="Open ({{ $overview['funnel']['open'] }})"></div>
+                    <div class="bg-amber-400 h-full" style="width: {{ $overview['funnel']['pct_handover'] }}%" title="In Handover ({{ $overview['funnel']['in_handover'] }})"></div>
+                    <div class="bg-emerald-500 h-full" style="width: {{ $overview['funnel']['pct_resolved'] }}%" title="Resolved ({{ $overview['funnel']['resolved'] }})"></div>
                 </div>
 
                 <div class="space-y-1 text-xs">
@@ -207,17 +207,17 @@
                             <span class="group-hover:text-[#111827]">Open (Aktif Terbuka)</span>
                         </span>
                         <div class="flex items-center gap-1.5">
-                            <span class="font-bold text-[#111827]">18</span>
+                            <span class="font-bold text-[#111827]">{{ $overview['funnel']['open'] }}</span>
                             <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-gray-300 group-hover:text-gray-500 transition-colors"></i>
                         </div>
                     </div>
                     <div onclick="switchAdminTab('reports'); setReportsQuickFilter('in_handover');" class="flex items-center justify-between p-1.5 -mx-1.5 rounded-lg hover:bg-[#f9fafb] cursor-pointer transition-colors group">
                         <span class="flex items-center gap-2 text-[#4b5563]">
                             <span class="w-2 h-2 rounded-full bg-amber-400"></span>
-                            <span class="group-hover:text-[#111827]">In Handover (Pos Satpam)</span>
+                            <span class="group-hover:text-[#111827]">Menunggu Serah Terima</span>
                         </span>
                         <div class="flex items-center gap-1.5">
-                            <span class="font-bold text-[#111827]">10</span>
+                            <span class="font-bold text-[#111827]">{{ $overview['funnel']['in_handover'] }}</span>
                             <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-gray-300 group-hover:text-gray-500 transition-colors"></i>
                         </div>
                     </div>
@@ -227,7 +227,7 @@
                             <span class="group-hover:text-[#111827]">Resolved (Selesai Klaim)</span>
                         </span>
                         <div class="flex items-center gap-1.5">
-                            <span class="font-bold text-[#111827]">95</span>
+                            <span class="font-bold text-[#111827]">{{ $overview['funnel']['resolved'] }}</span>
                             <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-gray-300 group-hover:text-gray-500 transition-colors"></i>
                         </div>
                     </div>
@@ -237,7 +237,7 @@
                             <span class="group-hover:text-[#111827]">Hidden (Dimoderasi)</span>
                         </span>
                         <div class="flex items-center gap-1.5">
-                            <span class="font-bold text-[#111827]">1</span>
+                            <span class="font-bold text-[#111827]">{{ $overview['funnel']['hidden'] }}</span>
                             <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-gray-300 group-hover:text-gray-500 transition-colors"></i>
                         </div>
                     </div>
@@ -258,49 +258,26 @@
 
                 <!-- 4 Real Categories from System Catalog -->
                 <div class="space-y-2 mt-3 text-xs">
-                    <div>
-                        <div class="flex items-center justify-between text-[11px] mb-1">
-                            <span class="font-medium text-[#374151]">Elektronik &amp; Gadget</span>
-                            <span class="font-bold text-[#111827]">51 Laporan</span>
-                        </div>
-                        <div class="w-full h-1.5 rounded-full bg-[#f3f4f6] overflow-hidden">
-                            <div class="bg-[#1572b8] h-full rounded-full" style="width: 41%"></div>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="flex items-center justify-between text-[11px] mb-1">
-                            <span class="font-medium text-[#374151]">Dokumen &amp; KTM</span>
-                            <span class="font-bold text-[#111827]">34 Laporan</span>
-                        </div>
-                        <div class="w-full h-1.5 rounded-full bg-[#f3f4f6] overflow-hidden">
-                            <div class="bg-blue-400 h-full rounded-full" style="width: 27%"></div>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="flex items-center justify-between text-[11px] mb-1">
-                            <span class="font-medium text-[#374151]">Tas &amp; Dompet</span>
-                            <span class="font-bold text-[#111827]">22 Laporan</span>
-                        </div>
-                        <div class="w-full h-1.5 rounded-full bg-[#f3f4f6] overflow-hidden">
-                            <div class="bg-amber-400 h-full rounded-full" style="width: 18%"></div>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="flex items-center justify-between text-[11px] mb-1">
-                            <span class="font-medium text-[#374151]">Aksesoris &amp; Pakaian</span>
-                            <span class="font-bold text-[#111827]">18 Laporan</span>
-                        </div>
-                        <div class="w-full h-1.5 rounded-full bg-[#f3f4f6] overflow-hidden">
-                            <div class="bg-slate-400 h-full rounded-full" style="width: 14%"></div>
-                        </div>
-                    </div>
-                </div>
+@forelse ($overview['top_categories'] as $idx => $cat)
+    <div>
+        <div class="flex items-center justify-between text-[11px] mb-1">
+            <span class="font-medium text-[#374151]">{{ $cat['name'] }}</span>
+            <span class="font-bold text-[#111827]">{{ $cat['count'] }} Laporan</span>
+        </div>
+        <div class="w-full h-1.5 rounded-full bg-[#f3f4f6] overflow-hidden">
+            <div class="{{ ['bg-[#1572b8]', 'bg-blue-400', 'bg-amber-400', 'bg-slate-400'][$idx] ?? 'bg-slate-400' }} h-full rounded-full" style="width: {{ max($cat['pct'], 2) }}%"></div>
+        </div>
+    </div>
+@empty
+    <p class="text-xs text-[#98a2b3] py-2">Belum ada kategori yang memiliki laporan.</p>
+@endforelse
+</div>
 
                 <!-- Quick shortcut to handover items -->
                 <div class="mt-3.5 pt-3 border-t border-[#f3f4f6]">
                     <button type="button" onclick="switchAdminTab('reports'); setReportsQuickFilter('in_handover');" class="w-full flex items-center justify-center gap-2 py-1.5 rounded-lg bg-blue-50 hover:bg-blue-100 text-[#1572b8] font-semibold text-xs transition-colors cursor-pointer border border-blue-200">
                         <i data-lucide="package-check" class="w-3.5 h-3.5"></i>
-                        <span>10 Barang di Pos Satpam Tower</span>
+                        <span>{{ $overview['funnel']['in_handover'] }} Barang Menunggu Serah Terima</span>
                     </button>
                 </div>
             </div>
@@ -364,7 +341,7 @@
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <div>
                 <h1 class="text-xl sm:text-2xl font-bold tracking-tight text-[#111827]">Kelola Laporan</h1>
-                <p class="text-xs text-[#6b7280] mt-0.5">Inventarisasi barang temuan, laporan kehilangan, dan serah terima pos satpam.</p>
+                <p class="text-xs text-[#6b7280] mt-0.5">Inventarisasi barang temuan, laporan kehilangan, dan proses serah terima antar civitas.</p>
             </div>
             <div class="flex items-center gap-2 shrink-0">
                 <button type="button" onclick="exportAdminReportsCSV()" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border border-[#eaecf0] bg-white text-[#374151] hover:bg-[#f9fafb] hover:text-[#111827] transition-all">
@@ -385,9 +362,9 @@
                 <span class="text-sm font-medium text-[#475467]">Total Terdaftar</span>
                 <div class="mt-3.5">
                     <div class="flex items-center gap-2">
-                        <span class="text-[22px] font-semibold tracking-tight text-[#101828]" id="reports-kpi-total">30</span>
+                        <span class="text-[22px] font-semibold tracking-tight text-[#101828]" id="reports-kpi-total">{{ $stats['reports_total'] }}</span>
                         <span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-[5px] text-[11px] font-semibold bg-[#ecfdf3] text-[#027a48]">
-                            <i data-lucide="arrow-up-right" class="w-3 h-3"></i> 20%
+                            <i data-lucide="arrow-up-right" class="w-3 h-3"></i> {{ $stats['reports_total'] }} total
                         </span>
                     </div>
                     <p class="text-xs text-[#667085] mt-1.5">Akumulasi laporan civitas UMB</p>
@@ -399,12 +376,12 @@
                 <span class="text-sm font-medium text-[#475467]">Barang Temuan</span>
                 <div class="mt-3.5">
                     <div class="flex items-center gap-2">
-                        <span class="text-[22px] font-semibold tracking-tight text-[#101828]" id="reports-kpi-found">19</span>
+                        <span class="text-[22px] font-semibold tracking-tight text-[#101828]" id="reports-kpi-found">{{ $stats['reports_found'] }}</span>
                         <span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-[5px] text-[11px] font-semibold bg-[#ecfdf3] text-[#027a48]">
-                            <i data-lucide="arrow-up-right" class="w-3 h-3"></i> 63%
+                            <i data-lucide="arrow-up-right" class="w-3 h-3"></i> {{ $stats['reports_total'] > 0 ? round($stats['reports_found'] / $stats['reports_total'] * 100) : 0 }}%
                         </span>
                     </div>
-                    <p class="text-xs text-[#667085] mt-1.5">12 Open, 7 Di Pos Satpam</p>
+                    <p class="text-xs text-[#667085] mt-1.5">{{ $stats['reports_found_open'] }} Open, {{ $stats['reports_found_handover'] }} Menunggu Serah Terima</p>
                 </div>
             </div>
 
@@ -413,12 +390,12 @@
                 <span class="text-sm font-medium text-[#475467]">Laporan Kehilangan</span>
                 <div class="mt-3.5">
                     <div class="flex items-center gap-2">
-                        <span class="text-[22px] font-semibold tracking-tight text-[#101828]" id="reports-kpi-lost">9</span>
+                        <span class="text-[22px] font-semibold tracking-tight text-[#101828]" id="reports-kpi-lost">{{ $stats['reports_lost'] }}</span>
                         <span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-[5px] text-[11px] font-semibold bg-[#ecfdf3] text-[#027a48]">
-                            <i data-lucide="arrow-up-right" class="w-3 h-3"></i> 12%
+                            <i data-lucide="arrow-up-right" class="w-3 h-3"></i> {{ $stats['reports_total'] > 0 ? round($stats['reports_lost'] / $stats['reports_total'] * 100) : 0 }}%
                         </span>
                     </div>
-                    <p class="text-xs text-[#667085] mt-1.5">6 Terbuka, 3 Teridentifikasi</p>
+                    <p class="text-xs text-[#667085] mt-1.5">{{ $stats['reports_lost'] }} laporan hilang aktif</p>
                 </div>
             </div>
 
@@ -427,9 +404,9 @@
                 <span class="text-sm font-medium text-[#475467]">Selesai Dikembalikan</span>
                 <div class="mt-3.5">
                     <div class="flex items-center gap-2">
-                        <span class="text-[22px] font-semibold tracking-tight text-[#101828]" id="reports-kpi-resolved">1</span>
+                        <span class="text-[22px] font-semibold tracking-tight text-[#101828]" id="reports-kpi-resolved">{{ $stats['reports_resolved'] }}</span>
                         <span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-[5px] text-[11px] font-semibold bg-[#ecfdf3] text-[#027a48]">
-                            <i data-lucide="arrow-up-right" class="w-3 h-3"></i> 78%
+                            <i data-lucide="arrow-up-right" class="w-3 h-3"></i> {{ $overview['kpi']['return_rate'] }}%
                         </span>
                     </div>
                     <p class="text-xs text-[#667085] mt-1.5">Tingkat temu berhasil diklaim</p>
@@ -442,23 +419,23 @@
             <div class="flex flex-wrap items-center justify-between gap-2.5 pb-3 border-b border-[#f3f4f6]">
                 <div class="flex flex-wrap items-center gap-1.5 text-xs">
                     <button type="button" onclick="setReportsQuickFilter('all')" id="rep-pill-all" class="rep-quick-pill px-3 py-1 rounded-lg bg-[#1572b8] text-white font-semibold transition-all cursor-pointer shadow-2xs">
-                        Semua Laporan (<span id="pill-count-all">28</span>)
+                        Semua Laporan (<span id="pill-count-all">{{ $stats['reports_total'] }}</span>)
                     </button>
                     <button type="button" onclick="setReportsQuickFilter('found')" id="rep-pill-found" class="rep-quick-pill px-3 py-1 rounded-lg bg-[#f3f4f6] text-[#4b5563] font-medium hover:bg-[#eaecf0] transition-all cursor-pointer">
-                        Barang Temuan (<span id="pill-count-found">19</span>)
+                        Barang Temuan (<span id="pill-count-found">{{ $stats['reports_found'] }}</span>)
                     </button>
                     <button type="button" onclick="setReportsQuickFilter('lost')" id="rep-pill-lost" class="rep-quick-pill px-3 py-1 rounded-lg bg-[#f3f4f6] text-[#4b5563] font-medium hover:bg-[#eaecf0] transition-all cursor-pointer">
-                        Barang Hilang (<span id="pill-count-lost">9</span>)
+                        Barang Hilang (<span id="pill-count-lost">{{ $stats['reports_lost'] }}</span>)
                     </button>
                     <button type="button" onclick="setReportsQuickFilter('in_handover')" id="rep-pill-in_handover" class="rep-quick-pill px-3 py-1 rounded-lg bg-[#f3f4f6] text-[#4b5563] font-medium hover:bg-[#eaecf0] transition-all cursor-pointer">
-                        Siap Serah Terima (<span id="pill-count-handover">10</span>)
+                        Siap Serah Terima (<span id="pill-count-handover">{{ $overview['funnel']['in_handover'] }}</span>)
                     </button>
                     <button type="button" onclick="setReportsQuickFilter('resolved')" id="rep-pill-resolved" class="rep-quick-pill px-3 py-1 rounded-lg bg-[#f3f4f6] text-[#4b5563] font-medium hover:bg-[#eaecf0] transition-all cursor-pointer">
-                        Selesai (<span id="pill-count-resolved">95</span>)
+                        Selesai (<span id="pill-count-resolved">{{ $stats['reports_resolved'] }}</span>)
                     </button>
                 </div>
                 <div class="text-xs text-[#6b7280]">
-                    Menampilkan <strong class="text-[#111827]" id="reports-displayed-count">28</strong> laporan
+                    Menampilkan <strong class="text-[#111827]" id="reports-displayed-count">{{ $stats['reports_total'] }}</strong> laporan
                 </div>
             </div>
 
@@ -703,16 +680,16 @@
             <div class="flex flex-wrap items-center justify-between gap-2.5 pb-3 border-b border-[#f3f4f6]">
                 <div class="flex flex-wrap items-center gap-1.5 text-xs">
                     <button type="button" onclick="setUsersQuickFilter('all')" id="user-pill-all" class="user-quick-pill px-3 py-1 rounded-lg bg-[#1572b8] text-white font-semibold transition-all cursor-pointer shadow-2xs">
-                        Semua Pengguna (<span id="user-pill-count-all">5</span>)
+                        Semua Pengguna (<span id="user-pill-count-all">{{ $stats['users'] }}</span>)
                     </button>
                     <button type="button" onclick="setUsersQuickFilter('admin')" id="user-pill-admin" class="user-quick-pill px-3 py-1 rounded-lg bg-[#f3f4f6] text-[#4b5563] font-medium hover:bg-[#eaecf0] transition-all cursor-pointer">
-                        Administrator (<span id="user-pill-count-admin">2</span>)
+                        Administrator (<span id="user-pill-count-admin">{{ $adminData['users'] ? collect($adminData['users'])->where('role', 'admin')->count() : 0 }}</span>)
                     </button>
                     <button type="button" onclick="setUsersQuickFilter('user')" id="user-pill-user" class="user-quick-pill px-3 py-1 rounded-lg bg-[#f3f4f6] text-[#4b5563] font-medium hover:bg-[#eaecf0] transition-all cursor-pointer">
-                        Civitas Mahasiswa (<span id="user-pill-count-user">3</span>)
+                        Civitas Mahasiswa (<span id="user-pill-count-user">{{ collect($adminData['users'])->where('role', 'user')->count() }}</span>)
                     </button>
                     <button type="button" onclick="setUsersQuickFilter('suspended')" id="user-pill-suspended" class="user-quick-pill px-3 py-1 rounded-lg bg-[#f3f4f6] text-[#4b5563] font-medium hover:bg-[#eaecf0] transition-all cursor-pointer">
-                        Ditangguhkan (<span id="user-pill-count-suspended">1</span>)
+                        Ditangguhkan (<span id="user-pill-count-suspended">{{ $stats['suspended'] }}</span>)
                     </button>
                 </div>
                 <div class="text-xs text-[#6b7280]">
@@ -1002,15 +979,21 @@
 
             <div class="space-y-1">
                 <label for="admin-new-unit" class="font-semibold text-[#111827]">Unit Kerja</label>
-                <input type="text" id="admin-new-unit" placeholder="Pos Satpam Tower Meruya / Biro Kemahasiswaan" class="w-full p-2 bg-white border border-[#eaecf0] rounded-lg text-[#111827] focus:outline-none focus:border-[#1572b8]">
+                <input type="text" id="admin-new-unit" placeholder="Biro Kemahasiswaan / Unit Kerja" class="w-full p-2 bg-white border border-[#eaecf0] rounded-lg text-[#111827] focus:outline-none focus:border-[#1572b8]">
             </div>
 
             <div class="space-y-1">
-                <label for="admin-new-role" class="font-semibold text-[#111827]">Hak Akses</label>
-                <select id="admin-new-role" class="w-full p-2 bg-white border border-[#eaecf0] rounded-lg text-[#111827]">
-                    <option value="admin">Administrator Moderasi</option>
-                    <option value="superadmin">Super Administrator</option>
-                </select>
+                <label class="font-semibold text-[#111827]">Hak Akses</label>
+                <div class="w-full p-2 bg-[#f9fafb] border border-[#eaecf0] rounded-lg text-[#475467]">
+                    Administrator Moderasi
+                </div>
+                <span class="text-[10px] text-[#6b7280] block">Sistem hanya memiliki dua peran: civitas dan administrator.</span>
+            </div>
+
+            <div class="space-y-1">
+                <label for="admin-new-password" class="font-semibold text-[#111827]">Kata Sandi Awal <span class="text-rose-500">*</span></label>
+                <input type="password" id="admin-new-password" required minlength="8" autocomplete="new-password" placeholder="Minimal 8 karakter" class="w-full p-2 bg-white border border-[#eaecf0] rounded-lg text-[#111827] focus:outline-none focus:border-[#1572b8]">
+                <span class="text-[10px] text-[#6b7280] block">Akun langsung aktif & terverifikasi. Minta petugas mengganti kata sandi setelah login.</span>
             </div>
 
             <div class="pt-3 border-t border-[#eaecf0] flex items-center justify-end gap-2">
@@ -1095,7 +1078,7 @@
                 <div class="flex items-start gap-2 pt-2 border-t border-[#eaecf0]">
                     <i data-lucide="shield-alert" class="w-4 h-4 text-amber-600 shrink-0 mt-0.5"></i>
                     <div>
-                        <div class="font-semibold text-[#111827]">Ciri Khusus (Verifikasi Satpam):</div>
+                        <div class="font-semibold text-[#111827]">Ciri Khusus Barang:</div>
                         <div class="text-[#4b5563]" id="modal-rep-features">Terdapat stiker logo kucing di bagian case samping, nomor seri terverifikasi.</div>
                     </div>
                 </div>
@@ -1138,160 +1121,82 @@
        ADMIN DASHBOARD ENGINE & DATA STORE
        =========================================================================== */
 
-    const DEFAULT_ABUSE_REPORTS = [
-        {
-            id: 'ABUSE-2026-001',
-            reporter_name: 'Muhammad Farhan',
-            reporter_nim: '41521010088',
-            target_type: 'report',
-            target_id: 'rep_fake_iphone',
-            target_title: 'iPhone 15 Pro Max Deep Blue',
-            reason_code: 'fake_report',
-            reason_label: 'Laporan Palsu / Spam',
-            severity: 'high',
-            description: 'Foto diambil dari Google Images dan tidak ada barang aslinya.',
-            date: '04 Nov 2026, 14:20 WIB',
-            status: 'pending'
-        },
-        {
-            id: 'ABUSE-2026-002',
-            reporter_name: 'Siti Nurhaliza',
-            reporter_nim: '41521010012',
-            target_type: 'chat',
-            target_id: 'chat_anker_conv',
-            target_title: 'Percakapan Klaim Earphone TWS Anker',
-            reason_code: 'inappropriate_chat',
-            reason_label: 'Pelecehan / Kata Kasar',
-            severity: 'medium',
-            description: 'Pengklaim menggunakan kata-kata kasar dan mengancam saat penemu menanyakan detail nomor seri casing.',
-            date: '04 Nov 2026, 09:15 WIB',
-            status: 'pending'
-        },
-        {
-            id: 'ABUSE-2026-003',
-            reporter_name: 'Dwi Prasetyo',
-            reporter_nim: '41521010034',
-            target_type: 'user',
-            target_id: '41521010099',
-            target_title: 'Akun Civitas: Bagus Triyanto (41521010099)',
-            reason_code: 'fraud_claim',
-            reason_label: 'Klaim Fiktif Berulang',
-            severity: 'high',
-            description: 'Mengajukan klaim serah terima pada 5 laporan barang temuan berbeda dalam rentang waktu 2 jam.',
-            date: '03 Nov 2026, 19:40 WIB',
-            status: 'pending'
+    /* ===========================================================================
+       DATA DASHBOARD — dikirim server dari database (AdminDashboardController).
+       Tidak ada lagi data contoh / localStorage.
+       =========================================================================== */
+
+    const ADMIN_DATA = @json($adminData);
+
+    // Salinan di memori supaya UI langsung berubah setelah aksi admin,
+    // tanpa menulis apa pun ke localStorage. Sumber kebenaran tetap server.
+    let ADMIN_ABUSE = [...ADMIN_DATA.abuseReports];
+    let ADMIN_USERS = [...ADMIN_DATA.users];
+    let ADMIN_AUDIT = [...ADMIN_DATA.auditLogs];
+    let ADMIN_CATEGORIES = [...ADMIN_DATA.categories];
+    let ADMIN_REPORTS = [...ADMIN_DATA.reports];
+
+    function getAdminAbuseReports() { return ADMIN_ABUSE; }
+    function saveAdminAbuseReports(data) { ADMIN_ABUSE = data; }
+
+    function getAdminUsers() { return ADMIN_USERS; }
+    function saveAdminUsers(data) { ADMIN_USERS = data; }
+
+    function getAdminAuditLogs() { return ADMIN_AUDIT; }
+    function saveAdminAuditLogs(data) { ADMIN_AUDIT = data; }
+
+    function getAdminCategories() { return ADMIN_CATEGORIES; }
+
+    function getAllReportsCatalog() { return ADMIN_REPORTS; }
+    function saveAdminReportsCatalog(data) { ADMIN_REPORTS = data; }
+
+    /* ===========================================================================
+       JEMBATAN KE SERVER
+       Semua tindakan moderasi dikirim ke controller lalu halaman dimuat ulang,
+       sehingga tampilan selalu mencerminkan isi database (bukan state browser).
+       =========================================================================== */
+
+    const ADMIN_CSRF = '{{ csrf_token() }}';
+    const ADMIN_ACTIVE_TAB = @json($activeTab ?? 'overview');
+
+    async function adminApi(url, method, body) {
+        const response = await fetch(url, {
+            method: method || 'POST',
+            credentials: 'same-origin',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': ADMIN_CSRF,
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: body ? JSON.stringify(body) : undefined
+        });
+
+        let payload = null;
+        try { payload = await response.json(); } catch (e) { /* respons tanpa JSON */ }
+
+        if (!response.ok || (payload && payload.success === false)) {
+            let message = (payload && payload.message) || `Permintaan gagal (HTTP ${response.status}).`;
+            if (payload && payload.errors) {
+                const first = Object.values(payload.errors)[0];
+                if (Array.isArray(first) && first.length) message = first[0];
+            }
+            throw new Error(message);
         }
-    ];
 
-    const DEFAULT_ADMIN_USERS = [
-        { id: 'u_fauzi', name: 'Ahmad Fauzi', nim: '41521010045', faculty: 'Fakultas Ilmu Komputer', prodi: 'S1 Teknik Informatika', email: '41521010045@student.mercubuana.ac.id', role: 'user', status: 'active' },
-        { id: 'u_admin_biro', name: 'Biro Kemahasiswaan & Admin UMB', nim: 'NIK-UMB-8821', faculty: 'Biro Kemahasiswaan', prodi: 'Staf Administrasi', email: 'admin.lostfound@mercubuana.ac.id', role: 'admin', status: 'active' },
-        { id: 'u_admin_zidan', name: 'Zidan Maulana (Admin Pengembang)', nim: 'NIK-DEV-001', faculty: 'Pengembang Platform', prodi: 'IT Campus Center', email: 'zidan.personal@gmail.com', role: 'admin', status: 'active' },
-        { id: 'u_bagus', name: 'Bagus Triyanto', nim: '41521010099', faculty: 'Fakultas Teknik', prodi: 'S1 Teknik Sipil', email: '41521010099@student.mercubuana.ac.id', role: 'user', status: 'suspended' },
-        { id: 'u_siti', name: 'Siti Nurhaliza', nim: '41521010012', faculty: 'Fakultas Desain & Seni Kreatif', prodi: 'S1 Desain Komunikasi Visual', email: '41521010012@student.mercubuana.ac.id', role: 'user', status: 'active' }
-    ];
-
-    const DEFAULT_AUDIT_LOGS = [
-        { id: 'AUD-901', timestamp: '04 Nov 2026, 15:10 WIB', admin_name: 'Biro Kemahasiswaan', admin_email: 'admin.lostfound@mercubuana.ac.id', action_type: 'suspend_user', action_label: 'Penangguhan Akun', target: 'Bagus Triyanto (41521010099)', reason: 'Terbukti melakukan klaim serah terima fiktif secara massal.', impact: 'Akun status suspended (DEC-026).' },
-        { id: 'AUD-902', timestamp: '03 Nov 2026, 11:25 WIB', admin_name: 'Zidan Maulana', admin_email: 'zidan.personal@gmail.com', action_type: 'hide_report', action_label: 'Sembunyikan Laporan', target: 'Laporan #rep_spam_99', reason: 'Laporan mengandung tautan mencurigakan.', impact: 'Postingan disembunyikan.' },
-        { id: 'AUD-903', timestamp: '02 Nov 2026, 09:00 WIB', admin_name: 'Biro Kemahasiswaan', admin_email: 'admin.lostfound@mercubuana.ac.id', action_type: 'warn_user', action_label: 'Peringatan Formal', target: 'Rian Pratama (41521010022)', reason: 'Bahasa chat tidak sopan pada negosiasi lokasi serah terima.', impact: 'Peringatan dikirim.' }
-    ];
-
-    const DEFAULT_CATEGORIES = [
-        { id: 'cat_electronics', name: 'Elektronik & Gadget', icon: 'smartphone', count: 51, desc: 'Smartphone, laptop, earphone, charger, kalkulator ilmiah' },
-        { id: 'cat_docs', name: 'Dokumen & KTM', icon: 'id-card', count: 34, desc: 'KTM, SIM, KTP, STNK, buku catatan kuliah' },
-        { id: 'cat_bags', name: 'Tas & Dompet', icon: 'briefcase', count: 22, desc: 'Ransel laptop, tote bag, dompet kulit, pouch kosmetik' },
-        { id: 'cat_accessories', name: 'Aksesoris & Pakaian', icon: 'watch', count: 18, desc: 'Jam tangan, jaket hoodie, kacamata minus/silinder, topi' }
-    ];
-
-    function getAdminAbuseReports() {
-        try {
-            const raw = localStorage.getItem('findumb_admin_abuse_reports');
-            if (raw) return JSON.parse(raw);
-        } catch(e) {}
-        saveAdminAbuseReports(DEFAULT_ABUSE_REPORTS);
-        return DEFAULT_ABUSE_REPORTS;
+        return payload;
     }
 
-    function saveAdminAbuseReports(data) {
-        try { localStorage.setItem('findumb_admin_abuse_reports', JSON.stringify(data)); } catch(e) {}
+    // Setelah aksi berhasil: tampilkan toast, ingat tab aktif, lalu muat ulang
+    // supaya angka, tabel, dan log audit diambil lagi dari server.
+    function adminCommitDone(message, tabId) {
+        showAdminToast(message);
+        try { sessionStorage.setItem('findumb_admin_tab', tabId || 'overview'); } catch (e) {}
+        setTimeout(() => window.location.reload(), 750);
     }
 
-    function getAdminUsers() {
-        try {
-            const raw = localStorage.getItem('findumb_admin_users');
-            if (raw) return JSON.parse(raw);
-        } catch(e) {}
-        saveAdminUsers(DEFAULT_ADMIN_USERS);
-        return DEFAULT_ADMIN_USERS;
-    }
-
-    function saveAdminUsers(data) {
-        try { localStorage.setItem('findumb_admin_users', JSON.stringify(data)); } catch(e) {}
-    }
-
-    function getAdminAuditLogs() {
-        try {
-            const raw = localStorage.getItem('findumb_admin_audit_logs');
-            if (raw) return JSON.parse(raw);
-        } catch(e) {}
-        saveAdminAuditLogs(DEFAULT_AUDIT_LOGS);
-        return DEFAULT_AUDIT_LOGS;
-    }
-
-    function saveAdminAuditLogs(data) {
-        try { localStorage.setItem('findumb_admin_audit_logs', JSON.stringify(data)); } catch(e) {}
-    }
-
-    const DEFAULT_REPORTS_CATALOG = [
-        // 19 Barang Temuan (12 Open, 7 In Handover)
-        { id: '1', title: 'Earphone TWS Anker Soundcore R50i', type: 'found', reporter: 'Siti Nurhaliza (41521010012)', location: 'Kampus Meruya • Perpustakaan Lt. 2', date: '18 Okt 2026', status: 'in_handover' },
-        { id: '2', title: 'Tas Laptop Lenovo ThinkPad Hitam', type: 'found', reporter: 'Pos Satpam Tower', location: 'Kampus Meruya • Pos Satpam Lt. 1', date: '19 Jan 2026', status: 'open' },
-        { id: '3', title: 'Jaket Hoodie Hitam Uniqlo Airism', type: 'found', reporter: 'Petugas Lab Komputer', location: 'Kampus Meruya • Lab Fasilkom Lt. 3', date: '12 Jan 2026', status: 'open' },
-        { id: '4', title: 'KTM & Dompet Kulit Cokelat UMB', type: 'found', reporter: 'Dwi Prasetyo (41521010034)', location: 'Kampus Meruya • Kantin Blok D', date: '22 Okt 2026', status: 'open' },
-        { id: '5', title: 'Flashdisk SanDisk Ultra Flair 64GB', type: 'found', reporter: 'Staf Lab Jaringan', location: 'Kampus Meruya • Lab Fasilkom Lt. 2', date: '25 Okt 2026', status: 'open' },
-        { id: '6', title: 'Tumbler Corkcicle Classic 475ml Forest Green', type: 'found', reporter: 'Petugas Kebersihan Kampus', location: 'Kampus Meruya • Gazebo Rektorat', date: '26 Okt 2026', status: 'in_handover' },
-        { id: '7', title: 'Kacamata Minus Titanium Frame Hitam', type: 'found', reporter: 'Rina Anggraini (41621010015)', location: 'Kampus Meruya • Gedung B Ruang B-201', date: '27 Okt 2026', status: 'open' },
-        { id: '8', title: 'Helm KYT TT Course Motif Putih', type: 'found', reporter: 'Petugas Parkir Motor', location: 'Kampus Meruya • Parkir Barat Lt. 1', date: '28 Okt 2026', status: 'in_handover' },
-        { id: '9', title: 'Charger MacBook Pro 67W USB-C', type: 'found', reporter: 'Biro Perlengkapan UMB', location: 'Kampus Meruya • Gedung Tower Lt. 3', date: '29 Okt 2026', status: 'open' },
-        { id: '10', title: 'Kunci Motor Honda Vario 160 Hitam', type: 'found', reporter: 'Petugas Keamanan Parkir', location: 'Kampus Meruya • Parkir Gedung B', date: '30 Okt 2026', status: 'open' },
-        { id: '11', title: 'Payung Lipat Otomatis Navy Blue', type: 'found', reporter: 'Resepsionis Gedung Tower', location: 'Kampus Meruya • Lobi Utama Tower', date: '31 Okt 2026', status: 'open' },
-        { id: '12', title: 'Dompet Kartu Cardholder E-Money Mandiri', type: 'found', reporter: 'Bayu Wicaksono (41121010055)', location: 'Kampus Meruya • Halte Bus UMB', date: '01 Nov 2026', status: 'in_handover' },
-        { id: '13', title: 'Mouse Wireless Logitech Silent M331', type: 'found', reporter: 'Staf TU Fakultas Teknik', location: 'Kampus Meruya • Ruang Sidang FT Lt. 2', date: '01 Nov 2026', status: 'open' },
-        { id: '14', title: 'Buku Catatan Kalkulus II & Binder B5', type: 'found', reporter: 'Perpustakaan UMB', location: 'Kampus Meruya • Perpustakaan Lt. 1', date: '02 Nov 2026', status: 'open' },
-        { id: '15', title: 'Kalkulator Ilmiah Casio FX-991EX', type: 'found', reporter: 'Lab Teknik Sipil', location: 'Kampus Meruya • Gedung E Lt. 2', date: '02 Nov 2026', status: 'in_handover' },
-        { id: '16', title: 'Jam Tangan Alexandre Christie Rantai Wanita', type: 'found', reporter: 'Cleaning Service Tower', location: 'Kampus Meruya • Toilet Tower Lt. 4', date: '03 Nov 2026', status: 'in_handover' },
-        { id: '17', title: 'Powerbank Anker 20.000mAh Dual Port Hitam', type: 'found', reporter: 'Staf BEM Fasilkom', location: 'Kampus Meruya • Ruang BEM Gedung C', date: '03 Nov 2026', status: 'open' },
-        { id: '18', title: 'STNK Motor Honda Beat B 3921 KRF', type: 'found', reporter: 'Pos Satpam Pintu 2', location: 'Kampus Meruya • Pos Pintu Gerbang', date: '04 Nov 2026', status: 'in_handover' },
-        { id: '19', title: 'Pouch Kosmetik & Kunci Loker FDSK', type: 'found', reporter: 'Nadia Putri (41821010008)', location: 'Kampus Meruya • Koridor Gedung D Lt. 1', date: '04 Nov 2026', status: 'open' },
-
-        // 9 Barang Hilang Aktif (6 Open, 3 In Handover)
-        { id: '20', title: 'Samsung Galaxy A13 (SM-A135F) Biru Muda', type: 'lost', reporter: 'Ahmad Fauzi (41521010045)', location: 'Kampus Meruya • Tower Lt. 7', date: '20 Jun 2026', status: 'open' },
-        { id: '21', title: 'Kunci Motor Yamaha Aerox 155 Remote', type: 'lost', reporter: 'Muhammad Farhan (41521010088)', location: 'Kampus Meruya • Parkir Barat', date: '19 Jan 2026', status: 'open' },
-        { id: '22', title: 'Apple AirPods Pro Gen 2 & Case Putih', type: 'lost', reporter: 'Kevin Sanjaya (41521010067)', location: 'Kampus Meruya • Lapangan Futsal', date: '24 Okt 2026', status: 'in_handover' },
-        { id: '23', title: 'Jam Tangan Casio G-Shock GA-2100 All Black', type: 'lost', reporter: 'Rizky Ramadhan (41621010090)', location: 'Kampus Meruya • Masjid Manarul Ilmi', date: '27 Okt 2026', status: 'open' },
-        { id: '24', title: 'iPad Air 5 64GB Space Grey + Apple Pencil 2', type: 'lost', reporter: 'Clarissa Amanda (41921010014)', location: 'Kampus Meruya • Food Court Atrium', date: '28 Okt 2026', status: 'in_handover' },
-        { id: '25', title: 'Harddisk Eksternal WD Elements 1TB Hitam', type: 'lost', reporter: 'Ilham Hidayat (41521010052)', location: 'Kampus Meruya • Co-Working Space Lt. 2', date: '30 Okt 2026', status: 'open' },
-        { id: '26', title: 'Kacamata RayBan Aviator Frame Silver', type: 'lost', reporter: 'Dimas Aditya (41221010031)', location: 'Kampus Menteng • Ruang M-301', date: '01 Nov 2026', status: 'open' },
-        { id: '27', title: 'Dompet Lipat Braun Buffel Kulit Hitam', type: 'lost', reporter: 'Fajar Nugraha (41121010048)', location: 'Kampus Meruya • Kantin Karyawan', date: '02 Nov 2026', status: 'in_handover' },
-        { id: '28', title: 'Jaket Parka Erigo Krem Size L', type: 'lost', reporter: 'Anisa Maharani (41821010029)', location: 'Kampus Meruya • Plaza Rektorat', date: '03 Nov 2026', status: 'open' },
-
-        // Non-Aktif (1 Resolved, 1 Hidden)
-        { id: '29', title: 'Cincin Emas Berlian Solitaire', type: 'lost', reporter: 'Ahmad Fauzi (41521010045)', location: 'Kampus Meruya • Parkir Barat', date: '15 Jan 2026', status: 'resolved' },
-        { id: 'rep_fake_iphone', title: 'iPhone 15 Pro Max Deep Blue', type: 'lost', reporter: 'Akun Palsu (41521010000)', location: 'Kampus Menteng', date: '04 Nov 2026', status: 'hidden' }
-    ];
-
-    function getAllReportsCatalog() {
-        try {
-            const raw = localStorage.getItem('findumb_admin_reports');
-            if (raw) return JSON.parse(raw);
-        } catch(e) {}
-        saveAdminReportsCatalog(DEFAULT_REPORTS_CATALOG);
-        return DEFAULT_REPORTS_CATALOG;
-    }
-
-    function saveAdminReportsCatalog(data) {
-        try { localStorage.setItem('findumb_admin_reports', JSON.stringify(data)); } catch(e) {}
+    function adminFail(error) {
+        showAdminToast(error && error.message ? error.message : 'Tindakan gagal diproses.');
     }
 
     /* ===========================================================================
@@ -1346,14 +1251,14 @@
         const resolvedReports = reports.filter(r => r.status === 'resolved');
 
         document.getElementById('stat-active-reports').textContent = activeReports.length;
-        document.getElementById('stat-resolved-reports').textContent = resolvedReports.length + 94;
+        document.getElementById('stat-resolved-reports').textContent = resolvedReports.length;
         document.getElementById('stat-pending-abuse').textContent = pendingAbuse.length;
         document.getElementById('stat-suspended-users').textContent = suspendedUsers.length;
 
         const sidebarBadge = document.getElementById('sidebar-abuse-badge');
         if (sidebarBadge) sidebarBadge.textContent = pendingAbuse.length;
         const reportsCount = document.getElementById('sidebar-reports-count');
-        if (reportsCount) reportsCount.textContent = activeReports.length;
+        if (reportsCount) reportsCount.textContent = reports.length;
         const notifDot = document.getElementById('header-notif-indicator');
         if (notifDot) notifDot.style.display = pendingAbuse.length > 0 ? 'block' : 'none';
     }
@@ -1595,7 +1500,7 @@
         document.getElementById('modal-rep-date').textContent = item.date;
         document.getElementById('modal-rep-location').textContent = item.location;
         document.getElementById('modal-rep-reporter').textContent = item.reporter;
-        document.getElementById('modal-rep-features').textContent = item.features || 'Ciri khusus telah diverifikasi oleh petugas pos satpam.';
+        document.getElementById('modal-rep-features').textContent = item.features || 'Ciri khusus barang belum diisi pelapor.';
 
         const typeBadge = document.getElementById('modal-rep-badge-type');
         if (typeBadge) {
@@ -1630,32 +1535,45 @@
         currentSelectedReportId = null;
     }
 
-    function updateReportStatusDirect(newStatus) {
+    async function updateReportStatusDirect(newStatus) {
         if (!currentSelectedReportId) return;
-        const reports = getAllReportsCatalog();
-        const item = reports.find(r => String(r.id) === String(currentSelectedReportId));
-        if (item) {
-            item.status = newStatus;
-            saveAdminReportsCatalog(reports);
-            showAdminToast(`Status laporan #${item.id} berhasil diubah ke ${newStatus.toUpperCase()}.`);
+
+        const reason = newStatus === 'hidden'
+            ? 'Laporan disembunyikan melalui panel moderasi admin.'
+            : 'Laporan ditampilkan kembali melalui panel moderasi admin.';
+
+        try {
+            await adminApi(`/api/v1/admin/reports/${currentSelectedReportId}/status`, 'PATCH', {
+                status: newStatus,
+                reason: reason
+            });
             closeReportDetailModal();
-            renderReportsManagementTable();
-            refreshDashboardMetrics();
+            adminCommitDone(`Status laporan #${currentSelectedReportId} diubah ke ${newStatus.toUpperCase()}.`, 'reports');
+        } catch (error) {
+            adminFail(error);
         }
     }
 
-    function toggleHideActiveReport() {
+    async function toggleHideActiveReport() {
         if (!currentSelectedReportId) return;
-        const reports = getAllReportsCatalog();
-        const item = reports.find(r => String(r.id) === String(currentSelectedReportId));
-        if (item) {
-            const nextStatus = item.status === 'hidden' ? 'open' : 'hidden';
-            item.status = nextStatus;
-            saveAdminReportsCatalog(reports);
-            showAdminToast(nextStatus === 'hidden' ? 'Laporan disembunyikan dari publik.' : 'Laporan dipulihkan kembali ke publik.');
+
+        const item = getAllReportsCatalog().find(r => String(r.id) === String(currentSelectedReportId));
+        const nextStatus = item && item.status === 'hidden' ? 'open' : 'hidden';
+
+        try {
+            await adminApi(`/api/v1/admin/reports/${currentSelectedReportId}/status`, 'PATCH', {
+                status: nextStatus,
+                reason: nextStatus === 'hidden'
+                    ? 'Laporan disembunyikan melalui panel moderasi admin.'
+                    : 'Laporan dipulihkan ke katalog publik.'
+            });
             closeReportDetailModal();
-            renderReportsManagementTable();
-            refreshDashboardMetrics();
+            adminCommitDone(
+                nextStatus === 'hidden' ? 'Laporan disembunyikan dari publik.' : 'Laporan dipulihkan kembali ke publik.',
+                'reports'
+            );
+        } catch (error) {
+            adminFail(error);
         }
     }
 
@@ -2041,7 +1959,7 @@
         const container = document.getElementById('categories-grid-container');
         if (!container) return;
 
-        container.innerHTML = DEFAULT_CATEGORIES.map(cat => `
+        container.innerHTML = getAdminCategories().map(cat => `
             <div class="p-3.5 rounded-xl border border-[#eaecf0] bg-white flex flex-col justify-between">
                 <div>
                     <div class="font-medium text-[#111827] text-xs">${escapeHtml(cat.name)}</div>
@@ -2096,138 +2014,106 @@
         document.getElementById('modal-moderation-action').classList.add('hidden');
     }
 
-    function executeModerationCommit(e) {
+    async function executeModerationCommit(e) {
         e.preventDefault();
         const actionType = document.getElementById('mod-action-type').value;
         const targetType = document.getElementById('mod-target-type').value;
         const targetId = document.getElementById('mod-target-id').value;
-        const targetSummary = document.getElementById('mod-target-summary').textContent;
         const reason = document.getElementById('mod-reason-input').value.trim();
 
         if (!reason) { alert('Alasan tindakan wajib diisi.'); return; }
 
-        const now = new Date().toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' }) + ' WIB';
-        const adminName = document.getElementById('admin-user-display-name')?.textContent || 'Biro Kemahasiswaan';
-        const adminEmail = document.getElementById('admin-user-display-email')?.textContent || 'admin.lostfound@mercubuana.ac.id';
+        try {
+            if (actionType === 'hide_report') {
+                await adminApi(`/api/v1/admin/reports/${targetId}/status`, 'PATCH', {
+                    status: 'hidden',
+                    reason: reason
+                });
+            } else if (actionType === 'suspend_user') {
+                const user = getAdminUsers().find(u => String(u.id) === String(targetId) || String(u.nim) === String(targetId));
+                const userId = user ? user.id : targetId;
 
-        if (actionType === 'hide_report') {
-            let abuseReports = getAdminAbuseReports();
-            abuseReports.forEach(a => { if (a.target_id === targetId) a.status = 'resolved'; });
-            saveAdminAbuseReports(abuseReports);
-
-            let reports = getAllReportsCatalog();
-            const rep = reports.find(r => String(r.id) === String(targetId));
-            if (rep) {
-                rep.status = 'hidden';
-                saveAdminReportsCatalog(reports);
-            }
-        } else if (actionType === 'suspend_user') {
-            let users = getAdminUsers();
-            users.forEach(u => { if (u.id === targetId || u.nim === targetId) u.status = 'suspended'; });
-            saveAdminUsers(users);
-
-            let abuseReports = getAdminAbuseReports();
-            abuseReports.forEach(a => { if (a.reporter_nim === targetId || a.target_id === targetId) a.status = 'resolved'; });
-            saveAdminAbuseReports(abuseReports);
-
-            // DEC-026: Sembunyikan seluruh laporan aktif milik pengguna yang ditangguhkan
-            let reports = getAllReportsCatalog();
-            reports.forEach(r => {
-                if (r.reporter && r.reporter.includes(targetId)) {
-                    r.status = 'hidden';
+                await adminApi(`/api/v1/admin/users/${userId}/status`, 'PATCH', {
+                    status: 'suspended',
+                    reason: reason
+                });
+            } else if (actionType === 'warn_user') {
+                const user = getAdminUsers().find(u => String(u.id) === String(targetId) || String(u.nim) === String(targetId));
+                const userId = user ? user.id : targetId;
+                const response = await fetch(`/admin/users/${userId}/warn`, {
+                    method: 'POST',
+                    credentials: 'same-origin',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': ADMIN_CSRF,
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: JSON.stringify({ reason: reason })
+                });
+                if (!response.ok) {
+                    throw new Error('Peringatan gagal dikirim.');
                 }
-            });
-            saveAdminReportsCatalog(reports);
+            } else {
+                throw new Error('Jenis tindakan belum didukung.');
+            }
+
+            closeModerationActionModal();
+            adminCommitDone('Tindakan moderasi tersimpan di server.', targetType === 'user' ? 'users' : 'moderation');
+        } catch (error) {
+            adminFail(error);
         }
-
-        const newLog = {
-            id: `AUD-${Date.now().toString().slice(-4)}`,
-            timestamp: now,
-            admin_name: adminName,
-            admin_email: adminEmail,
-            action_type: actionType,
-            action_label: actionType === 'hide_report' ? 'Sembunyikan Laporan' : (actionType === 'suspend_user' ? 'Penangguhan Akun' : 'Peringatan Formal'),
-            target: targetSummary,
-            reason: reason,
-            impact: actionType === 'suspend_user' ? 'Klaim dibatalkan, hak klaim diblokir (DEC-026).' : 'Konten disembunyikan dari publik.'
-        };
-
-        const logs = getAdminAuditLogs();
-        logs.unshift(newLog);
-        saveAdminAuditLogs(logs);
-
-        closeModerationActionModal();
-        showAdminToast('Tindakan moderasi berhasil dieksekusi.');
-        refreshDashboardMetrics();
-        renderOverviewDashboard();
-        renderAbuseReportsTable();
-        renderReportsManagementTable();
-        renderUsersTable();
-        renderAuditTable();
     }
 
-    function dismissAbuseReportDirect(abuseId) {
+    async function dismissAbuseReportDirect(abuseId) {
         if (!confirm('Abaikan aduan ini?')) return;
-        let abuseReports = getAdminAbuseReports();
-        const item = abuseReports.find(a => a.id === abuseId);
-        if (item) {
-            item.status = 'dismissed';
-            saveAdminAbuseReports(abuseReports);
 
-            const now = new Date().toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' }) + ' WIB';
-            const adminName = document.getElementById('admin-user-display-name')?.textContent || 'Biro Kemahasiswaan';
-            const adminEmail = document.getElementById('admin-user-display-email')?.textContent || 'admin.lostfound@mercubuana.ac.id';
-            const logs = getAdminAuditLogs();
-            logs.unshift({
-                id: `AUD-${Date.now().toString().slice(-4)}`,
-                timestamp: now,
-                admin_name: adminName,
-                admin_email: adminEmail,
-                action_type: 'dismiss_abuse',
-                action_label: 'Abaikan Aduan',
-                target: `${item.id}: ${item.target_title}`,
-                reason: 'Aduan ditinjau dan dinyatakan tidak memenuhi unsur pelanggaran.',
-                impact: 'Aduan ditutup tanpa sanksi (FR-11).'
+        const item = getAdminAbuseReports().find(a => a.id === abuseId);
+        if (!item) return;
+
+        const abuseId_ = item.raw_id || String(abuseId).replace(/\D/g, '');
+
+        try {
+            const response = await fetch(`/admin/abuse-reports/${abuseId_}/resolve`, {
+                method: 'POST',
+                credentials: 'same-origin',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': ADMIN_CSRF,
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: JSON.stringify({
+                    decision: 'dismissed',
+                    reason: 'Aduan ditinjau dan dinyatakan tidak memenuhi unsur pelanggaran.'
+                })
             });
-            saveAdminAuditLogs(logs);
 
-            showAdminToast('Aduan telah diabaikan.');
-            refreshDashboardMetrics();
-            renderOverviewDashboard();
-            renderAbuseReportsTable();
-            renderAuditTable();
+            if (!response.ok) {
+                throw new Error('Aduan gagal ditutup.');
+            }
+
+            adminCommitDone('Aduan telah diabaikan.', 'moderation');
+        } catch (error) {
+            adminFail(error);
         }
     }
 
-    function reactivateUserDirect(userId, userName) {
+    async function reactivateUserDirect(userId, userName) {
         if (!confirm(`Aktifkan kembali akun ${userName}?`)) return;
-        let users = getAdminUsers();
-        const user = users.find(u => String(u.id) === String(userId) || String(u.nim) === String(userId));
-        if (user) {
-            user.status = 'active';
-            saveAdminUsers(users);
 
-            const now = new Date().toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' }) + ' WIB';
-            const adminName = document.getElementById('admin-user-display-name')?.textContent || 'Biro Kemahasiswaan';
-            const adminEmail = document.getElementById('admin-user-display-email')?.textContent || 'admin.lostfound@mercubuana.ac.id';
-            const logs = getAdminAuditLogs();
-            logs.unshift({
-                id: `AUD-${Date.now().toString().slice(-4)}`,
-                timestamp: now,
-                admin_name: adminName,
-                admin_email: adminEmail,
-                action_type: 'reactivate_user',
-                action_label: 'Reaktivasi Akun',
-                target: `${userName} (${user.nim || userId})`,
-                reason: 'Akun dipulihkan setelah peninjauan etika selesai.',
-                impact: 'Status akun aktif kembali (DEC-026).'
+        const user = getAdminUsers().find(u => String(u.id) === String(userId) || String(u.nim) === String(userId));
+        const targetId = user ? user.id : userId;
+
+        try {
+            await adminApi(`/api/v1/admin/users/${targetId}/status`, 'PATCH', {
+                status: 'active',
+                reason: 'Akun dipulihkan setelah peninjauan etika selesai.'
             });
-            saveAdminAuditLogs(logs);
 
-            showAdminToast(`Akun ${userName} berhasil diaktifkan kembali.`);
-            refreshDashboardMetrics();
-            renderUsersTable();
-            renderAuditTable();
+            adminCommitDone(`Akun ${userName} berhasil diaktifkan kembali.`, 'users');
+        } catch (error) {
+            adminFail(error);
         }
     }
 
@@ -2269,53 +2155,55 @@
         document.getElementById('modal-create-admin').classList.add('hidden');
     }
 
-    function handleCreateAdminSubmit(e) {
+    async function handleCreateAdminSubmit(e) {
         e.preventDefault();
         const name = document.getElementById('admin-new-name').value.trim();
         const email = document.getElementById('admin-new-email').value.trim();
-        const unit = document.getElementById('admin-new-unit').value.trim() || 'Staf Operasional Admin';
-        const role = document.getElementById('admin-new-role').value;
+        const unit = document.getElementById('admin-new-unit').value.trim();
+        const password = document.getElementById('admin-new-password').value;
 
         if (!name || !email) return;
 
-        const users = getAdminUsers();
-        users.push({
-            id: `adm_${Date.now()}`,
-            name: name,
-            nim: `ADMIN-${Math.floor(1000 + Math.random() * 9000)}`,
-            faculty: unit,
-            prodi: role === 'superadmin' ? 'Super Administrator' : 'Administrator Moderasi',
-            email: email,
-            role: 'admin',
-            status: 'active'
-        });
-        saveAdminUsers(users);
+        if (!password || password.length < 8) {
+            showAdminToast('Kata sandi minimal 8 karakter.');
+            return;
+        }
 
-        const now = new Date().toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' }) + ' WIB';
-        const adminName = document.getElementById('admin-user-display-name')?.textContent || 'Biro Kemahasiswaan';
-        const adminEmail = document.getElementById('admin-user-display-email')?.textContent || 'admin.lostfound@mercubuana.ac.id';
-        const logs = getAdminAuditLogs();
-        logs.unshift({
-            id: `AUD-${Date.now().toString().slice(-4)}`,
-            timestamp: now,
-            admin_name: adminName,
-            admin_email: adminEmail,
-            action_type: 'create_admin',
-            action_label: 'Penambahan Admin',
-            target: `${name} (${email})`,
-            reason: `Pemberian hak akses ${role === 'superadmin' ? 'Super Administrator' : 'Administrator Moderasi'} untuk unit ${unit}.`,
-            impact: 'Akun administrator baru aktif di sistem.'
-        });
-        saveAdminAuditLogs(logs);
+        try {
+            const response = await fetch('{{ route('admin.users.store') }}', {
+                method: 'POST',
+                credentials: 'same-origin',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': ADMIN_CSRF,
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: JSON.stringify({ name: name, email: email, unit: unit, password: password })
+            });
 
-        const formEl = document.getElementById('form-create-admin');
-        if (formEl) formEl.reset();
+            let payload = null;
+            try { payload = await response.json(); } catch (err) { /* redirect */ }
 
-        closeCreateAdminModal();
-        showAdminToast(`Akun admin ${name} berhasil didaftarkan!`);
-        refreshDashboardMetrics();
-        renderUsersTable();
-        renderAuditTable();
+            if (!response.ok) {
+                let message = 'Akun admin gagal dibuat.';
+                if (payload && payload.errors) {
+                    const first = Object.values(payload.errors)[0];
+                    if (Array.isArray(first) && first.length) message = first[0];
+                } else if (payload && payload.message) {
+                    message = payload.message;
+                }
+                throw new Error(message);
+            }
+
+            const formEl = document.getElementById('form-create-admin');
+            if (formEl) formEl.reset();
+
+            closeCreateAdminModal();
+            adminCommitDone(`Akun admin ${name} berhasil dibuat.`, 'users');
+        } catch (error) {
+            adminFail(error);
+        }
     }
 
     function openAdminSettingsModal() {
@@ -2405,41 +2293,7 @@
        REAL INTERACTIVE TREND CHART (CHART.JS SPLINE + CROSSHAIR & HOVER TOOLTIP)
        =========================================================================== */
 
-    const CHART_CONFIG = {
-        '7d': {
-            labels: ['Sen, 28 Okt', 'Sel, 29 Okt', 'Rab, 30 Okt', 'Kam, 31 Okt', 'Jum, 01 Nov', 'Sab, 02 Nov', 'Min, 03 Nov'],
-            headline: '28 Laporan',
-            trendText: '+16.5% vs minggu lalu',
-            high: '8',
-            low: '2',
-            rate: '82.1%',
-            temuan: [3, 4, 7, 5, 8, 6, 5],
-            hilang: [1, 2, 2, 1, 3, 2, 1],
-            keyPoints: [0, 4]
-        },
-        '30d': {
-            labels: ['01 Okt', '04 Okt', '07 Okt', '10 Okt', '13 Okt', '16 Okt', '19 Okt', '22 Okt', '25 Okt', '28 Okt', '31 Okt', '03 Nov'],
-            headline: '123 Laporan',
-            trendText: '+14.2% 30 hari',
-            high: '42',
-            low: '8',
-            rate: '78.3%',
-            temuan: [12, 18, 15, 24, 28, 14, 22, 29, 35, 42, 38, 32],
-            hilang: [4, 5, 3, 6, 7, 4, 5, 6, 8, 9, 7, 5],
-            keyPoints: [0, 5, 9] // Start (12), Dip on 16 Okt (14), Peak on 28 Okt (42) matching Reference!
-        },
-        '90d': {
-            labels: ['Agt M1', 'Agt M2', 'Agt M3', 'Agt M4', 'Sep M1', 'Sep M2', 'Sep M3', 'Sep M4', 'Okt M1', 'Okt M2', 'Okt M3', 'Okt M4'],
-            headline: '348 Laporan',
-            trendText: '+23.8% kuartal ini',
-            high: '54',
-            low: '14',
-            rate: '76.4%',
-            temuan: [18, 22, 25, 20, 28, 34, 30, 39, 44, 48, 54, 46],
-            hilang: [6, 8, 7, 6, 9, 10, 8, 11, 12, 14, 15, 11],
-            keyPoints: [0, 3, 10]
-        }
-    };
+    const CHART_CONFIG = @json($overview['trend']);
 
     let adminTrendChartInstance = null;
     let currentChartRange = '30d';
@@ -2518,6 +2372,16 @@
         }
     }
 
+    // Langkah tick sumbu Y menyesuaikan data. Dengan stepSize tetap 10,
+    // data maksimal 2 akan menempel di garis bawah dan terlihat datar.
+    function chartStepSize(rangeData) {
+        const peak = Math.max(0, ...(rangeData.temuan || []), ...(rangeData.hilang || []));
+        if (peak <= 5) return 1;
+        if (peak <= 20) return 5;
+        if (peak <= 50) return 10;
+        return Math.ceil(peak / 8);
+    }
+
     function renderAdminTrendChart() {
         const canvas = document.getElementById('adminTrendChart');
         if (!canvas) return;
@@ -2551,6 +2415,9 @@
             adminTrendChartInstance.data.datasets[0].data = rangeData.temuan;
             adminTrendChartInstance.data.datasets[0].pointRadius = pointRadii;
             adminTrendChartInstance.data.datasets[1].data = rangeData.hilang;
+            // 90 titik harian perlu label yang lebih sedikit agar tidak bertumpuk.
+            adminTrendChartInstance.options.scales.x.ticks.maxTicksLimit = rangeData.tickLimit || 7;
+            adminTrendChartInstance.options.scales.y.ticks.stepSize = chartStepSize(rangeData);
             adminTrendChartInstance.update();
             return;
         }
@@ -2643,7 +2510,7 @@ Tingkat Temu: ${rate}%`;
                             color: '#9ca3af',
                             maxRotation: 0,
                             autoSkip: true,
-                            maxTicksLimit: 7
+                            maxTicksLimit: rangeData.tickLimit || 7
                         }
                     },
                     y: {
@@ -2655,7 +2522,8 @@ Tingkat Temu: ${rate}%`;
                         ticks: {
                             font: { size: 10, family: 'ui-monospace, monospace' },
                             color: '#9ca3af',
-                            stepSize: 10
+                            precision: 0,
+                            stepSize: chartStepSize(rangeData)
                         }
                     }
                 }
@@ -2665,9 +2533,20 @@ Tingkat Temu: ${rate}%`;
     }
 
     document.addEventListener('DOMContentLoaded', () => {
+        const validTabs = ['overview', 'reports', 'moderation', 'users', 'audit', 'categories'];
         const hash = window.location.hash.replace('#', '');
-        if (hash && ['overview', 'reports', 'moderation', 'users', 'audit', 'categories'].includes(hash)) {
+
+        // Setelah aksi moderasi halaman dimuat ulang; buka lagi tab yang tadi aktif.
+        let savedTab = null;
+        try { savedTab = sessionStorage.getItem('findumb_admin_tab'); } catch (e) {}
+        try { sessionStorage.removeItem('findumb_admin_tab'); } catch (e) {}
+
+        if (hash && validTabs.includes(hash)) {
             switchAdminTab(hash);
+        } else if (savedTab && validTabs.includes(savedTab)) {
+            switchAdminTab(savedTab);
+        } else if (ADMIN_ACTIVE_TAB && validTabs.includes(ADMIN_ACTIVE_TAB)) {
+            switchAdminTab(ADMIN_ACTIVE_TAB);
         } else {
             switchAdminTab('overview');
         }

@@ -2030,9 +2030,11 @@
 
         .desktop-detail-zoom-pill {
             position: absolute;
-            bottom: 12px;
+            /* Kartu putih di bawah narik ke atas 26px, jadi pill harus naik
+               di atas garis itu supaya tidak ketutupan. */
+            bottom: 40px;
             right: 14px;
-            z-index: 4;
+            z-index: 11;
             background: rgba(15, 23, 42, 0.72);
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
@@ -2112,25 +2114,33 @@
 
                 <!-- 2. Komunikasi Cepat (Pesan Masuk & Notifikasi dengan Indikator Merah) -->
                 <div class="sidebar-links-group">
-                    <a href="{{ route('messages') }}" class="sidebar-nav-item {{ request()->is('messages*') ? 'active' : '' }}" title="Pesan Masuk Civitas">
+                    <a href="{{ route('messages') }}" class="sidebar-nav-item {{ request()->is('messages*') ? 'active' : '' }}" title="Pesan Masuk Civitas ({{ $navCounts['messages'] ?? 0 }} percakapan)">
                         <div class="sidebar-item-left">
                             <div class="sidebar-item-icon" style="position: relative;">
                                 <i data-lucide="inbox"></i>
-                                <span class="sidebar-rail-notif-dot" id="sidebar-rail-messages-dot"></span>
+                                @if (($navCounts['messages'] ?? 0) > 0)
+                                    <span class="sidebar-rail-notif-dot"></span>
+                                @endif
                             </div>
                             <span class="sidebar-item-label">Pesan Masuk</span>
                         </div>
-                        <span class="sidebar-badge-counter sidebar-badge-notif" id="sidebar-messages-badge">2</span>
+                        @if (($navCounts['messages'] ?? 0) > 0)
+                            <span class="sidebar-badge-counter sidebar-badge-notif">{{ $navCounts['messages'] }}</span>
+                        @endif
                     </a>
-                    <a href="{{ route('notifications') }}" class="sidebar-nav-item {{ request()->is('notifications*') ? 'active' : '' }}" title="Notifikasi">
+                    <a href="{{ route('notifications') }}" class="sidebar-nav-item {{ request()->is('notifications*') ? 'active' : '' }}" title="Notifikasi ({{ $navCounts['notifications'] ?? 0 }} belum dibaca)">
                         <div class="sidebar-item-left">
                             <div class="sidebar-item-icon" style="position: relative;">
                                 <i data-lucide="bell"></i>
-                                <span class="sidebar-rail-notif-dot" id="sidebar-rail-notif-dot"></span>
+                                @if (($navCounts['notifications'] ?? 0) > 0)
+                                    <span class="sidebar-rail-notif-dot"></span>
+                                @endif
                             </div>
                             <span class="sidebar-item-label">Notifikasi</span>
                         </div>
-                        <span class="sidebar-badge-counter sidebar-badge-notif" id="sidebar-notif-badge">3</span>
+                        @if (($navCounts['notifications'] ?? 0) > 0)
+                            <span class="sidebar-badge-counter sidebar-badge-notif">{{ $navCounts['notifications'] }}</span>
+                        @endif
                     </a>
                 </div>
 
@@ -2237,14 +2247,19 @@
 
                 <!-- 6. Footer User Profile Card -->
                 <div class="sidebar-footer">
-                    <a href="{{ route('profile') }}" class="sidebar-user-card" title="Buka Profil Saya">
+                    <a href="{{ auth()->check() ? route('profile') : route('login') }}" class="sidebar-user-card" title="{{ auth()->check() ? 'Buka Profil Saya' : 'Masuk ke akun' }}">
                         <div class="sidebar-user-left">
                             <div class="sidebar-user-avatar">
                                 <i data-lucide="user"></i>
                             </div>
                             <div class="sidebar-user-info">
-                                <span class="sidebar-user-name">Zidan Maulana</span>
-                                <span class="sidebar-user-role">Civitas Akademika UMB</span>
+                                @auth
+                                    <span class="sidebar-user-name">{{ auth()->user()->name }}</span>
+                                    <span class="sidebar-user-role">{{ auth()->user()->isAdmin() ? 'Administrator Platform' : 'Civitas Akademika UMB' }}</span>
+                                @else
+                                    <span class="sidebar-user-name">Masuk / Daftar</span>
+                                    <span class="sidebar-user-role">Belum masuk</span>
+                                @endauth
                             </div>
                         </div>
                         <i data-lucide="chevrons-up-down" class="sidebar-user-chevrons"></i>
@@ -2795,142 +2810,24 @@
                 });
             }
 
-            // Real-time notification synchronization for role user
-            if (typeof window.syncNotificationBadges === 'function') {
-                window.syncNotificationBadges();
-            }
-        });
-
-        /* ===========================================================================
-           REAL-TIME NOTIFICATION INDICATOR ENGINE (ROLE USER)
-           =========================================================================== */
-        function getStoredUserNotifications() {
-            try {
-                const raw = localStorage.getItem('findumb_notifications');
-                if (raw) {
-                    const parsed = JSON.parse(raw);
-                    if (Array.isArray(parsed) && parsed.length > 0) return parsed;
-                }
-            } catch(e) {}
-            // Default initial notifications (3 unread: id 1, 2, 3)
-            return [
-                { id: 1, read: false },
-                { id: 2, read: false },
-                { id: 3, read: false },
-                { id: 4, read: true },
-                { id: 5, read: true },
-                { id: 6, read: true }
-            ];
-        }
-
-        window.syncNotificationBadges = function(optionalList) {
-            try {
-                const list = optionalList || getStoredUserNotifications();
-                const unreadCount = Array.isArray(list) ? list.filter(n => !n.read).length : 0;
-
-                // 1. Desktop & Mobile Header Bell Dot
-                const headerDot = document.getElementById('header-notif-dot');
-                if (headerDot) {
-                    headerDot.style.setProperty('display', unreadCount > 0 ? 'block' : 'none', 'important');
-                }
-
-                // 2. Sidebar Badge Counter
-                const sidebarBadge = document.getElementById('sidebar-notif-badge');
-                if (sidebarBadge) {
-                    sidebarBadge.textContent = unreadCount > 99 ? '99+' : unreadCount;
-                    sidebarBadge.style.setProperty('display', unreadCount > 0 ? 'inline-flex' : 'none', 'important');
-                }
-
-                // 3. Sidebar Rail Dot (Collapsed Mini-Rail)
-                const railDot = document.getElementById('sidebar-rail-notif-dot');
-                if (railDot) {
-                    railDot.style.setProperty('display', unreadCount > 0 ? 'block' : 'none', 'important');
-                }
-
-                // 4. Notifications Page Header Badge (if on /notifications)
-                const pageBadge = document.getElementById('header-unread-badge');
-                if (pageBadge) {
-                    pageBadge.textContent = unreadCount;
-                    pageBadge.style.setProperty('display', unreadCount > 0 ? 'inline-flex' : 'none', 'important');
-                }
-            } catch (err) {
-                console.error('Error syncing notification badges:', err);
-            }
-        };
-
-        /* ===========================================================================
-           REAL-TIME MESSAGES INDICATOR ENGINE (ROLE USER)
-           =========================================================================== */
-        function getStoredUserUnreadConversations() {
-            try {
-                const raw = localStorage.getItem('findumb_unread_conversations');
-                if (raw !== null) {
-                    const parsed = JSON.parse(raw);
-                    if (Array.isArray(parsed)) return parsed;
-                }
-            } catch(e) {}
-            // Default initial unread conversations: ['ahmad', 'siti'] (Total: 2 unread)
-            return ['ahmad', 'siti'];
-        }
-
-        window.getStoredUserUnreadConversations = getStoredUserUnreadConversations;
-
-        window.syncMessagesBadges = function(optionalList) {
-            try {
-                const list = optionalList || getStoredUserUnreadConversations();
-                const unreadCount = Array.isArray(list) ? list.length : 0;
-
-                // 1. Sidebar Messages Badge
-                const msgBadge = document.getElementById('sidebar-messages-badge');
-                if (msgBadge) {
-                    msgBadge.textContent = unreadCount;
-                    msgBadge.style.setProperty('display', unreadCount > 0 ? 'inline-flex' : 'none', 'important');
-                }
-
-                // 2. Sidebar Rail Messages Dot (Mini-rail when collapsed)
-                const msgRailDot = document.getElementById('sidebar-rail-messages-dot');
-                if (msgRailDot) {
-                    msgRailDot.style.setProperty('display', unreadCount > 0 ? 'block' : 'none', 'important');
-                }
-
-                // 3. Mobile Bottom Navigation Messages Dot
-                const bottomMsgDot = document.getElementById('bottom-nav-messages-dot');
-                if (bottomMsgDot) {
-                    bottomMsgDot.style.setProperty('display', unreadCount > 0 ? 'block' : 'none', 'important');
-                }
-            } catch (err) {
-                console.error('Error syncing messages badges:', err);
-            }
-        };
-
-        // Real-time synchronization listeners across tabs & same-window updates
-        window.addEventListener('storage', (e) => {
-            if (e.key === 'findumb_notifications') {
-                window.syncNotificationBadges();
-            }
-            if (e.key === 'findumb_unread_conversations') {
-                window.syncMessagesBadges();
-            }
-        });
-
-        window.addEventListener('findumb:notif-updated', () => {
-            window.syncNotificationBadges();
-        });
-
-        window.addEventListener('findumb:messages-updated', () => {
-            window.syncMessagesBadges();
-        });
-
-        // Initialize immediately on DOM load
-        document.addEventListener('DOMContentLoaded', () => {
-            if (typeof window.syncNotificationBadges === 'function') {
-                window.syncNotificationBadges();
-            }
-            if (typeof window.syncMessagesBadges === 'function') {
-                window.syncMessagesBadges();
+            // Titik notifikasi ikut hitungan server (bukan cache localStorage).
+            const headerDot = document.getElementById('header-notif-dot');
+            if (headerDot) {
+                const unread = {{ (int) ($navCounts['notifications'] ?? 0) }};
+                headerDot.style.display = unread > 0 ? 'block' : 'none';
             }
         });
     </script>
     @stack('scripts')
+
+    {{-- Jembatan API: menyambungkan antarmuka ke backend (markup/CSS tidak diubah). --}}
+    <script>
+        window.FindUMB_CSRF = '{{ csrf_token() }}';
+        window.FindUMB_USER_ID = {{ auth()->id() ?? 'null' }};
+        window.FindUMB_USER_NAME = @json(auth()->user()?->name);
+        window.FindUMB_USER_ROLE = @json(auth()->user()?->isAdmin() ? 'Administrator Platform' : 'Civitas Akademika UMB');
+        window.FindUMB_CATEGORIES = @json(\App\Models\ItemCategory::cachedSlugMap());
+    </script>
+    <script src="{{ asset('js/findumb-api.js') }}?v={{ filemtime(public_path('js/findumb-api.js')) }}"></script>
 </body>
 </html>

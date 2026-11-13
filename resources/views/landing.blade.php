@@ -1360,7 +1360,7 @@
 
             <!-- Action Buttons Group (Login) -->
             <div class="nav-actions">
-                <a href="{{ (auth()->check() || session('authenticated')) ? route('home') : route('login') }}" class="nav-login-btn">
+                <a href="{{ (auth()->check()) ? route('home') : route('login') }}" class="nav-login-btn">
                     Masuk
                 </a>
             </div>
@@ -1392,7 +1392,7 @@
                     </svg>
                     <span>Unduh Aplikasi</span>
                 </button>
-                <a href="{{ (auth()->check() || session('authenticated')) ? route('home') : route('login') }}" class="hero-outline-btn">
+                <a href="{{ (auth()->check()) ? route('home') : route('login') }}" class="hero-outline-btn">
                     <span>Buka Aplikasi</span>
                 </a>
             </div>
@@ -1425,7 +1425,7 @@
                             </p>
                         </div>
                         <div class="features-cta-wrap">
-                            <a href="{{ (auth()->check() || session('authenticated')) ? route('home') : route('login') }}" class="features-cta-btn">
+                            <a href="{{ (auth()->check()) ? route('home') : route('login') }}" class="features-cta-btn">
                                 Buka Aplikasi
                             </a>
                         </div>
@@ -1456,7 +1456,7 @@
                             </div>
                         </div>
 
-                        <!-- Card 2: Validasi Pos Satpam (Light Style) -->
+                        <!-- Card 2: Verifikasi Klaim (Light Style) -->
                         <div class="feature-box">
                             <div class="feature-box-icon">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1466,9 +1466,9 @@
                                 </svg>
                             </div>
                             <div class="feature-box-body">
-                                <h3 class="feature-box-title">Validasi Pos Satpam</h3>
+                                <h3 class="feature-box-title">Verifikasi Klaim</h3>
                                 <p class="feature-box-desc">
-                                    Titipkan dan verifikasi barang berharga di pos satpam.
+                                    Penemu memverifikasi pemilik sah lewat pertanyaan rahasia sebelum barang diserahkan.
                                 </p>
                             </div>
                         </div>
@@ -1692,7 +1692,7 @@
                                 </button>
                                 <div class="faq-answer">
                                     <p>
-                                        Tamu atau pengunjung umum dapat melapor langsung melalui Pos Satpam kampus terdekat, di mana petugas satpam resmi akan mencatatkan temuan ke sistem atas nama pelapor tamu.
+                                        Pelaporan memerlukan akun dengan email kampus yang sudah diverifikasi. Tamu atau pengunjung umum diarahkan menghubungi petugas keamanan kampus, dan petugas yang memiliki akun dapat mencatatkan temuan tersebut ke sistem.
                                     </p>
                                 </div>
                             </div>
@@ -1746,7 +1746,7 @@
                                 </button>
                                 <div class="faq-answer">
                                     <p>
-                                        Sangat aman. Setiap penitipan di Pos Satpam tercatat di buku register dan sistem UMBFind dengan bukti tanda terima resmi serta pengawasan langsung oleh staf keamanan universitas.
+                                        Penitipan fisik di luar aplikasi sepenuhnya menjadi tanggung jawab penemu. UMBFind hanya mencatat keterangan tempat penyimpanan pada laporan barang temuan, dan menyarankan serah terima dilakukan di area kampus yang ramai.
                                     </p>
                                 </div>
                             </div>
@@ -1763,7 +1763,7 @@
                                 </button>
                                 <div class="faq-answer">
                                     <p>
-                                        Barang temuan yang disimpan di Pos Satpam akan diarsipkan secara aman hingga 30-90 hari kerja sesuai regulasi tata tertib kampus sebelum diproses lebih lanjut sesuai kebijakan universitas.
+                                        UMBFind tidak mengatur batas waktu penyimpanan fisik barang. Laporan barang temuan tetap tayang sampai diklaim dan diserahterimakan, atau dibatalkan oleh penemu. Kebijakan penitipan fisik mengikuti tata tertib kampus.
                                     </p>
                                 </div>
                             </div>
@@ -1833,7 +1833,7 @@
                         <ul class="footer-col-list">
                             <li><a href="#features" class="footer-nav-link">Fitur Utama</a></li>
                             <li><a href="{{ route('search') }}" class="footer-nav-link">Cari Barang</a></li>
-                            <li><a href="{{ (auth()->check() || session('authenticated')) ? route('home') : route('login') }}" class="footer-nav-link">Lapor Barang</a></li>
+                            <li><a href="{{ (auth()->check()) ? route('home') : route('login') }}" class="footer-nav-link">Lapor Barang</a></li>
                             <li><a href="javascript:void(0)" onclick="handlePWAInstall()" class="footer-nav-link">Aplikasi PWA</a></li>
                         </ul>
                     </div>
@@ -1901,7 +1901,7 @@
             </div>
 
             <div style="display: flex; gap: 0.75rem;">
-                <a href="{{ (auth()->check() || session('authenticated')) ? route('home') : route('login') }}" class="nav-btn-app" style="flex: 1; justify-content: center; padding: 0.75rem;">
+                <a href="{{ (auth()->check()) ? route('home') : route('login') }}" class="nav-btn-app" style="flex: 1; justify-content: center; padding: 0.75rem;">
                     Buka Versi Web Sekarang
                 </a>
             </div>

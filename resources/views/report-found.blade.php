@@ -779,6 +779,42 @@
                     <input type="text" class="form-text-input" id="input-brand" placeholder="Contoh: Apple, Honda, Eiger, Casio">
                 </div>
             </div>
+
+            <!-- Pertanyaan verifikasi pemilik (DEC-027) -->
+            <div class="input-field-group">
+                <label class="input-label" for="input-proof-question">Pertanyaan Verifikasi <span style="font-weight: 400; color: #94a3b8; font-size: 0.75rem;">(Opsional)</span></label>
+                <div class="input-box-wrapper">
+                    <span class="input-icon-left"><i data-lucide="help-circle"></i></span>
+                    <input type="text" class="form-text-input" id="input-proof-question" maxlength="255" placeholder="Contoh: Apa isi dompetnya selain uang?">
+                </div>
+                <span style="display: block; font-size: 0.72rem; color: #94a3b8; margin-top: 0.3rem; line-height: 1.5;">Pertanyaan ini wajib dijawab pengklaim sebelum klaimnya bisa dikirim — membantu Anda menyaring klaim asal-asalan.</span>
+            </div>
+
+            <!-- Hubungkan ke laporan kehilangan (DEC-027) -->
+            <div id="link-lost-card" style="border: 1px solid #e2e8f0; border-radius: 14px; padding: 0.85rem; margin-top: 0.35rem; background: #f8fafc;">
+                <div style="display: flex; align-items: center; gap: 0.45rem;">
+                    <i data-lucide="link-2" style="width: 16px; height: 16px; color: #3b82f6;"></i>
+                    <span style="font-size: 0.8rem; font-weight: 700; color: #0f172a;">Barang ini dari laporan kehilangan?</span>
+                </div>
+                <p style="font-size: 0.72rem; color: #64748b; margin: 0.3rem 0 0.6rem; line-height: 1.5;">
+                    Hubungkan supaya laporan kehilangan tersebut otomatis ditutup dan tidak muncul dobel di daftar laporan.
+                </p>
+
+                <div id="link-lost-search-row" style="display: flex; gap: 0.4rem;">
+                    <input type="text" id="input-link-lost-search" class="form-text-input" maxlength="100" placeholder="Cari nama barang atau pemilik" style="flex: 1; border: 1px solid #e2e8f0; border-radius: 10px; padding: 0.5rem 0.7rem; font-size: 0.78rem;">
+                    <button type="button" onclick="searchLostReports()" style="border: none; border-radius: 10px; background: #3b82f6; color: #ffffff; font-size: 0.75rem; font-weight: 700; padding: 0 0.9rem; cursor: pointer;">Cari</button>
+                </div>
+
+                <div id="link-lost-results" style="margin-top: 0.5rem; display: flex; flex-direction: column; gap: 0.35rem;"></div>
+
+                <div id="link-lost-selected" style="display: none; margin-top: 0.5rem; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 10px; padding: 0.5rem 0.65rem;">
+                    <span style="font-size: 0.7rem; color: #1d4ed8; font-weight: 700; text-transform: uppercase; letter-spacing: .03em;">Terhubung ke laporan kehilangan</span>
+                    <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; margin-top: 0.2rem;">
+                        <span id="link-lost-selected-title" style="font-size: 0.78rem; font-weight: 600; color: #0f172a;"></span>
+                        <button type="button" onclick="clearLinkedLostReport()" style="border: none; background: transparent; color: #b91c1c; font-size: 0.72rem; font-weight: 700; cursor: pointer;">Batal</button>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- ============================================================== -->
@@ -1081,6 +1117,53 @@
     });
 
     let currentPhotoDataUrl = null;
+    let currentPhotoFile = null;
+
+    // Kategori dari Supabase (nama -> id) supaya laporan masuk ke DB, bukan localStorage.
+    const CATEGORY_MAP = @json($categories->mapWithKeys(fn ($c) => [$c->name => $c->id]));
+
+    // Dirujuk dari laporan HILANG ("Saya Menemukan Barang Ini").
+    @php
+        $refPayload = $referenceReport ? [
+            'id' => $referenceReport->id,
+            'title' => $referenceReport->title,
+            'brand' => $referenceReport->brand,
+            'category' => $referenceReport->category?->name,
+            'campus_location' => $referenceReport->campus_location,
+            'location' => $referenceReport->location,
+            'description' => $referenceReport->description,
+            'owner_name' => $referenceReport->user?->name,
+        ] : null;
+    @endphp
+    const REFERENCE_REPORT = @json($refPayload);
+
+    // DEC-027 — hubungkan laporan temuan ke laporan kehilangan tanpa pindah halaman.
+    let LINKED_LOST_ID = null;
+
+    document.addEventListener('DOMContentLoaded', () => {
+        if (REFERENCE_REPORT) {
+            const card = document.getElementById('link-lost-card');
+            if (card) card.style.display = 'none';
+        }
+
+        if (!REFERENCE_REPORT) return;
+
+        const setValue = (id, value) => {
+            const el = document.getElementById(id);
+            if (!el || !value) return;
+            el.value = value;
+            el.dispatchEvent(new Event('change', { bubbles: true }));
+        };
+
+        setValue('input-item-name', REFERENCE_REPORT.title);
+        setValue('input-brand', REFERENCE_REPORT.brand);
+        setValue('input-specific-location', REFERENCE_REPORT.location);
+        setValue('input-features', REFERENCE_REPORT.description);
+        setValue('select-category', REFERENCE_REPORT.category);
+        setValue('select-location', REFERENCE_REPORT.campus_location);
+
+        showToast('Formulir diisi otomatis dari laporan kehilangan. Lengkapi lokasi & waktu penemuan.');
+    });
 
     function setStep(stepIndex) {
         currentStep = stepIndex;
@@ -1317,6 +1400,7 @@
             const reader = new FileReader();
             reader.onload = function(e) {
                 currentPhotoDataUrl = e.target.result;
+            currentPhotoFile = file;
                 const previewBox = document.getElementById('preview-box');
                 const previewImg = document.getElementById('preview-image');
                 const dropzone = document.getElementById('dropzone-box');
@@ -1418,121 +1502,176 @@
     }
 
     // Submit Report Handler & Persistence
+    // Notifikasi ringan untuk halaman formulir.
+    function showToast(message) {
+        let el = document.getElementById('form-toast');
+        if (!el) {
+            el = document.createElement('div');
+            el.id = 'form-toast';
+            el.style.cssText = 'position:fixed;left:50%;bottom:28px;transform:translateX(-50%);background:#0f172a;color:#fff;'
+                + 'padding:12px 18px;border-radius:12px;font-size:13.5px;font-weight:600;z-index:9999;'
+                + 'box-shadow:0 10px 30px rgba(15,23,42,.25);opacity:0;transition:opacity .2s ease;max-width:88vw;text-align:center;';
+            document.body.appendChild(el);
+        }
+        el.textContent = message;
+        el.style.opacity = '1';
+        clearTimeout(el._t);
+        el._t = setTimeout(() => { el.style.opacity = '0'; }, 3200);
+    }
+
+    // DEC-027 — cari laporan kehilangan yang cocok lalu hubungkan.
+    function searchLostReports() {
+        const input = document.getElementById('input-link-lost-search');
+        const results = document.getElementById('link-lost-results');
+        if (!results) return;
+
+        const q = input ? input.value.trim() : '';
+
+        if (q.length < 3) {
+            results.textContent = '';
+            const hint = document.createElement('span');
+            hint.style.cssText = 'font-size:0.72rem;color:#b91c1c;';
+            hint.textContent = 'Ketik minimal 3 karakter.';
+            results.appendChild(hint);
+            return;
+        }
+
+        results.textContent = '';
+        const loading = document.createElement('span');
+        loading.style.cssText = 'font-size:0.72rem;color:#64748b;';
+        loading.textContent = 'Mencari...';
+        results.appendChild(loading);
+
+        fetch(`{{ url('/api/reports') }}?type=lost&per_page=5&q=` + encodeURIComponent(q), {
+            headers: { 'Accept': 'application/json' },
+        })
+            .then((res) => res.json())
+            .then((payload) => {
+                results.textContent = '';
+                const list = (payload && payload.data) || [];
+
+                if (!list.length) {
+                    const empty = document.createElement('span');
+                    empty.style.cssText = 'font-size:0.72rem;color:#64748b;';
+                    empty.textContent = 'Tidak ada laporan kehilangan yang cocok.';
+                    results.appendChild(empty);
+                    return;
+                }
+
+                list.forEach((report) => {
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.style.cssText = 'text-align:left;border:1px solid #e2e8f0;background:#ffffff;border-radius:10px;'
+                        + 'padding:0.5rem 0.65rem;font-size:0.75rem;color:#0f172a;cursor:pointer;font-family:inherit;';
+                    btn.textContent = report.title + ' — ' + (report.reporter_name || 'Civitas UMB');
+                    btn.addEventListener('click', () => selectLinkedLostReport(report.id, report.title));
+                    results.appendChild(btn);
+                });
+            })
+            .catch(() => {
+                results.textContent = '';
+                const err = document.createElement('span');
+                err.style.cssText = 'font-size:0.72rem;color:#b91c1c;';
+                err.textContent = 'Gagal mencari laporan. Coba lagi.';
+                results.appendChild(err);
+            });
+    }
+
+    function selectLinkedLostReport(id, title) {
+        LINKED_LOST_ID = id;
+
+        const results = document.getElementById('link-lost-results');
+        const row = document.getElementById('link-lost-search-row');
+        const selected = document.getElementById('link-lost-selected');
+        const label = document.getElementById('link-lost-selected-title');
+
+        if (results) results.textContent = '';
+        if (row) row.style.display = 'none';
+        if (selected) selected.style.display = 'block';
+        if (label) label.textContent = title || 'Laporan kehilangan';
+    }
+
+    function clearLinkedLostReport() {
+        LINKED_LOST_ID = null;
+
+        const row = document.getElementById('link-lost-search-row');
+        const selected = document.getElementById('link-lost-selected');
+        const input = document.getElementById('input-link-lost-search');
+
+        if (row) row.style.display = 'flex';
+        if (selected) selected.style.display = 'none';
+        if (input) input.value = '';
+    }
+
     function submitReport() {
-        const name = document.getElementById('input-item-name').value.trim() || 'Barang Temuan';
+        const name = document.getElementById('input-item-name').value.trim();
         const catSelect = document.getElementById('select-category').value;
         const catOther = document.getElementById('input-category-other') ? document.getElementById('input-category-other').value.trim() : '';
-        const catLabel = (catSelect === 'Lainnya' && catOther) ? `Lainnya (${catOther})` : (catSelect || 'Lainnya');
-        const catSlug = getCategorySlug(catSelect === 'Lainnya' ? catOther : catSelect);
+        const catName = (catSelect === 'Lainnya' && catOther) ? catOther : catSelect;
         const locCampus = document.getElementById('select-location').value || 'Kampus Meruya';
         const specLoc = document.getElementById('input-specific-location').value.trim();
-        const locFull = specLoc ? `${locCampus} (${specLoc})` : locCampus;
-        const locSlug = getLocationSlug(locCampus, specLoc);
-        const dateVal = document.getElementById('input-date-found').value || new Date().toISOString().split('T')[0];
+        const dateVal = document.getElementById('input-date-found').value;
         const timeVal = document.getElementById('input-time-found') ? document.getElementById('input-time-found').value.trim() : '';
         const featuresVal = document.getElementById('input-features').value.trim();
         const brandVal = document.getElementById('input-brand') ? document.getElementById('input-brand').value.trim() : '';
-        const img = currentPhotoDataUrl || getDefaultImageForCategory(catSlug);
 
-        const newReport = {
-            id: 'rep_' + Date.now(),
-            type: 'found',
-            status: 'found',
-            is_mine: true,
-            reporter_name: 'Ahmad Fauzi (Saya)',
-            reporter_nim: '41521010045',
-            reporter_role: 'Mahasiswa',
-            title: name,
-            brand: brandVal,
-            category: catSelect,
-            category_slug: catSlug,
-            category_label: catLabel,
-            location_campus: locCampus,
-            location_specific: specLoc,
-            location_full: locFull,
-            location_slug: locSlug,
-            date: dateVal,
-            date_display: formatDateIndo(dateVal),
-            time: timeVal,
-            features: featuresVal,
-            image: img,
-            created_at: new Date().toISOString()
-        };
+        if (!name) { showToast('Nama barang wajib diisi.'); return; }
 
-        // Persist to localStorage
-        let existingReports = [];
-        try {
-            existingReports = JSON.parse(localStorage.getItem('findumb_custom_reports') || '[]');
-        } catch(e) {
-            existingReports = [];
+        // Kirim ke Supabase lewat API — bukan localStorage lagi.
+        const form = new FormData();
+        form.append('type', 'found');
+        form.append('title', name);
+        form.append('description', featuresVal);
+        form.append('campus_location', locCampus);
+        form.append('location', specLoc);
+        form.append('brand', brandVal);
+        form.append('incident_date', dateVal);
+        form.append('incident_time', timeVal);
+
+        const catId = CATEGORY_MAP[catName];
+        if (catId) form.append('category_id', catId);
+        if (currentPhotoFile) form.append('photo', currentPhotoFile);
+
+        // DEC-027 — pertanyaan verifikasi untuk pengklaim.
+        const proofQuestion = document.getElementById('input-proof-question');
+        if (proofQuestion && proofQuestion.value.trim()) {
+            form.append('proof_question', proofQuestion.value.trim());
         }
 
-        if (existingReports.length === 0) {
-            existingReports = [
-                {
-                    id: '1',
-                    type: 'lost',
-                    title: 'Samsung SM-A135F',
-                    brand: 'Samsung Galaxy A13',
-                    category: 'Elektronik & HP',
-                    category_slug: 'elektronik',
-                    category_label: 'Elektronik & HP',
-                    location_campus: 'Kampus Meruya',
-                    location_specific: 'Gedung Tower Lt. 7 R. 702',
-                    location_full: 'Kampus Meruya — Gedung Tower Lt. 7 R. 702',
-                    date: '2026-06-20',
-                    date_display: '20 Jun 2026',
-                    time: '14.30 WIB (Siang)',
-                    storage: 'Disimpan Sendiri',
-                    features: 'Smartphone Samsung warna hitam, terpasang casing transparan dengan stiker logo Informatika di bagian belakang. Layar dalam keadaan terkunci.',
-                    image: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=800&auto=format&fit=crop&q=80',
-                    status: 'lost',
-                    is_mine: true,
-                    reporter_name: 'Ahmad Fauzi (Saya)',
-                    reporter_nim: '41521010045',
-                    created_at: '2026-06-20T14:30:00.000Z'
-                },
-                {
-                    id: '5',
-                    type: 'lost',
-                    title: 'Cincin Emas Berlian',
-                    brand: 'Perhiasan Emas Kuning',
-                    category: 'Jam & Aksesori',
-                    category_slug: 'aksesoris',
-                    category_label: 'Jam & Aksesori',
-                    location_campus: 'Kampus Meruya',
-                    location_specific: 'Parkir Barat Kampus Meruya',
-                    location_full: 'Kampus Meruya — Parkir Barat Kampus Meruya',
-                    date: '2026-01-15',
-                    date_display: '15 Jan 2026',
-                    time: 'Siang saat menuju kendaraan',
-                    storage: 'Disimpan Sendiri',
-                    features: 'Cincin emas sepasang model pertunangan/pernikahan dengan ukiran inisial halus di lingkar dalam. Terjatuh di sekitar parkiran.',
-                    image: 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=800&auto=format&fit=crop&q=80',
-                    status: 'lost',
-                    is_mine: true,
-                    reporter_name: 'Ahmad Fauzi (Saya)',
-                    reporter_nim: '41521010045',
-                    created_at: '2026-01-15T12:00:00.000Z'
+        // DEC-027 — laporan kehilangan yang dihubungkan (menutup laporan hilangnya).
+        if (REFERENCE_REPORT) form.append('reference_report_id', REFERENCE_REPORT.id);
+        else if (LINKED_LOST_ID) form.append('reference_report_id', LINKED_LOST_ID);
+
+        const btn = document.querySelector('[onclick="submitReport()"]');
+        if (btn) { btn.disabled = true; btn.dataset.label = btn.textContent; btn.textContent = 'Menyimpan...'; }
+
+        fetch('{{ route('api.reports.store') }}', {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': window.FindUMB_CSRF || '',
+                'Accept': 'application/json',
+            },
+            body: form,
+        })
+            .then(async (res) => {
+                const payload = await res.json().catch(() => ({}));
+                if (!res.ok) {
+                    const msg = payload.message
+                        || (payload.errors ? Object.values(payload.errors)[0][0] : null)
+                        || 'Laporan gagal disimpan.';
+                    throw new Error(msg);
                 }
-            ];
-        }
-
-        existingReports.unshift(newReport);
-        try {
-            localStorage.setItem('findumb_custom_reports', JSON.stringify(existingReports));
-            localStorage.setItem('findumb_reports_initialized', 'true');
-        } catch(e) {
-            console.warn('LocalStorage save error (storage quota or private browsing):', e);
-        }
-
-        const modal = document.getElementById('success-modal');
-        if (modal) {
-            modal.classList.add('active');
-            if (typeof lucide !== 'undefined') {
-                lucide.createIcons();
-            }
-        }
+                return payload;
+            })
+            .then((payload) => {
+                // Arahkan ke laporan asli yang barusan dibuat di Supabase.
+                const id = payload?.data?.id;
+                window.location.href = id ? `/report/${id}` : "{{ route('my.reports') }}";
+            })
+            .catch((err) => {
+                if (btn) { btn.disabled = false; btn.textContent = btn.dataset.label || 'Kirim Laporan'; }
+                showToast(err.message || 'Laporan gagal disimpan.');
+            });
     }
 </script>
 @endpush
